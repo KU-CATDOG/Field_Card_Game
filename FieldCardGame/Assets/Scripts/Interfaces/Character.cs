@@ -20,59 +20,59 @@ public abstract class Character : MonoBehaviour
         } 
     }
     private int sight;
-    public List<ICard> HandCard { get; private set; }
-    public List<ICard> CardPile { get; private set; }
-    public List<ICard> DiscardedPile { get; private set; }
+    public List<ICard> HandCard { get; private set; } = new List<ICard>();
+    public List<ICard> CardPile { get; private set; } = new List<ICard>();
+    public List<ICard> DiscardedPile { get; private set; } = new List<ICard>();
 
     /// for UI
-    public List<Buff> BuffList { get; set; }
-    public List<Debuff> DebuffList { get; set; }
+    public List<Buff> BuffList { get; set; } = new List<Buff>();
+    public List<Debuff> DebuffList { get; set; } = new List<Debuff>();
     /// 
 
-    public List<IEnumerator> BuffHandler { get; private set; }
-    public List<IEnumerator> DebuffHandler { get; private set; }
-    public List<IEnumerator> DrawBuffHandler { get; private set; }
-    public List<IEnumerator> DrawDebuffHandler { get; private set; }
-    public List<IEnumerator> TurnEndBuffHandler { get; private set; }
-    public List<IEnumerator> TurnEndDebuffHandler { get; private set; }
-    public List<IEnumerator> ForceTurnEndDebuffHandler { get; private set; }
+    public List<IEnumerator> BuffHandler { get; private set; } = new List<IEnumerator>();
+    public List<IEnumerator> DebuffHandler { get; private set; } = new List<IEnumerator>();
+    public List<IEnumerator> DrawBuffHandler { get; private set; } = new List<IEnumerator>();
+    public List<IEnumerator> DrawDebuffHandler { get; private set; } = new List<IEnumerator>();
+    public List<IEnumerator> TurnEndBuffHandler { get; private set; } = new List<IEnumerator>();
+    public List<IEnumerator> TurnEndDebuffHandler { get; private set; } = new List<IEnumerator>();
+    public List<IEnumerator> ForceTurnEndDebuffHandler { get; private set; } = new List<IEnumerator>();
 
 
     public bool MoveInterrupted { get; set; }
-    public List<IEnumerator> TryMoveRoutine { get; private set; }
-    public List<IEnumerator> MoveRoutine { get; private set; }
+    public List<IEnumerator> TryMoveRoutine { get; private set; } = new List<IEnumerator>();
+    public List<IEnumerator> MoveRoutine { get; private set; } = new List<IEnumerator>();
 
 
     public bool ForceMoveInterrupted { get; set; }
-    public List<IEnumerator> TryForceMoveRoutine { get; private set; }
-    public List<IEnumerator> ForceMoveRoutine { get; private set; }
+    public List<IEnumerator> TryForceMoveRoutine { get; private set; } = new List<IEnumerator>();
+    public List<IEnumerator> ForceMoveRoutine { get; private set; } = new List<IEnumerator>();
 
     public bool GetDmgInterrupted { get; set; }
-    public List<IEnumerator> TryGetDmgRoutine { get; private set; }
-    public List<IEnumerator> GetDmgRoutine { get; private set; }
+    public List<IEnumerator> TryGetDmgRoutine { get; private set; } = new List<IEnumerator>();
+    public List<IEnumerator> GetDmgRoutine { get; private set; } = new List<IEnumerator>();
 
     public bool HitInterrupted { get; set; }
-    public List<IEnumerator> TryHitAttackRoutine { get; private set; }
-    public List<IEnumerator> HitAttackRoutine { get; private set; }
+    public List<IEnumerator> TryHitAttackRoutine { get; private set; } = new List<IEnumerator>();
+    public List<IEnumerator> HitAttackRoutine { get; private set; } = new List<IEnumerator>();
     public bool DieInterrupted { get; set; }
-    public List<IEnumerator> TryDieRoutine { get; private set; }
-    public List<IEnumerator> DieRoutine { get; private set; }
+    public List<IEnumerator> TryDieRoutine { get; private set; } = new List<IEnumerator>();
+    public List<IEnumerator> DieRoutine { get; private set; } = new List<IEnumerator>();
 
     public ICard drawCard { get; set; }
     public bool DrawInterrupted { get; set; }
-    public List<IEnumerator> DrawCardTry { get; private set; }
-    public List<IEnumerator> DrawCardRoutine { get; private set; }
+    public List<IEnumerator> DrawCardTry { get; private set; } = new List<IEnumerator>();
+    public List<IEnumerator> DrawCardRoutine { get; private set; } = new List<IEnumerator>();
 
 
     public ICard dropCard { get; set; }
     public bool DropInterrupted { get; set; }
-    public List<IEnumerator> DropCardTry { get; private set; }
-    public List<IEnumerator> DropCardRoutine { get; private set; }
+    public List<IEnumerator> DropCardTry { get; private set; } = new List<IEnumerator>();
+    public List<IEnumerator> DropCardRoutine { get; private set; } = new List<IEnumerator>();
 
     public ICard usedCard { get; set; }
     public bool CardUseInterrupted { get; set; }
-    public List<IEnumerator> CardUseTry { get; private set; }
-    public List<IEnumerator> CardUseRoutine { get; private set; }
+    public List<IEnumerator> CardUseTry { get; private set; } = new List<IEnumerator>();
+    public List<IEnumerator> CardUseRoutine { get; private set; } = new List<IEnumerator>();
 
     public abstract IEnumerator AwakeTurn();
     public abstract IEnumerator AfterBuff();

@@ -7,7 +7,7 @@ public class Tile : MonoBehaviour
     public bool Discovered { get; set; }
     public bool Onsight { get; set; }
     public Character CharacterOnTile { get; set; }
-    public object EntityOnTile { get; set; }
+    public List<object> EntityOnTile { get; set; } = new List<object>();
     public Color TileColor { get; set; }
     public List<IEnumerator> OnCharacterEnterRoutine { get; private set; }
     public List<IEnumerator> OnCharacterStayRoutine { get; private set; }

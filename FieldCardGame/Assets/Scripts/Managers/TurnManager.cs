@@ -4,11 +4,24 @@ using UnityEngine;
 
 public class TurnManager : MonoBehaviour
 {
+    public static TurnManager Instance;
     private int token = 0;
+    public bool NeedWait { get; set; }
     public bool TurnEnd { get; set; } = false;
-    public List<IEnumerator> TurnStartRoutine;
-    
+    public List<IEnumerator> TurnStartRoutine { get; set; } = new List<IEnumerator>();
+
     public bool GameEnd { get; set; } = false;
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
     private void Start()
     {
         StartCoroutine(TurnRoutine());
@@ -79,6 +92,18 @@ public class TurnManager : MonoBehaviour
     {
         yield break;
         ///need implement
+    }
+    private IEnumerator TurnAwakeRoutine()
+    {
+        for (int i = TurnStartRoutine.Capacity - 1; i < TurnStartRoutine.Capacity; i--)
+        {
+            if (!TurnStartRoutine[i].MoveNext())
+            {
+                while (NeedWait) yield return null;
+                TurnStartRoutine.RemoveAt(i);
+            }
+            while (NeedWait) yield return null;
+        }
     }
     private IEnumerator BuffRoutine(Character curChar)
     {

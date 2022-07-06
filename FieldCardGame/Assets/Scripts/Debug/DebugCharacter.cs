@@ -32,4 +32,8 @@ public class DebugCharacter : Character
     {
         return base.ToString();
     }
+    protected override IEnumerator dieRoutine()
+    {
+        throw new System.NotImplementedException();
+    }
 }

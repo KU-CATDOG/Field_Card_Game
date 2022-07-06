@@ -9,5 +9,5 @@ public interface ICard
     public List<coordinate> GetAreaofEffect();
     public bool IsAvailablePosition(int row, int col);
     public IEnumerator CardRoutine(Character caster);
-    public void PayCost();
+    public bool PayCost();
 }

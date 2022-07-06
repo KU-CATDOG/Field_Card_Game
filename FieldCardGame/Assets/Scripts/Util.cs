@@ -20,11 +20,4 @@ public class coordinate
 }
 public class Util
 {
-    public void SyncCoroutine(Character character, IEnumerator coroutine)
-    {
-        character.NeedWait = true;
-        GameManager.Instance.StartCoroutine(coroutine);
-        character.NeedWait = false;
-
-    }
 }
