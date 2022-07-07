@@ -11,4 +11,6 @@ public interface ICard
     public IEnumerator CardRoutine(Character caster, coordinate center);
     public int GetCost();
     public CostType GetCostType();
+    public CardType GetCardType();
+    public int GetCardID();
 }

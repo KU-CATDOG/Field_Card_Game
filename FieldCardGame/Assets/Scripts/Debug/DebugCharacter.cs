@@ -48,4 +48,8 @@ public class DebugCharacter : Character
     {
         throw new System.NotImplementedException();
     }
+    public void DebugDrawCard()
+    {
+        StartCoroutine(DrawCard());
+    }
 }

@@ -4,6 +4,15 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField]
+    private List<GameObject> cardList;
+    public IReadOnlyList<GameObject> CardList
+    {
+        get
+        {
+            return cardList.AsReadOnly();
+        }
+    }
     public static GameManager Instance { get; set; }
     public List<Character> EnemyList { get; private set; }
     public Character Player { get; private set; }

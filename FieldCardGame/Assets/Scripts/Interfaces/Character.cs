@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class Character : MonoBehaviour
 {
+    private const int MAXHANDSIZE = 10;
     public bool NeedWait { get; set; }
     public bool ReadyToPlay { get; set; }
     private coordinate pos;
@@ -87,6 +88,12 @@ public abstract class Character : MonoBehaviour
     public List<IEnumerator> CardUseTry { get; private set; } = new List<IEnumerator>();
     public List<IEnumerator> CardUseRoutine { get; private set; } = new List<IEnumerator>();
 
+
+    public ICard addedCard { get; set; }
+    public bool AddCardInterrupted { get; set; }
+    public List<IEnumerator> AddCardTry { get; private set; } = new List<IEnumerator>();
+    public List<IEnumerator> AddCardRoutine { get; private set; } = new List<IEnumerator>();
+
     public abstract IEnumerator AwakeTurn();
     public abstract IEnumerator AfterBuff();
     public abstract IEnumerator AfterDraw();
@@ -112,6 +119,11 @@ public abstract class Character : MonoBehaviour
     }
     public IEnumerator DrawCard()
     {
+        if(HandCard.Capacity == MAXHANDSIZE)
+        {
+            //need animation for player
+            yield break;
+        }
         //need animation for player
         for(int i = DrawCardTry.Capacity-1; i>=0; i--)
         {
@@ -132,6 +144,10 @@ public abstract class Character : MonoBehaviour
         drawCard = CardPile[0];
         CardPile.RemoveAt(0);
         HandCard.Add(drawCard);
+        if(gameObject.tag == "Player")
+        {
+            yield return StartCoroutine(PlayerUIManager.Instance.DrawCard());
+        }
         for (int i = DrawCardRoutine.Capacity-1; i >= 0; i--)
         {
             IEnumerator routine = DrawCardRoutine[i];
@@ -164,6 +180,10 @@ public abstract class Character : MonoBehaviour
         }
         HandCard.Remove(usedCard);
         DiscardedPile.Add(usedCard);
+        if (gameObject.tag == "Player")
+        {
+            yield return StartCoroutine(PlayerUIManager.Instance.DropCard());
+        }
         for (int i = DropCardRoutine.Capacity - 1; i >= 0; i--)
         {
             IEnumerator routine = DropCardRoutine[i];
@@ -208,7 +228,36 @@ public abstract class Character : MonoBehaviour
         }
         yield return StartCoroutine(DropCard());
     }
+    public IEnumerator AddCard()
+    {
+        //need Animation for Player
+        for (int i = AddCardTry.Capacity - 1; i >= 0; i--)
+        {
+            IEnumerator routine = AddCardTry[i];
 
+            if (!routine.MoveNext())
+            {
+                while (NeedWait) yield return null;
+                AddCardTry.RemoveAt(i);
+            }
+            while (NeedWait) yield return null;
+        }
+        if (AddCardInterrupted)
+        {
+            AddCardInterrupted = false;
+            yield break;
+        }
+        for (int i = AddCardRoutine.Capacity - 1; i >= 0; i--)
+        {
+            IEnumerator routine = AddCardRoutine[i];
+            if (!routine.MoveNext())
+            {
+                while (NeedWait) yield return null;
+                AddCardRoutine.RemoveAt(i);
+            }
+            while (NeedWait) yield return null;
+        }
+    }
     private void SightUpdate(int newSight, bool posChange = false, coordinate prevPos = null)
     {
         //implementation need
@@ -423,4 +472,5 @@ public abstract class Character : MonoBehaviour
     }
     protected abstract IEnumerator payCost(int cost, CostType type);
     public abstract bool PayTest(int cost, CostType type);
+    
 }

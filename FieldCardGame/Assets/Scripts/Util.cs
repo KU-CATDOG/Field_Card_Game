@@ -19,6 +19,10 @@ public enum CostType
     MageWater,
     Hp,
 }
+public enum CardType
+{
+
+}
 public class coordinate
 {
     public int X { get; set; }
