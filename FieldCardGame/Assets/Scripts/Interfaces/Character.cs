@@ -20,6 +20,18 @@ public abstract class Character : MonoBehaviour
         } 
     }
     private int sight;
+    public int Sight
+    {
+        get
+        {
+            return sight;
+        }
+        set
+        {
+            SightUpdate(value);
+            sight = value;
+        }
+    }
     public List<ICard> HandCard { get; private set; } = new List<ICard>();
     public List<ICard> CardPile { get; private set; } = new List<ICard>();
     public List<ICard> DiscardedPile { get; private set; } = new List<ICard>();
@@ -68,6 +80,7 @@ public abstract class Character : MonoBehaviour
     public bool DropInterrupted { get; set; }
     public List<IEnumerator> DropCardTry { get; private set; } = new List<IEnumerator>();
     public List<IEnumerator> DropCardRoutine { get; private set; } = new List<IEnumerator>();
+    public List<IEnumerator> PayCostRoutine { get; private set; } = new List<IEnumerator>();
 
     public ICard usedCard { get; set; }
     public bool CardUseInterrupted { get; set; }
@@ -163,8 +176,9 @@ public abstract class Character : MonoBehaviour
         }
         yield break;
     }
-    public IEnumerator CardUse()
+    public IEnumerator CardUse(coordinate center)
     {
+        yield return StartCoroutine(PayCost(usedCard.GetCost(), usedCard.GetCostType()));
         for (int i = CardUseTry.Capacity-1; i >= 0; i--)
         {
             IEnumerator routine = CardUseTry[i];
@@ -181,7 +195,7 @@ public abstract class Character : MonoBehaviour
             CardUseInterrupted = false;
             yield break;
         }
-        yield return StartCoroutine(usedCard.CardRoutine(this));
+        yield return StartCoroutine(usedCard.CardRoutine(this, center));
         for (int i = DrawCardRoutine.Capacity-1; i >= 0; i--)
         {
             IEnumerator routine = DrawCardRoutine[i];
@@ -195,7 +209,22 @@ public abstract class Character : MonoBehaviour
         yield return StartCoroutine(DropCard());
     }
 
-    
+    private void SightUpdate(int newSight, bool posChange = false, coordinate prevPos = null)
+    {
+        //implementation need
+        //1. 현재 sight에 해당하는 범위의 모든 타일을 discover상태로 변경
+        //2-1. posChange가 false라면 position에서 Sight에 해당하는 범위의 모든 Tile의 OnSight를 false로 한다.
+        //2-2. posChange가 True라면  prevPos에서 Sight에 해당하는 범위의 모든 Tile의 OnSight를 false로 한다.
+        //3.   position에서 new Sight에 해당하는 범위의 모든 타일 상태를 Discover을 True, OnSight를 True로 한다.
+        //Tile은 GameManager.Instance.Map[X,Y]로 x,y좌표 타일에 접근 가능
+    }
+
+    /// <summary>
+    /// 1칸 이동
+    /// </summary>
+    /// <param name="target"></param>
+    /// <param name="speed"></param>
+    /// <returns></returns>
     public IEnumerator Move(coordinate target, int speed)
     {
         for (int i = TryMoveRoutine.Capacity-1; i >= 0; i--)
@@ -223,17 +252,27 @@ public abstract class Character : MonoBehaviour
             }
             while (NeedWait) yield return null;
         }
-        //fixme
         prevTile.CharacterOnTile = null;
+        Vector3 moveVector = new Vector3(target.X - position.X,0, target.Y - position.Y);
+        float time = 0f;
+        yield return new WaitUntil(() =>
+        {
+            time += Time.deltaTime;
+            transform.position += moveVector * Time.deltaTime * speed;
+            return time >= 1f / speed;
+        });
+        transform.position = new Vector3(target.X, 0, target.Y);
+        coordinate prevPos = position;
         position = target;
         targetTile.CharacterOnTile = this;
+        SightUpdate(sight, true, prevPos);
 
-        for (int i = targetTile.OnCharacterExitRoutine.Capacity-1; i >= 0; i--)
+        for (int i = targetTile.OnCharacterEnterRoutine.Capacity-1; i >= 0; i--)
         {
-            if (!targetTile.OnCharacterExitRoutine[i].MoveNext())
+            if (!targetTile.OnCharacterEnterRoutine[i].MoveNext())
             {
                 while (NeedWait) yield return null;
-                targetTile.OnCharacterExitRoutine.RemoveAt(i);
+                targetTile.OnCharacterEnterRoutine.RemoveAt(i);
             }
             while (NeedWait) yield return null;
         }
@@ -268,7 +307,7 @@ public abstract class Character : MonoBehaviour
 
         Tile prevTile = GameManager.Instance.Map[position.X, position.Y];
         Tile targetTile = GameManager.Instance.Map[target.X, target.Y];
-        for (int i = prevTile.OnCharacterExitRoutine.Capacity-1; i >= 0; i--)
+        for (int i = prevTile.OnCharacterExitRoutine.Capacity - 1; i >= 0; i--)
         {
             if (!prevTile.OnCharacterExitRoutine[i].MoveNext())
             {
@@ -277,17 +316,25 @@ public abstract class Character : MonoBehaviour
             }
             while (NeedWait) yield return null;
         }
-        //fixme
         prevTile.CharacterOnTile = null;
+        Vector3 moveVector = new Vector3(target.X - position.X, 0, target.Y - position.Y);
+        float time = 0f;
+        yield return new WaitUntil(() =>
+        {
+            time += Time.deltaTime;
+            transform.position += moveVector * Time.deltaTime * speed;
+            return time >= 1f / speed;
+        });
+        transform.position = new Vector3(target.X, 0, target.Y);
         position = target;
         targetTile.CharacterOnTile = this;
 
-        for (int i = targetTile.OnCharacterExitRoutine.Capacity-1; i >= 0; i--)
+        for (int i = targetTile.OnCharacterEnterRoutine.Capacity - 1; i >= 0; i--)
         {
-            if (!targetTile.OnCharacterExitRoutine[i].MoveNext())
+            if (!targetTile.OnCharacterEnterRoutine[i].MoveNext())
             {
                 while (NeedWait) yield return null;
-                targetTile.OnCharacterExitRoutine.RemoveAt(i);
+                targetTile.OnCharacterEnterRoutine.RemoveAt(i);
             }
             while (NeedWait) yield return null;
         }
@@ -319,7 +366,7 @@ public abstract class Character : MonoBehaviour
             GetDmgInterrupted = false;
             yield break;
         }
-        ////fixme
+        yield return StartCoroutine(getDmg(dmg));
 
         for (int i = GetDmgRoutine.Capacity-1; i >= 0; i--)
         {
@@ -331,6 +378,7 @@ public abstract class Character : MonoBehaviour
             while (NeedWait) yield return null;
         }
     }
+    protected abstract IEnumerator getDmg(int dmg);
     public IEnumerator Die()
     {
         for (int i = TryDieRoutine.Capacity-1; i >= 0; i--)
@@ -360,4 +408,19 @@ public abstract class Character : MonoBehaviour
         }
     }
     protected abstract IEnumerator dieRoutine();
+    public IEnumerator PayCost(int cost, CostType type)
+    {
+        yield return StartCoroutine(payCost(cost, type));
+        for (int i = PayCostRoutine.Capacity - 1; i >= 0; i--)
+        {
+            if (!PayCostRoutine[i].MoveNext())
+            {
+                while (NeedWait) yield return null;
+                PayCostRoutine.RemoveAt(i);
+            }
+            while (NeedWait) yield return null;
+        }
+    }
+    protected abstract IEnumerator payCost(int cost, CostType type);
+    public abstract bool PayTest(int cost, CostType type);
 }

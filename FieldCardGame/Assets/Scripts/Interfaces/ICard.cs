@@ -8,6 +8,7 @@ public interface ICard
     public List<coordinate> GetUnavailableTile();
     public List<coordinate> GetAreaofEffect();
     public bool IsAvailablePosition(int row, int col);
-    public IEnumerator CardRoutine(Character caster);
-    public bool PayCost();
+    public IEnumerator CardRoutine(Character caster, coordinate center);
+    public int GetCost();
+    public CostType GetCostType();
 }

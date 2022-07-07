@@ -13,6 +13,12 @@ public enum BuffType
 {
 
 }
+public enum CostType
+{
+    MageFire,
+    MageWater,
+    Hp,
+}
 public class coordinate
 {
     public int X { get; set; }

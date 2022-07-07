@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; set; }
     public List<Character> EnemyList { get; private set; }
     public Character Player { get; private set; }
+    public List<Character> Allies { get; private set; } = new List<Character>();
     public const int MAPSIZE = 128;
     [SerializeField]
     private GameObject MapObject;
@@ -29,6 +30,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         GenerateMap();
+        Allies.Add(Player);
     }
 
     public Tile GetTilePrefab()
