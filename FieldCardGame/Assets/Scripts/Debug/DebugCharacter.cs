@@ -59,7 +59,15 @@ public class DebugCharacter : Character
     }
     public void DebugAddCard()
     {
-        addedCard = new DebugCard();
+        if (addedCard is DebugCard)
+        {
+            Debug.Log("PALADINADDED");
+            addedCard = new PaladinMove();
+        }
+        else
+        {
+            addedCard = new DebugCard();
+        }
         StartCoroutine(AddCard());
     }
 }

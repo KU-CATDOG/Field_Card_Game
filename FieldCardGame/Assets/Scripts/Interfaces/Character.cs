@@ -17,7 +17,7 @@ public abstract class Character : MonoBehaviour
         set 
         { 
             pos = value;
-            transform.position = new Vector3(value.X, 0, value.Y);
+            transform.position = new Vector3(value.X, 1, value.Y);
         } 
     }
     private int sight;
@@ -164,7 +164,7 @@ public abstract class Character : MonoBehaviour
             }
             while (NeedWait) yield return null;
         }
-        Debug.Log("DrawCard, Card Pile Count:" + CardPile.Count + ", Hand Count: " + HandCard.Count);
+        Debug.Log("DrawCard "+ drawCard +" Card Pile Count:" + CardPile.Count + ", Hand Count: " + HandCard.Count);
         yield break;
     }
     public IEnumerator DropCard()
@@ -265,25 +265,52 @@ public abstract class Character : MonoBehaviour
             }
             while (NeedWait) yield return null;
         }
-        Debug.Log("AddCard, Card Pile Count:" + CardPile.Count + ", Hand Count: " + HandCard.Count);
+        Debug.Log("AddCard," + addedCard + " Card Pile Count:" + CardPile.Count + ", Hand Count: " + HandCard.Count);
     }
-    private void SightUpdate(int newSight, bool posChange = false, coordinate prevPos = null)
+    public void SightUpdate(int newSight, bool posChange = false, coordinate prevPos = null)
+    {        
+        if (posChange)
+        {
+            dfs(0, sight, position, true, false);
+        }
+        else
+        {
+            dfs(0, sight, prevPos, true, false);
+        }
+        dfs(0, newSight, position, true, true);
+    }
+    private void dfs(int level, int limit, coordinate now, bool discovered, bool onSight)
     {
-        //implementation need
-        //1. 현재 sight에 해당하는 범위의 모든 타일을 discover상태로 변경
-        //2-1. posChange가 false라면 position에서 Sight에 해당하는 범위의 모든 Tile의 OnSight를 false로 한다.
-        //2-2. posChange가 True라면  prevPos에서 Sight에 해당하는 범위의 모든 Tile의 OnSight를 false로 한다.
-        //3.   position에서 new Sight에 해당하는 범위의 모든 타일 상태를 Discover을 True, OnSight를 True로 한다.
-        //Tile은 GameManager.Instance.Map[X,Y]로 x,y좌표 타일에 접근 가능
-    }
+        GameManager.Instance.Map[now.X, now.Y].Discovered = discovered;
+        GameManager.Instance.Map[now.X, now.Y].Onsight = onSight;
+        if (level > limit)
+            return;
+        if (now.GetDownTile() != null)
+        {
+            dfs(level + 1, limit, now.GetDownTile(), discovered, onSight);
+        }
+        if (now.GetUpTile() != null)
+        {
+            dfs(level + 1, limit, now.GetUpTile(), discovered, onSight);
 
+        }
+        if (now.GetLeftTile() != null)
+        {
+            dfs(level + 1, limit, now.GetLeftTile(), discovered, onSight);
+
+        }
+        if (now.GetRightTile() != null)
+        {
+            dfs(level + 1, limit, now.GetRightTile(), discovered, onSight);
+        }
+    }
     /// <summary>
     /// 1칸 이동
     /// </summary>
     /// <param name="target"></param>
     /// <param name="speed"></param>
     /// <returns></returns>
-    public IEnumerator Move(coordinate target, int speed)
+    public IEnumerator Move(coordinate target, float speed)
     {
         for (int i = TryMoveRoutine.Count-1; i >= 0; i--)
         {

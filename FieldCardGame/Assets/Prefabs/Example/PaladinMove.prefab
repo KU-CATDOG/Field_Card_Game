@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -2726015609422013599}
   - component: {fileID: -7352726146194758784}
   m_Layer: 5
-  m_Name: DebugCard
+  m_Name: PaladinMove
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -68,7 +68,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: f547d6749eea9ca4d8eb0cddd338bf91, type: 3}
+  m_Texture: {fileID: 2800000, guid: e520d4d0b7f091b4385ed778a1cc6afb, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0

@@ -63,7 +63,7 @@ public class PaladinMove : ICard
         return ret;
     }
     
-    private List<coordinate> PathFind(coordinate target)
+    private List<coordinate> FindPath(coordinate target)
     {
         List<coordinate> ret = new List<coordinate>();
         for(int i = 1; i <= GetRange(); i++)
@@ -137,7 +137,13 @@ public class PaladinMove : ICard
     }
     public IEnumerator CardRoutine(Character caster, coordinate center)
     {
-        
+        List<coordinate> path = new List<coordinate>();
+        path = FindPath(center);
+        float speed = 1f;
+        foreach(coordinate i in path)
+        {
+            yield return GameManager.Instance.StartCoroutine(caster.Move(i, speed));
+        }
     }
     public int GetCost()
     {

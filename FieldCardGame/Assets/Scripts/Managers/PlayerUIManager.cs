@@ -22,6 +22,8 @@ public class PlayerUIManager : MonoBehaviour
     private Transform HighlightedAnchor;
     private Vector2 LeftSideVector;
     private float VectorLen;
+    public bool UseMode { get; set; }
+    public bool ReadyUseMode { get; set; }
     private float angle;
     private float[] evenAngles = new float[10];
     private float[] oddAngles = new float[9];
@@ -47,7 +49,7 @@ public class PlayerUIManager : MonoBehaviour
     private void Start()
     {
         defaultSiblingIndex = CardArea.transform.childCount;
-        centerPos = new Vector2(CenterPoint.transform.position.x, -Mathf.Tan(80f / 180f * Mathf.PI) * (RightSide.position - LeftSide.position).magnitude/2);
+        centerPos = new Vector2(CenterPoint.transform.position.x, -Mathf.Tan(80f / 180f * Mathf.PI) * (RightSide.position - LeftSide.position).magnitude / 2);
         CenterPoint.transform.position = centerPos;
         LeftSideVector = LeftSide.position - centerPos;
         VectorLen = LeftSideVector.magnitude;
@@ -70,7 +72,7 @@ public class PlayerUIManager : MonoBehaviour
     }
     public IEnumerator DrawCard()
     {
-        CardImages.Add(Instantiate(GameManager.Instance.CardObjectList[GameManager.Instance.Player.addedCard.GetCardID()], CardArea.transform));
+        CardImages.Add(Instantiate(GameManager.Instance.CardObjectList[GameManager.Instance.Player.drawCard.GetCardID()], CardArea.transform));
         yield return StartCoroutine(Rearrange());
 
     }
@@ -78,7 +80,7 @@ public class PlayerUIManager : MonoBehaviour
     {
         yield return StartCoroutine(Rearrange());
     }
-    public IEnumerator Rearrange()
+    public IEnumerator Rearrange(int exceptFor = -1)
     {
         List<ICard> cards = GameManager.Instance.Player.HandCard;
         int size = cards.Count;
@@ -86,6 +88,10 @@ public class PlayerUIManager : MonoBehaviour
         {
             for (int i = 0; i < size; i++)
             {
+                if (exceptFor == i)
+                {
+                    continue;
+                }
                 CardObject obj = CardImages[i];
                 obj.SiblingIndex = defaultSiblingIndex + i;
                 StartCoroutine(moveCard(obj, centerPos + evenVectors[5 - size / 2 + i]));
@@ -96,6 +102,10 @@ public class PlayerUIManager : MonoBehaviour
         {
             for (int i = 0; i < size; i++)
             {
+                if (exceptFor == i)
+                {
+                    continue;
+                }
                 CardObject obj = CardImages[i];
                 obj.SiblingIndex = defaultSiblingIndex + i;
                 StartCoroutine(moveCard(obj, centerPos + oddVectors[4 - size / 2 + i]));
@@ -109,7 +119,7 @@ public class PlayerUIManager : MonoBehaviour
 
         List<ICard> cards = GameManager.Instance.Player.HandCard;
         int size = cards.Count;
-        int cardIndex = card.SiblingIndex - defaultSiblingIndex; 
+        int cardIndex = card.SiblingIndex - defaultSiblingIndex;
         Vector2 target;
         for (int i = 0; i < size; i++)
         {
@@ -123,7 +133,7 @@ public class PlayerUIManager : MonoBehaviour
             target = (Vector2)centerPos + (cards.Count % 2 == 0 ? (Vector2)evenVectors[5 - size / 2 + i] : (Vector2)oddVectors[4 - size / 2 + i]) + movVec;
             StartCoroutine(moveCard(obj, target));
         }
-        card.transform.localScale *= 1.5f;
+        card.transform.localScale = CardObject.highlightedCardSize;
         target = new Vector2(centerPos.x + (cards.Count % 2 == 0 ? evenVectors[5 - size / 2 + cardIndex] : oddVectors[4 - size / 2 + cardIndex]).x, HighlightedAnchor.position.y);
         StartCoroutine(moveCard(card, target, 0.05f));
         card.transform.SetAsLastSibling();
@@ -132,6 +142,7 @@ public class PlayerUIManager : MonoBehaviour
     }
     private IEnumerator moveCard(CardObject card, Vector2 target, float timeLimit = 0.3f)
     {
+        bool interrupted = false;
         yield return new WaitUntil(() => {
             card.moveInterrupted = true;
             if (!card.OnMoving)
@@ -149,17 +160,22 @@ public class PlayerUIManager : MonoBehaviour
         {
             if (card.moveInterrupted)
             {
+                interrupted = true;
                 return true;
             }
             card.transform.position += (Vector3)movVec * Time.deltaTime;
             time += Time.deltaTime;
             return time > timeLimit;
-        }); 
+        });
+        if (!interrupted)
+        {
+            card.transform.position = target;
+        }
         card.OnMoving = false;
     }
     public IEnumerator DehighlightCard(CardObject card)
     {
-        card.transform.localScale /= 1.5f;
+        card.transform.localScale = CardObject.originCardSize;
         card.transform.SetSiblingIndex(card.SiblingIndex);
         StartCoroutine(Rearrange());
         yield break;
@@ -172,6 +188,36 @@ public class PlayerUIManager : MonoBehaviour
             StartCoroutine(CardObject.MouseEvent[i]);
             CardObject.MouseEvent.RemoveAt(i);
         }
+    }
+    public IEnumerator ReadyUseCard(CardObject card)
+    {
+        ReadyUseMode = true;
+        RectTransform rect = card.GetComponent<RectTransform>();
+        float speed = 10000f;
+        float threshold = 1000f;
+        Vector2 movVec;
+        yield return new WaitUntil(() =>
+        {
+            movVec = (Input.mousePosition - rect.position);
+            if (movVec.magnitude < threshold)
+            {
+                rect.position = Input.mousePosition;
+                return !ReadyUseMode;
+            }
+            movVec = movVec.normalized;
+            card.transform.position += (Vector3)movVec * Time.deltaTime * speed;
+            return !ReadyUseMode;
+        });
+    }
+    public IEnumerator UseCard(CardObject card)
+    {
+        yield break;
+    }
+    public IEnumerator ReadyUseCardCancel(CardObject card)
+    {
+        StartCoroutine(DehighlightCard(card));
+        ReadyUseMode = false;
+        yield break;
     }
     private void LateUpdate()
     {

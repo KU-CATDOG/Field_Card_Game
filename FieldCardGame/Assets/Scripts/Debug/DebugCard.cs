@@ -8,7 +8,11 @@ public class DebugCard : ICard
     {
         return 0;
     }
-    public List<coordinate> GetUnavailableTile()
+    public void SetRange(int _range)
+    {
+        return;
+    }
+    public List<coordinate> GetAvailableTile()
     {
         return null;
     }

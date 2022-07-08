@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        //fixme
         Player = FindObjectOfType<Character>();
         GenerateMap();
         Allies.Add(Player);
@@ -59,5 +60,8 @@ public class GameManager : MonoBehaviour
                 Map[i, j] = tile;
             }
         }
+        //fixme
+        Player.position = new coordinate(0, 0);
+        Player.SightUpdate(Player.Sight);
     }
 }

@@ -37,7 +37,7 @@ public class TurnManager : MonoBehaviour
             {
                 foreach(var j in GameManager.Instance.Allies)
                 {
-                    curChar = GameManager.Instance.Player;
+                    curChar = j;
                     TurnEnd = false;
                     yield return StartCoroutine(curChar.AwakeTurn());
                     yield return StartCoroutine(BuffRoutine(curChar));
