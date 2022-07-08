@@ -52,4 +52,14 @@ public class DebugCharacter : Character
     {
         StartCoroutine(DrawCard());
     }
+    private void Start()
+    {
+        addedCard = new DebugCard();
+        StartCoroutine(AddCard());
+    }
+    public void DebugAddCard()
+    {
+        addedCard = new DebugCard();
+        StartCoroutine(AddCard());
+    }
 }

@@ -5,12 +5,12 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
-    private List<GameObject> cardList;
-    public IReadOnlyList<GameObject> CardList
+    private List<CardObject> cardObjectList;
+    public IReadOnlyList<CardObject> CardObjectList
     {
         get
         {
-            return cardList.AsReadOnly();
+            return cardObjectList.AsReadOnly();
         }
     }
     public static GameManager Instance { get; set; }
@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        Player = FindObjectOfType<Character>();
         GenerateMap();
         Allies.Add(Player);
     }

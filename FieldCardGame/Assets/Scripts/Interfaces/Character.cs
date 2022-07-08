@@ -101,17 +101,17 @@ public abstract class Character : MonoBehaviour
     public IEnumerator ShuffleDeck()
     {
         //need animation for player
-        if(CardPile.Capacity != 0)
+        if(CardPile.Count != 0)
         {
-            for(int i = CardPile.Capacity-1; i>=0; i--)
+            for(int i = CardPile.Count-1; i>=0; i--)
             {
                 DiscardedPile.Add(CardPile[i]);
                 CardPile.RemoveAt(i);
             }
         }
-        while(DiscardedPile.Capacity != 0)
+        while(DiscardedPile.Count != 0)
         {
-            int rand = Random.Range(0, DiscardedPile.Capacity);
+            int rand = Random.Range(0, DiscardedPile.Count);
             CardPile.Add(DiscardedPile[rand]);
             DiscardedPile.RemoveAt(rand);
         }
@@ -119,13 +119,19 @@ public abstract class Character : MonoBehaviour
     }
     public IEnumerator DrawCard()
     {
-        if(HandCard.Capacity == MAXHANDSIZE)
+        if(CardPile.Count == 0)
+        {
+            yield return StartCoroutine(ShuffleDeck());
+            if (CardPile.Count == 0)
+                yield break;
+        }
+        if(HandCard.Count == MAXHANDSIZE)
         {
             //need animation for player
             yield break;
         }
         //need animation for player
-        for(int i = DrawCardTry.Capacity-1; i>=0; i--)
+        for(int i = DrawCardTry.Count-1; i>=0; i--)
         {
             IEnumerator routine = DrawCardTry[i];
             
@@ -148,7 +154,7 @@ public abstract class Character : MonoBehaviour
         {
             yield return StartCoroutine(PlayerUIManager.Instance.DrawCard());
         }
-        for (int i = DrawCardRoutine.Capacity-1; i >= 0; i--)
+        for (int i = DrawCardRoutine.Count-1; i >= 0; i--)
         {
             IEnumerator routine = DrawCardRoutine[i];
             if (!routine.MoveNext())
@@ -158,12 +164,13 @@ public abstract class Character : MonoBehaviour
             }
             while (NeedWait) yield return null;
         }
+        Debug.Log("DrawCard, Card Pile Count:" + CardPile.Count + ", Hand Count: " + HandCard.Count);
         yield break;
     }
     public IEnumerator DropCard()
     {
         //need animation for player
-        for (int i = DropCardTry.Capacity - 1; i >= 0; i--)
+        for (int i = DropCardTry.Count - 1; i >= 0; i--)
         {
             IEnumerator routine = DropCardTry[i];
             if (!routine.MoveNext())
@@ -184,7 +191,7 @@ public abstract class Character : MonoBehaviour
         {
             yield return StartCoroutine(PlayerUIManager.Instance.DropCard());
         }
-        for (int i = DropCardRoutine.Capacity - 1; i >= 0; i--)
+        for (int i = DropCardRoutine.Count - 1; i >= 0; i--)
         {
             IEnumerator routine = DropCardRoutine[i];
             if (!routine.MoveNext())
@@ -199,7 +206,7 @@ public abstract class Character : MonoBehaviour
     public IEnumerator CardUse(coordinate center)
     {
         yield return StartCoroutine(PayCost(usedCard.GetCost(), usedCard.GetCostType()));
-        for (int i = CardUseTry.Capacity-1; i >= 0; i--)
+        for (int i = CardUseTry.Count-1; i >= 0; i--)
         {
             IEnumerator routine = CardUseTry[i];
 
@@ -216,7 +223,7 @@ public abstract class Character : MonoBehaviour
             yield break;
         }
         yield return StartCoroutine(usedCard.CardRoutine(this, center));
-        for (int i = DrawCardRoutine.Capacity-1; i >= 0; i--)
+        for (int i = DrawCardRoutine.Count-1; i >= 0; i--)
         {
             IEnumerator routine = DrawCardRoutine[i];
             if (!routine.MoveNext())
@@ -231,7 +238,7 @@ public abstract class Character : MonoBehaviour
     public IEnumerator AddCard()
     {
         //need Animation for Player
-        for (int i = AddCardTry.Capacity - 1; i >= 0; i--)
+        for (int i = AddCardTry.Count - 1; i >= 0; i--)
         {
             IEnumerator routine = AddCardTry[i];
 
@@ -247,7 +254,8 @@ public abstract class Character : MonoBehaviour
             AddCardInterrupted = false;
             yield break;
         }
-        for (int i = AddCardRoutine.Capacity - 1; i >= 0; i--)
+        CardPile.Add(addedCard);
+        for (int i = AddCardRoutine.Count - 1; i >= 0; i--)
         {
             IEnumerator routine = AddCardRoutine[i];
             if (!routine.MoveNext())
@@ -257,6 +265,7 @@ public abstract class Character : MonoBehaviour
             }
             while (NeedWait) yield return null;
         }
+        Debug.Log("AddCard, Card Pile Count:" + CardPile.Count + ", Hand Count: " + HandCard.Count);
     }
     private void SightUpdate(int newSight, bool posChange = false, coordinate prevPos = null)
     {
@@ -276,7 +285,7 @@ public abstract class Character : MonoBehaviour
     /// <returns></returns>
     public IEnumerator Move(coordinate target, int speed)
     {
-        for (int i = TryMoveRoutine.Capacity-1; i >= 0; i--)
+        for (int i = TryMoveRoutine.Count-1; i >= 0; i--)
         {
             if (!TryMoveRoutine[i].MoveNext())
             {
@@ -292,7 +301,7 @@ public abstract class Character : MonoBehaviour
         }
         Tile prevTile = GameManager.Instance.Map[position.X, position.Y];
         Tile targetTile = GameManager.Instance.Map[target.X, target.Y];
-        for (int i = prevTile.OnCharacterExitRoutine.Capacity-1; i >= 0; i--)
+        for (int i = prevTile.OnCharacterExitRoutine.Count-1; i >= 0; i--)
         {
             if (!prevTile.OnCharacterExitRoutine[i].MoveNext())
             {
@@ -316,7 +325,7 @@ public abstract class Character : MonoBehaviour
         targetTile.CharacterOnTile = this;
         SightUpdate(sight, true, prevPos);
 
-        for (int i = targetTile.OnCharacterEnterRoutine.Capacity-1; i >= 0; i--)
+        for (int i = targetTile.OnCharacterEnterRoutine.Count-1; i >= 0; i--)
         {
             if (!targetTile.OnCharacterEnterRoutine[i].MoveNext())
             {
@@ -326,7 +335,7 @@ public abstract class Character : MonoBehaviour
             while (NeedWait) yield return null;
         }
 
-        for(int i = MoveRoutine.Capacity-1; i>=0; i--)
+        for(int i = MoveRoutine.Count-1; i>=0; i--)
         {
             if (!MoveRoutine[i].MoveNext())
             {
@@ -339,7 +348,7 @@ public abstract class Character : MonoBehaviour
 
     public IEnumerator ForceMove(coordinate target, int speed)
     {
-        for (int i = TryForceMoveRoutine.Capacity-1; i >= 0; i--)
+        for (int i = TryForceMoveRoutine.Count-1; i >= 0; i--)
         {
             if (!TryForceMoveRoutine[i].MoveNext())
             {
@@ -356,7 +365,7 @@ public abstract class Character : MonoBehaviour
 
         Tile prevTile = GameManager.Instance.Map[position.X, position.Y];
         Tile targetTile = GameManager.Instance.Map[target.X, target.Y];
-        for (int i = prevTile.OnCharacterExitRoutine.Capacity - 1; i >= 0; i--)
+        for (int i = prevTile.OnCharacterExitRoutine.Count - 1; i >= 0; i--)
         {
             if (!prevTile.OnCharacterExitRoutine[i].MoveNext())
             {
@@ -378,7 +387,7 @@ public abstract class Character : MonoBehaviour
         position = target;
         targetTile.CharacterOnTile = this;
 
-        for (int i = targetTile.OnCharacterEnterRoutine.Capacity - 1; i >= 0; i--)
+        for (int i = targetTile.OnCharacterEnterRoutine.Count - 1; i >= 0; i--)
         {
             if (!targetTile.OnCharacterEnterRoutine[i].MoveNext())
             {
@@ -388,7 +397,7 @@ public abstract class Character : MonoBehaviour
             while (NeedWait) yield return null;
         }
 
-        for (int i = ForceMoveRoutine.Capacity-1; i >= 0; i--)
+        for (int i = ForceMoveRoutine.Count-1; i >= 0; i--)
         {
             if (!ForceMoveRoutine[i].MoveNext())
             {
@@ -401,7 +410,7 @@ public abstract class Character : MonoBehaviour
 
     public IEnumerator GetDmg(int dmg)
     {
-        for (int i = TryGetDmgRoutine.Capacity-1; i >= 0; i--)
+        for (int i = TryGetDmgRoutine.Count-1; i >= 0; i--)
         {
             if (!TryGetDmgRoutine[i].MoveNext())
             {
@@ -417,7 +426,7 @@ public abstract class Character : MonoBehaviour
         }
         yield return StartCoroutine(getDmg(dmg));
 
-        for (int i = GetDmgRoutine.Capacity-1; i >= 0; i--)
+        for (int i = GetDmgRoutine.Count-1; i >= 0; i--)
         {
             if (!GetDmgRoutine[i].MoveNext())
             {
@@ -430,7 +439,7 @@ public abstract class Character : MonoBehaviour
     protected abstract IEnumerator getDmg(int dmg);
     public IEnumerator Die()
     {
-        for (int i = TryDieRoutine.Capacity-1; i >= 0; i--)
+        for (int i = TryDieRoutine.Count-1; i >= 0; i--)
         {
             if (!TryDieRoutine[i].MoveNext())
             {
@@ -446,7 +455,7 @@ public abstract class Character : MonoBehaviour
         }
         yield return StartCoroutine(dieRoutine());
 
-        for (int i = DieRoutine.Capacity-1; i >= 0; i--)
+        for (int i = DieRoutine.Count-1; i >= 0; i--)
         {
             if (!DieRoutine[i].MoveNext())
             {
@@ -460,7 +469,7 @@ public abstract class Character : MonoBehaviour
     public IEnumerator PayCost(int cost, CostType type)
     {
         yield return StartCoroutine(payCost(cost, type));
-        for (int i = PayCostRoutine.Capacity - 1; i >= 0; i--)
+        for (int i = PayCostRoutine.Count - 1; i >= 0; i--)
         {
             if (!PayCostRoutine[i].MoveNext())
             {
