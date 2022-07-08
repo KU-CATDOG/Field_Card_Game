@@ -130,35 +130,23 @@ public class PlayerUIManager : MonoBehaviour
         card.transform.rotation = Quaternion.Euler(Vector2.zero);
         yield break;
     }
-    private int i = 0;
     private IEnumerator moveCard(CardObject card, Vector2 target, float timeLimit = 0.3f)
     {
-        int id = i++;
-        if (card.SiblingIndex - defaultSiblingIndex == 1)
-        {
-            Debug.Log("ENTER ID:" + id);
-        }
         yield return new WaitUntil(() => {
-            if (card.SiblingIndex - defaultSiblingIndex == 1)
+            card.moveInterrupted = true;
+            if (!card.OnMoving)
             {
-                Debug.Log("WAIT ID:" + id);
+                card.OnMoving = true;
+                return true;
             }
-            card.moveInterrupted = true; return !card.OnMoving; });
+            return false;
+        });
         card.moveInterrupted = false;
-        if (card.SiblingIndex - defaultSiblingIndex == 1)
-        {
-            Debug.Log("IN ID:" + id);
-        }
-        card.OnMoving = true;
         Vector2 movVec = target - (Vector2)card.transform.position;
         float time = 0f;
         movVec /= timeLimit;
         yield return new WaitUntil(() =>
         {
-            if (card.SiblingIndex - defaultSiblingIndex == 1)
-            {
-            Debug.Log("RUNNING ID: " + id);
-            }
             if (card.moveInterrupted)
             {
                 return true;
@@ -167,10 +155,6 @@ public class PlayerUIManager : MonoBehaviour
             time += Time.deltaTime;
             return time > timeLimit;
         }); 
-        if (card.SiblingIndex - defaultSiblingIndex == 1)
-        {
-            Debug.Log("OUT ID" + id);
-        }
         card.OnMoving = false;
     }
     public IEnumerator DehighlightCard(CardObject card)
@@ -189,15 +173,9 @@ public class PlayerUIManager : MonoBehaviour
             CardObject.MouseEvent.RemoveAt(i);
         }
     }
-    private void Update()
-    {
-        Debug.Log("UPDATE===");
-    }
     private void LateUpdate()
     {
-        Debug.Log("LATE UPDATE IN===");
         ExecuteCardMouseEvents();
-        Debug.Log("LATE UPDATE OUT===");
     }
 
 }

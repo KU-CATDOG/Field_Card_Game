@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class CardObject : MonoBehaviour
 {
+    private void Start()
+    {
+        
+    }
     public static List<IEnumerator> MouseEvent { get; private set; } = new List<IEnumerator>();
     public int SiblingIndex { get; set; }
     public bool moveInterrupted { get; set; } = false;
