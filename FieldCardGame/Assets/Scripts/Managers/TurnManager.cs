@@ -59,8 +59,7 @@ public class TurnManager : MonoBehaviour
                     yield return StartCoroutine(TurnEndDebuffRoutine(curChar));
                     for (int i = curChar.HandCard.Count - 1; i >= 0; i--)
                     {
-                        curChar.usedCard = curChar.HandCard[i];
-                        yield return StartCoroutine(curChar.DropCard());
+                        yield return StartCoroutine(curChar.DropCard(i));
                     }
                 }
                 yield return StartCoroutine(TurnEndRoutine(null));
@@ -90,8 +89,7 @@ public class TurnManager : MonoBehaviour
                     yield return StartCoroutine(TurnEndDebuffRoutine(curChar)); 
                     for (int i = curChar.HandCard.Count - 1; i >= 0; i--)
                     {
-                        curChar.usedCard = curChar.HandCard[i];
-                        yield return StartCoroutine(curChar.DropCard());
+                        yield return StartCoroutine(curChar.DropCard(i));
                     }
                 }
                 StartCoroutine(TurnEndRoutine(null));
@@ -212,8 +210,7 @@ public class TurnManager : MonoBehaviour
             yield return StartCoroutine(TurnEndDebuffRoutine(curChar));
             for(int i = curChar.HandCard.Count-1; i>=0; i--)
             {
-                curChar.usedCard = curChar.HandCard[i];
-                yield return StartCoroutine(curChar.DropCard());
+                yield return StartCoroutine(curChar.DropCard(i));
             }
         }
     }

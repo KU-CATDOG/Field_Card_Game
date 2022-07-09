@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PaladinMove : ICard
 {
-    private List<coordinate> AreaOfEffect;
     private int range;
     public int GetRange()
     {
@@ -14,63 +13,69 @@ public class PaladinMove : ICard
     {
         range = _range;
     }
-    public List<coordinate> GetAvailableTile()
+    public Color GetUnAvailableTileColor()
+    {
+        return Color.red;
+    }
+    public List<coordinate> GetAvailableTile(coordinate pos)
     {
         List<coordinate> ret = new List<coordinate>();
-        if (AreaOfEffect != null)
-        {
-            AreaOfEffect.Clear();
-        }
         int level = 1;
         bool[,] visited = new bool[128, 128];
         Queue<coordinate> queue = new Queue<coordinate>();
         Queue<coordinate> nextQueue = new Queue<coordinate>();
-        queue.Enqueue(GameManager.Instance.Player.position);
+        queue.Enqueue(pos);
         while (level++ <= GetRange())
         {
             while(queue.Count != 0)
             {
                 coordinate tmp = queue.Dequeue();
+                ret.Add(tmp);
                 coordinate tile;
                 if ((tile = tmp.GetDownTile()) != null && !visited[tile.X,tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
                 {
                     visited[tile.X, tile.Y] = true;
                     nextQueue.Enqueue(tile);
                 };
-                if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                if ((tile = tmp.GetLeftTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
                 {
                     visited[tile.X, tile.Y] = true;
                     nextQueue.Enqueue(tile);
                 };
-                if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                if ((tile = tmp.GetRightTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
                 {
                     visited[tile.X, tile.Y] = true;
                     nextQueue.Enqueue(tile);
                 };
-                if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                if ((tile = tmp.GetUpTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
                 {
                     visited[tile.X, tile.Y] = true;
                     nextQueue.Enqueue(tile);
                 }
             }
-            queue = nextQueue;
+            queue = new Queue<coordinate>(nextQueue);
             nextQueue.Clear();
         }
-        while(nextQueue.Count != 0)
+        while(queue.Count != 0)
         {
-            ret.Add(nextQueue.Dequeue());
+            ret.Add(queue.Dequeue());
         }
         return ret;
     }
-    
-    private List<coordinate> FindPath(coordinate target)
+    public Color GetAvailableTileColor()
+    {
+        return Color.blue;
+    }
+
+    private List<coordinate> FindPath(coordinate from, coordinate to)
     {
         List<coordinate> ret = new List<coordinate>();
         for(int i = 1; i <= GetRange(); i++)
         {
-            if (dfs(0, i, GameManager.Instance.Player.position, ret, target))
+            if (dfs(0, i, from, ret, to))
             {
                 ret.Reverse();
+                ret.Add(to);
                 return ret;
             } 
         }
@@ -80,7 +85,13 @@ public class PaladinMove : ICard
     private bool dfs(int level, int limit, coordinate now, List<coordinate> path, coordinate target)
     {
         if (level > limit)
+        {
             return false;
+        }
+        if(target.X == now.X && target.Y == now.Y)
+        {
+            return true;
+        }
 
         if (now.GetDownTile() != null)
         {
@@ -125,20 +136,27 @@ public class PaladinMove : ICard
         ret.Add(new coordinate(0, 0));
         return ret;
     }
-    public bool IsAvailablePosition(int x, int y)
+    public Color GetColorOfEffect(coordinate pos)
     {
-        AreaOfEffect = GetAreaofEffect();
-        coordinate tmp = new coordinate(x, y);
-        if(AreaOfEffect.Exists((i)=>  i.X == tmp.X && i.Y == tmp.Y))
+        if(pos.X==0 && pos.Y == 0)
+        {
+            return Color.white;
+        }
+        return Color.black;
+    }
+    public bool IsAvailablePosition(coordinate caster, coordinate target)
+    {
+        List<coordinate> availablePositions = GetAvailableTile(caster);
+        if(availablePositions.Exists((i)=>  i.X == target.X && i.Y == target.Y))
         {
             return true;
         }
         return false;
     }
-    public IEnumerator CardRoutine(Character caster, coordinate center)
+    public IEnumerator CardRoutine(Character caster, coordinate target)
     {
-        List<coordinate> path = new List<coordinate>();
-        path = FindPath(center);
+        List<coordinate> path;
+        path = FindPath(caster.position, target);
         float speed = 1f;
         foreach(coordinate i in path)
         {

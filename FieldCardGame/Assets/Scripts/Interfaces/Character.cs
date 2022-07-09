@@ -8,19 +8,19 @@ public abstract class Character : MonoBehaviour
     public bool NeedWait { get; set; }
     public bool ReadyToPlay { get; set; }
     private coordinate pos;
-    public coordinate position 
-    { 
-        get 
-        { 
-            return pos; 
-        } 
-        set 
-        { 
+    public coordinate position
+    {
+        get
+        {
+            return pos;
+        }
+        set
+        {
             pos = value;
             transform.position = new Vector3(value.X, 1, value.Y);
-        } 
+        }
     }
-    private int sight;
+    private int sight = 10;
     public int Sight
     {
         get
@@ -101,15 +101,15 @@ public abstract class Character : MonoBehaviour
     public IEnumerator ShuffleDeck()
     {
         //need animation for player
-        if(CardPile.Count != 0)
+        if (CardPile.Count != 0)
         {
-            for(int i = CardPile.Count-1; i>=0; i--)
+            for (int i = CardPile.Count - 1; i >= 0; i--)
             {
                 DiscardedPile.Add(CardPile[i]);
                 CardPile.RemoveAt(i);
             }
         }
-        while(DiscardedPile.Count != 0)
+        while (DiscardedPile.Count != 0)
         {
             int rand = Random.Range(0, DiscardedPile.Count);
             CardPile.Add(DiscardedPile[rand]);
@@ -119,23 +119,23 @@ public abstract class Character : MonoBehaviour
     }
     public IEnumerator DrawCard()
     {
-        if(CardPile.Count == 0)
+        if (CardPile.Count == 0)
         {
             yield return StartCoroutine(ShuffleDeck());
             if (CardPile.Count == 0)
                 yield break;
         }
-        if(HandCard.Count == MAXHANDSIZE)
+        if (HandCard.Count == MAXHANDSIZE)
         {
             //need animation for player
             yield break;
         }
         //need animation for player
-        for(int i = DrawCardTry.Count-1; i>=0; i--)
+        for (int i = DrawCardTry.Count - 1; i >= 0; i--)
         {
             IEnumerator routine = DrawCardTry[i];
-            
-            if(!routine.MoveNext())
+
+            if (!routine.MoveNext())
             {
                 while (NeedWait) yield return null;
                 DrawCardTry.RemoveAt(i);
@@ -150,11 +150,11 @@ public abstract class Character : MonoBehaviour
         drawCard = CardPile[0];
         CardPile.RemoveAt(0);
         HandCard.Add(drawCard);
-        if(gameObject.tag == "Player")
+        if (gameObject.tag == "Player")
         {
             yield return StartCoroutine(PlayerUIManager.Instance.DrawCard());
         }
-        for (int i = DrawCardRoutine.Count-1; i >= 0; i--)
+        for (int i = DrawCardRoutine.Count - 1; i >= 0; i--)
         {
             IEnumerator routine = DrawCardRoutine[i];
             if (!routine.MoveNext())
@@ -164,10 +164,10 @@ public abstract class Character : MonoBehaviour
             }
             while (NeedWait) yield return null;
         }
-        Debug.Log("DrawCard "+ drawCard +" Card Pile Count:" + CardPile.Count + ", Hand Count: " + HandCard.Count);
+        Debug.Log("DrawCard " + drawCard + " Card Pile Count:" + CardPile.Count + ", Hand Count: " + HandCard.Count);
         yield break;
     }
-    public IEnumerator DropCard()
+    public IEnumerator DropCard(int idx)
     {
         //need animation for player
         for (int i = DropCardTry.Count - 1; i >= 0; i--)
@@ -185,11 +185,12 @@ public abstract class Character : MonoBehaviour
             DrawInterrupted = false;
             yield break;
         }
-        HandCard.Remove(usedCard);
-        DiscardedPile.Add(usedCard);
+        dropCard = HandCard[idx];
+        DiscardedPile.Add(dropCard);
+        HandCard.RemoveAt(idx);
         if (gameObject.tag == "Player")
         {
-            yield return StartCoroutine(PlayerUIManager.Instance.DropCard());
+            yield return StartCoroutine(PlayerUIManager.Instance.DropCard(GameManager.Instance.CardObjectList[dropCard.GetCardID()]));
         }
         for (int i = DropCardRoutine.Count - 1; i >= 0; i--)
         {
@@ -203,10 +204,11 @@ public abstract class Character : MonoBehaviour
         }
         yield break;
     }
-    public IEnumerator CardUse(coordinate center)
+    public IEnumerator CardUse(coordinate target, int idx)
     {
+        usedCard = HandCard[idx];
         yield return StartCoroutine(PayCost(usedCard.GetCost(), usedCard.GetCostType()));
-        for (int i = CardUseTry.Count-1; i >= 0; i--)
+        for (int i = CardUseTry.Count - 1; i >= 0; i--)
         {
             IEnumerator routine = CardUseTry[i];
 
@@ -222,18 +224,18 @@ public abstract class Character : MonoBehaviour
             CardUseInterrupted = false;
             yield break;
         }
-        yield return StartCoroutine(usedCard.CardRoutine(this, center));
-        for (int i = DrawCardRoutine.Count-1; i >= 0; i--)
+        yield return StartCoroutine(usedCard.CardRoutine(this, target));
+        for (int i = CardUseRoutine.Count - 1; i >= 0; i--)
         {
-            IEnumerator routine = DrawCardRoutine[i];
+            IEnumerator routine = CardUseRoutine[i];
             if (!routine.MoveNext())
             {
                 while (NeedWait) yield return null;
-                DrawCardRoutine.RemoveAt(i);
+                CardUseRoutine.RemoveAt(i);
             }
             while (NeedWait) yield return null;
         }
-        yield return StartCoroutine(DropCard());
+        yield return StartCoroutine(DropCard(idx));
     }
     public IEnumerator AddCard()
     {
@@ -268,8 +270,8 @@ public abstract class Character : MonoBehaviour
         Debug.Log("AddCard," + addedCard + " Card Pile Count:" + CardPile.Count + ", Hand Count: " + HandCard.Count);
     }
     public void SightUpdate(int newSight, bool posChange = false, coordinate prevPos = null)
-    {        
-        if (posChange)
+    {
+        if (!posChange)
         {
             dfs(0, sight, position, true, false);
         }
@@ -281,10 +283,10 @@ public abstract class Character : MonoBehaviour
     }
     private void dfs(int level, int limit, coordinate now, bool discovered, bool onSight)
     {
-        GameManager.Instance.Map[now.X, now.Y].Discovered = discovered;
-        GameManager.Instance.Map[now.X, now.Y].Onsight = onSight;
         if (level > limit)
             return;
+        GameManager.Instance.Map[now.X, now.Y].Discovered = discovered;
+        GameManager.Instance.Map[now.X, now.Y].Onsight = onSight;
         if (now.GetDownTile() != null)
         {
             dfs(level + 1, limit, now.GetDownTile(), discovered, onSight);
@@ -312,7 +314,7 @@ public abstract class Character : MonoBehaviour
     /// <returns></returns>
     public IEnumerator Move(coordinate target, float speed)
     {
-        for (int i = TryMoveRoutine.Count-1; i >= 0; i--)
+        for (int i = TryMoveRoutine.Count - 1; i >= 0; i--)
         {
             if (!TryMoveRoutine[i].MoveNext())
             {
@@ -328,7 +330,7 @@ public abstract class Character : MonoBehaviour
         }
         Tile prevTile = GameManager.Instance.Map[position.X, position.Y];
         Tile targetTile = GameManager.Instance.Map[target.X, target.Y];
-        for (int i = prevTile.OnCharacterExitRoutine.Count-1; i >= 0; i--)
+        for (int i = prevTile.OnCharacterExitRoutine.Count - 1; i >= 0; i--)
         {
             if (!prevTile.OnCharacterExitRoutine[i].MoveNext())
             {
@@ -338,13 +340,13 @@ public abstract class Character : MonoBehaviour
             while (NeedWait) yield return null;
         }
         prevTile.CharacterOnTile = null;
-        Vector3 moveVector = new Vector3(target.X - position.X,0, target.Y - position.Y);
+        Vector3 moveVector = new Vector3(target.X - position.X, 0, target.Y - position.Y);
         float time = 0f;
         yield return new WaitUntil(() =>
         {
             time += Time.deltaTime;
             transform.position += moveVector * Time.deltaTime * speed;
-            return time >= 1f / speed;
+            return time > 1f / speed;
         });
         transform.position = new Vector3(target.X, 0, target.Y);
         coordinate prevPos = position;
@@ -352,7 +354,7 @@ public abstract class Character : MonoBehaviour
         targetTile.CharacterOnTile = this;
         SightUpdate(sight, true, prevPos);
 
-        for (int i = targetTile.OnCharacterEnterRoutine.Count-1; i >= 0; i--)
+        for (int i = targetTile.OnCharacterEnterRoutine.Count - 1; i >= 0; i--)
         {
             if (!targetTile.OnCharacterEnterRoutine[i].MoveNext())
             {
@@ -362,7 +364,7 @@ public abstract class Character : MonoBehaviour
             while (NeedWait) yield return null;
         }
 
-        for(int i = MoveRoutine.Count-1; i>=0; i--)
+        for (int i = MoveRoutine.Count - 1; i >= 0; i--)
         {
             if (!MoveRoutine[i].MoveNext())
             {
@@ -375,7 +377,7 @@ public abstract class Character : MonoBehaviour
 
     public IEnumerator ForceMove(coordinate target, int speed)
     {
-        for (int i = TryForceMoveRoutine.Count-1; i >= 0; i--)
+        for (int i = TryForceMoveRoutine.Count - 1; i >= 0; i--)
         {
             if (!TryForceMoveRoutine[i].MoveNext())
             {
@@ -424,7 +426,7 @@ public abstract class Character : MonoBehaviour
             while (NeedWait) yield return null;
         }
 
-        for (int i = ForceMoveRoutine.Count-1; i >= 0; i--)
+        for (int i = ForceMoveRoutine.Count - 1; i >= 0; i--)
         {
             if (!ForceMoveRoutine[i].MoveNext())
             {
@@ -437,7 +439,7 @@ public abstract class Character : MonoBehaviour
 
     public IEnumerator GetDmg(int dmg)
     {
-        for (int i = TryGetDmgRoutine.Count-1; i >= 0; i--)
+        for (int i = TryGetDmgRoutine.Count - 1; i >= 0; i--)
         {
             if (!TryGetDmgRoutine[i].MoveNext())
             {
@@ -453,7 +455,7 @@ public abstract class Character : MonoBehaviour
         }
         yield return StartCoroutine(getDmg(dmg));
 
-        for (int i = GetDmgRoutine.Count-1; i >= 0; i--)
+        for (int i = GetDmgRoutine.Count - 1; i >= 0; i--)
         {
             if (!GetDmgRoutine[i].MoveNext())
             {
@@ -466,7 +468,7 @@ public abstract class Character : MonoBehaviour
     protected abstract IEnumerator getDmg(int dmg);
     public IEnumerator Die()
     {
-        for (int i = TryDieRoutine.Count-1; i >= 0; i--)
+        for (int i = TryDieRoutine.Count - 1; i >= 0; i--)
         {
             if (!TryDieRoutine[i].MoveNext())
             {
@@ -482,7 +484,7 @@ public abstract class Character : MonoBehaviour
         }
         yield return StartCoroutine(dieRoutine());
 
-        for (int i = DieRoutine.Count-1; i >= 0; i--)
+        for (int i = DieRoutine.Count - 1; i >= 0; i--)
         {
             if (!DieRoutine[i].MoveNext())
             {
@@ -508,5 +510,5 @@ public abstract class Character : MonoBehaviour
     }
     protected abstract IEnumerator payCost(int cost, CostType type);
     public abstract bool PayTest(int cost, CostType type);
-    
+
 }

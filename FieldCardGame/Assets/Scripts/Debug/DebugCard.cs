@@ -4,6 +4,18 @@ using UnityEngine;
 
 public class DebugCard : ICard
 {
+    public Color GetColorOfEffect(coordinate pos)
+    {
+        return Color.black;
+    }
+    public Color GetUnAvailableTileColor()
+    {
+        return Color.black;
+    }
+    public Color GetAvailableTileColor()
+    {
+        return Color.black;
+    }
     public int GetRange()
     {
         return 0;
@@ -12,7 +24,7 @@ public class DebugCard : ICard
     {
         return;
     }
-    public List<coordinate> GetAvailableTile()
+    public List<coordinate> GetAvailableTile(coordinate pos)
     {
         return null;
     }
@@ -20,7 +32,7 @@ public class DebugCard : ICard
     {
         return null;
     }
-    public bool IsAvailablePosition(int row, int col)
+    public bool IsAvailablePosition(coordinate caster, coordinate target)
     {
         return false;
     }

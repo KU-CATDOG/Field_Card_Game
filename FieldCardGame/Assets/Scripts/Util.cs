@@ -33,6 +33,14 @@ public class coordinate
         X = x;
         Y = y;
     }
+    public static coordinate operator+(coordinate p1, coordinate p2)
+    {
+        return new coordinate(p1.X + p2.X, p1.Y + p2.Y);
+    }
+    public static coordinate operator -(coordinate p1, coordinate p2)
+    {
+        return new coordinate(p1.X - p2.X, p1.Y - p2.Y);
+    }
     public coordinate GetUpTile()
     {
         coordinate ret = new coordinate(X, Y + 1);
@@ -40,7 +48,7 @@ public class coordinate
         {
             return null;
         }
-        return new coordinate(X, Y + 1);
+        return ret;
     }
     public coordinate GetDownTile()
     {
@@ -49,7 +57,7 @@ public class coordinate
         {
             return null;
         }
-        return new coordinate(X, Y + 1);
+        return ret;
     }
     public coordinate GetLeftTile()
     {
@@ -58,7 +66,7 @@ public class coordinate
         {
             return null;
         }
-        return new coordinate(X, Y + 1);
+        return ret;
     }
     public coordinate GetRightTile()
     {
@@ -67,7 +75,7 @@ public class coordinate
         {
             return null;
         }
-        return new coordinate(X, Y + 1);
+        return ret;
     }
     private bool OutRange(coordinate toTest)
     {

@@ -42,6 +42,7 @@ public class DebugCharacter : Character
     }
     protected override IEnumerator payCost(int cost, CostType type)
     {
+        yield break;
         throw new System.NotImplementedException();
     }
     public override bool PayTest(int cost, CostType type)

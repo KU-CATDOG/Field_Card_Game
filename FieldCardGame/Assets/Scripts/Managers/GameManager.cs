@@ -34,14 +34,14 @@ public class GameManager : MonoBehaviour
             Destroy(this);
         }
         EnemyList = new List<Character>();
+        Player = FindObjectOfType<Character>();
+        GenerateMap();
+        Allies.Add(Player);
     }
 
     private void Start()
     {
         //fixme
-        Player = FindObjectOfType<Character>();
-        GenerateMap();
-        Allies.Add(Player);
     }
 
     public Tile GetTilePrefab()
@@ -57,11 +57,13 @@ public class GameManager : MonoBehaviour
             {
                 Tile tile = Instantiate(tilePrefab, MapObject.transform);
                 tile.transform.position = new Vector3(i, 0, j);
+                tile.position = new coordinate(i, j);
                 Map[i, j] = tile;
             }
         }
         //fixme
-        Player.position = new coordinate(0, 0);
+        Player.position = new coordinate(10, 10);
+        Map[10, 10].CharacterOnTile = Player;
         Player.SightUpdate(Player.Sight);
     }
 }

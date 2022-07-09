@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class PlayerUIManager : MonoBehaviour
 {
     public static PlayerUIManager Instance { get; set; }
+    public float CardUseHeight { get; set; }
     [SerializeField]
     private Button TurnEndButton;
     [SerializeField]
@@ -22,8 +23,13 @@ public class PlayerUIManager : MonoBehaviour
     private Transform HighlightedAnchor;
     private Vector2 LeftSideVector;
     private float VectorLen;
+    public bool TileSelected { get; set; }
     public bool UseMode { get; set; }
+    public ICard UseModeCard;
+    public coordinate CardUsePos { get; set; }
+    public bool UseTileSelected { get; set; }
     public bool ReadyUseMode { get; set; }
+
     private float angle;
     private float[] evenAngles = new float[10];
     private float[] oddAngles = new float[9];
@@ -48,6 +54,8 @@ public class PlayerUIManager : MonoBehaviour
     }
     private void Start()
     {
+        RectTransform rect = CardArea.GetComponent<RectTransform>();
+        CardUseHeight = rect.position.y + rect.sizeDelta.y;
         defaultSiblingIndex = CardArea.transform.childCount;
         centerPos = new Vector2(CenterPoint.transform.position.x, -Mathf.Tan(80f / 180f * Mathf.PI) * (RightSide.position - LeftSide.position).magnitude / 2);
         CenterPoint.transform.position = centerPos;
@@ -76,9 +84,46 @@ public class PlayerUIManager : MonoBehaviour
         yield return StartCoroutine(Rearrange());
 
     }
-    public IEnumerator DropCard()
+    public IEnumerator DropCard(CardObject card)
     {
+        int idx = card.SiblingIndex; 
+        CardImages.RemoveAt(idx);
+        //needAnimation
+        Destroy(CardImages[idx].gameObject);
         yield return StartCoroutine(Rearrange());
+    }
+    private IEnumerator moveCard(CardObject card, Vector2 target, float timeLimit = 0.3f)
+    {
+        bool interrupted = false;
+        yield return new WaitUntil(() => {
+            card.moveInterrupted = true;
+            if (!card.OnMoving)
+            {
+                card.OnMoving = true;
+                return true;
+            }
+            return false;
+        });
+        card.moveInterrupted = false;
+        Vector2 movVec = target - (Vector2)card.transform.position;
+        float time = 0f;
+        movVec /= timeLimit;
+        yield return new WaitUntil(() =>
+        {
+            if (card.moveInterrupted)
+            {
+                interrupted = true;
+                return true;
+            }
+            card.transform.position += (Vector3)movVec * Time.deltaTime;
+            time += Time.deltaTime;
+            return time > timeLimit;
+        });
+        if (!interrupted)
+        {
+            card.transform.position = target;
+        }
+        card.OnMoving = false;
     }
     public IEnumerator Rearrange(int exceptFor = -1)
     {
@@ -140,39 +185,6 @@ public class PlayerUIManager : MonoBehaviour
         card.transform.rotation = Quaternion.Euler(Vector2.zero);
         yield break;
     }
-    private IEnumerator moveCard(CardObject card, Vector2 target, float timeLimit = 0.3f)
-    {
-        bool interrupted = false;
-        yield return new WaitUntil(() => {
-            card.moveInterrupted = true;
-            if (!card.OnMoving)
-            {
-                card.OnMoving = true;
-                return true;
-            }
-            return false;
-        });
-        card.moveInterrupted = false;
-        Vector2 movVec = target - (Vector2)card.transform.position;
-        float time = 0f;
-        movVec /= timeLimit;
-        yield return new WaitUntil(() =>
-        {
-            if (card.moveInterrupted)
-            {
-                interrupted = true;
-                return true;
-            }
-            card.transform.position += (Vector3)movVec * Time.deltaTime;
-            time += Time.deltaTime;
-            return time > timeLimit;
-        });
-        if (!interrupted)
-        {
-            card.transform.position = target;
-        }
-        card.OnMoving = false;
-    }
     public IEnumerator DehighlightCard(CardObject card)
     {
         card.transform.localScale = CardObject.originCardSize;
@@ -180,17 +192,79 @@ public class PlayerUIManager : MonoBehaviour
         StartCoroutine(Rearrange());
         yield break;
     }
-    public void ExecuteCardMouseEvents()
+    public IEnumerator UseCard(CardObject card)
     {
-        CardObject.MouseEvent.Reverse();
-        for (int i = CardObject.MouseEvent.Count - 1; i >= 0; i--)
+        ReadyUseMode = false;
+        UseMode = true;
+        StartCoroutine(MainCamera.Instance.moveCamera(true));
+        List<ICard> cards = GameManager.Instance.Player.HandCard;
+        int cardIdx = card.SiblingIndex - defaultSiblingIndex;
+        UseModeCard = cards[cardIdx];
+        int size = cards.Count;
+        for (int i = 0; i < size; i++)
         {
-            StartCoroutine(CardObject.MouseEvent[i]);
-            CardObject.MouseEvent.RemoveAt(i);
+            if (i == cardIdx) continue;
+            CardObject obj = CardImages[i];
+            Vector3 target = obj.transform.position - new Vector3(0, CardUseHeight, 0);
+            StartCoroutine(moveCard(obj, target));
+        }
+        card.gameObject.SetActive(false);
+        int range = UseModeCard.GetRange();
+        List<coordinate> inRange = new List<coordinate>();
+        dfs(0, range, GameManager.Instance.Player.position, inRange);
+        foreach(coordinate i in inRange)
+        {
+            GameManager.Instance.Map[i.X, i.Y].TileColor.material.color = UseModeCard.GetUnAvailableTileColor();
+        }
+        foreach (coordinate i in UseModeCard.GetAvailableTile(GameManager.Instance.Player.position))
+        {
+            GameManager.Instance.Map[i.X, i.Y].TileColor.material.color = UseModeCard.GetAvailableTileColor();
+        }
+        yield return new WaitUntil(() =>
+        {
+            return UseTileSelected;
+        });
+        foreach(coordinate i in inRange)
+        {
+            GameManager.Instance.Map[i.X, i.Y].RestoreColor();
+        }
+        UseMode = false;
+        yield return StartCoroutine(MainCamera.Instance.moveCamera(false));
+        yield return StartCoroutine(GameManager.Instance.Player.CardUse(CardUsePos, cardIdx));
+    }
+    private void dfs(int level, int limit, coordinate now, List<coordinate> inRange)
+    {
+        if (level > limit)
+            return;
+        inRange.Add(now);
+        if (now.GetDownTile() != null)
+        {
+            dfs(level + 1, limit, now.GetDownTile(), inRange);
+        }
+        if (now.GetUpTile() != null)
+        {
+            dfs(level + 1, limit, now.GetUpTile(), inRange);
+
+        }
+        if (now.GetLeftTile() != null)
+        {
+            dfs(level + 1, limit, now.GetLeftTile(), inRange);
+
+        }
+        if (now.GetRightTile() != null)
+        {
+            dfs(level + 1, limit, now.GetRightTile(), inRange);
         }
     }
+    /* implement if need
+    public IEnumerator UseCardCancel(CardObject card)
+    {
+
+    }
+    */
     public IEnumerator ReadyUseCard(CardObject card)
     {
+        StartCoroutine(HighlightCard(card));
         ReadyUseMode = true;
         RectTransform rect = card.GetComponent<RectTransform>();
         float speed = 10000f;
@@ -209,15 +283,20 @@ public class PlayerUIManager : MonoBehaviour
             return !ReadyUseMode;
         });
     }
-    public IEnumerator UseCard(CardObject card)
-    {
-        yield break;
-    }
     public IEnumerator ReadyUseCardCancel(CardObject card)
     {
         StartCoroutine(DehighlightCard(card));
         ReadyUseMode = false;
         yield break;
+    }
+    public void ExecuteCardMouseEvents()
+    {
+        CardObject.MouseEvent.Reverse();
+        for (int i = CardObject.MouseEvent.Count - 1; i >= 0; i--)
+        {
+            StartCoroutine(CardObject.MouseEvent[i]);
+            CardObject.MouseEvent.RemoveAt(i);
+        }
     }
     private void LateUpdate()
     {

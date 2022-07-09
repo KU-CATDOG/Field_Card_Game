@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
-public class CardObject : MonoBehaviour
+public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     public static List<IEnumerator> MouseEvent { get; private set; } = new List<IEnumerator>();
     public int SiblingIndex { get; set; }
@@ -23,27 +24,35 @@ public class CardObject : MonoBehaviour
     {
         image = GetComponent<RawImage>();
     }
-    public void CardMouseEnter()
+    public void OnPointerEnter(PointerEventData eventData)
     {
-        if (PlayerUIManager.Instance.ReadyUseMode) return;
+        if (PlayerUIManager.Instance.ReadyUseMode || PlayerUIManager.Instance.UseMode) return;
         MouseEvent.Add(PlayerUIManager.Instance.HighlightCard(this));
     }
-    public void CardMouseExit()
+    public void OnPointerExit(PointerEventData eventData)
     {
-        if (PlayerUIManager.Instance.ReadyUseMode) return;
+        if (PlayerUIManager.Instance.ReadyUseMode || PlayerUIManager.Instance.UseMode) return;
         MouseEvent.Add(PlayerUIManager.Instance.DehighlightCard(this));
     }
-    public void CardOnClick()
+    public void OnPointerClick(PointerEventData eventData)
     {
-        if (PlayerUIManager.Instance.ReadyUseMode)
+        if (PlayerUIManager.Instance.ReadyUseMode && !PlayerUIManager.Instance.UseMode)
         {
-            MouseEvent.Add(PlayerUIManager.Instance.ReadyUseCardCancel(this));
-            
+            if (Input.mousePosition.y > PlayerUIManager.Instance.CardUseHeight && eventData.button == 0)
+            {
+                MouseEvent.Add(PlayerUIManager.Instance.UseCard(this));
+            }
+            else
+            {
+                MouseEvent.Add(PlayerUIManager.Instance.ReadyUseCardCancel(this));
+            }
+
         }
-        else
+        else if(!PlayerUIManager.Instance.UseMode)
         {
-            MouseEvent.Add(PlayerUIManager.Instance.ReadyUseCard(this));
-            
+            if(eventData.button == 0)
+                MouseEvent.Add(PlayerUIManager.Instance.ReadyUseCard(this));
+
         }
     }
 }

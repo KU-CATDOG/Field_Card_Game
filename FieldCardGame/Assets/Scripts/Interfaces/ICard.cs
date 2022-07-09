@@ -5,13 +5,16 @@ using UnityEngine;
 public interface ICard
 {
     public int GetRange();
-    public List<coordinate> GetAvailableTile();
+    public void SetRange(int _range);
+    public Color GetUnAvailableTileColor();
+    public List<coordinate> GetAvailableTile(coordinate pos);
+    public Color GetAvailableTileColor();
     public List<coordinate> GetAreaofEffect();
-    public bool IsAvailablePosition(int x, int y);
+    public Color GetColorOfEffect(coordinate pos);
+    public bool IsAvailablePosition(coordinate caster, coordinate target);
     public IEnumerator CardRoutine(Character caster, coordinate center);
     public int GetCost();
     public CostType GetCostType();
     public CardType GetCardType();
     public int GetCardID();
-    public void SetRange(int _range);
 }
