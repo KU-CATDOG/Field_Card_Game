@@ -70,21 +70,155 @@ public class PaladinMove : ICard
 
     private List<coordinate> FindPath(coordinate from, coordinate to)
     {
-        bool[,] visited = new bool[128, 128];
-        List<coordinate> ret = new List<coordinate>();
-        for (int i = 1; i <= GetRange(); i++)
+        List<coordinate> ret;
+        ret = backTracking(GetRange(), from, to);
+        if (ret != null)
         {
-            if (dfs(0, i, from, ret, to, visited))
-            {
-                ret.RemoveAt(ret.Count - 1);
-                ret.Reverse();
-                ret.Add(to);
-                return ret;
-            }
+            ret.Reverse();
+            return ret;
         }
         return null;
     }
-
+    private List<coordinate> backTracking(int limit, coordinate center, coordinate target)
+    {
+        List<coordinate> ret = new List<coordinate>();
+        int level = 1;
+        int[,] direction = new int[128, 128];
+        Queue<coordinate> queue = new Queue<coordinate>();
+        Queue<coordinate> nextQueue = new Queue<coordinate>();
+        queue.Enqueue(center);
+        while (level++ <= limit)
+        {
+            while (queue.Count != 0)
+            {
+                coordinate tmp = queue.Dequeue();
+                coordinate tile;
+                if ((tile = tmp.GetDownTile()) != null && direction[tile.X, tile.Y] == 0 && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                {
+                    if (tile.X == target.X && tile.Y == target.Y)
+                    {
+                        ret.Add(target);
+                        coordinate i = tmp;
+                        while (i.X != center.X || i.Y != center.Y)
+                        {
+                            ret.Add(i);
+                            switch (direction[i.X, i.Y])
+                            {
+                                case 1:
+                                    i = i.GetLeftTile();
+                                    break;
+                                case 2:
+                                    i = i.GetDownTile();
+                                    break;
+                                case 3:
+                                    i = i.GetRightTile();
+                                    break;
+                                case 4:
+                                    i = i.GetUpTile();
+                                    break;
+                            }
+                        }
+                        return ret;
+                    }
+                    direction[tile.X, tile.Y] = 4;
+                    nextQueue.Enqueue(tile);
+                }
+                if ((tile = tmp.GetLeftTile()) != null && direction[tile.X, tile.Y] == 0 && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                {
+                    if (tile.X == target.X && tile.Y == target.Y)
+                    {
+                        ret.Add(target);
+                        coordinate i = tmp;
+                        while (i.X != center.X || i.Y != center.Y)
+                        {
+                            ret.Add(i);
+                            switch (direction[i.X, i.Y])
+                            {
+                                case 1:
+                                    i = i.GetLeftTile();
+                                    break;
+                                case 2:
+                                    i = i.GetDownTile();
+                                    break;
+                                case 3:
+                                    i = i.GetRightTile();
+                                    break;
+                                case 4:
+                                    i = i.GetUpTile();
+                                    break;
+                            }
+                        }
+                        return ret;
+                    }
+                    direction[tile.X, tile.Y] = 3;
+                    nextQueue.Enqueue(tile);
+                }
+                if ((tile = tmp.GetRightTile()) != null && direction[tile.X, tile.Y] == 0 && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                {
+                    if (tile.X == target.X && tile.Y == target.Y)
+                    {
+                        ret.Add(target);
+                        coordinate i = tmp;
+                        while (i.X != center.X || i.Y != center.Y)
+                        {
+                            ret.Add(i);
+                            switch (direction[i.X, i.Y])
+                            {
+                                case 1:
+                                    i = i.GetLeftTile();
+                                    break;
+                                case 2:
+                                    i = i.GetDownTile();
+                                    break;
+                                case 3:
+                                    i = i.GetRightTile();
+                                    break;
+                                case 4:
+                                    i = i.GetUpTile();
+                                    break;
+                            }
+                        }
+                        return ret;
+                    }
+                    direction[tile.X, tile.Y] = 1;
+                    nextQueue.Enqueue(tile);
+                }
+                if ((tile = tmp.GetUpTile()) != null && direction[tile.X, tile.Y] == 0 && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                {
+                    if (tile.X == target.X && tile.Y == target.Y)
+                    {
+                        ret.Add(target);
+                        coordinate i = tmp;
+                        while (i.X != center.X || i.Y != center.Y)
+                        {
+                            ret.Add(i);
+                            switch (direction[i.X, i.Y])
+                            {
+                                case 1:
+                                    i = i.GetLeftTile();
+                                    break;
+                                case 2:
+                                    i = i.GetDownTile();
+                                    break;
+                                case 3:
+                                    i = i.GetRightTile();
+                                    break;
+                                case 4:
+                                    i = i.GetUpTile();
+                                    break;
+                            }
+                        }
+                        return ret;
+                    }
+                    direction[tile.X, tile.Y] = 2;
+                    nextQueue.Enqueue(tile);
+                }
+            }
+            queue = new Queue<coordinate>(nextQueue);
+            nextQueue.Clear();
+        }
+        return null;
+    }
     private bool dfs(int level, int limit, coordinate now, List<coordinate> path, coordinate target, bool[,] visited)
     {
         if (level > limit)
@@ -132,7 +266,6 @@ public class PaladinMove : ICard
                 return true;
             }
         }
-        visited[now.X, now.Y] = false;
         return false;
     }
 

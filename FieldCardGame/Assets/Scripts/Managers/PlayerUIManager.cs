@@ -212,7 +212,7 @@ public class PlayerUIManager : MonoBehaviour
         int range = UseModeCard.GetRange();
         List<coordinate> inRange = new List<coordinate>();
         bool[,] visited = new bool[128, 128];
-        dfs(0, range, GameManager.Instance.Player.position, inRange, visited);
+        bfs(range, GameManager.Instance.Player.position, inRange);
         foreach (coordinate i in inRange)
         {
             GameManager.Instance.Map[i.X, i.Y].TileColor.material.color = UseModeCard.GetUnAvailableTileColor();
@@ -249,32 +249,49 @@ public class PlayerUIManager : MonoBehaviour
         yield return StartCoroutine(GameManager.Instance.Player.CardUse(CardUsePos, cardIdx));
         UseTileSelected = false;
     }
-    private void dfs(int level, int limit, coordinate now, List<coordinate> inRange, bool[,] visited)
+    private void bfs(int level, coordinate center, List<coordinate> list)
     {
-        if (level > limit)
-            return;
-        visited[now.X, now.Y] = true;
-        inRange.Add(now);
-        coordinate tile;
-        if ((tile = now.GetDownTile()) != null && !visited[tile.X, tile.Y])
+        int dist = 1;
+        bool[,] visited = new bool[128, 128];
+        Queue<coordinate> queue = new Queue<coordinate>();
+        Queue<coordinate> nextQueue = new Queue<coordinate>();
+        queue.Enqueue(center);
+        while (dist++ <= level)
         {
-            dfs(level + 1, limit, tile, inRange, visited);
+            while (queue.Count != 0)
+            {
+                coordinate tmp = queue.Dequeue();
+                list.Add(tmp);
+                coordinate tile;
+                if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                {
+                    visited[tile.X, tile.Y] = true;
+                    nextQueue.Enqueue(tile);
+                };
+                if ((tile = tmp.GetLeftTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                {
+                    visited[tile.X, tile.Y] = true;
+                    nextQueue.Enqueue(tile);
+                };
+                if ((tile = tmp.GetRightTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                {
+                    visited[tile.X, tile.Y] = true;
+                    nextQueue.Enqueue(tile);
+                };
+                if ((tile = tmp.GetUpTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                {
+                    visited[tile.X, tile.Y] = true;
+                    nextQueue.Enqueue(tile);
+                }
+            }
+            queue = new Queue<coordinate>(nextQueue);
+            nextQueue.Clear();
         }
-        if ((tile = now.GetUpTile()) != null && !visited[tile.X, tile.Y])
+        while (queue.Count != 0)
         {
-            dfs(level + 1, limit, tile, inRange, visited);
-
+            coordinate tmp = queue.Dequeue();
+            list.Add(tmp);
         }
-        if ((tile = now.GetLeftTile()) != null && !visited[tile.X, tile.Y])
-        {
-            dfs(level + 1, limit, tile, inRange, visited);
-
-        }
-        if ((tile = now.GetRightTile()) != null && !visited[tile.X, tile.Y])
-        {
-            dfs(level + 1, limit, tile, inRange, visited);
-        }
-        visited[now.X, now.Y] = false;
     }
     /* implement if need
     public IEnumerator UseCardCancel(CardObject card)

@@ -269,44 +269,61 @@ public abstract class Character : MonoBehaviour
     }
     public void SightUpdate(int newSight, bool posChange = false, coordinate prevPos = null)
     {
-        bool[,] visited = new bool[128, 128];
         if (!posChange)
         {
-            dfs(0, sight, position, true, false, visited);
+            bfs(sight, position, true, false);
         }
         else
         {
-            dfs(0, sight, prevPos, true, false, visited);
+            bfs(sight, prevPos, true, false);
         }
-        dfs(0, newSight, position, true, true, visited);
+        bfs(newSight, position, true, true);
     }
-    private void dfs(int level, int limit, coordinate now, bool discovered, bool onSight, bool[,] visited)
+    private void bfs(int level, coordinate center,bool discovered, bool onSight)
     {
-        if (level > limit)
-            return;
-        visited[now.X, now.Y] = true;
-        GameManager.Instance.Map[now.X, now.Y].Discovered = discovered;
-        GameManager.Instance.Map[now.X, now.Y].Onsight = onSight;
-        coordinate tile;
-        if ((tile = now.GetDownTile()) != null && !visited[tile.X,tile.Y])
+        int dist = 1;
+        bool[,] visited = new bool[128, 128];
+        Queue<coordinate> queue = new Queue<coordinate>();
+        Queue<coordinate> nextQueue = new Queue<coordinate>();
+        queue.Enqueue(center);
+        while (dist++ <= level)
         {
-            dfs(level + 1, limit, tile, discovered, onSight, visited);
+            while (queue.Count != 0)
+            {
+                coordinate tmp  = queue.Dequeue();
+                GameManager.Instance.Map[tmp.X, tmp.Y].Discovered = discovered;
+                GameManager.Instance.Map[tmp.X, tmp.Y].Onsight = onSight;
+                coordinate tile;
+                if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                {
+                    visited[tile.X, tile.Y] = true;
+                    nextQueue.Enqueue(tile);
+                };
+                if ((tile = tmp.GetLeftTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                {
+                    visited[tile.X, tile.Y] = true;
+                    nextQueue.Enqueue(tile);
+                };
+                if ((tile = tmp.GetRightTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                {
+                    visited[tile.X, tile.Y] = true;
+                    nextQueue.Enqueue(tile);
+                };
+                if ((tile = tmp.GetUpTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                {
+                    visited[tile.X, tile.Y] = true;
+                    nextQueue.Enqueue(tile);
+                }
+            }
+            queue = new Queue<coordinate>(nextQueue);
+            nextQueue.Clear();
         }
-        if ((tile = now.GetUpTile()) != null && !visited[tile.X, tile.Y])
+        while (queue.Count != 0)
         {
-            dfs(level + 1, limit, tile, discovered, onSight, visited);
-
+            coordinate tmp = queue.Dequeue();
+            GameManager.Instance.Map[tmp.X, tmp.Y].Discovered = discovered;
+            GameManager.Instance.Map[tmp.X, tmp.Y].Onsight = onSight;
         }
-        if ((tile = now.GetLeftTile()) != null && !visited[tile.X, tile.Y])
-        {
-            dfs(level + 1, limit, tile, discovered, onSight, visited);
-
-        }
-        if ((tile = now.GetRightTile()) != null && !visited[tile.X, tile.Y])
-        {
-            dfs(level + 1, limit, tile, discovered, onSight, visited);
-        }
-        visited[now.X, now.Y] = false;
     }
     /// <summary>
     /// 1Ä­ ÀÌµ¿
