@@ -87,6 +87,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     }
     public void OnPointerClick(PointerEventData data)
     {
+        Debug.Log("CLICK " + Time.frameCount);
         if (!PlayerUIManager.Instance.UseMode) return;
         if (data.button != 0) return;
         if (!PlayerUIManager.Instance.UseModeCard.IsAvailablePosition(GameManager.Instance.Player.position, position)) return;

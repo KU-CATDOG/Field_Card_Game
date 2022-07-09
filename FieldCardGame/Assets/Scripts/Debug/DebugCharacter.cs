@@ -20,21 +20,9 @@ public class DebugCharacter : Character
     {
         throw new System.NotImplementedException();
     }
-    public override bool Equals(object other)
-    {
-        return base.Equals(other);
-    }
-    public override int GetHashCode()
-    {
-        return base.GetHashCode();
-    }
     public override IEnumerator StartTurn()
     {
         throw new System.NotImplementedException();
-    }
-    public override string ToString()
-    {
-        return base.ToString();
     }
     protected override IEnumerator dieRoutine()
     {
@@ -59,16 +47,16 @@ public class DebugCharacter : Character
         StartCoroutine(AddCard());
     }
     public void DebugAddCard()
-    {
+    {/*
         if (addedCard is DebugCard)
         {
-            Debug.Log("PALADINADDED");
-            addedCard = new PaladinMove();
-        }
+        }*/
+        Debug.Log("PALADINADDED");
+        addedCard = new PaladinMove();/*
         else
         {
             addedCard = new DebugCard();
-        }
+        }*/
         StartCoroutine(AddCard());
     }
 }

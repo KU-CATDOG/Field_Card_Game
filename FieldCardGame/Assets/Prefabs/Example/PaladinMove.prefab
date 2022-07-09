@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8509223197248850498}
   - component: {fileID: 4837338463428886220}
   - component: {fileID: 4899360329481768548}
-  - component: {fileID: -2726015609422013599}
+  - component: {fileID: 6830255987249379778}
   m_Layer: 5
   m_Name: PaladinMove
   m_TagString: Untagged
@@ -74,7 +74,7 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!114 &-2726015609422013599
+--- !u!114 &6830255987249379778
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

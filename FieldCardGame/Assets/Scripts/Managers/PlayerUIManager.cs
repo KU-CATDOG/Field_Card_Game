@@ -23,7 +23,6 @@ public class PlayerUIManager : MonoBehaviour
     private Transform HighlightedAnchor;
     private Vector2 LeftSideVector;
     private float VectorLen;
-    public bool TileSelected { get; set; }
     public bool UseMode { get; set; }
     public ICard UseModeCard;
     public coordinate CardUsePos { get; set; }
@@ -35,7 +34,7 @@ public class PlayerUIManager : MonoBehaviour
     private float[] oddAngles = new float[9];
     private Vector3[] evenVectors = new Vector3[10];
     private Vector3[] oddVectors = new Vector3[9];
-    private List<CardObject> CardImages = new List<CardObject>();
+    public List<CardObject> CardImages { get; private set; } = new List<CardObject>();
     [SerializeField]
     private Transform RightSide;
     private Vector2 RightSideVector;
@@ -84,18 +83,19 @@ public class PlayerUIManager : MonoBehaviour
         yield return StartCoroutine(Rearrange());
 
     }
-    public IEnumerator DropCard(CardObject card)
+    public void DropCard(CardObject card)
     {
-        int idx = card.SiblingIndex; 
+        int idx = card.SiblingIndex - defaultSiblingIndex;
         CardImages.RemoveAt(idx);
         //needAnimation
-        Destroy(CardImages[idx].gameObject);
-        yield return StartCoroutine(Rearrange());
+        DestroyImmediate(card.gameObject);
+        StartCoroutine(Rearrange());
     }
     private IEnumerator moveCard(CardObject card, Vector2 target, float timeLimit = 0.3f)
     {
         bool interrupted = false;
-        yield return new WaitUntil(() => {
+        yield return new WaitUntil(() =>
+        {
             card.moveInterrupted = true;
             if (!card.OnMoving)
             {
@@ -196,7 +196,7 @@ public class PlayerUIManager : MonoBehaviour
     {
         ReadyUseMode = false;
         UseMode = true;
-        StartCoroutine(MainCamera.Instance.moveCamera(true));
+        //StartCoroutine(MainCamera.Instance.moveCamera(true));
         List<ICard> cards = GameManager.Instance.Player.HandCard;
         int cardIdx = card.SiblingIndex - defaultSiblingIndex;
         UseModeCard = cards[cardIdx];
@@ -211,50 +211,70 @@ public class PlayerUIManager : MonoBehaviour
         card.gameObject.SetActive(false);
         int range = UseModeCard.GetRange();
         List<coordinate> inRange = new List<coordinate>();
-        dfs(0, range, GameManager.Instance.Player.position, inRange);
-        foreach(coordinate i in inRange)
+        bool[,] visited = new bool[128, 128];
+        dfs(0, range, GameManager.Instance.Player.position, inRange, visited);
+        foreach (coordinate i in inRange)
         {
             GameManager.Instance.Map[i.X, i.Y].TileColor.material.color = UseModeCard.GetUnAvailableTileColor();
         }
+
         foreach (coordinate i in UseModeCard.GetAvailableTile(GameManager.Instance.Player.position))
         {
             GameManager.Instance.Map[i.X, i.Y].TileColor.material.color = UseModeCard.GetAvailableTileColor();
         }
+        bool UseCancel = false;
         yield return new WaitUntil(() =>
         {
-            return UseTileSelected;
+            UseCancel = Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(1);
+            return UseTileSelected || UseCancel;
         });
-        foreach(coordinate i in inRange)
+        if (UseCancel)
+        {
+            card.gameObject.SetActive(true);
+            yield return new WaitForSeconds(0.1f);
+            StartCoroutine(DehighlightCard(card));
+            UseMode = false;
+            foreach (coordinate i in inRange)
+            {
+                GameManager.Instance.Map[i.X, i.Y].RestoreColor();
+            }
+            yield break;
+        }
+        UseMode = false;
+        foreach (coordinate i in inRange)
         {
             GameManager.Instance.Map[i.X, i.Y].RestoreColor();
         }
-        UseMode = false;
-        yield return StartCoroutine(MainCamera.Instance.moveCamera(false));
+       // yield return StartCoroutine(MainCamera.Instance.moveCamera(false));
         yield return StartCoroutine(GameManager.Instance.Player.CardUse(CardUsePos, cardIdx));
+        UseTileSelected = false;
     }
-    private void dfs(int level, int limit, coordinate now, List<coordinate> inRange)
+    private void dfs(int level, int limit, coordinate now, List<coordinate> inRange, bool[,] visited)
     {
         if (level > limit)
             return;
+        visited[now.X, now.Y] = true;
         inRange.Add(now);
-        if (now.GetDownTile() != null)
+        coordinate tile;
+        if ((tile = now.GetDownTile()) != null && !visited[tile.X, tile.Y])
         {
-            dfs(level + 1, limit, now.GetDownTile(), inRange);
+            dfs(level + 1, limit, tile, inRange, visited);
         }
-        if (now.GetUpTile() != null)
+        if ((tile = now.GetUpTile()) != null && !visited[tile.X, tile.Y])
         {
-            dfs(level + 1, limit, now.GetUpTile(), inRange);
+            dfs(level + 1, limit, tile, inRange, visited);
 
         }
-        if (now.GetLeftTile() != null)
+        if ((tile = now.GetLeftTile()) != null && !visited[tile.X, tile.Y])
         {
-            dfs(level + 1, limit, now.GetLeftTile(), inRange);
+            dfs(level + 1, limit, tile, inRange, visited);
 
         }
-        if (now.GetRightTile() != null)
+        if ((tile = now.GetRightTile()) != null && !visited[tile.X, tile.Y])
         {
-            dfs(level + 1, limit, now.GetRightTile(), inRange);
+            dfs(level + 1, limit, tile, inRange, visited);
         }
+        visited[now.X, now.Y] = false;
     }
     /* implement if need
     public IEnumerator UseCardCancel(CardObject card)
@@ -270,6 +290,18 @@ public class PlayerUIManager : MonoBehaviour
         float speed = 10000f;
         float threshold = 1000f;
         Vector2 movVec;
+        /*while (ReadyUseMode)
+        {
+            movVec = (Input.mousePosition - rect.position);
+            if (movVec.magnitude < threshold)
+            {
+                rect.position = Input.mousePosition;
+                yield return new WaitForFixedUpdate();
+            }
+            movVec = movVec.normalized;
+            card.transform.position += (Vector3)movVec * Time.deltaTime * speed;
+            yield return new WaitForFixedUpdate();
+        }*/
         yield return new WaitUntil(() =>
         {
             movVec = (Input.mousePosition - rect.position);
@@ -302,5 +334,4 @@ public class PlayerUIManager : MonoBehaviour
     {
         ExecuteCardMouseEvents();
     }
-
 }

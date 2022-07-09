@@ -164,7 +164,6 @@ public abstract class Character : MonoBehaviour
             }
             while (NeedWait) yield return null;
         }
-        Debug.Log("DrawCard " + drawCard + " Card Pile Count:" + CardPile.Count + ", Hand Count: " + HandCard.Count);
         yield break;
     }
     public IEnumerator DropCard(int idx)
@@ -190,7 +189,7 @@ public abstract class Character : MonoBehaviour
         HandCard.RemoveAt(idx);
         if (gameObject.tag == "Player")
         {
-            yield return StartCoroutine(PlayerUIManager.Instance.DropCard(GameManager.Instance.CardObjectList[dropCard.GetCardID()]));
+            PlayerUIManager.Instance.DropCard(PlayerUIManager.Instance.CardImages[idx]);
         }
         for (int i = DropCardRoutine.Count - 1; i >= 0; i--)
         {
@@ -267,44 +266,47 @@ public abstract class Character : MonoBehaviour
             }
             while (NeedWait) yield return null;
         }
-        Debug.Log("AddCard," + addedCard + " Card Pile Count:" + CardPile.Count + ", Hand Count: " + HandCard.Count);
     }
     public void SightUpdate(int newSight, bool posChange = false, coordinate prevPos = null)
     {
+        bool[,] visited = new bool[128, 128];
         if (!posChange)
         {
-            dfs(0, sight, position, true, false);
+            dfs(0, sight, position, true, false, visited);
         }
         else
         {
-            dfs(0, sight, prevPos, true, false);
+            dfs(0, sight, prevPos, true, false, visited);
         }
-        dfs(0, newSight, position, true, true);
+        dfs(0, newSight, position, true, true, visited);
     }
-    private void dfs(int level, int limit, coordinate now, bool discovered, bool onSight)
+    private void dfs(int level, int limit, coordinate now, bool discovered, bool onSight, bool[,] visited)
     {
         if (level > limit)
             return;
+        visited[now.X, now.Y] = true;
         GameManager.Instance.Map[now.X, now.Y].Discovered = discovered;
         GameManager.Instance.Map[now.X, now.Y].Onsight = onSight;
-        if (now.GetDownTile() != null)
+        coordinate tile;
+        if ((tile = now.GetDownTile()) != null && !visited[tile.X,tile.Y])
         {
-            dfs(level + 1, limit, now.GetDownTile(), discovered, onSight);
+            dfs(level + 1, limit, tile, discovered, onSight, visited);
         }
-        if (now.GetUpTile() != null)
+        if ((tile = now.GetUpTile()) != null && !visited[tile.X, tile.Y])
         {
-            dfs(level + 1, limit, now.GetUpTile(), discovered, onSight);
+            dfs(level + 1, limit, tile, discovered, onSight, visited);
 
         }
-        if (now.GetLeftTile() != null)
+        if ((tile = now.GetLeftTile()) != null && !visited[tile.X, tile.Y])
         {
-            dfs(level + 1, limit, now.GetLeftTile(), discovered, onSight);
+            dfs(level + 1, limit, tile, discovered, onSight, visited);
 
         }
-        if (now.GetRightTile() != null)
+        if ((tile = now.GetRightTile()) != null && !visited[tile.X, tile.Y])
         {
-            dfs(level + 1, limit, now.GetRightTile(), discovered, onSight);
+            dfs(level + 1, limit, tile, discovered, onSight, visited);
         }
+        visited[now.X, now.Y] = false;
     }
     /// <summary>
     /// 1Ä­ ÀÌµ¿
@@ -314,6 +316,7 @@ public abstract class Character : MonoBehaviour
     /// <returns></returns>
     public IEnumerator Move(coordinate target, float speed)
     {
+
         for (int i = TryMoveRoutine.Count - 1; i >= 0; i--)
         {
             if (!TryMoveRoutine[i].MoveNext())
@@ -342,12 +345,18 @@ public abstract class Character : MonoBehaviour
         prevTile.CharacterOnTile = null;
         Vector3 moveVector = new Vector3(target.X - position.X, 0, target.Y - position.Y);
         float time = 0f;
+        while(time <= 1f / speed)
+        {
+            time += Time.fixedDeltaTime;
+            transform.position += moveVector * Time.fixedDeltaTime * speed;
+            yield return new WaitForFixedUpdate();
+        }/*
         yield return new WaitUntil(() =>
         {
             time += Time.deltaTime;
             transform.position += moveVector * Time.deltaTime * speed;
             return time > 1f / speed;
-        });
+        });*/
         transform.position = new Vector3(target.X, 0, target.Y);
         coordinate prevPos = position;
         position = target;
