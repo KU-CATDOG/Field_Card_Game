@@ -2,15 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-public class MainCamera : MonoBehaviour, IScrollHandler
+public class MainCamera : MonoBehaviour
 {
     public static MainCamera Instance { get; private set; }
+    public bool CameraLock { get; set; } = true;
+    public bool HardLock { get; set; } = true;
     private Vector3 posVec;
-    private Vector3 useModePos;
+    //private Vector3 useModePos;
+    private Vector3 target;
+    private float posVecMaxThreshold;
+    private float posVecMinThreshold;
+    private float MouseCameraMoveSpeed = 5f;
+    private float KeyboardCameraMoveSpeed = 5f;
+
+    private Vector3 right = new Vector3(1, 0, -1);
+    private Vector3 left = new Vector3(-1, 0, 1);
+    private Vector3 up = new Vector3(1, 0, 1);
+    private Vector3 down = new Vector3(-1, 0, -1);
     public bool OnMoving { get; private set; } = false;
     private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
         }
@@ -22,31 +34,85 @@ public class MainCamera : MonoBehaviour, IScrollHandler
     void Start()
     {
         posVec = transform.position - GameManager.Instance.Player.transform.position;
-        useModePos = posVec + Vector3.up * 4;
-        
-    }
-    public void OnScroll(PointerEventData data)
-    {/*
-        if (data.scrollDelta > 0)
-        {
+        posVecMaxThreshold = posVec.magnitude;
+        posVecMinThreshold = 3f;
+        //useModePos = posVec + Vector3.up * 4;
 
-        }
-        else
-        {
-
-        }*/
     }
     // Update is called once per frame
     void Update()
     {
-        if (!PlayerUIManager.Instance.UseMode)
+        if (Input.GetKeyDown(KeyCode.Y))
         {
-            transform.position = GameManager.Instance.Player.transform.position + posVec;
-            transform.LookAt(GameManager.Instance.Player.transform);
+            HardLock = !HardLock;
         }
-        
+        CameraLock = HardLock;
+        if (!HardLock)
+        {
+            if (Input.GetKey(KeyCode.Space))
+            {
+                CameraLock = true;
+            }
+            if (Input.GetKeyUp(KeyCode.Space))
+            {
+                CameraLock = false;
+            }
+        }
+        if (CameraLock)
+        {
+            target = GameManager.Instance.Player.transform.position;
+        }
+        else
+        {
+            Vector3 MoveDelta = new Vector3();
+            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+            {
+                MoveDelta += Time.deltaTime * KeyboardCameraMoveSpeed * up;
+            }
+            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+            {
+                MoveDelta += Time.deltaTime * KeyboardCameraMoveSpeed * left;
+            }
+            if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+            {
+                MoveDelta += Time.deltaTime * KeyboardCameraMoveSpeed * down;
+            }
+            if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+            {
+                MoveDelta += Time.deltaTime * KeyboardCameraMoveSpeed * right;
+            }
+
+            if (Input.mousePosition.x >= Screen.width)
+            {
+                MoveDelta += right * (Time.deltaTime * MouseCameraMoveSpeed);
+            }
+            if (Input.mousePosition.x <= 0)
+            {
+                MoveDelta += left * (Time.deltaTime * MouseCameraMoveSpeed);
+            }
+            if (Input.mousePosition.y >= Screen.height)
+            {
+                MoveDelta += up * (Time.deltaTime * MouseCameraMoveSpeed);
+            }
+            if (Input.mousePosition.y <= 0)
+            {
+                MoveDelta += down * (Time.deltaTime * MouseCameraMoveSpeed);
+            }
+            target += MoveDelta;
+        }
+        if (Input.mouseScrollDelta.x == 0 && Input.mouseScrollDelta.y > 0 && posVecMinThreshold <= (posVec - posVec.normalized * Input.mouseScrollDelta.y).magnitude)
+        {
+            posVec -= posVec.normalized * Input.mouseScrollDelta.y;
+        }
+        else if (Input.mouseScrollDelta.x == 0 && Input.mouseScrollDelta.y < 0 && posVecMaxThreshold >= (posVec - posVec.normalized * Input.mouseScrollDelta.y).magnitude)
+        {
+            posVec -= posVec.normalized * Input.mouseScrollDelta.y;
+        }
+
+        transform.position = target + posVec;
+        transform.LookAt(target);
     }
-    
+
     /*
     public IEnumerator moveCamera(bool useMode)
     {
@@ -91,5 +157,5 @@ public class MainCamera : MonoBehaviour, IScrollHandler
         }
         OnMoving = false;
     }*/
-    
+
 }
