@@ -57,12 +57,12 @@ public class GameManager : MonoBehaviour
             {
                 Tile tile = Instantiate(tilePrefab, MapObject.transform);
                 tile.transform.position = new Vector3(i, 0, j);
-                tile.position = new coordinate(i, j);
+                tile.position = new Coordinate(i, j);
                 Map[i, j] = tile;
             }
         }
         //fixme
-        Player.position = new coordinate(10, 10);
+        Player.position = new Coordinate(10, 10);
         Map[10, 10].CharacterOnTile = Player;
         Player.SightUpdate(Player.Sight);
     }

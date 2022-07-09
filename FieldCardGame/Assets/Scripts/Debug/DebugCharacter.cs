@@ -51,7 +51,6 @@ public class DebugCharacter : Character
         if (addedCard is DebugCard)
         {
         }*/
-        Debug.Log("PALADINADDED");
         addedCard = new PaladinMove();/*
         else
         {

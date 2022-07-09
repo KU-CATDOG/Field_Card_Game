@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DebugCard : ICard
 {
-    public Color GetColorOfEffect(coordinate pos)
+    public Color GetColorOfEffect(Coordinate pos)
     {
         return Color.black;
     }
@@ -24,19 +24,19 @@ public class DebugCard : ICard
     {
         return;
     }
-    public List<coordinate> GetAvailableTile(coordinate pos)
+    public List<Coordinate> GetAvailableTile(Coordinate pos)
     {
         return null;
     }
-    public List<coordinate> GetAreaofEffect()
+    public List<Coordinate> GetAreaofEffect()
     {
         return null;
     }
-    public bool IsAvailablePosition(coordinate caster, coordinate target)
+    public bool IsAvailablePosition(Coordinate caster, Coordinate target)
     {
         return false;
     }
-    public IEnumerator CardRoutine(Character caster, coordinate center)
+    public IEnumerator CardRoutine(Character caster, Coordinate center)
     {
         yield break;
     }

@@ -6,9 +6,8 @@ public abstract class Character : MonoBehaviour
 {
     private const int MAXHANDSIZE = 10;
     public bool NeedWait { get; set; }
-    public bool ReadyToPlay { get; set; }
-    private coordinate pos;
-    public coordinate position
+    private Coordinate pos;
+    public Coordinate position
     {
         get
         {
@@ -203,7 +202,7 @@ public abstract class Character : MonoBehaviour
         }
         yield break;
     }
-    public IEnumerator CardUse(coordinate target, int idx)
+    public IEnumerator CardUse(Coordinate target, int idx)
     {
         usedCard = HandCard[idx];
         yield return StartCoroutine(PayCost(usedCard.GetCost(), usedCard.GetCostType()));
@@ -267,7 +266,7 @@ public abstract class Character : MonoBehaviour
             while (NeedWait) yield return null;
         }
     }
-    public void SightUpdate(int newSight, bool posChange = false, coordinate prevPos = null)
+    public void SightUpdate(int newSight, bool posChange = false, Coordinate prevPos = null)
     {
         if (!posChange)
         {
@@ -279,21 +278,21 @@ public abstract class Character : MonoBehaviour
         }
         bfs(newSight, position, true, true);
     }
-    private void bfs(int level, coordinate center,bool discovered, bool onSight)
+    private void bfs(int level, Coordinate center,bool discovered, bool onSight)
     {
         int dist = 1;
         bool[,] visited = new bool[128, 128];
-        Queue<coordinate> queue = new Queue<coordinate>();
-        Queue<coordinate> nextQueue = new Queue<coordinate>();
+        Queue<Coordinate> queue = new Queue<Coordinate>();
+        Queue<Coordinate> nextQueue = new Queue<Coordinate>();
         queue.Enqueue(center);
         while (dist++ <= level)
         {
             while (queue.Count != 0)
             {
-                coordinate tmp  = queue.Dequeue();
+                Coordinate tmp  = queue.Dequeue();
                 GameManager.Instance.Map[tmp.X, tmp.Y].Discovered = discovered;
                 GameManager.Instance.Map[tmp.X, tmp.Y].Onsight = onSight;
-                coordinate tile;
+                Coordinate tile;
                 if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
                 {
                     visited[tile.X, tile.Y] = true;
@@ -315,12 +314,12 @@ public abstract class Character : MonoBehaviour
                     nextQueue.Enqueue(tile);
                 }
             }
-            queue = new Queue<coordinate>(nextQueue);
+            queue = new Queue<Coordinate>(nextQueue);
             nextQueue.Clear();
         }
         while (queue.Count != 0)
         {
-            coordinate tmp = queue.Dequeue();
+            Coordinate tmp = queue.Dequeue();
             GameManager.Instance.Map[tmp.X, tmp.Y].Discovered = discovered;
             GameManager.Instance.Map[tmp.X, tmp.Y].Onsight = onSight;
         }
@@ -331,7 +330,7 @@ public abstract class Character : MonoBehaviour
     /// <param name="target"></param>
     /// <param name="speed"></param>
     /// <returns></returns>
-    public IEnumerator Move(coordinate target, float speed)
+    public IEnumerator Move(Coordinate target, float speed)
     {
 
         for (int i = TryMoveRoutine.Count - 1; i >= 0; i--)
@@ -375,7 +374,7 @@ public abstract class Character : MonoBehaviour
             return time > 1f / speed;
         });*/
         transform.position = new Vector3(target.X, 0, target.Y);
-        coordinate prevPos = position;
+        Coordinate prevPos = position;
         position = target;
         targetTile.CharacterOnTile = this;
         SightUpdate(sight, true, prevPos);
@@ -401,7 +400,7 @@ public abstract class Character : MonoBehaviour
         }
     }
 
-    public IEnumerator ForceMove(coordinate target, int speed)
+    public IEnumerator ForceMove(Coordinate target, int speed)
     {
         for (int i = TryForceMoveRoutine.Count - 1; i >= 0; i--)
         {

@@ -7,17 +7,17 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
 {
     public static List<IEnumerator> MouseEvent { get; private set; } = new List<IEnumerator>();
     public int SiblingIndex { get; set; }
-    public bool moveInterrupted { get; set; } = false;
+    public bool MoveInterrupted { get; set; } = false;
     public bool OnMoving { get; set; } = false;
-    public static Vector3 highlightedCardSize { get; private set; } = Vector3.zero;
-    public static Vector3 originCardSize { get; private set; } = Vector3.zero;
+    public static Vector3 HighlightedCardSize { get; private set; } = Vector3.zero;
+    public static Vector3 OriginCardSize { get; private set; } = Vector3.zero;
     private RawImage image;
     private void Awake()
     {
-        if(originCardSize == Vector3.zero)
+        if(OriginCardSize == Vector3.zero)
         {
-            originCardSize = transform.localScale;
-            highlightedCardSize = originCardSize * 1.5f;
+            OriginCardSize = transform.localScale;
+            HighlightedCardSize = OriginCardSize * 1.5f;
         }
     }
     private void Start()

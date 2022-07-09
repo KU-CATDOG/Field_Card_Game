@@ -4,17 +4,14 @@ using UnityEngine;
 
 public interface ICard
 {
+    public int GetCardID();
     public int GetRange();
     public void SetRange(int _range);
-    public Color GetUnAvailableTileColor();
-    public List<coordinate> GetAvailableTile(coordinate pos);
-    public Color GetAvailableTileColor();
-    public List<coordinate> GetAreaofEffect();
-    public Color GetColorOfEffect(coordinate pos);
-    public bool IsAvailablePosition(coordinate caster, coordinate target);
-    public IEnumerator CardRoutine(Character caster, coordinate center);
     public int GetCost();
     public CostType GetCostType();
     public CardType GetCardType();
-    public int GetCardID();
+    public List<Coordinate> GetAvailableTile(Coordinate pos);
+    public bool IsAvailablePosition(Coordinate caster, Coordinate target);
+    public List<Coordinate> GetAreaofEffect();
+    public IEnumerator CardRoutine(Character caster, Coordinate center);
 }

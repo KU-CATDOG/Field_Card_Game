@@ -24,60 +24,60 @@ public enum CardType
 {
     Move
 }
-public class coordinate
+public class Coordinate
 {
     public int X { get; set; }
     public int Y { get; set; }
-    public coordinate(int x, int y)
+    public Coordinate(int x, int y)
     {
         X = x;
         Y = y;
     }
-    public static coordinate operator+(coordinate p1, coordinate p2)
+    public static Coordinate operator+(Coordinate p1, Coordinate p2)
     {
-        return new coordinate(p1.X + p2.X, p1.Y + p2.Y);
+        return new Coordinate(p1.X + p2.X, p1.Y + p2.Y);
     }
-    public static coordinate operator -(coordinate p1, coordinate p2)
+    public static Coordinate operator -(Coordinate p1, Coordinate p2)
     {
-        return new coordinate(p1.X - p2.X, p1.Y - p2.Y);
+        return new Coordinate(p1.X - p2.X, p1.Y - p2.Y);
     }
-    public coordinate GetUpTile()
+    public Coordinate GetUpTile()
     {
-        coordinate ret = new coordinate(X, Y + 1);
+        Coordinate ret = new Coordinate(X, Y + 1);
         if (OutRange(ret))
         {
             return null;
         }
         return ret;
     }
-    public coordinate GetDownTile()
+    public Coordinate GetDownTile()
     {
-        coordinate ret = new coordinate(X, Y - 1);
+        Coordinate ret = new Coordinate(X, Y - 1);
         if (OutRange(ret))
         {
             return null;
         }
         return ret;
     }
-    public coordinate GetLeftTile()
+    public Coordinate GetLeftTile()
     {
-        coordinate ret = new coordinate(X - 1, Y);
+        Coordinate ret = new Coordinate(X - 1, Y);
         if (OutRange(ret))
         {
             return null;
         }
         return ret;
     }
-    public coordinate GetRightTile()
+    public Coordinate GetRightTile()
     {
-        coordinate ret = new coordinate(X + 1, Y);
+        Coordinate ret = new Coordinate(X + 1, Y);
         if (OutRange(ret))
         {
             return null;
         }
         return ret;
     }
-    private bool OutRange(coordinate toTest)
+    private bool OutRange(Coordinate toTest)
     {
         if (toTest.X < 0 || toTest.X >= 128 || toTest.Y < 0 || toTest.Y >= 128)
         {
@@ -85,7 +85,4 @@ public class coordinate
         }
         return false;
     }
-}
-public class Util
-{
 }

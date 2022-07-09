@@ -25,7 +25,7 @@ public class PlayerUIManager : MonoBehaviour
     private float VectorLen;
     public bool UseMode { get; set; }
     public ICard UseModeCard;
-    public coordinate CardUsePos { get; set; }
+    public Coordinate CardUsePos { get; set; }
     public bool UseTileSelected { get; set; }
     public bool ReadyUseMode { get; set; }
 
@@ -91,12 +91,12 @@ public class PlayerUIManager : MonoBehaviour
         DestroyImmediate(card.gameObject);
         StartCoroutine(Rearrange());
     }
-    private IEnumerator moveCard(CardObject card, Vector2 target, float timeLimit = 0.3f)
+    private IEnumerator MoveCard(CardObject card, Vector2 target, float timeLimit = 0.3f)
     {
         bool interrupted = false;
         yield return new WaitUntil(() =>
         {
-            card.moveInterrupted = true;
+            card.MoveInterrupted = true;
             if (!card.OnMoving)
             {
                 card.OnMoving = true;
@@ -104,13 +104,13 @@ public class PlayerUIManager : MonoBehaviour
             }
             return false;
         });
-        card.moveInterrupted = false;
+        card.MoveInterrupted = false;
         Vector2 movVec = target - (Vector2)card.transform.position;
         float time = 0f;
         movVec /= timeLimit;
         yield return new WaitUntil(() =>
         {
-            if (card.moveInterrupted)
+            if (card.MoveInterrupted)
             {
                 interrupted = true;
                 return true;
@@ -139,7 +139,7 @@ public class PlayerUIManager : MonoBehaviour
                 }
                 CardObject obj = CardImages[i];
                 obj.SiblingIndex = defaultSiblingIndex + i;
-                StartCoroutine(moveCard(obj, centerPos + evenVectors[5 - size / 2 + i]));
+                StartCoroutine(MoveCard(obj, centerPos + evenVectors[5 - size / 2 + i]));
                 obj.transform.rotation = Quaternion.Euler(Vector3.back * evenAngles[5 - size / 2 + i] * 70f);
             }
         }
@@ -153,7 +153,7 @@ public class PlayerUIManager : MonoBehaviour
                 }
                 CardObject obj = CardImages[i];
                 obj.SiblingIndex = defaultSiblingIndex + i;
-                StartCoroutine(moveCard(obj, centerPos + oddVectors[4 - size / 2 + i]));
+                StartCoroutine(MoveCard(obj, centerPos + oddVectors[4 - size / 2 + i]));
                 obj.transform.rotation = Quaternion.Euler(Vector3.back * oddAngles[4 - size / 2 + i] * 70f);
             }
         }
@@ -176,18 +176,18 @@ public class PlayerUIManager : MonoBehaviour
             CardObject obj = CardImages[i];
             Vector2 movVec = new Vector2(Mathf.Log(10000, Mathf.Abs(val)) * ((i - cardIndex < 0) ? -1f : 1f), 0);
             target = (Vector2)centerPos + (cards.Count % 2 == 0 ? (Vector2)evenVectors[5 - size / 2 + i] : (Vector2)oddVectors[4 - size / 2 + i]) + movVec;
-            StartCoroutine(moveCard(obj, target));
+            StartCoroutine(MoveCard(obj, target));
         }
-        card.transform.localScale = CardObject.highlightedCardSize;
+        card.transform.localScale = CardObject.HighlightedCardSize;
         target = new Vector2(centerPos.x + (cards.Count % 2 == 0 ? evenVectors[5 - size / 2 + cardIndex] : oddVectors[4 - size / 2 + cardIndex]).x, HighlightedAnchor.position.y);
-        StartCoroutine(moveCard(card, target, 0.05f));
+        StartCoroutine(MoveCard(card, target, 0.05f));
         card.transform.SetAsLastSibling();
         card.transform.rotation = Quaternion.Euler(Vector2.zero);
         yield break;
     }
     public IEnumerator DehighlightCard(CardObject card)
     {
-        card.transform.localScale = CardObject.originCardSize;
+        card.transform.localScale = CardObject.OriginCardSize;
         card.transform.SetSiblingIndex(card.SiblingIndex);
         StartCoroutine(Rearrange());
         yield break;
@@ -206,21 +206,21 @@ public class PlayerUIManager : MonoBehaviour
             if (i == cardIdx) continue;
             CardObject obj = CardImages[i];
             Vector3 target = obj.transform.position - new Vector3(0, CardUseHeight, 0);
-            StartCoroutine(moveCard(obj, target));
+            StartCoroutine(MoveCard(obj, target));
         }
         card.gameObject.SetActive(false);
         int range = UseModeCard.GetRange();
-        List<coordinate> inRange = new List<coordinate>();
+        List<Coordinate> inRange = new List<Coordinate>();
         bool[,] visited = new bool[128, 128];
         bfs(range, GameManager.Instance.Player.position, inRange);
-        foreach (coordinate i in inRange)
+        foreach (Coordinate i in inRange)
         {
-            GameManager.Instance.Map[i.X, i.Y].TileColor.material.color = UseModeCard.GetUnAvailableTileColor();
+            GameManager.Instance.Map[i.X, i.Y].TileColor.material.color = (UseModeCard as IPlayerCard).GetUnAvailableTileColor();
         }
 
-        foreach (coordinate i in UseModeCard.GetAvailableTile(GameManager.Instance.Player.position))
+        foreach (Coordinate i in UseModeCard.GetAvailableTile(GameManager.Instance.Player.position))
         {
-            GameManager.Instance.Map[i.X, i.Y].TileColor.material.color = UseModeCard.GetAvailableTileColor();
+            GameManager.Instance.Map[i.X, i.Y].TileColor.material.color = (UseModeCard as IPlayerCard).GetAvailableTileColor();
         }
         bool UseCancel = false;
         yield return new WaitUntil(() =>
@@ -234,14 +234,14 @@ public class PlayerUIManager : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
             StartCoroutine(DehighlightCard(card));
             UseMode = false;
-            foreach (coordinate i in inRange)
+            foreach (Coordinate i in inRange)
             {
                 GameManager.Instance.Map[i.X, i.Y].RestoreColor();
             }
             yield break;
         }
         UseMode = false;
-        foreach (coordinate i in inRange)
+        foreach (Coordinate i in inRange)
         {
             GameManager.Instance.Map[i.X, i.Y].RestoreColor();
         }
@@ -249,20 +249,20 @@ public class PlayerUIManager : MonoBehaviour
         yield return StartCoroutine(GameManager.Instance.Player.CardUse(CardUsePos, cardIdx));
         UseTileSelected = false;
     }
-    private void bfs(int level, coordinate center, List<coordinate> list)
+    private void bfs(int level, Coordinate center, List<Coordinate> list)
     {
         int dist = 1;
         bool[,] visited = new bool[128, 128];
-        Queue<coordinate> queue = new Queue<coordinate>();
-        Queue<coordinate> nextQueue = new Queue<coordinate>();
+        Queue<Coordinate> queue = new Queue<Coordinate>();
+        Queue<Coordinate> nextQueue = new Queue<Coordinate>();
         queue.Enqueue(center);
         while (dist++ <= level)
         {
             while (queue.Count != 0)
             {
-                coordinate tmp = queue.Dequeue();
+                Coordinate tmp = queue.Dequeue();
                 list.Add(tmp);
-                coordinate tile;
+                Coordinate tile;
                 if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
                 {
                     visited[tile.X, tile.Y] = true;
@@ -284,12 +284,12 @@ public class PlayerUIManager : MonoBehaviour
                     nextQueue.Enqueue(tile);
                 }
             }
-            queue = new Queue<coordinate>(nextQueue);
+            queue = new Queue<Coordinate>(nextQueue);
             nextQueue.Clear();
         }
         while (queue.Count != 0)
         {
-            coordinate tmp = queue.Dequeue();
+            Coordinate tmp = queue.Dequeue();
             list.Add(tmp);
         }
     }

@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PaladinMove : ICard
+public class PaladinMove : IPlayerCard
 {
     private int range;
     public int GetRange()
     {
+        //return range;
         return 10;
     }
     public void SetRange(int _range)
@@ -17,22 +18,22 @@ public class PaladinMove : ICard
     {
         return Color.red;
     }
-    public List<coordinate> GetAvailableTile(coordinate pos)
+    public List<Coordinate> GetAvailableTile(Coordinate pos)
     {
-        List<coordinate> ret = new List<coordinate>();
+        List<Coordinate> ret = new List<Coordinate>();
         int level = 1;
         bool[,] visited = new bool[128, 128];
-        Queue<coordinate> queue = new Queue<coordinate>();
-        Queue<coordinate> nextQueue = new Queue<coordinate>();
+        Queue<Coordinate> queue = new Queue<Coordinate>();
+        Queue<Coordinate> nextQueue = new Queue<Coordinate>();
         queue.Enqueue(pos);
         while (level++ <= GetRange())
         {
             while (queue.Count != 0)
             {
-                coordinate tmp = queue.Dequeue();
+                Coordinate tmp = queue.Dequeue();
                 if (tmp.X != pos.X || tmp.Y != pos.Y)
                     ret.Add(tmp);
-                coordinate tile;
+                Coordinate tile;
                 if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
                 {
                     visited[tile.X, tile.Y] = true;
@@ -54,7 +55,7 @@ public class PaladinMove : ICard
                     nextQueue.Enqueue(tile);
                 }
             }
-            queue = new Queue<coordinate>(nextQueue);
+            queue = new Queue<Coordinate>(nextQueue);
             nextQueue.Clear();
         }
         while (queue.Count != 0)
@@ -68,9 +69,9 @@ public class PaladinMove : ICard
         return Color.blue;
     }
 
-    private List<coordinate> FindPath(coordinate from, coordinate to)
+    private List<Coordinate> FindPath(Coordinate from, Coordinate to)
     {
-        List<coordinate> ret;
+        List<Coordinate> ret;
         ret = backTracking(GetRange(), from, to);
         if (ret != null)
         {
@@ -79,26 +80,26 @@ public class PaladinMove : ICard
         }
         return null;
     }
-    private List<coordinate> backTracking(int limit, coordinate center, coordinate target)
+    private List<Coordinate> backTracking(int limit, Coordinate center, Coordinate target)
     {
-        List<coordinate> ret = new List<coordinate>();
+        List<Coordinate> ret = new List<Coordinate>();
         int level = 1;
         int[,] direction = new int[128, 128];
-        Queue<coordinate> queue = new Queue<coordinate>();
-        Queue<coordinate> nextQueue = new Queue<coordinate>();
+        Queue<Coordinate> queue = new Queue<Coordinate>();
+        Queue<Coordinate> nextQueue = new Queue<Coordinate>();
         queue.Enqueue(center);
         while (level++ <= limit)
         {
             while (queue.Count != 0)
             {
-                coordinate tmp = queue.Dequeue();
-                coordinate tile;
+                Coordinate tmp = queue.Dequeue();
+                Coordinate tile;
                 if ((tile = tmp.GetDownTile()) != null && direction[tile.X, tile.Y] == 0 && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
                 {
                     if (tile.X == target.X && tile.Y == target.Y)
                     {
                         ret.Add(target);
-                        coordinate i = tmp;
+                        Coordinate i = tmp;
                         while (i.X != center.X || i.Y != center.Y)
                         {
                             ret.Add(i);
@@ -128,7 +129,7 @@ public class PaladinMove : ICard
                     if (tile.X == target.X && tile.Y == target.Y)
                     {
                         ret.Add(target);
-                        coordinate i = tmp;
+                        Coordinate i = tmp;
                         while (i.X != center.X || i.Y != center.Y)
                         {
                             ret.Add(i);
@@ -158,7 +159,7 @@ public class PaladinMove : ICard
                     if (tile.X == target.X && tile.Y == target.Y)
                     {
                         ret.Add(target);
-                        coordinate i = tmp;
+                        Coordinate i = tmp;
                         while (i.X != center.X || i.Y != center.Y)
                         {
                             ret.Add(i);
@@ -188,7 +189,7 @@ public class PaladinMove : ICard
                     if (tile.X == target.X && tile.Y == target.Y)
                     {
                         ret.Add(target);
-                        coordinate i = tmp;
+                        Coordinate i = tmp;
                         while (i.X != center.X || i.Y != center.Y)
                         {
                             ret.Add(i);
@@ -214,68 +215,18 @@ public class PaladinMove : ICard
                     nextQueue.Enqueue(tile);
                 }
             }
-            queue = new Queue<coordinate>(nextQueue);
+            queue = new Queue<Coordinate>(nextQueue);
             nextQueue.Clear();
         }
         return null;
     }
-    private bool dfs(int level, int limit, coordinate now, List<coordinate> path, coordinate target, bool[,] visited)
+    public List<Coordinate> GetAreaofEffect()
     {
-        if (level > limit)
-        {
-            return false;
-        }
-        if (target.X == now.X && target.Y == now.Y)
-        {
-            return true;
-        }
-
-        visited[now.X, now.Y] = true;
-        coordinate tile;
-        if ((tile = now.GetDownTile()) != null && !visited[tile.X, tile.Y])
-        {
-            if (dfs(level + 1, limit, now.GetDownTile(), path, target, visited))
-            {
-                path.Add(now);
-                return true;
-            }
-        }
-        if ((tile = now.GetUpTile()) != null && !visited[tile.X, tile.Y])
-        {
-            if (dfs(level + 1, limit, now.GetUpTile(), path, target, visited))
-            {
-                path.Add(now);
-                return true;
-            }
-
-        }
-        if ((tile = now.GetLeftTile()) != null && !visited[tile.X, tile.Y])
-        {
-            if (dfs(level + 1, limit, now.GetLeftTile(), path, target, visited))
-            {
-                path.Add(now);
-                return true;
-            }
-
-        }
-        if ((tile = now.GetRightTile()) != null && !visited[tile.X, tile.Y])
-        {
-            if (dfs(level + 1, limit, now.GetRightTile(), path, target, visited))
-            {
-                path.Add(now);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public List<coordinate> GetAreaofEffect()
-    {
-        List<coordinate> ret = new List<coordinate>();
-        ret.Add(new coordinate(0, 0));
+        List<Coordinate> ret = new List<Coordinate>();
+        ret.Add(new Coordinate(0, 0));
         return ret;
     }
-    public Color GetColorOfEffect(coordinate pos)
+    public Color GetColorOfEffect(Coordinate pos)
     {
         if (pos.X == 0 && pos.Y == 0)
         {
@@ -283,21 +234,21 @@ public class PaladinMove : ICard
         }
         return Color.black;
     }
-    public bool IsAvailablePosition(coordinate caster, coordinate target)
+    public bool IsAvailablePosition(Coordinate caster, Coordinate target)
     {
-        List<coordinate> availablePositions = GetAvailableTile(caster);
+        List<Coordinate> availablePositions = GetAvailableTile(caster);
         if (availablePositions.Exists((i) => i.X == target.X && i.Y == target.Y))
         {
             return true;
         }
         return false;
     }
-    public IEnumerator CardRoutine(Character caster, coordinate target)
+    public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
-        List<coordinate> path;
+        List<Coordinate> path;
         path = FindPath(caster.position, target);
         float speed = 5f;
-        foreach (coordinate i in path)
+        foreach (Coordinate i in path)
         {
             yield return GameManager.Instance.StartCoroutine(caster.Move(i, speed));
         }
