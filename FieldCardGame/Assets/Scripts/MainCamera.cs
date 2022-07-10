@@ -100,11 +100,11 @@ public class MainCamera : MonoBehaviour
             }
             target += MoveDelta;
         }
-        if (Input.mouseScrollDelta.x == 0 && Input.mouseScrollDelta.y > 0 && posVecMinThreshold <= (posVec - posVec.normalized * Input.mouseScrollDelta.y).magnitude)
+        if (!PlayerUIManager.Instance.PanelOpenned && Input.mouseScrollDelta.x == 0 && Input.mouseScrollDelta.y > 0 && posVecMinThreshold <= (posVec - posVec.normalized * Input.mouseScrollDelta.y).magnitude)
         {
             posVec -= posVec.normalized * Input.mouseScrollDelta.y;
         }
-        else if (Input.mouseScrollDelta.x == 0 && Input.mouseScrollDelta.y < 0 && posVecMaxThreshold >= (posVec - posVec.normalized * Input.mouseScrollDelta.y).magnitude)
+        else if (!PlayerUIManager.Instance.PanelOpenned && Input.mouseScrollDelta.x == 0 && Input.mouseScrollDelta.y < 0 && posVecMaxThreshold >= (posVec - posVec.normalized * Input.mouseScrollDelta.y).magnitude)
         {
             posVec -= posVec.normalized * Input.mouseScrollDelta.y;
         }

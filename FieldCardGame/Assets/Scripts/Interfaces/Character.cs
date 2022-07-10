@@ -93,6 +93,11 @@ public abstract class Character : MonoBehaviour
     public List<IEnumerator> AddCardTry { get; private set; } = new List<IEnumerator>();
     public List<IEnumerator> AddCardRoutine { get; private set; } = new List<IEnumerator>();
 
+    public ICard removedCard { get; set; }
+    public bool RemoveCardInterrupted { get; set; }
+    public List<IEnumerator> RemoveCardTry { get; private set; } = new List<IEnumerator>();
+    public List<IEnumerator> RemoveCardRoutine { get; private set; } = new List<IEnumerator>();
+
     public abstract IEnumerator AwakeTurn();
     public abstract IEnumerator AfterBuff();
     public abstract IEnumerator AfterDraw();
@@ -235,7 +240,7 @@ public abstract class Character : MonoBehaviour
         }
         yield return StartCoroutine(DropCard(idx));
     }
-    public IEnumerator AddCard()
+    public IEnumerator AddCard(ICard toAdd)
     {
         //need Animation for Player
         for (int i = AddCardTry.Count - 1; i >= 0; i--)
@@ -254,6 +259,7 @@ public abstract class Character : MonoBehaviour
             AddCardInterrupted = false;
             yield break;
         }
+        addedCard = toAdd;
         CardPile.Add(addedCard);
         for (int i = AddCardRoutine.Count - 1; i >= 0; i--)
         {
@@ -262,6 +268,79 @@ public abstract class Character : MonoBehaviour
             {
                 while (NeedWait) yield return null;
                 AddCardRoutine.RemoveAt(i);
+            }
+            while (NeedWait) yield return null;
+        }
+    }
+    public IEnumerator RemoveCard(ICard toRemove, bool discardedPileFirst)
+    {
+        //need Animation for Player
+        for (int i = RemoveCardTry.Count - 1; i >= 0; i--)
+        {
+            IEnumerator routine = RemoveCardTry[i];
+
+            if (!routine.MoveNext())
+            {
+                while (NeedWait) yield return null;
+                RemoveCardTry.RemoveAt(i);
+            }
+            while (NeedWait) yield return null;
+        }
+        if (RemoveCardInterrupted)
+        {
+            RemoveCardInterrupted = false;
+            yield break;
+        }
+        removedCard = toRemove;
+        if (discardedPileFirst)
+        {
+            ICard card = DiscardedPile.Find((x) => x.GetCardID() == removedCard.GetCardID());
+            if(card == null)
+            {
+                card = CardPile.Find((x) => x.GetCardID() == removedCard.GetCardID());
+                if (card == null)
+                {
+                    yield break;
+                }
+                else
+                {
+                    CardPile.Remove(card);
+                }
+            }
+            else
+            {
+                DiscardedPile.Remove(card);
+            }
+        }
+        else
+        {
+            ICard card = CardPile.Find((x) => x.GetCardID() == removedCard.GetCardID());
+            if (card == null)
+            {
+                card = DiscardedPile.Find((x) => x.GetCardID() == removedCard.GetCardID());
+                if (card == null)
+                {
+                    yield break;
+                }
+                else
+                {
+                    DiscardedPile.Remove(card);
+                }
+            }
+            else
+            {
+                CardPile.Remove(card);
+            }
+            //CardPile.Remove();
+        }
+
+        for (int i = RemoveCardRoutine.Count - 1; i >= 0; i--)
+        {
+            IEnumerator routine = RemoveCardRoutine[i];
+            if (!routine.MoveNext())
+            {
+                while (NeedWait) yield return null;
+                RemoveCardRoutine.RemoveAt(i);
             }
             while (NeedWait) yield return null;
         }

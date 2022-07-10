@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
+    public bool isPileCard { get; set; }
     public static List<IEnumerator> MouseEvent { get; private set; } = new List<IEnumerator>();
     public int SiblingIndex { get; set; }
     public bool MoveInterrupted { get; set; } = false;
@@ -26,16 +27,30 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (PlayerUIManager.Instance.PanelOpenned)
+        {
+            transform.localScale = HighlightedCardSize;
+            return;
+        }
         if (PlayerUIManager.Instance.ReadyUseMode || PlayerUIManager.Instance.UseMode) return;
         MouseEvent.Add(PlayerUIManager.Instance.HighlightCard(this));
     }
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (PlayerUIManager.Instance.PanelOpenned)
+        {
+            transform.localScale = OriginCardSize;
+            return;
+        }
         if (PlayerUIManager.Instance.ReadyUseMode || PlayerUIManager.Instance.UseMode) return;
         MouseEvent.Add(PlayerUIManager.Instance.DehighlightCard(this));
     }
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (PlayerUIManager.Instance.PanelOpenned)
+        {
+            return;
+        }
         if (PlayerUIManager.Instance.ReadyUseMode && !PlayerUIManager.Instance.UseMode)
         {
             if (Input.mousePosition.y > PlayerUIManager.Instance.CardUseHeight && eventData.button == 0)

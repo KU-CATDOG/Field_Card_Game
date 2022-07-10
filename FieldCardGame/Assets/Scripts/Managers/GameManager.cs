@@ -4,13 +4,20 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField]
-    private List<CardObject> cardObjectList;
-    public IReadOnlyList<CardObject> CardObjectList
+    private Dictionary<int, ICard> cardDict = new Dictionary<int, ICard>();
+    public IReadOnlyDictionary<int, ICard> CardDict
     {
         get
         {
-            return cardObjectList.AsReadOnly();
+            return cardDict;
+        }
+    }
+    private Dictionary<int, CardObject> cardObjectDict = new Dictionary<int, CardObject>();
+    public IReadOnlyDictionary<int, CardObject> CardObjectDict
+    {
+        get
+        {
+            return cardObjectDict;
         }
     }
     public static GameManager Instance { get; set; }
@@ -18,6 +25,8 @@ public class GameManager : MonoBehaviour
     public Character Player { get; private set; }
     public List<Character> Allies { get; private set; } = new List<Character>();
     public const int MAPSIZE = 128;
+    [SerializeField]
+    private List<CardObject> cardObjectList;
     [SerializeField]
     private GameObject MapObject;
     [SerializeField]
@@ -33,10 +42,18 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this);
         }
+        InitializeDictionary();
         EnemyList = new List<Character>();
         Player = FindObjectOfType<Character>();
         GenerateMap();
         Allies.Add(Player);
+    }
+    private void InitializeDictionary()
+    {
+        ICard card;
+        card = new PaladinMove();
+        cardDict.Add(card.GetCardID(), card);
+        cardObjectDict.Add(card.GetCardID(), cardObjectList[1]);
     }
 
     private void Start()
@@ -48,7 +65,7 @@ public class GameManager : MonoBehaviour
     {
         return tilePrefab;
     }
-    public void GenerateMap()
+    private void GenerateMap()
     {
         //fixme
         for(int i = 0; i<MAPSIZE; i++)

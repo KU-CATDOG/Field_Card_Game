@@ -43,19 +43,16 @@ public class DebugCharacter : Character
     }
     private void Start()
     {
-        addedCard = new DebugCard();
-        StartCoroutine(AddCard());
     }
     public void DebugAddCard()
     {/*
         if (addedCard is DebugCard)
         {
-        }*/
-        addedCard = new PaladinMove();/*
+        }
         else
         {
             addedCard = new DebugCard();
         }*/
-        StartCoroutine(AddCard());
+        StartCoroutine(AddCard(new PaladinMove()));
     }
 }

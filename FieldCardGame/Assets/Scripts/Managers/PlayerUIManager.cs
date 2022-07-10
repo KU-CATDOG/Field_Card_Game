@@ -14,6 +14,10 @@ public class PlayerUIManager : MonoBehaviour
     [SerializeField]
     private Button DiscardedPile;
     [SerializeField]
+    private CardPile CardPilePanel;
+    [SerializeField]
+    private CardPile DiscardedPilePanel;
+    [SerializeField]
     private GameObject CenterPoint;
     [SerializeField]
     private GameObject CardArea;
@@ -28,7 +32,7 @@ public class PlayerUIManager : MonoBehaviour
     public Coordinate CardUsePos { get; set; }
     public bool UseTileSelected { get; set; }
     public bool ReadyUseMode { get; set; }
-
+    public bool PanelOpenned { get; set; }
     private float angle;
     private float[] evenAngles = new float[10];
     private float[] oddAngles = new float[9];
@@ -79,7 +83,8 @@ public class PlayerUIManager : MonoBehaviour
     }
     public IEnumerator DrawCard()
     {
-        CardImages.Add(Instantiate(GameManager.Instance.CardObjectList[GameManager.Instance.Player.drawCard.GetCardID()], CardArea.transform));
+        CardImages.Add(Instantiate(GameManager.Instance.CardObjectDict[GameManager.Instance.Player.drawCard.GetCardID()], CardArea.transform));
+        CardImages[CardImages.Count - 1].isPileCard = false;
         yield return StartCoroutine(Rearrange());
 
     }
@@ -347,6 +352,20 @@ public class PlayerUIManager : MonoBehaviour
             CardObject.MouseEvent.RemoveAt(i);
         }
     }
+
+    public void OpenCardPilePanel()
+    {
+        PanelOpenned = true;
+        StartCoroutine(CardPilePanel.ShowPile(GameManager.Instance.Player.CardPile));
+    }
+
+    public void OpenDiscardedPilePanel()
+    {
+        PanelOpenned = true;
+        StartCoroutine(DiscardedPilePanel.ShowPile(GameManager.Instance.Player.DiscardedPile));
+    }
+
+
     private void LateUpdate()
     {
         ExecuteCardMouseEvents();

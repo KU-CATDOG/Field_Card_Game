@@ -3,7 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Test : MonoBehaviour
-{/*
+{
+    class i
+    {
+        public i(int a,int b, int c)
+        {
+            this.a = a;
+            this.b = b;
+            this.c = c;
+        }
+        public int a;
+        public int b;
+        public int c;
+    }/*
+    private void Start()
+    {
+        List<i> list = new List<i>();
+        list.Add(new i(1, 2, 3));
+        list.Add(new i(1, 3, 4));
+        list.Add(new i(1, 2, 3));
+        list.Add(new i(0, 2, 4));
+        list.Add(new i(1, 2, 4));
+        Debug.Log(list.Remove(new i(1, 2, 3)));
+        foreach(var j in list)
+            Debug.Log(j.a + " " + j.b + " " + j.c);
+    }*/
+    /*
     private int t = 0;
 
     void Start()
