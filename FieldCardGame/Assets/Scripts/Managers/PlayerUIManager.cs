@@ -10,10 +10,6 @@ public class PlayerUIManager : MonoBehaviour
     [SerializeField]
     private Button TurnEndButton;
     [SerializeField]
-    private Button CardPile;
-    [SerializeField]
-    private Button DiscardedPile;
-    [SerializeField]
     private CardPile CardPilePanel;
     [SerializeField]
     private CardPile DiscardedPilePanel;
@@ -27,6 +23,7 @@ public class PlayerUIManager : MonoBehaviour
     private Transform HighlightedAnchor;
     private Vector2 LeftSideVector;
     private float VectorLen;
+    public bool OnRoutine { get; private set; }
     public bool UseMode { get; set; }
     public ICard UseModeCard;
     public Coordinate CardUsePos { get; set; }
@@ -246,12 +243,14 @@ public class PlayerUIManager : MonoBehaviour
             yield break;
         }
         UseMode = false;
+        OnRoutine = true;
         foreach (Coordinate i in inRange)
         {
             GameManager.Instance.Map[i.X, i.Y].RestoreColor();
         }
        // yield return StartCoroutine(MainCamera.Instance.moveCamera(false));
         yield return StartCoroutine(GameManager.Instance.Player.CardUse(CardUsePos, cardIdx));
+        OnRoutine = false;
         UseTileSelected = false;
     }
     private void bfs(int level, Coordinate center, List<Coordinate> list)
@@ -362,7 +361,7 @@ public class PlayerUIManager : MonoBehaviour
     public void OpenDiscardedPilePanel()
     {
         PanelOpenned = true;
-        StartCoroutine(DiscardedPilePanel.ShowPile(GameManager.Instance.Player.DiscardedPile));
+        StartCoroutine(DiscardedPilePanel.ShowPile(GameManager.Instance.Player.DiscardedPile, false));
     }
 
 

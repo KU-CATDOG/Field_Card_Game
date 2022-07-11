@@ -42,75 +42,79 @@ public class MainCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Y))
+        if (TurnManager.Instance.IsPlayerTurn)
         {
-            HardLock = !HardLock;
-        }
-        CameraLock = HardLock;
-        if (!HardLock)
-        {
-            if (Input.GetKey(KeyCode.Space))
+
+            if (Input.GetKeyDown(KeyCode.Y))
             {
-                CameraLock = true;
+                HardLock = !HardLock;
             }
-            if (Input.GetKeyUp(KeyCode.Space))
+            CameraLock = HardLock;
+            if (!HardLock)
             {
-                CameraLock = false;
+                if (Input.GetKey(KeyCode.Space))
+                {
+                    CameraLock = true;
+                }
+                if (Input.GetKeyUp(KeyCode.Space))
+                {
+                    CameraLock = false;
+                }
             }
-        }
-        if (CameraLock)
-        {
-            target = GameManager.Instance.Player.transform.position;
-        }
-        else
-        {
-            Vector3 MoveDelta = new Vector3();
-            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+            if (CameraLock)
             {
-                MoveDelta += Time.deltaTime * KeyboardCameraMoveSpeed * up;
+                target = GameManager.Instance.Player.transform.position;
             }
-            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+            else
             {
-                MoveDelta += Time.deltaTime * KeyboardCameraMoveSpeed * left;
+                Vector3 MoveDelta = new Vector3();
+                if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+                {
+                    MoveDelta += Time.deltaTime * KeyboardCameraMoveSpeed * up;
+                }
+                if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+                {
+                    MoveDelta += Time.deltaTime * KeyboardCameraMoveSpeed * left;
+                }
+                if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+                {
+                    MoveDelta += Time.deltaTime * KeyboardCameraMoveSpeed * down;
+                }
+                if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+                {
+                    MoveDelta += Time.deltaTime * KeyboardCameraMoveSpeed * right;
+                }
+
+                if (Input.mousePosition.x >= Screen.width)
+                {
+                    MoveDelta += right * (Time.deltaTime * MouseCameraMoveSpeed);
+                }
+                if (Input.mousePosition.x <= 0)
+                {
+                    MoveDelta += left * (Time.deltaTime * MouseCameraMoveSpeed);
+                }
+                if (Input.mousePosition.y >= Screen.height)
+                {
+                    MoveDelta += up * (Time.deltaTime * MouseCameraMoveSpeed);
+                }
+                if (Input.mousePosition.y <= 0)
+                {
+                    MoveDelta += down * (Time.deltaTime * MouseCameraMoveSpeed);
+                }
+                target += MoveDelta;
             }
-            if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+            if (!PlayerUIManager.Instance.PanelOpenned && Input.mouseScrollDelta.x == 0 && Input.mouseScrollDelta.y > 0 && posVecMinThreshold <= (posVec - posVec.normalized * Input.mouseScrollDelta.y).magnitude)
             {
-                MoveDelta += Time.deltaTime * KeyboardCameraMoveSpeed * down;
+                posVec -= posVec.normalized * Input.mouseScrollDelta.y;
             }
-            if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+            else if (!PlayerUIManager.Instance.PanelOpenned && Input.mouseScrollDelta.x == 0 && Input.mouseScrollDelta.y < 0 && posVecMaxThreshold >= (posVec - posVec.normalized * Input.mouseScrollDelta.y).magnitude)
             {
-                MoveDelta += Time.deltaTime * KeyboardCameraMoveSpeed * right;
+                posVec -= posVec.normalized * Input.mouseScrollDelta.y;
             }
 
-            if (Input.mousePosition.x >= Screen.width)
-            {
-                MoveDelta += right * (Time.deltaTime * MouseCameraMoveSpeed);
-            }
-            if (Input.mousePosition.x <= 0)
-            {
-                MoveDelta += left * (Time.deltaTime * MouseCameraMoveSpeed);
-            }
-            if (Input.mousePosition.y >= Screen.height)
-            {
-                MoveDelta += up * (Time.deltaTime * MouseCameraMoveSpeed);
-            }
-            if (Input.mousePosition.y <= 0)
-            {
-                MoveDelta += down * (Time.deltaTime * MouseCameraMoveSpeed);
-            }
-            target += MoveDelta;
+            transform.position = target + posVec;
+            transform.LookAt(target);
         }
-        if (!PlayerUIManager.Instance.PanelOpenned && Input.mouseScrollDelta.x == 0 && Input.mouseScrollDelta.y > 0 && posVecMinThreshold <= (posVec - posVec.normalized * Input.mouseScrollDelta.y).magnitude)
-        {
-            posVec -= posVec.normalized * Input.mouseScrollDelta.y;
-        }
-        else if (!PlayerUIManager.Instance.PanelOpenned && Input.mouseScrollDelta.x == 0 && Input.mouseScrollDelta.y < 0 && posVecMaxThreshold >= (posVec - posVec.normalized * Input.mouseScrollDelta.y).magnitude)
-        {
-            posVec -= posVec.normalized * Input.mouseScrollDelta.y;
-        }
-
-        transform.position = target + posVec;
-        transform.LookAt(target);
     }
 
     /*

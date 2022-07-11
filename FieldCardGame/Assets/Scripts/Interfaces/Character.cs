@@ -151,6 +151,10 @@ public abstract class Character : MonoBehaviour
             DrawInterrupted = false;
             yield break;
         }
+        if (CardPile.Count == 0)
+        {
+            StartCoroutine(ShuffleDeck());
+        }
         drawCard = CardPile[0];
         CardPile.RemoveAt(0);
         HandCard.Add(drawCard);
@@ -170,6 +174,54 @@ public abstract class Character : MonoBehaviour
         }
         yield break;
     }
+    /// <summary>
+    /// drop from deck
+    /// </summary>
+    /// <param name="idx"></param>
+    /// <returns></returns>
+    public IEnumerator DropCard(ICard card)
+    {
+        //need animation for player
+        for (int i = DropCardTry.Count - 1; i >= 0; i--)
+        {
+            IEnumerator routine = DropCardTry[i];
+            if (!routine.MoveNext())
+            {
+                while (NeedWait) yield return null;
+                DropCardTry.RemoveAt(i);
+            }
+            while (NeedWait) yield return null;
+        }
+        if (DropInterrupted)
+        {
+            DrawInterrupted = false;
+            yield break;
+        }
+        dropCard = CardPile.Find((x) => x.GetCardID() == card.GetCardID());
+        if(dropCard == null)
+        {
+            Debug.LogError("Wrong DropCard Operation");
+            yield break;
+        }
+        DiscardedPile.Add(dropCard);
+        CardPile.Remove(dropCard);
+        for (int i = DropCardRoutine.Count - 1; i >= 0; i--)
+        {
+            IEnumerator routine = DropCardRoutine[i];
+            if (!routine.MoveNext())
+            {
+                while (NeedWait) yield return null;
+                DropCardRoutine.RemoveAt(i);
+            }
+            while (NeedWait) yield return null;
+        }
+        yield break;
+    }
+    /// <summary>
+    /// drop from Hand
+    /// </summary>
+    /// <param name="idx"></param>
+    /// <returns></returns>
     public IEnumerator DropCard(int idx)
     {
         //need animation for player

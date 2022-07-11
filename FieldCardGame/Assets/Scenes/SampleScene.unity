@@ -272,7 +272,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 30}
+  m_AnchoredPosition: {x: 0, y: 80}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &482377711
@@ -736,6 +736,7 @@ GameObject:
   - component: {fileID: 953133643}
   - component: {fileID: 953133642}
   - component: {fileID: 953133641}
+  - component: {fileID: 953133644}
   m_Layer: 5
   m_Name: CardPileButton
   m_TagString: Untagged
@@ -857,6 +858,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 953133639}
   m_CullTransparentMesh: 1
+--- !u!114 &953133644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 953133639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95e9bb307811b194daca66f4c03a1c12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1266,7 +1279,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1288432455}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1585,8 +1598,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 150}
-  m_SizeDelta: {x: 0, y: 300}
+  m_AnchoredPosition: {x: 0, y: 100}
+  m_SizeDelta: {x: 0, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1392761469
 GameObject:
@@ -1633,8 +1646,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TurnEndButton: {fileID: 2045399660}
-  CardPile: {fileID: 953133641}
-  DiscardedPile: {fileID: 2054016819}
   CardPilePanel: {fileID: 1686757317}
   DiscardedPilePanel: {fileID: 544652322}
   CenterPoint: {fileID: 1120090897}
@@ -2200,6 +2211,7 @@ GameObject:
   - component: {fileID: 2045399662}
   - component: {fileID: 2045399661}
   - component: {fileID: 2045399660}
+  - component: {fileID: 2045399663}
   m_Layer: 5
   m_Name: TurnEndButton
   m_TagString: Untagged
@@ -2309,6 +2321,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2045399658}
   m_CullTransparentMesh: 1
+--- !u!114 &2045399663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2045399658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95e9bb307811b194daca66f4c03a1c12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2054016817
 GameObject:
   m_ObjectHideFlags: 0
@@ -2321,6 +2345,7 @@ GameObject:
   - component: {fileID: 2054016821}
   - component: {fileID: 2054016820}
   - component: {fileID: 2054016819}
+  - component: {fileID: 2054016822}
   m_Layer: 5
   m_Name: DiscardedPileButton
   m_TagString: Untagged
@@ -2442,6 +2467,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2054016817}
   m_CullTransparentMesh: 1
+--- !u!114 &2054016822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2054016817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95e9bb307811b194daca66f4c03a1c12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1846555705335601080
 PrefabInstance:
   m_ObjectHideFlags: 0

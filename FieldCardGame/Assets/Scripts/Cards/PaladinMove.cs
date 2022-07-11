@@ -267,7 +267,7 @@ public class PaladinMove : IPlayerCard
     }
     public int GetCardID()
     {
-        return 1110001;
+        return 1001100;
     }
 
 }

@@ -36,25 +36,32 @@ public class CardPile : MonoBehaviour
         minThreshold = originPos.y + space.y;
         softMinThreshold = originPos.y;
     }
-    public IEnumerator ShowPile(List<ICard> cardList)
+    public IEnumerator ShowPile(List<ICard> cardList, bool blindOrder = true)
     {
         gameObject.SetActive(true);
         Initialize();
-        maxThreshold = originPos.y - Mathf.Max(((cardList.Count-1) / 5 - 1), 1) * space.y;
-        softMaxThreshold = maxThreshold - Mathf.Max(((cardList.Count-1) / 5 - 2), 0) * space.y + originPos.y;
+        maxThreshold = originPos.y - Mathf.Max(((cardList.Count - 1) / 5 - 1), 1) * space.y;
+        softMaxThreshold = maxThreshold - Mathf.Max(((cardList.Count - 1) / 5 - 2), 0) * space.y + originPos.y;
         Vector2 nextPos = padding;
         scrollLock = true;
         List<ICard> ordered = new List<ICard>(cardList);
-        ordered = ordered.OrderBy((x) => x.GetCardID()).ToList<ICard>();
+        if (blindOrder)
+        {
+            ordered = ordered.OrderBy((x) => x.GetCardID()).ToList<ICard>();
+        }
+        else
+        {
+            ordered.Reverse();
+        }
         for (int i = 0; i < ordered.Count; i++)
         {
             CardObject card = Instantiate(GameManager.Instance.CardObjectDict[ordered[i].GetCardID()], panel);
             cardObjects.Add(card);
             card.isPileCard = true;
             card.transform.position = nextPos;
-            nextPos = padding + new Vector2(space.x * (i % 5), space.y * (i / 5));
+            nextPos = padding + new Vector2(space.x * ((i + 1) % 5), space.y * ((i + 1) / 5));
         }
-        panel.position += Vector3.up * space.y/3;
+        panel.position += Vector3.up * space.y / 3;
         scrollLock = false;
         yield break;
     }
@@ -84,13 +91,13 @@ public class CardPile : MonoBehaviour
             StartCoroutine(ClosePile());
         }
         Vector2 movVec = Vector2.zero;
-        if(panel.position.y > softMaxThreshold)
+        if (panel.position.y > softMaxThreshold)
         {
-            movVec += Vector2.down * Mathf.Exp((-softMaxThreshold + panel.position.y)/50f);
+            movVec += Vector2.down * Mathf.Exp((-softMaxThreshold + panel.position.y) / 50f);
         }
         else if (panel.position.y < softMinThreshold)
         {
-            movVec += Vector2.up * Mathf.Exp((softMinThreshold - panel.position.y)/50f);
+            movVec += Vector2.up * Mathf.Exp((softMinThreshold - panel.position.y) / 50f);
         }
         if (!scrollLock && Input.mouseScrollDelta.x == 0 && Input.mouseScrollDelta.y > 0 && minThreshold <= (panel.position.y))
         {

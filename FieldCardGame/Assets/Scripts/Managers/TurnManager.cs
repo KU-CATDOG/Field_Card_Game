@@ -7,6 +7,7 @@ public class TurnManager : MonoBehaviour
     public static TurnManager Instance;
     private int token = 0;
     public bool NeedWait { get; set; }
+    public bool IsPlayerTurn { get; set; } = true;
     public bool TurnEnd { get; set; } = false;
     public List<IEnumerator> TurnStartRoutine { get; set; } = new List<IEnumerator>();
 
