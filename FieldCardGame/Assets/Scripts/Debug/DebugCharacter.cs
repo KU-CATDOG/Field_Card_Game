@@ -20,21 +20,9 @@ public class DebugCharacter : Character
     {
         throw new System.NotImplementedException();
     }
-    public override bool Equals(object other)
-    {
-        return base.Equals(other);
-    }
-    public override int GetHashCode()
-    {
-        return base.GetHashCode();
-    }
     public override IEnumerator StartTurn()
     {
         throw new System.NotImplementedException();
-    }
-    public override string ToString()
-    {
-        return base.ToString();
     }
     protected override IEnumerator dieRoutine()
     {
@@ -42,10 +30,29 @@ public class DebugCharacter : Character
     }
     protected override IEnumerator payCost(int cost, CostType type)
     {
+        yield break;
         throw new System.NotImplementedException();
     }
     public override bool PayTest(int cost, CostType type)
     {
         throw new System.NotImplementedException();
+    }
+    public void DebugDrawCard()
+    {
+        StartCoroutine(DrawCard());
+    }
+    private void Start()
+    {
+    }
+    public void DebugAddCard()
+    {/*
+        if (addedCard is DebugCard)
+        {
+        }
+        else
+        {
+            addedCard = new DebugCard();
+        }*/
+        StartCoroutine(AddCard(new PaladinMove()));
     }
 }

@@ -4,11 +4,14 @@ using UnityEngine;
 
 public interface ICard
 {
+    public int GetCardID();
     public int GetRange();
-    public List<coordinate> GetUnavailableTile();
-    public List<coordinate> GetAreaofEffect();
-    public bool IsAvailablePosition(int row, int col);
-    public IEnumerator CardRoutine(Character caster, coordinate center);
+    public void SetRange(int _range);
     public int GetCost();
     public CostType GetCostType();
+    public CardType GetCardType();
+    public List<Coordinate> GetAvailableTile(Coordinate pos);
+    public bool IsAvailablePosition(Coordinate caster, Coordinate target);
+    public List<Coordinate> GetAreaofEffect();
+    public IEnumerator CardRoutine(Character caster, Coordinate center);
 }

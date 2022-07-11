@@ -4,22 +4,22 @@ using UnityEngine;
 
 public abstract class Character : MonoBehaviour
 {
+    private const int MAXHANDSIZE = 10;
     public bool NeedWait { get; set; }
-    public bool ReadyToPlay { get; set; }
-    private coordinate pos;
-    public coordinate position 
-    { 
-        get 
-        { 
-            return pos; 
-        } 
-        set 
-        { 
+    private Coordinate pos;
+    public Coordinate position
+    {
+        get
+        {
+            return pos;
+        }
+        set
+        {
             pos = value;
-            transform.position = new Vector3(value.X, 0, value.Y);
-        } 
+            transform.position = new Vector3(value.X, 1, value.Y);
+        }
     }
-    private int sight;
+    private int sight = 10;
     public int Sight
     {
         get
@@ -87,6 +87,17 @@ public abstract class Character : MonoBehaviour
     public List<IEnumerator> CardUseTry { get; private set; } = new List<IEnumerator>();
     public List<IEnumerator> CardUseRoutine { get; private set; } = new List<IEnumerator>();
 
+
+    public ICard addedCard { get; set; }
+    public bool AddCardInterrupted { get; set; }
+    public List<IEnumerator> AddCardTry { get; private set; } = new List<IEnumerator>();
+    public List<IEnumerator> AddCardRoutine { get; private set; } = new List<IEnumerator>();
+
+    public ICard removedCard { get; set; }
+    public bool RemoveCardInterrupted { get; set; }
+    public List<IEnumerator> RemoveCardTry { get; private set; } = new List<IEnumerator>();
+    public List<IEnumerator> RemoveCardRoutine { get; private set; } = new List<IEnumerator>();
+
     public abstract IEnumerator AwakeTurn();
     public abstract IEnumerator AfterBuff();
     public abstract IEnumerator AfterDraw();
@@ -94,17 +105,17 @@ public abstract class Character : MonoBehaviour
     public IEnumerator ShuffleDeck()
     {
         //need animation for player
-        if(CardPile.Capacity != 0)
+        if (CardPile.Count != 0)
         {
-            for(int i = CardPile.Capacity-1; i>=0; i--)
+            for (int i = CardPile.Count - 1; i >= 0; i--)
             {
                 DiscardedPile.Add(CardPile[i]);
                 CardPile.RemoveAt(i);
             }
         }
-        while(DiscardedPile.Capacity != 0)
+        while (DiscardedPile.Count != 0)
         {
-            int rand = Random.Range(0, DiscardedPile.Capacity);
+            int rand = Random.Range(0, DiscardedPile.Count);
             CardPile.Add(DiscardedPile[rand]);
             DiscardedPile.RemoveAt(rand);
         }
@@ -112,12 +123,23 @@ public abstract class Character : MonoBehaviour
     }
     public IEnumerator DrawCard()
     {
+        if (CardPile.Count == 0)
+        {
+            yield return StartCoroutine(ShuffleDeck());
+            if (CardPile.Count == 0)
+                yield break;
+        }
+        if (HandCard.Count == MAXHANDSIZE)
+        {
+            //need animation for player
+            yield break;
+        }
         //need animation for player
-        for(int i = DrawCardTry.Capacity-1; i>=0; i--)
+        for (int i = DrawCardTry.Count - 1; i >= 0; i--)
         {
             IEnumerator routine = DrawCardTry[i];
-            
-            if(!routine.MoveNext())
+
+            if (!routine.MoveNext())
             {
                 while (NeedWait) yield return null;
                 DrawCardTry.RemoveAt(i);
@@ -129,10 +151,18 @@ public abstract class Character : MonoBehaviour
             DrawInterrupted = false;
             yield break;
         }
+        if (CardPile.Count == 0)
+        {
+            StartCoroutine(ShuffleDeck());
+        }
         drawCard = CardPile[0];
         CardPile.RemoveAt(0);
         HandCard.Add(drawCard);
-        for (int i = DrawCardRoutine.Capacity-1; i >= 0; i--)
+        if (gameObject.tag == "Player")
+        {
+            yield return StartCoroutine(PlayerUIManager.Instance.DrawCard());
+        }
+        for (int i = DrawCardRoutine.Count - 1; i >= 0; i--)
         {
             IEnumerator routine = DrawCardRoutine[i];
             if (!routine.MoveNext())
@@ -144,10 +174,15 @@ public abstract class Character : MonoBehaviour
         }
         yield break;
     }
-    public IEnumerator DropCard()
+    /// <summary>
+    /// drop from deck
+    /// </summary>
+    /// <param name="idx"></param>
+    /// <returns></returns>
+    public IEnumerator DropCard(ICard card)
     {
         //need animation for player
-        for (int i = DropCardTry.Capacity - 1; i >= 0; i--)
+        for (int i = DropCardTry.Count - 1; i >= 0; i--)
         {
             IEnumerator routine = DropCardTry[i];
             if (!routine.MoveNext())
@@ -162,9 +197,15 @@ public abstract class Character : MonoBehaviour
             DrawInterrupted = false;
             yield break;
         }
-        HandCard.Remove(usedCard);
-        DiscardedPile.Add(usedCard);
-        for (int i = DropCardRoutine.Capacity - 1; i >= 0; i--)
+        dropCard = CardPile.Find((x) => x.GetCardID() == card.GetCardID());
+        if(dropCard == null)
+        {
+            Debug.LogError("Wrong DropCard Operation");
+            yield break;
+        }
+        DiscardedPile.Add(dropCard);
+        CardPile.Remove(dropCard);
+        for (int i = DropCardRoutine.Count - 1; i >= 0; i--)
         {
             IEnumerator routine = DropCardRoutine[i];
             if (!routine.MoveNext())
@@ -176,10 +217,53 @@ public abstract class Character : MonoBehaviour
         }
         yield break;
     }
-    public IEnumerator CardUse(coordinate center)
+    /// <summary>
+    /// drop from Hand
+    /// </summary>
+    /// <param name="idx"></param>
+    /// <returns></returns>
+    public IEnumerator DropCard(int idx)
     {
+        //need animation for player
+        for (int i = DropCardTry.Count - 1; i >= 0; i--)
+        {
+            IEnumerator routine = DropCardTry[i];
+            if (!routine.MoveNext())
+            {
+                while (NeedWait) yield return null;
+                DropCardTry.RemoveAt(i);
+            }
+            while (NeedWait) yield return null;
+        }
+        if (DropInterrupted)
+        {
+            DrawInterrupted = false;
+            yield break;
+        }
+        dropCard = HandCard[idx];
+        DiscardedPile.Add(dropCard);
+        HandCard.RemoveAt(idx);
+        if (gameObject.tag == "Player")
+        {
+            PlayerUIManager.Instance.DropCard(PlayerUIManager.Instance.CardImages[idx]);
+        }
+        for (int i = DropCardRoutine.Count - 1; i >= 0; i--)
+        {
+            IEnumerator routine = DropCardRoutine[i];
+            if (!routine.MoveNext())
+            {
+                while (NeedWait) yield return null;
+                DropCardRoutine.RemoveAt(i);
+            }
+            while (NeedWait) yield return null;
+        }
+        yield break;
+    }
+    public IEnumerator CardUse(Coordinate target, int idx)
+    {
+        usedCard = HandCard[idx];
         yield return StartCoroutine(PayCost(usedCard.GetCost(), usedCard.GetCostType()));
-        for (int i = CardUseTry.Capacity-1; i >= 0; i--)
+        for (int i = CardUseTry.Count - 1; i >= 0; i--)
         {
             IEnumerator routine = CardUseTry[i];
 
@@ -195,39 +279,192 @@ public abstract class Character : MonoBehaviour
             CardUseInterrupted = false;
             yield break;
         }
-        yield return StartCoroutine(usedCard.CardRoutine(this, center));
-        for (int i = DrawCardRoutine.Capacity-1; i >= 0; i--)
+        yield return StartCoroutine(usedCard.CardRoutine(this, target));
+        for (int i = CardUseRoutine.Count - 1; i >= 0; i--)
         {
-            IEnumerator routine = DrawCardRoutine[i];
+            IEnumerator routine = CardUseRoutine[i];
             if (!routine.MoveNext())
             {
                 while (NeedWait) yield return null;
-                DrawCardRoutine.RemoveAt(i);
+                CardUseRoutine.RemoveAt(i);
             }
             while (NeedWait) yield return null;
         }
-        yield return StartCoroutine(DropCard());
+        yield return StartCoroutine(DropCard(idx));
     }
-
-    private void SightUpdate(int newSight, bool posChange = false, coordinate prevPos = null)
+    public IEnumerator AddCard(ICard toAdd)
     {
-        //implementation need
-        //1. 현재 sight에 해당하는 범위의 모든 타일을 discover상태로 변경
-        //2-1. posChange가 false라면 position에서 Sight에 해당하는 범위의 모든 Tile의 OnSight를 false로 한다.
-        //2-2. posChange가 True라면  prevPos에서 Sight에 해당하는 범위의 모든 Tile의 OnSight를 false로 한다.
-        //3.   position에서 new Sight에 해당하는 범위의 모든 타일 상태를 Discover을 True, OnSight를 True로 한다.
-        //Tile은 GameManager.Instance.Map[X,Y]로 x,y좌표 타일에 접근 가능
-    }
+        //need Animation for Player
+        for (int i = AddCardTry.Count - 1; i >= 0; i--)
+        {
+            IEnumerator routine = AddCardTry[i];
 
+            if (!routine.MoveNext())
+            {
+                while (NeedWait) yield return null;
+                AddCardTry.RemoveAt(i);
+            }
+            while (NeedWait) yield return null;
+        }
+        if (AddCardInterrupted)
+        {
+            AddCardInterrupted = false;
+            yield break;
+        }
+        addedCard = toAdd;
+        CardPile.Add(addedCard);
+        for (int i = AddCardRoutine.Count - 1; i >= 0; i--)
+        {
+            IEnumerator routine = AddCardRoutine[i];
+            if (!routine.MoveNext())
+            {
+                while (NeedWait) yield return null;
+                AddCardRoutine.RemoveAt(i);
+            }
+            while (NeedWait) yield return null;
+        }
+    }
+    public IEnumerator RemoveCard(ICard toRemove, bool discardedPileFirst)
+    {
+        //need Animation for Player
+        for (int i = RemoveCardTry.Count - 1; i >= 0; i--)
+        {
+            IEnumerator routine = RemoveCardTry[i];
+
+            if (!routine.MoveNext())
+            {
+                while (NeedWait) yield return null;
+                RemoveCardTry.RemoveAt(i);
+            }
+            while (NeedWait) yield return null;
+        }
+        if (RemoveCardInterrupted)
+        {
+            RemoveCardInterrupted = false;
+            yield break;
+        }
+        removedCard = toRemove;
+        if (discardedPileFirst)
+        {
+            ICard card = DiscardedPile.Find((x) => x.GetCardID() == removedCard.GetCardID());
+            if(card == null)
+            {
+                card = CardPile.Find((x) => x.GetCardID() == removedCard.GetCardID());
+                if (card == null)
+                {
+                    yield break;
+                }
+                else
+                {
+                    CardPile.Remove(card);
+                }
+            }
+            else
+            {
+                DiscardedPile.Remove(card);
+            }
+        }
+        else
+        {
+            ICard card = CardPile.Find((x) => x.GetCardID() == removedCard.GetCardID());
+            if (card == null)
+            {
+                card = DiscardedPile.Find((x) => x.GetCardID() == removedCard.GetCardID());
+                if (card == null)
+                {
+                    yield break;
+                }
+                else
+                {
+                    DiscardedPile.Remove(card);
+                }
+            }
+            else
+            {
+                CardPile.Remove(card);
+            }
+            //CardPile.Remove();
+        }
+
+        for (int i = RemoveCardRoutine.Count - 1; i >= 0; i--)
+        {
+            IEnumerator routine = RemoveCardRoutine[i];
+            if (!routine.MoveNext())
+            {
+                while (NeedWait) yield return null;
+                RemoveCardRoutine.RemoveAt(i);
+            }
+            while (NeedWait) yield return null;
+        }
+    }
+    public void SightUpdate(int newSight, bool posChange = false, Coordinate prevPos = null)
+    {
+        if (!posChange)
+        {
+            bfs(sight, position, true, false);
+        }
+        else
+        {
+            bfs(sight, prevPos, true, false);
+        }
+        bfs(newSight, position, true, true);
+    }
+    private void bfs(int level, Coordinate center,bool discovered, bool onSight)
+    {
+        int dist = 1;
+        bool[,] visited = new bool[128, 128];
+        Queue<Coordinate> queue = new Queue<Coordinate>();
+        Queue<Coordinate> nextQueue = new Queue<Coordinate>();
+        queue.Enqueue(center);
+        while (dist++ <= level)
+        {
+            while (queue.Count != 0)
+            {
+                Coordinate tmp  = queue.Dequeue();
+                GameManager.Instance.Map[tmp.X, tmp.Y].Discovered = discovered;
+                GameManager.Instance.Map[tmp.X, tmp.Y].Onsight = onSight;
+                Coordinate tile;
+                if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                {
+                    visited[tile.X, tile.Y] = true;
+                    nextQueue.Enqueue(tile);
+                };
+                if ((tile = tmp.GetLeftTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                {
+                    visited[tile.X, tile.Y] = true;
+                    nextQueue.Enqueue(tile);
+                };
+                if ((tile = tmp.GetRightTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                {
+                    visited[tile.X, tile.Y] = true;
+                    nextQueue.Enqueue(tile);
+                };
+                if ((tile = tmp.GetUpTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                {
+                    visited[tile.X, tile.Y] = true;
+                    nextQueue.Enqueue(tile);
+                }
+            }
+            queue = new Queue<Coordinate>(nextQueue);
+            nextQueue.Clear();
+        }
+        while (queue.Count != 0)
+        {
+            Coordinate tmp = queue.Dequeue();
+            GameManager.Instance.Map[tmp.X, tmp.Y].Discovered = discovered;
+            GameManager.Instance.Map[tmp.X, tmp.Y].Onsight = onSight;
+        }
+    }
     /// <summary>
     /// 1칸 이동
     /// </summary>
     /// <param name="target"></param>
     /// <param name="speed"></param>
     /// <returns></returns>
-    public IEnumerator Move(coordinate target, int speed)
+    public IEnumerator Move(Coordinate target, float speed)
     {
-        for (int i = TryMoveRoutine.Capacity-1; i >= 0; i--)
+
+        for (int i = TryMoveRoutine.Count - 1; i >= 0; i--)
         {
             if (!TryMoveRoutine[i].MoveNext())
             {
@@ -243,7 +480,7 @@ public abstract class Character : MonoBehaviour
         }
         Tile prevTile = GameManager.Instance.Map[position.X, position.Y];
         Tile targetTile = GameManager.Instance.Map[target.X, target.Y];
-        for (int i = prevTile.OnCharacterExitRoutine.Capacity-1; i >= 0; i--)
+        for (int i = prevTile.OnCharacterExitRoutine.Count - 1; i >= 0; i--)
         {
             if (!prevTile.OnCharacterExitRoutine[i].MoveNext())
             {
@@ -253,21 +490,27 @@ public abstract class Character : MonoBehaviour
             while (NeedWait) yield return null;
         }
         prevTile.CharacterOnTile = null;
-        Vector3 moveVector = new Vector3(target.X - position.X,0, target.Y - position.Y);
+        Vector3 moveVector = new Vector3(target.X - position.X, 0, target.Y - position.Y);
         float time = 0f;
+        while(time <= 1f / speed)
+        {
+            time += Time.fixedDeltaTime;
+            transform.position += moveVector * Time.fixedDeltaTime * speed;
+            yield return new WaitForFixedUpdate();
+        }/*
         yield return new WaitUntil(() =>
         {
             time += Time.deltaTime;
             transform.position += moveVector * Time.deltaTime * speed;
-            return time >= 1f / speed;
-        });
+            return time > 1f / speed;
+        });*/
         transform.position = new Vector3(target.X, 0, target.Y);
-        coordinate prevPos = position;
+        Coordinate prevPos = position;
         position = target;
         targetTile.CharacterOnTile = this;
         SightUpdate(sight, true, prevPos);
 
-        for (int i = targetTile.OnCharacterEnterRoutine.Capacity-1; i >= 0; i--)
+        for (int i = targetTile.OnCharacterEnterRoutine.Count - 1; i >= 0; i--)
         {
             if (!targetTile.OnCharacterEnterRoutine[i].MoveNext())
             {
@@ -277,7 +520,7 @@ public abstract class Character : MonoBehaviour
             while (NeedWait) yield return null;
         }
 
-        for(int i = MoveRoutine.Capacity-1; i>=0; i--)
+        for (int i = MoveRoutine.Count - 1; i >= 0; i--)
         {
             if (!MoveRoutine[i].MoveNext())
             {
@@ -288,9 +531,9 @@ public abstract class Character : MonoBehaviour
         }
     }
 
-    public IEnumerator ForceMove(coordinate target, int speed)
+    public IEnumerator ForceMove(Coordinate target, int speed)
     {
-        for (int i = TryForceMoveRoutine.Capacity-1; i >= 0; i--)
+        for (int i = TryForceMoveRoutine.Count - 1; i >= 0; i--)
         {
             if (!TryForceMoveRoutine[i].MoveNext())
             {
@@ -307,7 +550,7 @@ public abstract class Character : MonoBehaviour
 
         Tile prevTile = GameManager.Instance.Map[position.X, position.Y];
         Tile targetTile = GameManager.Instance.Map[target.X, target.Y];
-        for (int i = prevTile.OnCharacterExitRoutine.Capacity - 1; i >= 0; i--)
+        for (int i = prevTile.OnCharacterExitRoutine.Count - 1; i >= 0; i--)
         {
             if (!prevTile.OnCharacterExitRoutine[i].MoveNext())
             {
@@ -329,7 +572,7 @@ public abstract class Character : MonoBehaviour
         position = target;
         targetTile.CharacterOnTile = this;
 
-        for (int i = targetTile.OnCharacterEnterRoutine.Capacity - 1; i >= 0; i--)
+        for (int i = targetTile.OnCharacterEnterRoutine.Count - 1; i >= 0; i--)
         {
             if (!targetTile.OnCharacterEnterRoutine[i].MoveNext())
             {
@@ -339,7 +582,7 @@ public abstract class Character : MonoBehaviour
             while (NeedWait) yield return null;
         }
 
-        for (int i = ForceMoveRoutine.Capacity-1; i >= 0; i--)
+        for (int i = ForceMoveRoutine.Count - 1; i >= 0; i--)
         {
             if (!ForceMoveRoutine[i].MoveNext())
             {
@@ -352,7 +595,7 @@ public abstract class Character : MonoBehaviour
 
     public IEnumerator GetDmg(int dmg)
     {
-        for (int i = TryGetDmgRoutine.Capacity-1; i >= 0; i--)
+        for (int i = TryGetDmgRoutine.Count - 1; i >= 0; i--)
         {
             if (!TryGetDmgRoutine[i].MoveNext())
             {
@@ -368,7 +611,7 @@ public abstract class Character : MonoBehaviour
         }
         yield return StartCoroutine(getDmg(dmg));
 
-        for (int i = GetDmgRoutine.Capacity-1; i >= 0; i--)
+        for (int i = GetDmgRoutine.Count - 1; i >= 0; i--)
         {
             if (!GetDmgRoutine[i].MoveNext())
             {
@@ -381,7 +624,7 @@ public abstract class Character : MonoBehaviour
     protected abstract IEnumerator getDmg(int dmg);
     public IEnumerator Die()
     {
-        for (int i = TryDieRoutine.Capacity-1; i >= 0; i--)
+        for (int i = TryDieRoutine.Count - 1; i >= 0; i--)
         {
             if (!TryDieRoutine[i].MoveNext())
             {
@@ -397,7 +640,7 @@ public abstract class Character : MonoBehaviour
         }
         yield return StartCoroutine(dieRoutine());
 
-        for (int i = DieRoutine.Capacity-1; i >= 0; i--)
+        for (int i = DieRoutine.Count - 1; i >= 0; i--)
         {
             if (!DieRoutine[i].MoveNext())
             {
@@ -411,7 +654,7 @@ public abstract class Character : MonoBehaviour
     public IEnumerator PayCost(int cost, CostType type)
     {
         yield return StartCoroutine(payCost(cost, type));
-        for (int i = PayCostRoutine.Capacity - 1; i >= 0; i--)
+        for (int i = PayCostRoutine.Count - 1; i >= 0; i--)
         {
             if (!PayCostRoutine[i].MoveNext())
             {
@@ -423,4 +666,5 @@ public abstract class Character : MonoBehaviour
     }
     protected abstract IEnumerator payCost(int cost, CostType type);
     public abstract bool PayTest(int cost, CostType type);
+
 }

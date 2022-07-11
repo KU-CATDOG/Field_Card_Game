@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4068269855793044119
+--- !u!1 &1846555704339768339
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,48 +8,48 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4068269855793044107}
-  - component: {fileID: 4068269855793044116}
-  - component: {fileID: 4068269855793044117}
-  - component: {fileID: 4068269855793044118}
-  - component: {fileID: 1449130435364560125}
+  - component: {fileID: 1846555704339768328}
+  - component: {fileID: 1846555704339768343}
+  - component: {fileID: 1846555704339768342}
+  - component: {fileID: 1846555704339768341}
+  - component: {fileID: 1846555704339768340}
   m_Layer: 0
-  m_Name: Tile
-  m_TagString: Untagged
+  m_Name: DebugCharacter
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4068269855793044107
+--- !u!4 &1846555704339768328
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4068269855793044119}
+  m_GameObject: {fileID: 1846555704339768339}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 650.2284, y: 202.75397, z: -409.47217}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &4068269855793044116
+--- !u!33 &1846555704339768343
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4068269855793044119}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &4068269855793044117
+  m_GameObject: {fileID: 1846555704339768339}
+  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &1846555704339768342
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4068269855793044119}
+  m_GameObject: {fileID: 1846555704339768339}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d64939ac9880c1c4eb1487a6b71775a0, type: 2}
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -85,31 +85,29 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4068269855793044118
-BoxCollider:
+--- !u!136 &1846555704339768341
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4068269855793044119}
+  m_GameObject: {fileID: 1846555704339768339}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1449130435364560125
+--- !u!114 &1846555704339768340
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4068269855793044119}
+  m_GameObject: {fileID: 1846555704339768339}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dce4ef868e5c0c140b02041558e6275e, type: 3}
+  m_Script: {fileID: 11500000, guid: cdbdfc99c3471ec46ab3923101117dbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DiscoveredColor: {fileID: 2100000, guid: e2bc956f6eb45d24ca1087f23f9549a5, type: 2}
-  OnSightColor: {fileID: 2100000, guid: d64939ac9880c1c4eb1487a6b71775a0, type: 2}
-  DefaultColor: {fileID: 2100000, guid: 1d6ce9ca851c9ba49827f007539791bb, type: 2}
