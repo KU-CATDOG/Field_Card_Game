@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class PaladinMove : IPlayerCard
 {
-    private int range;
+    private int range = 10;
+    private bool interrupted;
     public int GetRange()
     {
         //return range;
-        return 10;
+        return range;
     }
     public void SetRange(int _range)
     {
@@ -250,8 +251,17 @@ public class PaladinMove : IPlayerCard
         float speed = 5f;
         foreach (Coordinate i in path)
         {
+            if (interrupted)
+            {
+                interrupted = false;
+                yield break;
+            }
             yield return GameManager.Instance.StartCoroutine(caster.Move(i, speed));
         }
+    }
+    public void CardRoutineInterrupt()
+    {
+        interrupted = true;
     }
     public int GetCost()
     {

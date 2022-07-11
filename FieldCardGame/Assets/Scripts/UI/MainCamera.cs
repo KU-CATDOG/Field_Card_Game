@@ -9,7 +9,7 @@ public class MainCamera : MonoBehaviour
     public bool HardLock { get; set; } = true;
     private Vector3 posVec;
     //private Vector3 useModePos;
-    private Vector3 target;
+    public Vector3 target;
     private float posVecMaxThreshold;
     private float posVecMinThreshold;
     private float MouseCameraMoveSpeed = 5f;
@@ -33,7 +33,7 @@ public class MainCamera : MonoBehaviour
     }
     void Start()
     {
-        posVec = transform.position - GameManager.Instance.Player.transform.position;
+        posVec = transform.position - GameManager.Instance.CurPlayer.transform.position;
         posVecMaxThreshold = posVec.magnitude;
         posVecMinThreshold = 3f;
         //useModePos = posVec + Vector3.up * 4;
@@ -63,7 +63,7 @@ public class MainCamera : MonoBehaviour
             }
             if (CameraLock)
             {
-                target = GameManager.Instance.Player.transform.position;
+                target = GameManager.Instance.CurPlayer.transform.position;
             }
             else
             {

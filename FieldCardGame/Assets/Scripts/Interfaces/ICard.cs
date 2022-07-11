@@ -14,4 +14,5 @@ public interface ICard
     public bool IsAvailablePosition(Coordinate caster, Coordinate target);
     public List<Coordinate> GetAreaofEffect();
     public IEnumerator CardRoutine(Character caster, Coordinate center);
+    public void CardRoutineInterrupt();
 }

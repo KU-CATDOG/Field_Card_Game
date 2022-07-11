@@ -28,7 +28,7 @@ public class PlayerButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     {
         float threshold = 0.5f;
         Vector2 targetPos;
-        if (!PlayerUIManager.Instance.UseMode && !PlayerUIManager.Instance.OnRoutine)
+        if (!PlayerUIManager.Instance.UseMode && !PlayerUIManager.Instance.OnRoutine && TurnManager.Instance.Token != 1)
         {
             targetPos = originPos;
         }

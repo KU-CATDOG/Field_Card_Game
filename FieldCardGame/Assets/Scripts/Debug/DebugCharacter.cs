@@ -2,40 +2,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DebugCharacter : Character
+public class DebugCharacter : Player
 {
     protected override IEnumerator getDmg(int dmg)
     {
-        throw new System.NotImplementedException();
+        yield break;
     }
     public override IEnumerator AfterBuff()
     {
-        throw new System.NotImplementedException();
+        yield break;
     }
     public override IEnumerator AfterDraw()
     {
-        throw new System.NotImplementedException();
+        yield break;
     }
     public override IEnumerator AwakeTurn()
     {
-        throw new System.NotImplementedException();
+        yield break;
     }
     public override IEnumerator StartTurn()
     {
-        throw new System.NotImplementedException();
+        yield break;
     }
     protected override IEnumerator dieRoutine()
     {
-        throw new System.NotImplementedException();
+        yield break;
     }
     protected override IEnumerator payCost(int cost, CostType type)
     {
         yield break;
-        throw new System.NotImplementedException();
     }
     public override bool PayTest(int cost, CostType type)
     {
-        throw new System.NotImplementedException();
+        return true;
     }
     public void DebugDrawCard()
     {
@@ -43,6 +42,7 @@ public class DebugCharacter : Character
     }
     private void Start()
     {
+        TurnStartDraw = 5;
     }
     public void DebugAddCard()
     {/*
@@ -54,5 +54,9 @@ public class DebugCharacter : Character
             addedCard = new DebugCard();
         }*/
         StartCoroutine(AddCard(new PaladinMove()));
+    }
+    public void AddSummonCard()
+    {
+        StartCoroutine(AddCard(new DebugCard()));
     }
 }

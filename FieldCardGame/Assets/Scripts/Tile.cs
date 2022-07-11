@@ -22,7 +22,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         }
         set
         {
-            if (value == true && !Onsight)
+            if (value == true && Onsight == 0)
             {
                 TileColor.material = DiscoveredColor;
                 discovered = value;
@@ -33,8 +33,8 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             }
         }
     }
-    private bool onSight;
-    public bool Onsight
+    private int onSight;
+    public int Onsight
     {
         get
         {
@@ -42,7 +42,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         }
         set
         {
-            if (value == true)
+            if (value != 0)
             {
                 TileColor.material = OnSightColor;
             }
@@ -64,7 +64,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     public void OnPointerEnter(PointerEventData data)
     {
         if (!PlayerUIManager.Instance.UseMode) return;
-        if (!PlayerUIManager.Instance.UseModeCard.IsAvailablePosition(GameManager.Instance.Player.position, position)) return;
+        if (!PlayerUIManager.Instance.UseModeCard.IsAvailablePosition(GameManager.Instance.CurPlayer.position, position)) return;
         OriginColor = TileColor.material.color;
         foreach (Coordinate i in PlayerUIManager.Instance.UseModeCard.GetAreaofEffect())
         {
@@ -75,7 +75,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     public void OnPointerExit(PointerEventData data)
     {
         if (!PlayerUIManager.Instance.UseMode) return;
-        if (!PlayerUIManager.Instance.UseModeCard.IsAvailablePosition(GameManager.Instance.Player.position, position)) return;
+        if (!PlayerUIManager.Instance.UseModeCard.IsAvailablePosition(GameManager.Instance.CurPlayer.position, position)) return;
         foreach (Coordinate i in PlayerUIManager.Instance.UseModeCard.GetAreaofEffect())
         {
             Coordinate target = position + i;
@@ -87,12 +87,12 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         Debug.Log("CLICK " + Time.frameCount);
         if (!PlayerUIManager.Instance.UseMode) return;
         if (data.button != 0) return;
-        if (!PlayerUIManager.Instance.UseModeCard.IsAvailablePosition(GameManager.Instance.Player.position, position)) return;
+        if (!PlayerUIManager.Instance.UseModeCard.IsAvailablePosition(GameManager.Instance.CurPlayer.position, position)) return;
         PlayerUIManager.Instance.UseTileSelected = true;
         PlayerUIManager.Instance.CardUsePos = position;
         foreach (Coordinate i in PlayerUIManager.Instance.UseModeCard.GetAreaofEffect())
         {
-            Coordinate target = GameManager.Instance.Player.position + i;
+            Coordinate target = GameManager.Instance.CurPlayer.position + i;
             GameManager.Instance.Map[target.X, target.Y].RestoreColor();
         }
 
@@ -107,7 +107,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     }
     public void RestoreColor()
     {
-        if (Onsight)
+        if (Onsight>0)
         {
             TileColor.material = OnSightColor;
         }

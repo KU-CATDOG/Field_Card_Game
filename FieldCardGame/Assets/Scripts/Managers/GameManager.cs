@@ -20,9 +20,20 @@ public class GameManager : MonoBehaviour
             return cardObjectDict;
         }
     }
-    public static GameManager Instance { get; set; }
-    public List<Character> EnemyList { get; private set; }
-    public Character Player { get; private set; }
+    [SerializeField]
+    private List<Enemy> enemyDict;  
+    public IReadOnlyList<Enemy> EnemyDict
+    {
+        get
+        {
+            return enemyDict.AsReadOnly();
+        }
+    }
+
+    public static GameManager Instance { get; set; }  
+    public List<Character> EnemyList { get; private set; } = new List<Character>();
+
+    public Character CurPlayer { get; set; }
     public List<Character> Allies { get; private set; } = new List<Character>();
     public const int MAPSIZE = 128;
     [SerializeField]
@@ -43,21 +54,25 @@ public class GameManager : MonoBehaviour
             Destroy(this);
         }
         InitializeDictionary();
-        EnemyList = new List<Character>();
-        Player = FindObjectOfType<Character>();
-        GenerateMap();
-        Allies.Add(Player);
     }
     private void InitializeDictionary()
     {
         ICard card;
+        card = new DebugCard();
+        cardDict.Add(card.GetCardID(), card);
+        cardObjectDict.Add(card.GetCardID(), cardObjectList[0]);
+
         card = new PaladinMove();
         cardDict.Add(card.GetCardID(), card);
         cardObjectDict.Add(card.GetCardID(), cardObjectList[1]);
+
     }
 
     private void Start()
     {
+        //fixme
+        GameManager.Instance.CurPlayer = GameManager.Instance.Allies[0];
+        GenerateMap();
         //fixme
     }
 
@@ -79,8 +94,8 @@ public class GameManager : MonoBehaviour
             }
         }
         //fixme
-        Player.position = new Coordinate(10, 10);
-        Map[10, 10].CharacterOnTile = Player;
-        Player.SightUpdate(Player.Sight);
+        CurPlayer.position = new Coordinate(10, 10);
+        Map[10, 10].CharacterOnTile = CurPlayer;
+        CurPlayer.SightUpdate(CurPlayer.Sight);
     }
 }

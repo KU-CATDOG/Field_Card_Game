@@ -8,7 +8,14 @@ public class PlayerUIManager : MonoBehaviour
     public static PlayerUIManager Instance { get; set; }
     public float CardUseHeight { get; set; }
     [SerializeField]
-    private Button TurnEndButton;
+    private Button turnEndButton;
+    public Button TurnEndButton
+    {
+        get
+        {
+            return TurnEndButton;
+        }
+    }
     [SerializeField]
     private CardPile CardPilePanel;
     [SerializeField]
@@ -80,7 +87,7 @@ public class PlayerUIManager : MonoBehaviour
     }
     public IEnumerator DrawCard()
     {
-        CardImages.Add(Instantiate(GameManager.Instance.CardObjectDict[GameManager.Instance.Player.drawCard.GetCardID()], CardArea.transform));
+        CardImages.Add(Instantiate(GameManager.Instance.CardObjectDict[GameManager.Instance.CurPlayer.drawCard.GetCardID()], CardArea.transform));
         CardImages[CardImages.Count - 1].isPileCard = false;
         yield return StartCoroutine(Rearrange());
 
@@ -112,7 +119,7 @@ public class PlayerUIManager : MonoBehaviour
         movVec /= timeLimit;
         yield return new WaitUntil(() =>
         {
-            if (card.MoveInterrupted)
+            if (!card || card.MoveInterrupted)
             {
                 interrupted = true;
                 return true;
@@ -129,7 +136,7 @@ public class PlayerUIManager : MonoBehaviour
     }
     public IEnumerator Rearrange(int exceptFor = -1)
     {
-        List<ICard> cards = GameManager.Instance.Player.HandCard;
+        List<ICard> cards = GameManager.Instance.CurPlayer.HandCard;
         int size = cards.Count;
         if (cards.Count % 2 == 0)
         {
@@ -164,7 +171,7 @@ public class PlayerUIManager : MonoBehaviour
     public IEnumerator HighlightCard(CardObject card)
     {
 
-        List<ICard> cards = GameManager.Instance.Player.HandCard;
+        List<ICard> cards = GameManager.Instance.CurPlayer.HandCard;
         int size = cards.Count;
         int cardIndex = card.SiblingIndex - defaultSiblingIndex;
         Vector2 target;
@@ -199,7 +206,7 @@ public class PlayerUIManager : MonoBehaviour
         ReadyUseMode = false;
         UseMode = true;
         //StartCoroutine(MainCamera.Instance.moveCamera(true));
-        List<ICard> cards = GameManager.Instance.Player.HandCard;
+        List<ICard> cards = GameManager.Instance.CurPlayer.HandCard;
         int cardIdx = card.SiblingIndex - defaultSiblingIndex;
         UseModeCard = cards[cardIdx];
         int size = cards.Count;
@@ -214,13 +221,13 @@ public class PlayerUIManager : MonoBehaviour
         int range = UseModeCard.GetRange();
         List<Coordinate> inRange = new List<Coordinate>();
         bool[,] visited = new bool[128, 128];
-        bfs(range, GameManager.Instance.Player.position, inRange);
+        bfs(range, GameManager.Instance.CurPlayer.position, inRange);
         foreach (Coordinate i in inRange)
         {
             GameManager.Instance.Map[i.X, i.Y].TileColor.material.color = (UseModeCard as IPlayerCard).GetUnAvailableTileColor();
         }
 
-        foreach (Coordinate i in UseModeCard.GetAvailableTile(GameManager.Instance.Player.position))
+        foreach (Coordinate i in UseModeCard.GetAvailableTile(GameManager.Instance.CurPlayer.position))
         {
             GameManager.Instance.Map[i.X, i.Y].TileColor.material.color = (UseModeCard as IPlayerCard).GetAvailableTileColor();
         }
@@ -249,7 +256,7 @@ public class PlayerUIManager : MonoBehaviour
             GameManager.Instance.Map[i.X, i.Y].RestoreColor();
         }
        // yield return StartCoroutine(MainCamera.Instance.moveCamera(false));
-        yield return StartCoroutine(GameManager.Instance.Player.CardUse(CardUsePos, cardIdx));
+        yield return StartCoroutine(GameManager.Instance.CurPlayer.CardUse(CardUsePos, cardIdx));
         OnRoutine = false;
         UseTileSelected = false;
     }
@@ -267,22 +274,22 @@ public class PlayerUIManager : MonoBehaviour
                 Coordinate tmp = queue.Dequeue();
                 list.Add(tmp);
                 Coordinate tile;
-                if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y])
                 {
                     visited[tile.X, tile.Y] = true;
                     nextQueue.Enqueue(tile);
                 };
-                if ((tile = tmp.GetLeftTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                if ((tile = tmp.GetLeftTile()) != null && !visited[tile.X, tile.Y])
                 {
                     visited[tile.X, tile.Y] = true;
                     nextQueue.Enqueue(tile);
                 };
-                if ((tile = tmp.GetRightTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                if ((tile = tmp.GetRightTile()) != null && !visited[tile.X, tile.Y])
                 {
                     visited[tile.X, tile.Y] = true;
                     nextQueue.Enqueue(tile);
                 };
-                if ((tile = tmp.GetUpTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                if ((tile = tmp.GetUpTile()) != null && !visited[tile.X, tile.Y])
                 {
                     visited[tile.X, tile.Y] = true;
                     nextQueue.Enqueue(tile);
@@ -355,13 +362,13 @@ public class PlayerUIManager : MonoBehaviour
     public void OpenCardPilePanel()
     {
         PanelOpenned = true;
-        StartCoroutine(CardPilePanel.ShowPile(GameManager.Instance.Player.CardPile));
+        StartCoroutine(CardPilePanel.ShowPile(GameManager.Instance.CurPlayer.CardPile));
     }
 
     public void OpenDiscardedPilePanel()
     {
         PanelOpenned = true;
-        StartCoroutine(DiscardedPilePanel.ShowPile(GameManager.Instance.Player.DiscardedPile, false));
+        StartCoroutine(DiscardedPilePanel.ShowPile(GameManager.Instance.CurPlayer.DiscardedPile, false));
     }
 
 

@@ -5,8 +5,13 @@ using UnityEngine;
 public abstract class Character : MonoBehaviour
 {
     private const int MAXHANDSIZE = 10;
+    private MeshRenderer meshRenderer;
+    public Buff BuffHandler { get; private set; } = new Buff();
+    public Debuff DebuffHandler { get; private set; } = new Debuff();
+    public int TurnStartDraw { get; set; }
     public bool NeedWait { get; set; }
     private Coordinate pos;
+    public Coordinate PrevPos { get; set; }
     public Coordinate position
     {
         get
@@ -15,7 +20,13 @@ public abstract class Character : MonoBehaviour
         }
         set
         {
+            PrevPos = pos;
+            if (pos != null)
+            {
+                GameManager.Instance.Map[pos.X, pos.Y].CharacterOnTile = null;
+            }
             pos = value;
+            GameManager.Instance.Map[pos.X, pos.Y].CharacterOnTile = this;
             transform.position = new Vector3(value.X, 1, value.Y);
         }
     }
@@ -28,7 +39,11 @@ public abstract class Character : MonoBehaviour
         }
         set
         {
-            SightUpdate(value);
+            if (this is Player)
+            {
+                SightUpdate(value);
+            }
+
             sight = value;
         }
     }
@@ -37,12 +52,12 @@ public abstract class Character : MonoBehaviour
     public List<ICard> DiscardedPile { get; private set; } = new List<ICard>();
 
     /// for UI
-    public List<Buff> BuffList { get; set; } = new List<Buff>();
+    public List<BuffType> BuffList { get; set; } = new List<BuffType>();
     public List<Debuff> DebuffList { get; set; } = new List<Debuff>();
     /// 
 
-    public List<IEnumerator> BuffHandler { get; private set; } = new List<IEnumerator>();
-    public List<IEnumerator> DebuffHandler { get; private set; } = new List<IEnumerator>();
+    public List<IEnumerator> StartBuffHandler { get; private set; } = new List<IEnumerator>();
+    public List<IEnumerator> StartDebuffHandler { get; private set; } = new List<IEnumerator>();
     public List<IEnumerator> DrawBuffHandler { get; private set; } = new List<IEnumerator>();
     public List<IEnumerator> DrawDebuffHandler { get; private set; } = new List<IEnumerator>();
     public List<IEnumerator> TurnEndBuffHandler { get; private set; } = new List<IEnumerator>();
@@ -59,11 +74,13 @@ public abstract class Character : MonoBehaviour
     public List<IEnumerator> TryForceMoveRoutine { get; private set; } = new List<IEnumerator>();
     public List<IEnumerator> ForceMoveRoutine { get; private set; } = new List<IEnumerator>();
 
+    public int Dmg { get; set; }
     public bool GetDmgInterrupted { get; set; }
     public List<IEnumerator> TryGetDmgRoutine { get; private set; } = new List<IEnumerator>();
     public List<IEnumerator> GetDmgRoutine { get; private set; } = new List<IEnumerator>();
 
     public bool HitInterrupted { get; set; }
+    public int HitDmg { get; set; }
     public List<IEnumerator> TryHitAttackRoutine { get; private set; } = new List<IEnumerator>();
     public List<IEnumerator> HitAttackRoutine { get; private set; } = new List<IEnumerator>();
     public bool DieInterrupted { get; set; }
@@ -98,10 +115,6 @@ public abstract class Character : MonoBehaviour
     public List<IEnumerator> RemoveCardTry { get; private set; } = new List<IEnumerator>();
     public List<IEnumerator> RemoveCardRoutine { get; private set; } = new List<IEnumerator>();
 
-    public abstract IEnumerator AwakeTurn();
-    public abstract IEnumerator AfterBuff();
-    public abstract IEnumerator AfterDraw();
-    public abstract IEnumerator StartTurn();
     public IEnumerator ShuffleDeck()
     {
         //need animation for player
@@ -198,7 +211,7 @@ public abstract class Character : MonoBehaviour
             yield break;
         }
         dropCard = CardPile.Find((x) => x.GetCardID() == card.GetCardID());
-        if(dropCard == null)
+        if (dropCard == null)
         {
             Debug.LogError("Wrong DropCard Operation");
             yield break;
@@ -347,7 +360,7 @@ public abstract class Character : MonoBehaviour
         if (discardedPileFirst)
         {
             ICard card = DiscardedPile.Find((x) => x.GetCardID() == removedCard.GetCardID());
-            if(card == null)
+            if (card == null)
             {
                 card = CardPile.Find((x) => x.GetCardID() == removedCard.GetCardID());
                 if (card == null)
@@ -397,19 +410,19 @@ public abstract class Character : MonoBehaviour
             while (NeedWait) yield return null;
         }
     }
-    public void SightUpdate(int newSight, bool posChange = false, Coordinate prevPos = null)
+    public void SightUpdate(int newSight, bool posChange = false, Coordinate prevPos = null, bool sightChange = false)
     {
-        if (!posChange)
+        if (!posChange && sightChange)
         {
-            bfs(sight, position, true, false);
+            bfs(sight, position, true, -1);
         }
-        else
+        if(posChange && !sightChange)
         {
-            bfs(sight, prevPos, true, false);
+            bfs(sight, prevPos, true, -1);
         }
-        bfs(newSight, position, true, true);
+        bfs(newSight, position, true, 1);
     }
-    private void bfs(int level, Coordinate center,bool discovered, bool onSight)
+    private void bfs(int level, Coordinate center, bool discovered, int onSight)
     {
         int dist = 1;
         bool[,] visited = new bool[128, 128];
@@ -420,26 +433,40 @@ public abstract class Character : MonoBehaviour
         {
             while (queue.Count != 0)
             {
-                Coordinate tmp  = queue.Dequeue();
+                Coordinate tmp = queue.Dequeue();
                 GameManager.Instance.Map[tmp.X, tmp.Y].Discovered = discovered;
-                GameManager.Instance.Map[tmp.X, tmp.Y].Onsight = onSight;
+                GameManager.Instance.Map[tmp.X, tmp.Y].Onsight += onSight;
+                if (GameManager.Instance.Map[tmp.X, tmp.Y].Onsight == 0)
+                {
+                    if (GameManager.Instance.Map[tmp.X, tmp.Y].CharacterOnTile)
+                    {
+                        GameManager.Instance.Map[tmp.X, tmp.Y].CharacterOnTile.meshRenderer.enabled = false;
+                    }
+                }
+                else
+                {
+                    if (GameManager.Instance.Map[tmp.X, tmp.Y].CharacterOnTile)
+                    {
+                        GameManager.Instance.Map[tmp.X, tmp.Y].CharacterOnTile.meshRenderer.enabled = true;
+                    }
+                }
                 Coordinate tile;
-                if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y])
                 {
                     visited[tile.X, tile.Y] = true;
                     nextQueue.Enqueue(tile);
                 };
-                if ((tile = tmp.GetLeftTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                if ((tile = tmp.GetLeftTile()) != null && !visited[tile.X, tile.Y])
                 {
                     visited[tile.X, tile.Y] = true;
                     nextQueue.Enqueue(tile);
                 };
-                if ((tile = tmp.GetRightTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                if ((tile = tmp.GetRightTile()) != null && !visited[tile.X, tile.Y])
                 {
                     visited[tile.X, tile.Y] = true;
                     nextQueue.Enqueue(tile);
                 };
-                if ((tile = tmp.GetUpTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                if ((tile = tmp.GetUpTile()) != null && !visited[tile.X, tile.Y])
                 {
                     visited[tile.X, tile.Y] = true;
                     nextQueue.Enqueue(tile);
@@ -452,7 +479,7 @@ public abstract class Character : MonoBehaviour
         {
             Coordinate tmp = queue.Dequeue();
             GameManager.Instance.Map[tmp.X, tmp.Y].Discovered = discovered;
-            GameManager.Instance.Map[tmp.X, tmp.Y].Onsight = onSight;
+            GameManager.Instance.Map[tmp.X, tmp.Y].Onsight += onSight;
         }
     }
     /// <summary>
@@ -489,27 +516,33 @@ public abstract class Character : MonoBehaviour
             }
             while (NeedWait) yield return null;
         }
-        prevTile.CharacterOnTile = null;
         Vector3 moveVector = new Vector3(target.X - position.X, 0, target.Y - position.Y);
         float time = 0f;
-        while(time <= 1f / speed)
+        if(GameManager.Instance.Map[position.X, position.Y].Onsight != 0)
         {
-            time += Time.fixedDeltaTime;
-            transform.position += moveVector * Time.fixedDeltaTime * speed;
-            yield return new WaitForFixedUpdate();
-        }/*
-        yield return new WaitUntil(() =>
-        {
-            time += Time.deltaTime;
-            transform.position += moveVector * Time.deltaTime * speed;
-            return time > 1f / speed;
-        });*/
-        transform.position = new Vector3(target.X, 0, target.Y);
-        Coordinate prevPos = position;
+            while (time <= 1f / speed)
+            {
+                time += Time.fixedDeltaTime;
+                transform.position += moveVector * Time.fixedDeltaTime * speed;
+                yield return new WaitForFixedUpdate();
+            }
+        }
         position = target;
-        targetTile.CharacterOnTile = this;
-        SightUpdate(sight, true, prevPos);
-
+        if (this is Player)
+        {
+            SightUpdate(sight, true, PrevPos);
+        }
+        else
+        {
+            if(GameManager.Instance.Map[position.X, position.Y].Onsight != 0)
+            {
+                meshRenderer.enabled = true;
+            }
+            else
+            {
+                meshRenderer.enabled = false;
+            }
+        }
         for (int i = targetTile.OnCharacterEnterRoutine.Count - 1; i >= 0; i--)
         {
             if (!targetTile.OnCharacterEnterRoutine[i].MoveNext())
@@ -559,18 +592,22 @@ public abstract class Character : MonoBehaviour
             }
             while (NeedWait) yield return null;
         }
-        prevTile.CharacterOnTile = null;
         Vector3 moveVector = new Vector3(target.X - position.X, 0, target.Y - position.Y);
         float time = 0f;
-        yield return new WaitUntil(() =>
+        if (GameManager.Instance.Map[position.X, position.Y].Onsight != 0)
         {
-            time += Time.deltaTime;
-            transform.position += moveVector * Time.deltaTime * speed;
-            return time >= 1f / speed;
-        });
-        transform.position = new Vector3(target.X, 0, target.Y);
+            while (time <= 1f / speed)
+            {
+                time += Time.fixedDeltaTime;
+                transform.position += moveVector * Time.fixedDeltaTime * speed;
+                yield return new WaitForFixedUpdate();
+            }
+        }
         position = target;
-        targetTile.CharacterOnTile = this;
+        if (this is Player)
+        {
+            SightUpdate(sight, true, PrevPos);
+        }
 
         for (int i = targetTile.OnCharacterEnterRoutine.Count - 1; i >= 0; i--)
         {
@@ -595,6 +632,7 @@ public abstract class Character : MonoBehaviour
 
     public IEnumerator GetDmg(int dmg)
     {
+        Dmg = dmg;
         for (int i = TryGetDmgRoutine.Count - 1; i >= 0; i--)
         {
             if (!TryGetDmgRoutine[i].MoveNext())
@@ -609,8 +647,11 @@ public abstract class Character : MonoBehaviour
             GetDmgInterrupted = false;
             yield break;
         }
-        yield return StartCoroutine(getDmg(dmg));
-
+        yield return StartCoroutine(getDmg(Dmg));
+        if (!gameObject)
+        {
+            yield break;
+        }
         for (int i = GetDmgRoutine.Count - 1; i >= 0; i--)
         {
             if (!GetDmgRoutine[i].MoveNext())
@@ -621,7 +662,6 @@ public abstract class Character : MonoBehaviour
             while (NeedWait) yield return null;
         }
     }
-    protected abstract IEnumerator getDmg(int dmg);
     public IEnumerator Die()
     {
         for (int i = TryDieRoutine.Count - 1; i >= 0; i--)
@@ -649,8 +689,8 @@ public abstract class Character : MonoBehaviour
             }
             while (NeedWait) yield return null;
         }
+        Destroy(gameObject);
     }
-    protected abstract IEnumerator dieRoutine();
     public IEnumerator PayCost(int cost, CostType type)
     {
         yield return StartCoroutine(payCost(cost, type));
@@ -664,7 +704,16 @@ public abstract class Character : MonoBehaviour
             while (NeedWait) yield return null;
         }
     }
+    protected abstract IEnumerator dieRoutine();
     protected abstract IEnumerator payCost(int cost, CostType type);
     public abstract bool PayTest(int cost, CostType type);
-
+    public abstract IEnumerator AwakeTurn();
+    public abstract IEnumerator AfterBuff();
+    public abstract IEnumerator AfterDraw();
+    public abstract IEnumerator StartTurn();
+    protected abstract IEnumerator getDmg(int dmg);
+    protected virtual void Awake()
+    {
+        meshRenderer = GetComponent<MeshRenderer>();
+    }
 }

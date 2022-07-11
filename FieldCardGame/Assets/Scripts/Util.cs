@@ -13,6 +13,10 @@ public enum BuffType
 {
 
 }
+public enum DebuffType
+{
+
+}
 public enum CostType
 {
     PaladinEnergy,
