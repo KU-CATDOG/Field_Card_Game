@@ -2,50 +2,61 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DebugCharacter : Character
+public class DebugCharacter : Player
 {
     protected override IEnumerator getDmg(int dmg)
     {
-        throw new System.NotImplementedException();
+        yield break;
     }
     public override IEnumerator AfterBuff()
     {
-        throw new System.NotImplementedException();
+        yield break;
     }
     public override IEnumerator AfterDraw()
     {
-        throw new System.NotImplementedException();
+        yield break;
     }
     public override IEnumerator AwakeTurn()
     {
-        throw new System.NotImplementedException();
-    }
-    public override bool Equals(object other)
-    {
-        return base.Equals(other);
-    }
-    public override int GetHashCode()
-    {
-        return base.GetHashCode();
+        yield break;
     }
     public override IEnumerator StartTurn()
     {
-        throw new System.NotImplementedException();
-    }
-    public override string ToString()
-    {
-        return base.ToString();
+        yield break;
     }
     protected override IEnumerator dieRoutine()
     {
-        throw new System.NotImplementedException();
+        yield break;
     }
     protected override IEnumerator payCost(int cost, CostType type)
     {
-        throw new System.NotImplementedException();
+        yield break;
     }
     public override bool PayTest(int cost, CostType type)
     {
-        throw new System.NotImplementedException();
+        return true;
+    }
+    public void DebugDrawCard()
+    {
+        StartCoroutine(DrawCard());
+    }
+    private void Start()
+    {
+        TurnStartDraw = 5;
+    }
+    public void DebugAddCard()
+    {/*
+        if (addedCard is DebugCard)
+        {
+        }
+        else
+        {
+            addedCard = new DebugCard();
+        }*/
+        StartCoroutine(AddCard(new PaladinMove()));
+    }
+    public void AddSummonCard()
+    {
+        StartCoroutine(AddCard(new DebugCard()));
     }
 }

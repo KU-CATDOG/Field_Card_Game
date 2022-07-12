@@ -44,5 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe7f0502285bd34449589b8886f065e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardObjectList:
+  - {fileID: 0}
   MapObject: {fileID: 0}
   tilePrefab: {fileID: 1449130435364560125, guid: adf42912160c2054aa4b305bd4188ca8, type: 3}
