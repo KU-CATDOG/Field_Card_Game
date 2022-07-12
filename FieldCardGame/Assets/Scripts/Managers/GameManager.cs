@@ -32,7 +32,6 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance { get; set; }  
     public List<Character> EnemyList { get; private set; } = new List<Character>();
-
     public Character CurPlayer { get; set; }
     public List<Character> Allies { get; private set; } = new List<Character>();
     public const int MAPSIZE = 128;

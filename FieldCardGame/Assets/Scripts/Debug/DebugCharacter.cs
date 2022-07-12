@@ -43,6 +43,8 @@ public class DebugCharacter : Player
     private void Start()
     {
         TurnStartDraw = 5;
+        MaxHp = Hp = 30;
+        Exp = 3;
     }
     public void DebugAddCard()
     {/*

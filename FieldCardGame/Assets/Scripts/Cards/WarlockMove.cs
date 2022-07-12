@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarlockMove : IPlayerCard
+public class WarlockMove //: IPlayerCard
 {
     private int range;
     public int GetRange()
