@@ -8,7 +8,7 @@ public abstract class Character : MonoBehaviour
     public int Hp { get; set; }
     private const int MAXHANDSIZE = 10;
     private MeshRenderer meshRenderer;
-    public Buff BuffHandler { get; private set; } = new Buff();
+    public Buff BuffHandler { get; private set; }
     public Debuff DebuffHandler { get; private set; } = new Debuff();
     public int TurnStartDraw { get; set; }
     public bool NeedWait { get; set; }
@@ -783,5 +783,6 @@ public abstract class Character : MonoBehaviour
     protected virtual void Awake()
     {
         meshRenderer = GetComponent<MeshRenderer>();
+        BuffHandler = new Buff(this);
     }
 }

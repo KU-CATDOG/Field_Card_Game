@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class WarlockMove //: IPlayerCard
 {
-    private int range;
+    private int range = 4;
+    private bool interrupted;
     public int GetRange()
     {
         return range;
@@ -249,8 +250,17 @@ public class WarlockMove //: IPlayerCard
         float speed = 5f;
         foreach (Coordinate i in path)
         {
+            if (interrupted)
+            {
+                interrupted = false;
+                yield break;
+            }
             yield return GameManager.Instance.StartCoroutine(caster.Move(i, speed));
         }
+    }
+    public void CardRoutineInterrupt()
+    {
+        interrupted = true;
     }
     public int GetCost()
     {

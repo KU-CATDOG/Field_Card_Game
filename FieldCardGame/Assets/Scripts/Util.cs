@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public enum Buff
+public enum BuffIcon
 {
     debug,
 }
-public enum Debuff
+public enum DebuffIcon
 {
     debug,
 }
