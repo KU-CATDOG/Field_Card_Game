@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WarlockGathering : IPlayerCard
 {
-    private int range;
+    private int range = 0;
     private int amount;
     private bool interrupted;
     public int GetRange()
@@ -30,47 +30,7 @@ public class WarlockGathering : IPlayerCard
     public List<Coordinate> GetAvailableTile(Coordinate pos)
     {
         List<Coordinate> ret = new List<Coordinate>();
-        int level = 1;
-        bool[,] visited = new bool[128, 128];
-        Queue<Coordinate> queue = new Queue<Coordinate>();
-        Queue<Coordinate> nextQueue = new Queue<Coordinate>();
-        queue.Enqueue(pos);
-        while (level++ <= GetRange())
-        {
-            while (queue.Count != 0)
-            {
-                Coordinate tmp = queue.Dequeue();
-                if (tmp.X != pos.X || tmp.Y != pos.Y)
-                    ret.Add(tmp);
-                Coordinate tile;
-                if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                };
-                if ((tile = tmp.GetLeftTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                };
-                if ((tile = tmp.GetRightTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                };
-                if ((tile = tmp.GetUpTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                }
-            }
-            queue = new Queue<Coordinate>(nextQueue);
-            nextQueue.Clear();
-        }
-        while (queue.Count != 0)
-        {
-            ret.Add(queue.Dequeue());
-        }
+        ret.add(pos);
         return ret;
     }
     public Color GetAvailableTileColor()

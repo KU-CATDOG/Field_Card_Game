@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WarlockSnatch : IPlayerCard
 {
-    private int range;
+    private int range = 1;
     private int damage;
     private int healAmount;
     private bool interrupted;

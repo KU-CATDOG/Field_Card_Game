@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WarlockMove : IPlayerCard
 {
-    private int range;
+    private int range = 4;
     private bool interrupted;
     public int GetRange()
     {
