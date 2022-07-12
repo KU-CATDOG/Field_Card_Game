@@ -30,7 +30,7 @@ public class WarlockGathering : IPlayerCard
     public List<Coordinate> GetAvailableTile(Coordinate pos)
     {
         List<Coordinate> ret = new List<Coordinate>();
-        ret.add(pos);
+        ret.Add(pos);
         return ret;
     }
     public Color GetAvailableTileColor()
