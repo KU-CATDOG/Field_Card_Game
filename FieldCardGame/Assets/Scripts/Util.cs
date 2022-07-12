@@ -22,7 +22,9 @@ public enum CostType
 }
 public enum CardType
 {
-    Move
+    Move,
+    Attack,
+    Skill,
 }
 public class Coordinate
 {
