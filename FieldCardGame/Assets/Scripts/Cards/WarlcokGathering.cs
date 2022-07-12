@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarlockSnatch : IPlayerCard
+public class WarlockGathering : IPlayerCard
 {
     private int range;
-    private int damage;
-    private int healAmount;
+    private int amount;
     private bool interrupted;
     public int GetRange()
     {
@@ -16,21 +15,13 @@ public class WarlockSnatch : IPlayerCard
     {
         range = _range;
     }
-    public int GetDamage()
+    public int GetAmount()
     {
-        return damage;
+        return amount;
     }
-    public void SetDamage(int _damage)
+    public void SetAmount(int _amount)
     {
-        damage = _damage;
-    }
-    public int GetHealAmount()
-    {
-        return healAmount;
-    }
-    public void SetHealAmount(int _healAmount)
-    {
-        healAmount = _healAmount;
+        amount = _amount;
     }
     public Color GetUnAvailableTileColor()
     {
@@ -111,17 +102,12 @@ public class WarlockSnatch : IPlayerCard
     }
     public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
-        Character tmp = GameManager.Instance.Map[target.X, target.Y].CharacterOnTile;
-        if (tmp)
+        if (interrupted)
         {
-            if (interrupted)
-            {
-                interrupted = false;
-                yield break;
-            }
-            yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
-            //yield return GameManger.Instance.StartCoroutine(caster.Heal(healAmount));
+             interrupted = false;
+             yield break;
         }
+        caster.BuffHandler.Strengthen(GetAmount());
         yield break;
     }
     public void CardRoutineInterrupt()
@@ -130,7 +116,7 @@ public class WarlockSnatch : IPlayerCard
     }
     public int GetCost()
     {
-        return 15;
+        return 20;
     }
     public CostType GetCostType()
     {
@@ -138,11 +124,11 @@ public class WarlockSnatch : IPlayerCard
     }
     public CardType GetCardType()
     {
-        return CardType.Attack;
+        return CardType.Skill;
     }
     public int GetCardID()
     {
-        return 3002010;
+        return 3103001;
     }
 
 }
