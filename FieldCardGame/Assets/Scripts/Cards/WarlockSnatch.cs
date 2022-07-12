@@ -5,14 +5,32 @@ using UnityEngine;
 public class WarlockSnatch : IPlayerCard
 {
     private int range;
+    private int damage;
+    private int healAmount;
+    private bool interrupted;
     public int GetRange()
     {
-        //return range;
-        return 1;
+        return range;
     }
     public void SetRange(int _range)
     {
         range = _range;
+    }
+    public int GetDamage()
+    {
+        return damage;
+    }
+    public void SetDamage(int _damage)
+    {
+        damage = _damage;
+    }
+    public int GetHealAmount()
+    {
+        return healAmount;
+    }
+    public void SetHealAmount(int _healAmount)
+    {
+        healAmount = _healAmount;
     }
     public Color GetUnAvailableTileColor()
     {
@@ -93,9 +111,22 @@ public class WarlockSnatch : IPlayerCard
     }
     public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
-        //give damage to enemy which is on target position
-        //get Hp
-        caster.
+        Character tmp = GameManager.Instance.Map[target.X, target.Y].CharacterOnTile;
+        if (tmp)
+        {
+            if (interrupted)
+            {
+                interrupted = false;
+                yield break;
+            }
+            yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, damage));
+            //yield return GameManger.Instance.StartCoroutine(caster.Heal(healAmount));
+        }
+        yield return null;
+    }
+    public void CardRoutineInterrupt()
+    {
+        interrupted = true;
     }
     public int GetCost()
     {
