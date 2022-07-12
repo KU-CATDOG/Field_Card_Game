@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public abstract class Character : MonoBehaviour
 {
     public int MaxHp { get; set; }
     public int Hp { get; set; }
+    [SerializeField]
+    private RawImage hpBar;
     private const int MAXHANDSIZE = 10;
     private MeshRenderer meshRenderer;
     public Buff BuffHandler { get; private set; }
@@ -655,10 +657,13 @@ public abstract class Character : MonoBehaviour
             GetDmgInterrupted = false;
             yield break;
         }
+        Hp -= Dmg;
         yield return StartCoroutine(getDmg(Dmg));
-        if (!gameObject)
+        if (Hp<=0)
         {
-            yield break;
+            StartCoroutine(Die());
+            if(!gameObject)
+                yield break;
         }
         for (int i = GetDmgRoutine.Count - 1; i >= 0; i--)
         {
@@ -780,9 +785,15 @@ public abstract class Character : MonoBehaviour
     public abstract IEnumerator AfterDraw();
     public abstract IEnumerator StartTurn();
     protected abstract IEnumerator getDmg(int dmg);
+    protected abstract void InitializeDeck();
     protected virtual void Awake()
     {
+        InitializeDeck();
         meshRenderer = GetComponent<MeshRenderer>();
         BuffHandler = new Buff(this);
+    }
+    protected virtual void Update()
+    {
+
     }
 }

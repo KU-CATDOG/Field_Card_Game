@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
+    public bool Usable { get; private set; }
     public bool isPileCard { get; set; }
     public static List<IEnumerator> MouseEvent { get; private set; } = new List<IEnumerator>();
     public int SiblingIndex { get; set; }
@@ -24,6 +25,19 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
     private void Start()
     {
         image = GetComponent<RawImage>();
+    }
+    private void Update()
+    {
+        int idx = SiblingIndex - PlayerUIManager.Instance.DefaultSiblingIndex;
+        ICard card = GameManager.Instance.CurPlayer.HandCard[idx];
+        if (GameManager.Instance.CurPlayer.PayTest(card.GetCost(), card.GetCostType()))
+        {
+            Usable = true;
+        }
+        else
+        {
+            Usable = false;
+        }
     }
     public void OnPointerEnter(PointerEventData eventData)
     {

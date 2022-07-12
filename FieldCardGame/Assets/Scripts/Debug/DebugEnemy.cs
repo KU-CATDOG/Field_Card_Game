@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class DebugEnemy : Enemy
 {
-    private int hp = 10;
     private void Start()
     {
         TurnStartDraw = 1;
-        CardPile.Add(new PaladinMove());
     }
     protected override IEnumerator payCost(int cost, CostType type)
     {
@@ -37,11 +35,6 @@ public class DebugEnemy : Enemy
     }
     protected override IEnumerator getDmg(int dmg)
     {
-        hp -= dmg;
-        if (hp <= 0)
-        {
-            yield return StartCoroutine(Die());
-        }
         yield break;
     }
     protected override IEnumerator dieRoutine()
@@ -54,5 +47,9 @@ public class DebugEnemy : Enemy
         List<Coordinate> tiles = HandCard[0].GetAvailableTile(position);
         int random = Random.Range(0, tiles.Count);
         yield return StartCoroutine(CardUse(tiles[random], 0));
+    }
+    protected override void InitializeDeck()
+    {
+        CardPile.Add(new PaladinMove());
     }
 }
