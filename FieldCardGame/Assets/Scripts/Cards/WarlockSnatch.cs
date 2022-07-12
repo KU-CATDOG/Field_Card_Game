@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarlockSnatch : IPlayerCard
+public class WarlockSnatch// : IPlayerCard
 {
     private int range;
     public int GetRange()
@@ -90,13 +90,13 @@ public class WarlockSnatch : IPlayerCard
             return true;
         }
         return false;
-    }
+    }/*
     public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
         //give damage to enemy which is on target position
         //get Hp
-        caster.
-    }
+        //caster.
+    }*/
     public int GetCost()
     {
         return 15;

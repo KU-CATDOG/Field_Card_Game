@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerUIManager : MonoBehaviour
 {
@@ -16,6 +17,15 @@ public class PlayerUIManager : MonoBehaviour
             return TurnEndButton;
         }
     }
+    [SerializeField]
+    private TextMeshProUGUI LevelText;
+    [SerializeField]
+    private RectTransform ExpBar;
+    private Vector2 ExpBarPos;
+    [SerializeField]
+    private TextMeshProUGUI HpText;
+    [SerializeField]
+    private TextMeshProUGUI GoldText;
     [SerializeField]
     private CardPile CardPilePanel;
     [SerializeField]
@@ -58,6 +68,7 @@ public class PlayerUIManager : MonoBehaviour
         {
             Destroy(this);
         }
+        ExpBarPos = ExpBar.position;
     }
     private void Start()
     {
@@ -371,6 +382,16 @@ public class PlayerUIManager : MonoBehaviour
         StartCoroutine(DiscardedPilePanel.ShowPile(GameManager.Instance.CurPlayer.DiscardedPile, false));
     }
 
+    private void Update()
+    {
+        int lev = (GameManager.Instance.Allies[0] as Player).Level;
+        int exp = (GameManager.Instance.Allies[0] as Player).Exp;
+        HpText.text = $"Hp {GameManager.Instance.Allies[0].Hp}/{GameManager.Instance.Allies[0].MaxHp}";
+        LevelText.text = $"Lv. {lev}";
+        ExpBar.sizeDelta = new Vector2( 200 * (float)exp / Mathf.Pow(2, 1 + lev), ExpBar.sizeDelta.y);
+        ExpBar.position = ExpBarPos + new Vector2((float)exp / Mathf.Pow(2, 1 + lev) *100, 0);
+        GoldText.text = $"Gold {(GameManager.Instance.Allies[0] as Player).Gold}";
+    }
 
     private void LateUpdate()
     {
