@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class Character : MonoBehaviour
 {
+    public int Hp { get; set; }
     private const int MAXHANDSIZE = 10;
     private MeshRenderer meshRenderer;
     public Buff BuffHandler { get; private set; } = new Buff();
@@ -83,6 +84,7 @@ public abstract class Character : MonoBehaviour
     public int HitDmg { get; set; }
     public List<IEnumerator> TryHitAttackRoutine { get; private set; } = new List<IEnumerator>();
     public List<IEnumerator> HitAttackRoutine { get; private set; } = new List<IEnumerator>();
+
     public bool DieInterrupted { get; set; }
     public List<IEnumerator> TryDieRoutine { get; private set; } = new List<IEnumerator>();
     public List<IEnumerator> DieRoutine { get; private set; } = new List<IEnumerator>();
@@ -662,6 +664,38 @@ public abstract class Character : MonoBehaviour
             while (NeedWait) yield return null;
         }
     }
+
+    public IEnumerator HitAttack(Character target, int dmg)
+    {
+        HitDmg = dmg;
+        for (int i = TryHitAttackRoutine.Count - 1; i >= 0; i--)
+        {
+            if (!TryHitAttackRoutine[i].MoveNext())
+            {
+                while (NeedWait) yield return null;
+                TryHitAttackRoutine.RemoveAt(i);
+            }
+            while (NeedWait) yield return null;
+        }
+        if (HitInterrupted)
+        {
+            HitInterrupted = false;
+            yield break;
+        }
+        yield return StartCoroutine(target.GetDmg(HitDmg));
+
+        for (int i = HitAttackRoutine.Count - 1; i >= 0; i--)
+        {
+            if (!HitAttackRoutine[i].MoveNext())
+            {
+                while (NeedWait) yield return null;
+                HitAttackRoutine.RemoveAt(i);
+            }
+            while (NeedWait) yield return null;
+        }
+        Destroy(gameObject);
+    }
+
     public IEnumerator Die()
     {
         for (int i = TryDieRoutine.Count - 1; i >= 0; i--)
