@@ -753,6 +753,14 @@ public abstract class Character : MonoBehaviour
                 DieRoutine.RemoveAt(i);
             }
         }
+        if (this is Enemy)
+        {
+            GameManager.Instance.EnemyList.Remove(this);
+        }
+        else if(this is Player)
+        {
+            GameManager.Instance.Allies.Remove(this);
+        }
         Destroy(gameObject);
         Destroy(hpBar);
     }
