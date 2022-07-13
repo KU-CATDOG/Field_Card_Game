@@ -28,6 +28,8 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
     }
     private void Update()
     {
+        if (isPileCard)
+            return;
         int idx = SiblingIndex - PlayerUIManager.Instance.DefaultSiblingIndex;
         ICard card = GameManager.Instance.CurPlayer.HandCard[idx];
         if (GameManager.Instance.CurPlayer.PayTest(card.GetCost(), card.GetCostType()))
