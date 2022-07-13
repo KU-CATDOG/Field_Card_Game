@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarlockSnatch// : IPlayerCard
+public class WarlockSnatch : IPlayerCard
 {
     private int range = 1;
-    private int damage;
-    private int healAmount;
+    private int damage = 15;
+    private int healAmount = 20;
     private bool interrupted;
     public int GetRange()
     {
@@ -38,49 +38,25 @@ public class WarlockSnatch// : IPlayerCard
     }
     public List<Coordinate> GetAvailableTile(Coordinate pos)
     {
-        List<Coordinate> ret = new List<Coordinate>();
-        int level = 1;
-        bool[,] visited = new bool[128, 128];
-        Queue<Coordinate> queue = new Queue<Coordinate>();
-        Queue<Coordinate> nextQueue = new Queue<Coordinate>();
-        queue.Enqueue(pos);
-        while (level++ <= GetRange())
-        {
-            while (queue.Count != 0)
-            {
-                Coordinate tmp = queue.Dequeue();
-                if (tmp.X != pos.X || tmp.Y != pos.Y)
-                    ret.Add(tmp);
-                Coordinate tile;
-                if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                };
-                if ((tile = tmp.GetLeftTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                };
-                if ((tile = tmp.GetRightTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                };
-                if ((tile = tmp.GetUpTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                }
-            }
-            queue = new Queue<Coordinate>(nextQueue);
-            nextQueue.Clear();
-        }
-        while (queue.Count != 0)
-        {
-            ret.Add(queue.Dequeue());
-        }
-        return ret;
+      List<Coordinate> ret = new List<Coordinate>();
+      Coordinate tile;
+      if ((tile = pos.GetDownTile()) != null)
+      {
+        ret.Add(tile);
+      };
+      if ((tile = pos.GetLeftTile()) != null)
+      {
+        ret.Add(tile);
+      };
+      if ((tile = pos.GetRightTile()) != null)
+      {
+        ret.Add(tile);
+      };
+      if ((tile = pos.GetUpTile()) != null)
+      {
+        ret.Add(tile);
+      }
+      return ret;
     }
     public Color GetAvailableTileColor()
     {

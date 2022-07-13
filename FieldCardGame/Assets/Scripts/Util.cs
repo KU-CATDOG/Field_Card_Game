@@ -82,8 +82,28 @@ public class Coordinate
             return null;
         }
         return ret;
-    }
-    private bool OutRange(Coordinate toTest)
+  }
+  public Coordinate GetUpTilewithoutTest()
+  {
+    Coordinate ret = new Coordinate(X, Y + 1);
+    return ret;
+  }
+  public Coordinate GetDownTilewithoutTest()
+  {
+    Coordinate ret = new Coordinate(X, Y - 1);
+    return ret;
+  }
+  public Coordinate GetLeftTilewithoutTest()
+  {
+    Coordinate ret = new Coordinate(X - 1, Y);
+    return ret;
+  }
+  public Coordinate GetRightTilewithoutTest()
+  {
+    Coordinate ret = new Coordinate(X + 1, Y);
+    return ret;
+  }
+  public static bool OutRange(Coordinate toTest)
     {
         if (toTest.X < 0 || toTest.X >= 128 || toTest.Y < 0 || toTest.Y >= 128)
         {
