@@ -52,9 +52,9 @@ public class TurnManager : MonoBehaviour
                     (GameManager.Instance.CurPlayer as Player).PlayerUI.SetActive(true);
                     GameManager.Instance.CurPlayer = curChar = j;
                     yield return StartCoroutine(curChar.AwakeTurn());
-                    if(curChar.StartBuffHandler.Count!=0)
+                    if (curChar.StartBuffHandler.Count != 0)
                         yield return StartCoroutine(StartBuffRoutine(curChar));
-                    if(curChar.StartDebuffHandler.Count!=0)
+                    if (curChar.StartDebuffHandler.Count != 0)
                         yield return StartCoroutine(StartDebuffRoutine(curChar));
                     if (curChar.ForceTurnEndDebuffHandler.Count != 0)
                     {
@@ -68,14 +68,14 @@ public class TurnManager : MonoBehaviour
                         yield return StartCoroutine(curChar.DrawCard());
                     }
                     yield return StartCoroutine(curChar.AfterDraw());
-                    if(curChar.DrawBuffHandler.Count != 0)
+                    if (curChar.DrawBuffHandler.Count != 0)
                         yield return StartCoroutine(DrawBuffRoutine(curChar));
                     if (curChar.DrawDebuffHandler.Count != 0)
                         yield return StartCoroutine(DrawDebuffRoutine(curChar));
                     yield return StartCoroutine(curChar.StartTurn());
                     TurnEnd = false;
                     yield return new WaitUntil(() => { return !PlayerUIManager.Instance.UseMode && TurnEnd; });
-                    if(curChar.TurnEndBuffHandler.Count!=0)
+                    if (curChar.TurnEndBuffHandler.Count != 0)
                         yield return StartCoroutine(TurnEndBuffRoutine(curChar));
                     if (curChar.TurnEndDebuffHandler.Count != 0)
                         yield return StartCoroutine(TurnEndDebuffRoutine(curChar));
@@ -141,84 +141,77 @@ public class TurnManager : MonoBehaviour
     {
         for (int i = curChar.StartBuffHandler.Count - 1; i >= 0; i--)
         {
+            while (curChar.NeedWait != 0) yield return null;
             if (!curChar.StartBuffHandler[i].MoveNext())
             {
-                while (curChar.NeedWait) yield return null;
                 curChar.StartBuffHandler.RemoveAt(i);
             }
-            while (curChar.NeedWait) yield return null;
         }
     }
     private IEnumerator StartDebuffRoutine(Character curChar)
     {
         for (int i = curChar.StartDebuffHandler.Count - 1; i >= 0; i--)
         {
+            while (curChar.NeedWait != 0) yield return null;
             if (!curChar.StartDebuffHandler[i].MoveNext())
             {
-                while (curChar.NeedWait) yield return null;
                 curChar.StartDebuffHandler.RemoveAt(i);
             }
-            while (curChar.NeedWait) yield return null;
         }
     }
     private IEnumerator DrawBuffRoutine(Character curChar)
     {
         for (int i = curChar.DrawBuffHandler.Count - 1; i >= 0; i--)
         {
+            while (curChar.NeedWait != 0) yield return null;
             if (!curChar.DrawBuffHandler[i].MoveNext())
             {
-                while (curChar.NeedWait) yield return null;
                 curChar.DrawBuffHandler.RemoveAt(i);
             }
-            while (curChar.NeedWait) yield return null;
         }
     }
     private IEnumerator DrawDebuffRoutine(Character curChar)
     {
         for (int i = curChar.DrawDebuffHandler.Count - 1; i >= 0; i--)
         {
+            while (curChar.NeedWait != 0) yield return null;
             if (!curChar.DrawDebuffHandler[i].MoveNext())
             {
-                while (curChar.NeedWait) yield return null;
                 curChar.DrawDebuffHandler.RemoveAt(i);
             }
-            while (curChar.NeedWait) yield return null;
         }
     }
     private IEnumerator ForceTurnEndDebuffRoutine(Character curChar)
     {
         for (int i = curChar.ForceTurnEndDebuffHandler.Count - 1; i >= 0; i--)
         {
+            while (curChar.NeedWait != 0) yield return null;
             if (!curChar.ForceTurnEndDebuffHandler[i].MoveNext())
             {
-                while (curChar.NeedWait) yield return null;
                 curChar.ForceTurnEndDebuffHandler.RemoveAt(i);
             }
-            while (curChar.NeedWait) yield return null;
         }
     }
     private IEnumerator TurnEndBuffRoutine(Character curChar)
     {
         for (int i = curChar.TurnEndBuffHandler.Count - 1; i >= 0; i--)
         {
+            while (curChar.NeedWait != 0) yield return null;
             if (!curChar.TurnEndBuffHandler[i].MoveNext())
             {
-                while (curChar.NeedWait) yield return null;
                 curChar.TurnEndBuffHandler.RemoveAt(i);
             }
-            while (curChar.NeedWait) yield return null;
         }
     }
     private IEnumerator TurnEndDebuffRoutine(Character curChar)
     {
         for (int i = curChar.TurnEndDebuffHandler.Count - 1; i >= 0; i--)
         {
+            while (curChar.NeedWait != 0) yield return null;
             if (!curChar.TurnEndDebuffHandler[i].MoveNext())
             {
-                while (curChar.NeedWait) yield return null;
                 curChar.TurnEndDebuffHandler.RemoveAt(i);
             }
-            while (curChar.NeedWait) yield return null;
         }
     }
     private IEnumerator TurnEndRoutine(Character curChar)
