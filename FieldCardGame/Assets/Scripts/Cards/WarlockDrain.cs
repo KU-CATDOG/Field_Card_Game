@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarlockGathering : IPlayerCard
+public class WarlockDrain : IPlayerCard
 {
     private int range = 0;
-    private int amount = 5;
+    private int damage = 10;
+    private int healAmount = 10;
     private bool interrupted;
     public int GetRange()
     {
@@ -15,13 +16,21 @@ public class WarlockGathering : IPlayerCard
     {
         range = _range;
     }
-    public int GetAmount()
+    public int GetDamage()
     {
-        return amount;
+        return damage;
     }
-    public void SetAmount(int _amount)
+    public void SetDamage(int _damage)
     {
-        amount = _amount;
+        damage = _damage;
+    }
+    public int GetHealAmount()
+    {
+        return healAmount;
+    }
+    public void SetHealAmount(int _healAmount)
+    {
+        healAmount = _healAmount;
     }
     public Color GetUnAvailableTileColor()
     {
@@ -40,7 +49,16 @@ public class WarlockGathering : IPlayerCard
     public List<Coordinate> GetAreaofEffect()
     {
         List<Coordinate> ret = new List<Coordinate>();
-        ret.Add(new Coordinate(0, 0));
+        Coordinate pos = new Coordinate(0, 0);
+        Coordinate tile;
+        tile = pos.GetDownTilewithoutTest();
+        ret.Add(tile);
+        tile = pos.GetLeftTilewithoutTest();
+        ret.Add(tile);
+        tile = pos.GetRightTilewithoutTest();
+        ret.Add(tile);
+        tile = pos.GetUpTilewithoutTest();
+        ret.Add(tile);
         return ret;
     }
     public Color GetColorOfEffect(Coordinate pos)
@@ -49,7 +67,7 @@ public class WarlockGathering : IPlayerCard
         {
             return Color.white;
         }
-        return Color.black;
+        return Color.red;
     }
     public bool IsAvailablePosition(Coordinate caster, Coordinate target)
     {
@@ -62,12 +80,27 @@ public class WarlockGathering : IPlayerCard
     }
     public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
-        if (interrupted)
+        List<Coordinate> attack;
+        attack = GetAreaofEffect();
+        foreach (Coordinate i in attack)
         {
-             interrupted = false;
-             yield break;
+            Coordinate pos = i + target;
+            if (Coordinate.OutRange(pos))
+            {
+                continue;
+            }
+            if (interrupted)
+            {
+                interrupted = false;
+                yield break;
+            }
+            Character tmp = GameManager.Instance.Map[pos.X, pos.Y].CharacterOnTile;
+            if (tmp)
+            {
+                GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
+                GameManager.Instance.StartCoroutine(caster.Heal(caster, healAmount));
+            }
         }
-        caster.BuffHandler.Strengthen(GetAmount());
         yield break;
     }
     public void CardRoutineInterrupt()
@@ -84,11 +117,10 @@ public class WarlockGathering : IPlayerCard
     }
     public CardType GetCardType()
     {
-        return CardType.Skill;
+        return CardType.Attack;
     }
     public int GetCardID()
     {
-        return 3103001;
+        return 3004100;
     }
-
 }
