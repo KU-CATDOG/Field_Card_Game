@@ -68,6 +68,7 @@ public class DebugCharacter : Player
     }
     protected override void Update()
     {
+        base.Update();
         crystalText.text = $"{crystalCount}";
     }
     public void DebugAddCard()
@@ -84,6 +85,10 @@ public class DebugCharacter : Player
     public void AddSummonCard()
     {
         StartCoroutine(AddCard(new DebugCard()));
+    }
+    public void AddAttackCard()
+    {
+        StartCoroutine(AddCard(new Attack()));
     }
     protected override void InitializeDeck()
     {

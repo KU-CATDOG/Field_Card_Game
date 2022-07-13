@@ -21,8 +21,9 @@ public abstract class Player : Character
         base.Awake();
         GameManager.Instance.Allies.Add(this);
     }
-    protected virtual void Start()
+    protected override void Start()
     {
+        base.Start();
         playerUI = Instantiate(PlayerUI, PlayerUIManager.Instance.PlayerSpecificArea).gameObject;
         PlayerUI.SetActive(false);
     }

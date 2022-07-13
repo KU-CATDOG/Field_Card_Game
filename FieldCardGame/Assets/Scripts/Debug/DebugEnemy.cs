@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class DebugEnemy : Enemy
 {
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+        Hp = MaxHp = 10;
         TurnStartDraw = 1;
     }
     protected override IEnumerator payCost(int cost, CostType type)

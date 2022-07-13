@@ -27,6 +27,15 @@ public class PlayerUIManager : MonoBehaviour
         }
     }
     [SerializeField]
+    private GameObject hpBar;
+    public GameObject HpBar
+    {
+        get
+        {
+            return hpBar;
+        }
+    }
+    [SerializeField]
     private TextMeshProUGUI LevelText;
     [SerializeField]
     private RectTransform ExpBar;
