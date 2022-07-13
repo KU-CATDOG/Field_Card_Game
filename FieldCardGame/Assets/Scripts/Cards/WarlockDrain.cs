@@ -96,18 +96,18 @@ public class WarlockDrain : IPlayerCard
                 interrupted = false;
                 yield break;
             }
-            MultiAttack(caster, pos);
+            Character tmp = GameManager.Instance.Map[target.X, target.Y].CharacterOnTile;
+            if (tmp)
+            {
+                GameManager.Instance.StartCoroutine(MultiAttack(caster, tmp));
+            }
         }
         yield return GameManager.Instance.StartCoroutine(caster.GiveHeal(caster, GetHealAmount()*healCount));
     }
-    private IEnumerator MultiAttack(Character caster, Coordinate target)
+    private IEnumerator MultiAttack(Character caster, Character target)
     {
         caster.NeedWait++;
-        Character tmp = GameManager.Instance.Map[target.X, target.Y].CharacterOnTile;
-        if (tmp)
-        {
-            yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
-        }
+        yield return GameManager.Instance.StartCoroutine(caster.HitAttack(target, GetDamage()));
         caster.NeedWait--;
     }
     public void CardRoutineInterrupt()
