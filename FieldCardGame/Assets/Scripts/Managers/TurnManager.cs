@@ -5,6 +5,8 @@ using UnityEngine;
 public class TurnManager : MonoBehaviour
 {
     public static TurnManager Instance;
+    public List<Player> DieAllyList { get; private set; } = new List<Player>();
+    public List<Enemy> DieEnemyList { get; private set; } = new List<Enemy>();
     private int token = 0;
     public int Token
     {
@@ -49,11 +51,14 @@ public class TurnManager : MonoBehaviour
             {
                 foreach (var j in GameManager.Instance.Allies)
                 {
+                    if (j.IsDie) continue;
                     (GameManager.Instance.CurPlayer as Player).PlayerUI.SetActive(true);
                     GameManager.Instance.CurPlayer = curChar = j;
                     yield return StartCoroutine(curChar.AwakeTurn());
                     if (curChar.StartBuffHandler.Count != 0)
+                    {
                         yield return StartCoroutine(StartBuffRoutine(curChar));
+                    }
                     if (curChar.StartDebuffHandler.Count != 0)
                         yield return StartCoroutine(StartDebuffRoutine(curChar));
                     if (curChar.ForceTurnEndDebuffHandler.Count != 0)
@@ -62,18 +67,22 @@ public class TurnManager : MonoBehaviour
                         yield return StartCoroutine(TurnEndRoutine(curChar));
                         continue;
                     }
+                    if (j.IsDie) continue;
                     yield return StartCoroutine(curChar.AfterBuff());
                     for (int i = 0; i < curChar.TurnStartDraw; i++)
                     {
                         yield return StartCoroutine(curChar.DrawCard());
                     }
+                    if (j.IsDie) continue;
                     yield return StartCoroutine(curChar.AfterDraw());
                     if (curChar.DrawBuffHandler.Count != 0)
                         yield return StartCoroutine(DrawBuffRoutine(curChar));
                     if (curChar.DrawDebuffHandler.Count != 0)
                         yield return StartCoroutine(DrawDebuffRoutine(curChar));
+                    if (j.IsDie) continue;
                     yield return StartCoroutine(curChar.StartTurn());
                     TurnEnd = false;
+                    if (j.IsDie) continue;
                     yield return new WaitUntil(() => { return !PlayerUIManager.Instance.UseMode && TurnEnd; });
                     if (curChar.TurnEndBuffHandler.Count != 0)
                         yield return StartCoroutine(TurnEndBuffRoutine(curChar));
@@ -83,7 +92,9 @@ public class TurnManager : MonoBehaviour
                     {
                         yield return StartCoroutine(curChar.DropCard(i));
                     }
+                    (GameManager.Instance.CurPlayer as Player).PlayerUI.SetActive(false);
                 }
+                ApplyDie();
                 yield return StartCoroutine(TurnEndRoutine(null));
             }
             else
@@ -91,6 +102,7 @@ public class TurnManager : MonoBehaviour
                 foreach (var j in GameManager.Instance.EnemyList)
                 {
                     curChar = j;
+                    if (j.IsDie) continue;
                     yield return StartCoroutine(curChar.AwakeTurn());
                     if (curChar.StartBuffHandler.Count != 0)
                         yield return StartCoroutine(StartBuffRoutine(curChar));
@@ -102,15 +114,19 @@ public class TurnManager : MonoBehaviour
                         yield return StartCoroutine(TurnEndRoutine(curChar));
                         continue;
                     }
+                    if (j.IsDie) continue;
                     yield return StartCoroutine(curChar.AfterBuff());
                     for (int i = 0; i < curChar.TurnStartDraw; i++)
                         yield return StartCoroutine(curChar.DrawCard());
+                    if (j.IsDie) continue;
                     yield return StartCoroutine(curChar.AfterDraw());
                     if (curChar.DrawBuffHandler.Count != 0)
                         yield return StartCoroutine(DrawBuffRoutine(curChar));
                     if (curChar.DrawDebuffHandler.Count != 0)
                         yield return StartCoroutine(DrawDebuffRoutine(curChar));
+                    if (j.IsDie) continue;
                     yield return StartCoroutine(curChar.StartTurn());
+                    if (j.IsDie) continue;
                     yield return StartCoroutine((curChar as Enemy).EnemyRoutine());
                     if (curChar.TurnEndBuffHandler.Count != 0)
                         yield return StartCoroutine(TurnEndBuffRoutine(curChar));
@@ -121,10 +137,28 @@ public class TurnManager : MonoBehaviour
                         yield return StartCoroutine(curChar.DropCard(i));
                     }
                 }
-                StartCoroutine(TurnEndRoutine(null));
+                ApplyDie();
+                yield return StartCoroutine(TurnEndRoutine(null));
             }
         }
     }
+
+    private void ApplyDie()
+    {
+        foreach(Enemy i in DieEnemyList)
+        {
+            GameManager.Instance.EnemyList.Remove(i);
+            Destroy(i.gameObject);
+        }
+        foreach(Player i in DieAllyList)
+        {
+            GameManager.Instance.Allies.Remove(i);
+            Destroy(i.gameObject);
+        }
+        DieEnemyList.Clear();
+        DieAllyList.Clear();
+    }
+
     private IEnumerator TurnAwakeRoutine()
     {
         for (int i = TurnStartRoutine.Count - 1; i >= 0; i--)
@@ -139,7 +173,7 @@ public class TurnManager : MonoBehaviour
     }
     private IEnumerator StartBuffRoutine(Character curChar)
     {
-        for (int i = curChar.StartBuffHandler.Count - 1; i >= 0; i--)
+        for (int i = curChar.StartBuffHandler.Count - 1; !curChar.IsDie && i >= 0; i--)
         {
             while (curChar.NeedWait != 0) yield return null;
             if (!curChar.StartBuffHandler[i].MoveNext())
@@ -150,7 +184,7 @@ public class TurnManager : MonoBehaviour
     }
     private IEnumerator StartDebuffRoutine(Character curChar)
     {
-        for (int i = curChar.StartDebuffHandler.Count - 1; i >= 0; i--)
+        for (int i = curChar.StartDebuffHandler.Count - 1; !curChar.IsDie && i >= 0; i--)
         {
             while (curChar.NeedWait != 0) yield return null;
             if (!curChar.StartDebuffHandler[i].MoveNext())
@@ -161,7 +195,7 @@ public class TurnManager : MonoBehaviour
     }
     private IEnumerator DrawBuffRoutine(Character curChar)
     {
-        for (int i = curChar.DrawBuffHandler.Count - 1; i >= 0; i--)
+        for (int i = curChar.DrawBuffHandler.Count - 1; !curChar.IsDie && i >= 0; i--)
         {
             while (curChar.NeedWait != 0) yield return null;
             if (!curChar.DrawBuffHandler[i].MoveNext())
@@ -172,7 +206,7 @@ public class TurnManager : MonoBehaviour
     }
     private IEnumerator DrawDebuffRoutine(Character curChar)
     {
-        for (int i = curChar.DrawDebuffHandler.Count - 1; i >= 0; i--)
+        for (int i = curChar.DrawDebuffHandler.Count - 1; !curChar.IsDie && i >= 0; i--)
         {
             while (curChar.NeedWait != 0) yield return null;
             if (!curChar.DrawDebuffHandler[i].MoveNext())
@@ -183,7 +217,7 @@ public class TurnManager : MonoBehaviour
     }
     private IEnumerator ForceTurnEndDebuffRoutine(Character curChar)
     {
-        for (int i = curChar.ForceTurnEndDebuffHandler.Count - 1; i >= 0; i--)
+        for (int i = curChar.ForceTurnEndDebuffHandler.Count - 1; !curChar.IsDie && i >= 0; i--)
         {
             while (curChar.NeedWait != 0) yield return null;
             if (!curChar.ForceTurnEndDebuffHandler[i].MoveNext())
@@ -194,7 +228,7 @@ public class TurnManager : MonoBehaviour
     }
     private IEnumerator TurnEndBuffRoutine(Character curChar)
     {
-        for (int i = curChar.TurnEndBuffHandler.Count - 1; i >= 0; i--)
+        for (int i = curChar.TurnEndBuffHandler.Count - 1; !curChar.IsDie && i >= 0; i--)
         {
             while (curChar.NeedWait != 0) yield return null;
             if (!curChar.TurnEndBuffHandler[i].MoveNext())
@@ -205,7 +239,7 @@ public class TurnManager : MonoBehaviour
     }
     private IEnumerator TurnEndDebuffRoutine(Character curChar)
     {
-        for (int i = curChar.TurnEndDebuffHandler.Count - 1; i >= 0; i--)
+        for (int i = curChar.TurnEndDebuffHandler.Count - 1; !curChar.IsDie && i >= 0; i--)
         {
             while (curChar.NeedWait != 0) yield return null;
             if (!curChar.TurnEndDebuffHandler[i].MoveNext())
@@ -221,7 +255,7 @@ public class TurnManager : MonoBehaviour
         {
             yield return StartCoroutine(TurnEndBuffRoutine(curChar));
             yield return StartCoroutine(TurnEndDebuffRoutine(curChar));
-            for (int i = curChar.HandCard.Count - 1; i >= 0; i--)
+            for (int i = curChar.HandCard.Count - 1; !curChar.IsDie && i >= 0; i--)
             {
                 yield return StartCoroutine(curChar.DropCard(i));
             }
