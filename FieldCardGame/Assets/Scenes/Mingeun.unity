@@ -645,7 +645,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1163621292}
         m_TargetAssemblyTypeName: DebugCharacter, Assembly-CSharp
-        m_MethodName: DebugAddCard
+        m_MethodName: AddWarlockSnatchCard
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -853,7 +853,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1163621292}
         m_TargetAssemblyTypeName: DebugCharacter, Assembly-CSharp
-        m_MethodName: AddAttackCard
+        m_MethodName: AddWarlockDrainCard
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5443,7 +5443,7 @@ PrefabInstance:
       objectReference: {fileID: 272578123582767711, guid: 6bf6862004037344691795cfac4b6b6a, type: 3}
     - target: {fileID: 6598237354727999962, guid: 3edbc0b4980a2ae4a939b53cef258fe8, type: 3}
       propertyPath: cardObjectList.Array.size
-      value: 3
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6598237354727999962, guid: 3edbc0b4980a2ae4a939b53cef258fe8, type: 3}
       propertyPath: cardObjectList.Array.data[0]
@@ -5457,6 +5457,22 @@ PrefabInstance:
       propertyPath: cardObjectList.Array.data[2]
       value: 
       objectReference: {fileID: -2726015609422013599, guid: 0985c6b0ca8245a46bf1b161c82d6331, type: 3}
+    - target: {fileID: 6598237354727999962, guid: 3edbc0b4980a2ae4a939b53cef258fe8, type: 3}
+      propertyPath: cardObjectList.Array.data[3]
+      value: 
+      objectReference: {fileID: -2726015609422013599, guid: 1a537069e3420604fa68cbd46742b159, type: 3}
+    - target: {fileID: 6598237354727999962, guid: 3edbc0b4980a2ae4a939b53cef258fe8, type: 3}
+      propertyPath: cardObjectList.Array.data[4]
+      value: 
+      objectReference: {fileID: -2726015609422013599, guid: 3ed6d0cf8fbf57e4faa2f640ec841acf, type: 3}
+    - target: {fileID: 6598237354727999962, guid: 3edbc0b4980a2ae4a939b53cef258fe8, type: 3}
+      propertyPath: cardObjectList.Array.data[5]
+      value: 
+      objectReference: {fileID: -2726015609422013599, guid: 1a537069e3420604fa68cbd46742b159, type: 3}
+    - target: {fileID: 6598237354727999962, guid: 3edbc0b4980a2ae4a939b53cef258fe8, type: 3}
+      propertyPath: cardObjectList.Array.data[6]
+      value: 
+      objectReference: {fileID: -2726015609422013599, guid: 729493005668b3d499dd5cba3a92758c, type: 3}
     - target: {fileID: 6598237354727999963, guid: 3edbc0b4980a2ae4a939b53cef258fe8, type: 3}
       propertyPath: m_Name
       value: GameManager
