@@ -108,7 +108,7 @@ public class WarlockSnatch// : IPlayerCard
             return true;
         }
         return false;
-    }/*
+    }
     public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
         Character tmp = GameManager.Instance.Map[target.X, target.Y].CharacterOnTile;
@@ -120,7 +120,7 @@ public class WarlockSnatch// : IPlayerCard
                 yield break;
             }
             yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
-            //yield return GameManger.Instance.StartCoroutine(caster.Heal(healAmount));
+            yield return GameManager.Instance.StartCoroutine(caster.Heal(caster, healAmount));
         }
         yield break;
     }
@@ -144,5 +144,4 @@ public class WarlockSnatch// : IPlayerCard
     {
         return 3002010;
     }
-    */
 }
