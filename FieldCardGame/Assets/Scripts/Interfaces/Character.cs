@@ -15,7 +15,7 @@ public abstract class Character : MonoBehaviour
     public Buff BuffHandler { get; private set; }
     public Debuff DebuffHandler { get; private set; } = new Debuff();
     public int TurnStartDraw { get; set; }
-    public bool NeedWait { get; set; }
+    public int NeedWait { get; set; }
     private Coordinate pos;
     public Coordinate PrevPos { get; set; }
     public Coordinate position
@@ -94,6 +94,10 @@ public abstract class Character : MonoBehaviour
     public int HealAmount { get; set; }
     public List<IEnumerator> TryHealRoutine { get; private set; } = new List<IEnumerator>();
     public List<IEnumerator> HealRoutine { get; private set; } = new List<IEnumerator>();
+    public bool GiveHealInterrupted { get; set; }
+    public int GiveHealAmount { get; set; }
+    public List<IEnumerator> TryGiveHealRoutine { get; private set; } = new List<IEnumerator>();
+    public List<IEnumerator> GiveHealRoutine { get; private set; } = new List<IEnumerator>();
 
     public bool DieInterrupted { get; set; }
     public List<IEnumerator> TryDieRoutine { get; private set; } = new List<IEnumerator>();
@@ -164,12 +168,11 @@ public abstract class Character : MonoBehaviour
         {
             IEnumerator routine = DrawCardTry[i];
 
+            while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
-                while (NeedWait) yield return null;
                 DrawCardTry.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
         if (DrawInterrupted)
         {
@@ -190,12 +193,11 @@ public abstract class Character : MonoBehaviour
         for (int i = DrawCardRoutine.Count - 1; i >= 0; i--)
         {
             IEnumerator routine = DrawCardRoutine[i];
+            while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
-                while (NeedWait) yield return null;
                 DrawCardRoutine.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
         yield break;
     }
@@ -210,12 +212,11 @@ public abstract class Character : MonoBehaviour
         for (int i = DropCardTry.Count - 1; i >= 0; i--)
         {
             IEnumerator routine = DropCardTry[i];
+            while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
-                while (NeedWait) yield return null;
                 DropCardTry.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
         if (DropInterrupted)
         {
@@ -233,12 +234,11 @@ public abstract class Character : MonoBehaviour
         for (int i = DropCardRoutine.Count - 1; i >= 0; i--)
         {
             IEnumerator routine = DropCardRoutine[i];
+            while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
-                while (NeedWait) yield return null;
                 DropCardRoutine.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
         yield break;
     }
@@ -253,12 +253,11 @@ public abstract class Character : MonoBehaviour
         for (int i = DropCardTry.Count - 1; i >= 0; i--)
         {
             IEnumerator routine = DropCardTry[i];
+            while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
-                while (NeedWait) yield return null;
                 DropCardTry.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
         if (DropInterrupted)
         {
@@ -275,12 +274,11 @@ public abstract class Character : MonoBehaviour
         for (int i = DropCardRoutine.Count - 1; i >= 0; i--)
         {
             IEnumerator routine = DropCardRoutine[i];
+            while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
-                while (NeedWait) yield return null;
                 DropCardRoutine.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
         yield break;
     }
@@ -291,13 +289,11 @@ public abstract class Character : MonoBehaviour
         for (int i = CardUseTry.Count - 1; i >= 0; i--)
         {
             IEnumerator routine = CardUseTry[i];
-
+            while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
-                while (NeedWait) yield return null;
                 CardUseTry.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
         if (CardUseInterrupted)
         {
@@ -308,12 +304,11 @@ public abstract class Character : MonoBehaviour
         for (int i = CardUseRoutine.Count - 1; i >= 0; i--)
         {
             IEnumerator routine = CardUseRoutine[i];
+            while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
-                while (NeedWait) yield return null;
                 CardUseRoutine.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
         yield return StartCoroutine(DropCard(idx));
     }
@@ -323,13 +318,12 @@ public abstract class Character : MonoBehaviour
         for (int i = AddCardTry.Count - 1; i >= 0; i--)
         {
             IEnumerator routine = AddCardTry[i];
+            while (NeedWait != 0) yield return null;
 
             if (!routine.MoveNext())
             {
-                while (NeedWait) yield return null;
                 AddCardTry.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
         if (AddCardInterrupted)
         {
@@ -341,12 +335,11 @@ public abstract class Character : MonoBehaviour
         for (int i = AddCardRoutine.Count - 1; i >= 0; i--)
         {
             IEnumerator routine = AddCardRoutine[i];
+            while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
-                while (NeedWait) yield return null;
                 AddCardRoutine.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
     }
     public IEnumerator RemoveCard(ICard toRemove, bool discardedPileFirst)
@@ -355,13 +348,12 @@ public abstract class Character : MonoBehaviour
         for (int i = RemoveCardTry.Count - 1; i >= 0; i--)
         {
             IEnumerator routine = RemoveCardTry[i];
+            while (NeedWait != 0) yield return null;
 
             if (!routine.MoveNext())
             {
-                while (NeedWait) yield return null;
                 RemoveCardTry.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
         if (RemoveCardInterrupted)
         {
@@ -414,12 +406,11 @@ public abstract class Character : MonoBehaviour
         for (int i = RemoveCardRoutine.Count - 1; i >= 0; i--)
         {
             IEnumerator routine = RemoveCardRoutine[i];
+            while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
-                while (NeedWait) yield return null;
                 RemoveCardRoutine.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
     }
     public void SightUpdate(int newSight, bool posChange = false, Coordinate prevPos = null, bool sightChange = false)
@@ -428,7 +419,7 @@ public abstract class Character : MonoBehaviour
         {
             bfs(sight, position, true, -1);
         }
-        if(posChange && !sightChange)
+        if (posChange && !sightChange)
         {
             bfs(sight, prevPos, true, -1);
         }
@@ -503,12 +494,11 @@ public abstract class Character : MonoBehaviour
 
         for (int i = TryMoveRoutine.Count - 1; i >= 0; i--)
         {
+            while (NeedWait != 0) yield return null;
             if (!TryMoveRoutine[i].MoveNext())
             {
-                while (NeedWait) yield return null;
                 TryMoveRoutine.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
         if (MoveInterrupted)
         {
@@ -519,16 +509,15 @@ public abstract class Character : MonoBehaviour
         Tile targetTile = GameManager.Instance.Map[target.X, target.Y];
         for (int i = prevTile.OnCharacterExitRoutine.Count - 1; i >= 0; i--)
         {
+            while (NeedWait != 0) yield return null;
             if (!prevTile.OnCharacterExitRoutine[i].MoveNext())
             {
-                while (NeedWait) yield return null;
                 prevTile.OnCharacterExitRoutine.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
         Vector3 moveVector = new Vector3(target.X - position.X, 0, target.Y - position.Y);
         float time = 0f;
-        if(GameManager.Instance.Map[position.X, position.Y].Onsight != 0)
+        if (GameManager.Instance.Map[position.X, position.Y].Onsight != 0)
         {
             while (time <= 1f / speed)
             {
@@ -544,22 +533,20 @@ public abstract class Character : MonoBehaviour
         }
         for (int i = targetTile.OnCharacterEnterRoutine.Count - 1; i >= 0; i--)
         {
+            while (NeedWait != 0) yield return null;
             if (!targetTile.OnCharacterEnterRoutine[i].MoveNext())
             {
-                while (NeedWait) yield return null;
                 targetTile.OnCharacterEnterRoutine.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
 
         for (int i = MoveRoutine.Count - 1; i >= 0; i--)
         {
             if (!MoveRoutine[i].MoveNext())
             {
-                while (NeedWait) yield return null;
+                while (NeedWait != 0) yield return null;
                 MoveRoutine.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
     }
 
@@ -567,12 +554,11 @@ public abstract class Character : MonoBehaviour
     {
         for (int i = TryForceMoveRoutine.Count - 1; i >= 0; i--)
         {
+            while (NeedWait != 0) yield return null;
             if (!TryForceMoveRoutine[i].MoveNext())
             {
-                while (NeedWait) yield return null;
                 TryForceMoveRoutine.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
         if (ForceMoveInterrupted)
         {
@@ -584,12 +570,11 @@ public abstract class Character : MonoBehaviour
         Tile targetTile = GameManager.Instance.Map[target.X, target.Y];
         for (int i = prevTile.OnCharacterExitRoutine.Count - 1; i >= 0; i--)
         {
+            while (NeedWait != 0) yield return null;
             if (!prevTile.OnCharacterExitRoutine[i].MoveNext())
             {
-                while (NeedWait) yield return null;
                 prevTile.OnCharacterExitRoutine.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
         Vector3 moveVector = new Vector3(target.X - position.X, 0, target.Y - position.Y);
         float time = 0f;
@@ -610,22 +595,20 @@ public abstract class Character : MonoBehaviour
 
         for (int i = targetTile.OnCharacterEnterRoutine.Count - 1; i >= 0; i--)
         {
+            while (NeedWait != 0) yield return null;
             if (!targetTile.OnCharacterEnterRoutine[i].MoveNext())
             {
-                while (NeedWait) yield return null;
                 targetTile.OnCharacterEnterRoutine.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
 
         for (int i = ForceMoveRoutine.Count - 1; i >= 0; i--)
         {
+            while (NeedWait != 0) yield return null;
             if (!ForceMoveRoutine[i].MoveNext())
             {
-                while (NeedWait) yield return null;
                 ForceMoveRoutine.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
     }
 
@@ -634,12 +617,11 @@ public abstract class Character : MonoBehaviour
         Dmg = dmg;
         for (int i = TryGetDmgRoutine.Count - 1; i >= 0; i--)
         {
+            while (NeedWait != 0) yield return null;
             if (!TryGetDmgRoutine[i].MoveNext())
             {
-                while (NeedWait) yield return null;
                 TryGetDmgRoutine.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
         if (GetDmgInterrupted)
         {
@@ -648,20 +630,19 @@ public abstract class Character : MonoBehaviour
         }
         Hp -= Dmg;
         yield return StartCoroutine(getDmg(Dmg));
-        if (Hp<=0)
+        if (Hp <= 0)
         {
             StartCoroutine(Die());
-            if(!gameObject)
+            if (!gameObject)
                 yield break;
         }
         for (int i = GetDmgRoutine.Count - 1; i >= 0; i--)
         {
+            while (NeedWait != 0) yield return null;
             if (!GetDmgRoutine[i].MoveNext())
             {
-                while (NeedWait) yield return null;
                 GetDmgRoutine.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
     }
 
@@ -670,12 +651,11 @@ public abstract class Character : MonoBehaviour
         HitDmg = dmg;
         for (int i = TryHitAttackRoutine.Count - 1; i >= 0; i--)
         {
+            while (NeedWait != 0) yield return null;
             if (!TryHitAttackRoutine[i].MoveNext())
             {
-                while (NeedWait) yield return null;
                 TryHitAttackRoutine.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
         if (HitInterrupted)
         {
@@ -686,41 +666,65 @@ public abstract class Character : MonoBehaviour
 
         for (int i = HitAttackRoutine.Count - 1; i >= 0; i--)
         {
+            while (NeedWait != 0) yield return null;
             if (!HitAttackRoutine[i].MoveNext())
             {
-                while (NeedWait) yield return null;
                 HitAttackRoutine.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
     }
-    public IEnumerator Heal(Character target, int amount)
+    public IEnumerator GiveHeal(Character target, int amount)
+    {
+        GiveHealAmount = amount;
+        for (int i = TryGiveHealRoutine.Count - 1; i >= 0; i--)
+        {
+            while (NeedWait != 0) yield return null;
+            if (!TryGiveHealRoutine[i].MoveNext())
+            {
+                TryGiveHealRoutine.RemoveAt(i);
+            }
+        }
+        if (GiveHealInterrupted)
+        {
+            GiveHealInterrupted = false;
+            yield break;
+        }
+        yield return StartCoroutine(target.Heal(GiveHealAmount));
+
+        for (int i = GiveHealRoutine.Count - 1; i >= 0; i--)
+        {
+            while (NeedWait != 0) yield return null;
+            if (!GiveHealRoutine[i].MoveNext())
+            {
+                GiveHealRoutine.RemoveAt(i);
+            }
+        }
+    }
+    private IEnumerator Heal(int amount)
     {
         HealAmount = amount;
-        for (int i = TryHitAttackRoutine.Count - 1; i >= 0; i--)
+        for (int i = TryHealRoutine.Count - 1; i >= 0; i--)
         {
-            if (!TryHitAttackRoutine[i].MoveNext())
+            while (NeedWait != 0) yield return null;
+            if (!TryHealRoutine[i].MoveNext())
             {
-                while (NeedWait) yield return null;
-                TryHitAttackRoutine.RemoveAt(i);
+                TryHealRoutine.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
-        if (HitInterrupted)
+        if (HealInterrupted)
         {
-            HitInterrupted = false;
+            HealInterrupted = false;
             yield break;
         }
         Hp += HealAmount;
 
-        for (int i = HitAttackRoutine.Count - 1; i >= 0; i--)
+        for (int i = HealRoutine.Count - 1; i >= 0; i--)
         {
-            if (!HitAttackRoutine[i].MoveNext())
+            while (NeedWait != 0) yield return null;
+            if (!HealRoutine[i].MoveNext())
             {
-                while (NeedWait) yield return null;
-                HitAttackRoutine.RemoveAt(i);
+                HealRoutine.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
     }
 
@@ -728,12 +732,11 @@ public abstract class Character : MonoBehaviour
     {
         for (int i = TryDieRoutine.Count - 1; i >= 0; i--)
         {
+            while (NeedWait != 0) yield return null;
             if (!TryDieRoutine[i].MoveNext())
             {
-                while (NeedWait) yield return null;
                 TryDieRoutine.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
         if (DieInterrupted)
         {
@@ -744,12 +747,11 @@ public abstract class Character : MonoBehaviour
 
         for (int i = DieRoutine.Count - 1; i >= 0; i--)
         {
+            while (NeedWait != 0) yield return null;
             if (!DieRoutine[i].MoveNext())
             {
-                while (NeedWait) yield return null;
                 DieRoutine.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
         Destroy(gameObject);
         Destroy(hpBar);
@@ -759,12 +761,11 @@ public abstract class Character : MonoBehaviour
         yield return StartCoroutine(payCost(cost, type));
         for (int i = PayCostRoutine.Count - 1; i >= 0; i--)
         {
+            while (NeedWait != 0) yield return null;
             if (!PayCostRoutine[i].MoveNext())
             {
-                while (NeedWait) yield return null;
                 PayCostRoutine.RemoveAt(i);
             }
-            while (NeedWait) yield return null;
         }
     }
     protected abstract IEnumerator dieRoutine();
