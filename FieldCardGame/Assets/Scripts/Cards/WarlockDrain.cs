@@ -81,34 +81,40 @@ public class WarlockDrain : IPlayerCard
     public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
         List<Coordinate> attack;
-        int healCount = 0;
+        List<Coordinate> available = new List<Coordinate>();
+        Character tmp;
+        Coordinate pos;
         attack = GetAreaofEffect();
-        foreach (Coordinate i in attack)
+        for (int i = 0; i<attack.Count;i++)
         {
-            Coordinate pos = i + target;
+            pos = attack[i] + target;
             if (Coordinate.OutRange(pos))
             {
                 continue;
             }
-            healCount++;
             if (interrupted)
             {
                 interrupted = false;
                 yield break;
             }
-            MultiAttack(caster, pos);
+            tmp = GameManager.Instance.Map[pos.X, pos.Y].CharacterOnTile;
+            if (tmp)
+            {
+                available.Add(pos);
+            }
         }
-        yield return GameManager.Instance.StartCoroutine(caster.GiveHeal(caster, GetHealAmount()*healCount));
-    }
-    private IEnumerator MultiAttack(Character caster, Coordinate target)
-    {
-        caster.NeedWait++;
-        Character tmp = GameManager.Instance.Map[target.X, target.Y].CharacterOnTile;
-        if (tmp)
+        if (available.Count == 0)
+            yield break;
+        for (int i = 0; i < available.Count - 1; i++)
         {
-            yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
+            pos = available[i];
+            tmp = GameManager.Instance.Map[pos.X, pos.Y].CharacterOnTile;
+            GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
         }
-        caster.NeedWait--;
+        pos = available[available.Count - 1];
+        tmp = GameManager.Instance.Map[pos.X, pos.Y].CharacterOnTile;
+        yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
+        yield return GameManager.Instance.StartCoroutine(caster.GiveHeal(caster, GetHealAmount()*available.Count));
     }
     public void CardRoutineInterrupt()
     {
@@ -116,7 +122,7 @@ public class WarlockDrain : IPlayerCard
     }
     public int GetCost()
     {
-        return 20;
+        return 50;
     }
     public CostType GetCostType()
     {

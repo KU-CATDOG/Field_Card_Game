@@ -5,82 +5,82 @@ using TMPro;
 
 public class DebugCharacter : Player
 {
-  private TextMeshProUGUI crystalText;
-  private int crystalCount;
-  protected override IEnumerator getDmg(int dmg)
-  {
-    yield break;
-  }
-  public override IEnumerator AfterBuff()
-  {
-    yield break;
-  }
-  public override IEnumerator AfterDraw()
-  {
-    yield break;
-  }
-  public override IEnumerator AwakeTurn()
-  {
-    yield break;
-  }
-  public override IEnumerator StartTurn()
-  {
-    crystalCount = 3;
-    yield break;
-  }
-  protected override IEnumerator dieRoutine()
-  {
-    yield break;
-  }
-  protected override IEnumerator payCost(int cost, CostType type)
-  {
-    if (type == CostType.PaladinEnergy)
+    private TextMeshProUGUI crystalText;
+    private int crystalCount;
+    protected override IEnumerator getDmg(int dmg)
     {
-      crystalCount -= cost;
+        yield break;
     }
-    else if(type == CostType.Hp)
+    public override IEnumerator AfterBuff()
     {
-      Hp -= cost;
+        yield break;
     }
-    else
+    public override IEnumerator AfterDraw()
     {
-      yield break;
+        yield break;
     }
-    yield break;
-  }
-  public override bool PayTest(int cost, CostType type)
-  {
-    if (type == CostType.PaladinEnergy)
+    public override IEnumerator AwakeTurn()
     {
-      return crystalCount >= cost;
+        yield break;
     }
-    else if (type == CostType.Hp)
+    public override IEnumerator StartTurn()
     {
-      return Hp >= cost;
+        crystalCount = 3;
+        yield break;
     }
-    else
+    protected override IEnumerator dieRoutine()
     {
-      return false;
+        yield break;
     }
-  }
-  public void DebugDrawCard()
-  {
-    StartCoroutine(DrawCard());
-  }
-  protected override void Start()
-  {
-    base.Start();
-    TurnStartDraw = 5;
-    MaxHp = Hp = 50;
-    crystalText = PlayerUI.GetComponentInChildren<TextMeshProUGUI>();
-  }
-  protected override void Update()
-  {
-    base.Update();
-    crystalText.text = $"{crystalCount}";
-  }
-  public void DebugAddCard()
-  {/*
+    protected override IEnumerator payCost(int cost, CostType type)
+    {
+        if (type == CostType.PaladinEnergy)
+        {
+            crystalCount -= cost;
+        }
+        else if (type == CostType.Hp)
+        {
+            StartCoroutine(GetDmg(cost));
+        }
+        else
+        {
+            yield break;
+        }
+        yield break;
+    }
+    public override bool PayTest(int cost, CostType type)
+    {
+        if (type == CostType.PaladinEnergy)
+        {
+            return crystalCount >= cost;
+        }
+        else if (type == CostType.Hp)
+        {
+            return Hp >= cost;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    public void DebugDrawCard()
+    {
+        StartCoroutine(DrawCard());
+    }
+    protected override void Start()
+    {
+        base.Start();
+        TurnStartDraw = 5;
+        MaxHp = Hp = 50;
+        crystalText = PlayerUI.GetComponentInChildren<TextMeshProUGUI>();
+    }
+    protected override void Update()
+    {
+        base.Update();
+        crystalText.text = $"{crystalCount}";
+    }
+    public void DebugAddCard()
+    {/*
         if (addedCard is DebugCard)
         {
         }
@@ -88,37 +88,37 @@ public class DebugCharacter : Player
         {
             addedCard = new DebugCard();
         }*/
-    StartCoroutine(AddCard(new PaladinMove()));
-  }
-  public void AddSummonCard()
-  {
-    StartCoroutine(AddCard(new DebugCard()));
-  }
-  public void AddAttackCard()
-  {
-    StartCoroutine(AddCard(new Attack()));
-  }
-  public void AddWarlockMoveCard()
-  {
-    StartCoroutine(AddCard(new WarlockMove()));
-  }
-  public void AddWarlockSnatchCard()
-  {
-    StartCoroutine(AddCard(new WarlockSnatch()));
-  }
-  public void AddWarlockGatheringCard()
-  {
-    StartCoroutine(AddCard(new WarlockGathering()));
-  }
-  public void AddWarlockDrainCard()
-  {
-    StartCoroutine(AddCard(new WarlockDrain()));
-  }
-  protected override void InitializeDeck()
-  {
-    CardPile.Add(new PaladinMove());
-    CardPile.Add(new PaladinMove());
-    CardPile.Add(new PaladinMove());
-    CardPile.Add(new PaladinMove());
-  }
+        StartCoroutine(AddCard(new PaladinMove()));
+    }
+    public void AddSummonCard()
+    {
+        StartCoroutine(AddCard(new DebugCard()));
+    }
+    public void AddAttackCard()
+    {
+        StartCoroutine(AddCard(new Attack()));
+    }
+    public void AddWarlockMoveCard()
+    {
+        StartCoroutine(AddCard(new WarlockMove()));
+    }
+    public void AddWarlockSnatchCard()
+    {
+        StartCoroutine(AddCard(new WarlockSnatch()));
+    }
+    public void AddWarlockGatheringCard()
+    {
+        StartCoroutine(AddCard(new WarlockGathering()));
+    }
+    public void AddWarlockDrainCard()
+    {
+        StartCoroutine(AddCard(new WarlockDrain()));
+    }
+    protected override void InitializeDeck()
+    {
+        CardPile.Add(new PaladinMove());
+        CardPile.Add(new PaladinMove());
+        CardPile.Add(new PaladinMove());
+        CardPile.Add(new PaladinMove());
+    }
 }
