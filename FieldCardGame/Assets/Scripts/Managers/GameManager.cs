@@ -65,6 +65,10 @@ public class GameManager : MonoBehaviour
         cardDict.Add(card.GetCardID(), card);
         cardObjectDict.Add(card.GetCardID(), cardObjectList[1]);
 
+        card = new Attack();
+        cardDict.Add(card.GetCardID(), card);
+        cardObjectDict.Add(card.GetCardID(), cardObjectList[2]);
+
     }
 
     private void Start()

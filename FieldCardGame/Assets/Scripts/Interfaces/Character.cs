@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
+using TMPro;
 public abstract class Character : MonoBehaviour
 {
     public int MaxHp { get; set; }
     public int Hp { get; set; }
+    private GameObject hpBar;
+    private TextMeshProUGUI hpText;
+    private RectTransform hpBarImg;
     private const int MAXHANDSIZE = 10;
     private MeshRenderer meshRenderer;
     public Buff BuffHandler { get; private set; }
@@ -448,14 +452,12 @@ public abstract class Character : MonoBehaviour
                 {
                     if (GameManager.Instance.Map[tmp.X, tmp.Y].CharacterOnTile)
                     {
-                        GameManager.Instance.Map[tmp.X, tmp.Y].CharacterOnTile.meshRenderer.enabled = false;
                     }
                 }
                 else
                 {
                     if (GameManager.Instance.Map[tmp.X, tmp.Y].CharacterOnTile)
                     {
-                        GameManager.Instance.Map[tmp.X, tmp.Y].CharacterOnTile.meshRenderer.enabled = true;
                     }
                 }
                 Coordinate tile;
@@ -539,17 +541,6 @@ public abstract class Character : MonoBehaviour
         if (this is Player)
         {
             SightUpdate(sight, true, PrevPos);
-        }
-        else
-        {
-            if(GameManager.Instance.Map[position.X, position.Y].Onsight != 0)
-            {
-                meshRenderer.enabled = true;
-            }
-            else
-            {
-                meshRenderer.enabled = false;
-            }
         }
         for (int i = targetTile.OnCharacterEnterRoutine.Count - 1; i >= 0; i--)
         {
@@ -655,10 +646,13 @@ public abstract class Character : MonoBehaviour
             GetDmgInterrupted = false;
             yield break;
         }
+        Hp -= Dmg;
         yield return StartCoroutine(getDmg(Dmg));
-        if (!gameObject)
+        if (Hp<=0)
         {
-            yield break;
+            StartCoroutine(Die());
+            if(!gameObject)
+                yield break;
         }
         for (int i = GetDmgRoutine.Count - 1; i >= 0; i--)
         {
@@ -758,6 +752,7 @@ public abstract class Character : MonoBehaviour
             while (NeedWait) yield return null;
         }
         Destroy(gameObject);
+        Destroy(hpBar);
     }
     public IEnumerator PayCost(int cost, CostType type)
     {
@@ -780,9 +775,33 @@ public abstract class Character : MonoBehaviour
     public abstract IEnumerator AfterDraw();
     public abstract IEnumerator StartTurn();
     protected abstract IEnumerator getDmg(int dmg);
+    protected abstract void InitializeDeck();
     protected virtual void Awake()
     {
+        InitializeDeck();
         meshRenderer = GetComponent<MeshRenderer>();
         BuffHandler = new Buff(this);
+    }
+    protected virtual void Start()
+    {
+        hpBar = Instantiate(PlayerUIManager.Instance.HpBar, PlayerUIManager.Instance.HpBars);
+        hpBar.transform.position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 1.5f);
+        hpBarImg = hpBar.transform.GetChild(1).GetComponent<RectTransform>();
+        hpText = hpBar.GetComponentInChildren<TextMeshProUGUI>();
+    }
+    protected virtual void Update()
+    {
+        if (GameManager.Instance.Map[position.X, position.Y].Onsight == 0)
+        {
+            meshRenderer.enabled = false;
+            hpBar.SetActive(false);
+            return;
+        }
+        hpBar.SetActive(true);
+        meshRenderer.enabled = true;
+        hpBar.transform.position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 1.5f);
+        hpText.text = $"{Hp}/{MaxHp}";
+        hpBarImg.sizeDelta = new Vector2(150 * (float)Hp / MaxHp, hpBarImg.sizeDelta.y);
+        hpBarImg.transform.localPosition = new Vector3(-75 + 75 * (float)Hp / MaxHp, 0);
     }
 }

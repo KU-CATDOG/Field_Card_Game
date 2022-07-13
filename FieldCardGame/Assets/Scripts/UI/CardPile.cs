@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class CardPile : MonoBehaviour
 {
+    private Vector2 movVec = Vector2.zero;
     private float scrollSpeed;
     [SerializeField]
     private Transform panel;
@@ -41,7 +42,7 @@ public class CardPile : MonoBehaviour
         gameObject.SetActive(true);
         Initialize();
         maxThreshold = originPos.y - Mathf.Max(((cardList.Count - 1) / 5 - 1), 1) * space.y;
-        softMaxThreshold = maxThreshold - Mathf.Max(((cardList.Count - 1) / 5 - 2), 0) * space.y + originPos.y;
+        softMaxThreshold = maxThreshold + space.y;
         Vector2 nextPos = padding;
         scrollLock = true;
         List<ICard> ordered = new List<ICard>(cardList);
@@ -90,13 +91,15 @@ public class CardPile : MonoBehaviour
             Close = false;
             StartCoroutine(ClosePile());
         }
-        Vector2 movVec = Vector2.zero;
+        movVec = movVec*0.9f;
         if (panel.position.y > softMaxThreshold)
         {
+            movVec = Vector2.zero;
             movVec += Vector2.down * Mathf.Exp((-softMaxThreshold + panel.position.y) / 50f);
         }
         else if (panel.position.y < softMinThreshold)
         {
+            movVec = Vector2.zero;
             movVec += Vector2.up * Mathf.Exp((softMinThreshold - panel.position.y) / 50f);
         }
         if (!scrollLock && Input.mouseScrollDelta.x == 0 && Input.mouseScrollDelta.y > 0 && minThreshold <= (panel.position.y))

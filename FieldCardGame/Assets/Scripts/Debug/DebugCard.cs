@@ -103,11 +103,11 @@ public class DebugCard : IPlayerCard
     }
     public int GetCost()
     {
-        return 0;
+        return 1;
     }
     public CostType GetCostType()
     {
-        return 0;
+        return CostType.PaladinEnergy;
     }
     public CardType GetCardType()
     {

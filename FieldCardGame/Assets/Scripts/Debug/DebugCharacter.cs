@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class DebugCharacter : Player
 {
+    private TextMeshProUGUI crystalText;
+    private int crystalCount;
     protected override IEnumerator getDmg(int dmg)
     {
         yield break;
@@ -22,6 +25,7 @@ public class DebugCharacter : Player
     }
     public override IEnumerator StartTurn()
     {
+        crystalCount = 3;
         yield break;
     }
     protected override IEnumerator dieRoutine()
@@ -30,21 +34,42 @@ public class DebugCharacter : Player
     }
     protected override IEnumerator payCost(int cost, CostType type)
     {
+        if (type == CostType.PaladinEnergy)
+        {
+            crystalCount -= cost;
+        }
+        else
+        {
+            yield break;
+        }
         yield break;
     }
     public override bool PayTest(int cost, CostType type)
     {
-        return true;
+        if(type == CostType.PaladinEnergy)
+        {
+            return crystalCount >= cost;
+        }
+        else
+        {
+            return false;
+        }
     }
     public void DebugDrawCard()
     {
         StartCoroutine(DrawCard());
     }
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         TurnStartDraw = 5;
         MaxHp = Hp = 30;
-        Exp = 3;
+        crystalText = PlayerUI.GetComponentInChildren<TextMeshProUGUI>();
+    }
+    protected override void Update()
+    {
+        base.Update();
+        crystalText.text = $"{crystalCount}";
     }
     public void DebugAddCard()
     {/*
@@ -60,5 +85,16 @@ public class DebugCharacter : Player
     public void AddSummonCard()
     {
         StartCoroutine(AddCard(new DebugCard()));
+    }
+    public void AddAttackCard()
+    {
+        StartCoroutine(AddCard(new Attack()));
+    }
+    protected override void InitializeDeck()
+    {
+        CardPile.Add(new PaladinMove());
+        CardPile.Add(new PaladinMove());
+        CardPile.Add(new PaladinMove());
+        CardPile.Add(new PaladinMove());
     }
 }

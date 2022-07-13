@@ -18,6 +18,24 @@ public class PlayerUIManager : MonoBehaviour
         }
     }
     [SerializeField]
+    private Transform hpBars;
+    public Transform HpBars
+    {
+        get
+        {
+            return hpBars;
+        }
+    }
+    [SerializeField]
+    private GameObject hpBar;
+    public GameObject HpBar
+    {
+        get
+        {
+            return hpBar;
+        }
+    }
+    [SerializeField]
     private TextMeshProUGUI LevelText;
     [SerializeField]
     private RectTransform ExpBar;
@@ -38,6 +56,15 @@ public class PlayerUIManager : MonoBehaviour
     private Transform LeftSide;
     [SerializeField]
     private Transform HighlightedAnchor;
+    [SerializeField]
+    private Transform playerSpecificArea;
+    public Transform PlayerSpecificArea
+    {
+        get
+        {
+            return playerSpecificArea;
+        }
+    }
     private Vector2 LeftSideVector;
     private float VectorLen;
     public bool OnRoutine { get; private set; }
@@ -58,6 +85,13 @@ public class PlayerUIManager : MonoBehaviour
     private Vector2 RightSideVector;
     private Vector3 centerPos;
     private int defaultSiblingIndex;
+    public int DefaultSiblingIndex
+    {
+        get
+        {
+            return defaultSiblingIndex;
+        }
+    }
     private void Awake()
     {
         if (Instance == null)
@@ -214,6 +248,10 @@ public class PlayerUIManager : MonoBehaviour
     }
     public IEnumerator UseCard(CardObject card)
     {
+        if (!card.Usable)
+        {
+            yield break;
+        }
         ReadyUseMode = false;
         UseMode = true;
         //StartCoroutine(MainCamera.Instance.moveCamera(true));
