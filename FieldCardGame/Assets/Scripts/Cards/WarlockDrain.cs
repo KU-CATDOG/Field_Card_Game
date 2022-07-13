@@ -81,6 +81,7 @@ public class WarlockDrain : IPlayerCard
     public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
         List<Coordinate> attack;
+        int healCount = 0;
         attack = GetAreaofEffect();
         foreach (Coordinate i in attack)
         {
@@ -89,19 +90,25 @@ public class WarlockDrain : IPlayerCard
             {
                 continue;
             }
+            healCount++;
             if (interrupted)
             {
                 interrupted = false;
                 yield break;
             }
-            Character tmp = GameManager.Instance.Map[pos.X, pos.Y].CharacterOnTile;
-            if (tmp)
-            {
-                GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
-                GameManager.Instance.StartCoroutine(caster.Heal(caster, healAmount));
-            }
+            MultiAttack(caster, pos);
         }
-        yield break;
+        yield return GameManager.Instance.StartCoroutine(caster.GiveHeal(caster, GetHealAmount()*healCount));
+    }
+    private IEnumerator MultiAttack(Character caster, Coordinate target)
+    {
+        caster.NeedWait++;
+        Character tmp = GameManager.Instance.Map[target.X, target.Y].CharacterOnTile;
+        if (tmp)
+        {
+            yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
+        }
+        caster.NeedWait--;
     }
     public void CardRoutineInterrupt()
     {
