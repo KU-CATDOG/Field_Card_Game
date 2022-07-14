@@ -61,7 +61,7 @@ public class MainCamera : MonoBehaviour
                     CameraLock = false;
                 }
             }
-            if (CameraLock)
+            if (CameraLock && GameManager.Instance.CurPlayer)
             {
                 target = GameManager.Instance.CurPlayer.transform.position;
             }

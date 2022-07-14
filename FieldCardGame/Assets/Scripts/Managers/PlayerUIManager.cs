@@ -67,7 +67,7 @@ public class PlayerUIManager : MonoBehaviour
     }
     private Vector2 LeftSideVector;
     private float VectorLen;
-    public bool OnRoutine { get; private set; }
+    public bool OnRoutine { get; set; }
     public bool UseMode { get; set; }
     public ICard UseModeCard;
     public Coordinate CardUsePos { get; set; }
@@ -142,7 +142,7 @@ public class PlayerUIManager : MonoBehaviour
         int idx = card.SiblingIndex - defaultSiblingIndex;
         CardImages.RemoveAt(idx);
         //needAnimation
-        DestroyImmediate(card.gameObject);
+        Destroy(card.gameObject);
         StartCoroutine(Rearrange());
     }
     private IEnumerator MoveCard(CardObject card, Vector2 target, float timeLimit = 0.3f)
@@ -422,6 +422,7 @@ public class PlayerUIManager : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance.GameOver) return;
         int lev = (GameManager.Instance.Allies[0] as Player).Level;
         int exp = (GameManager.Instance.Allies[0] as Player).Exp;
         HpText.text = $"Hp {GameManager.Instance.Allies[0].Hp}/{GameManager.Instance.Allies[0].MaxHp}";

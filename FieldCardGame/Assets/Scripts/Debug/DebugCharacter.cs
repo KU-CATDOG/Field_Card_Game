@@ -40,7 +40,7 @@ public class DebugCharacter : Player
         }
         else if (type == CostType.Hp)
         {
-            StartCoroutine(GetDmg(cost));
+            yield return StartCoroutine(GetDmg(cost));
         }
         else
         {
