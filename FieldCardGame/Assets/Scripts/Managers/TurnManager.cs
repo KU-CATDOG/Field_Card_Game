@@ -148,11 +148,13 @@ public class TurnManager : MonoBehaviour
         foreach(Enemy i in DieEnemyList)
         {
             GameManager.Instance.EnemyList.Remove(i);
+            Destroy(i.HpBar);
             Destroy(i.gameObject);
         }
         foreach(Player i in DieAllyList)
         {
             GameManager.Instance.Allies.Remove(i);
+            Destroy(i.HpBar);
             Destroy(i.gameObject);
         }
         DieEnemyList.Clear();

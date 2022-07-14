@@ -8,7 +8,7 @@ public abstract class Character : MonoBehaviour
     public int MaxHp { get; set; }
     public int Hp { get; set; }
     public bool IsDie { get; set; }
-    private GameObject hpBar;
+    public GameObject HpBar { get; set; }
     private TextMeshProUGUI hpText;
     private RectTransform hpBarImg;
     private const int MAXHANDSIZE = 10;
@@ -76,11 +76,13 @@ public abstract class Character : MonoBehaviour
     public List<IEnumerator> TryMoveRoutine { get; private set; } = new List<IEnumerator>();
     public List<IEnumerator> MoveRoutine { get; private set; } = new List<IEnumerator>();
 
-
+    public Character ForceMovedBy { get; set; }
     public bool ForceMoveInterrupted { get; set; }
     public List<IEnumerator> TryForceMoveRoutine { get; private set; } = new List<IEnumerator>();
     public List<IEnumerator> ForceMoveRoutine { get; private set; } = new List<IEnumerator>();
 
+
+    public Character HitBy { get; set; }
     public int Dmg { get; set; }
     public bool GetDmgInterrupted { get; set; }
     public List<IEnumerator> TryGetDmgRoutine { get; private set; } = new List<IEnumerator>();
@@ -91,15 +93,18 @@ public abstract class Character : MonoBehaviour
     public List<IEnumerator> TryHitAttackRoutine { get; private set; } = new List<IEnumerator>();
     public List<IEnumerator> HitAttackRoutine { get; private set; } = new List<IEnumerator>();
 
+    public Character HealedBy;
     public bool HealInterrupted { get; set; }
     public int HealAmount { get; set; }
     public List<IEnumerator> TryHealRoutine { get; private set; } = new List<IEnumerator>();
     public List<IEnumerator> HealRoutine { get; private set; } = new List<IEnumerator>();
+
     public bool GiveHealInterrupted { get; set; }
     public int GiveHealAmount { get; set; }
     public List<IEnumerator> TryGiveHealRoutine { get; private set; } = new List<IEnumerator>();
     public List<IEnumerator> GiveHealRoutine { get; private set; } = new List<IEnumerator>();
 
+    public Character KilledBy { get; set; }
     public bool DieInterrupted { get; set; }
     public List<IEnumerator> TryDieRoutine { get; private set; } = new List<IEnumerator>();
     public List<IEnumerator> DieRoutine { get; private set; } = new List<IEnumerator>();
@@ -552,8 +557,9 @@ public abstract class Character : MonoBehaviour
         }
     }
 
-    public IEnumerator ForceMove(Coordinate target, int speed)
+    public IEnumerator ForceMove(Character caster, Coordinate target, int speed)
     {
+        ForceMovedBy = caster;
         for (int i = TryForceMoveRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
@@ -614,8 +620,9 @@ public abstract class Character : MonoBehaviour
         }
     }
 
-    public IEnumerator GetDmg(int dmg)
+    public IEnumerator GetDmg(Character caster, int dmg)
     {
+        HitBy = caster;
         Dmg = dmg;
         for (int i = TryGetDmgRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
@@ -634,7 +641,7 @@ public abstract class Character : MonoBehaviour
         yield return StartCoroutine(getDmg(Dmg));
         if (Hp <= 0)
         {
-            yield return StartCoroutine(Die());
+            yield return StartCoroutine(Die(caster));
         }
         for (int i = GetDmgRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
@@ -662,7 +669,7 @@ public abstract class Character : MonoBehaviour
             HitInterrupted = false;
             yield break;
         }
-        yield return StartCoroutine(target.GetDmg(HitDmg));
+        yield return StartCoroutine(target.GetDmg(this, HitDmg));
 
         for (int i = HitAttackRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
@@ -689,7 +696,7 @@ public abstract class Character : MonoBehaviour
             GiveHealInterrupted = false;
             yield break;
         }
-        yield return StartCoroutine(target.Heal(GiveHealAmount));
+        yield return StartCoroutine(target.Heal(this, GiveHealAmount));
 
         for (int i = GiveHealRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
@@ -700,8 +707,9 @@ public abstract class Character : MonoBehaviour
             }
         }
     }
-    private IEnumerator Heal(int amount)
+    private IEnumerator Heal(Character caster, int amount)
     {
+        HealedBy = caster;
         HealAmount = amount;
         for (int i = TryHealRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
@@ -728,8 +736,9 @@ public abstract class Character : MonoBehaviour
         }
     }
 
-    public IEnumerator Die()
+    public IEnumerator Die(Character caster)
     {
+        KilledBy = caster;
         for (int i = TryDieRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
@@ -770,12 +779,12 @@ public abstract class Character : MonoBehaviour
             }
             (GameManager.Instance.CurPlayer as Player).PlayerUI.SetActive(false);
             PlayerUIManager.Instance.UseMode = PlayerUIManager.Instance.ReadyUseMode = PlayerUIManager.Instance.OnRoutine = false;
+            TurnManager.Instance.TurnEnd = true;
         }
-        TurnManager.Instance.TurnEnd = true;
         IsDie = true;
         TurnStartDraw = 0; 
         gameObject.SetActive(false);
-        hpBar.SetActive(false);
+        HpBar.SetActive(false);
     }
     public IEnumerator PayCost(int cost, CostType type)
     {
@@ -806,22 +815,22 @@ public abstract class Character : MonoBehaviour
     }
     protected virtual void Start()
     {
-        hpBar = Instantiate(PlayerUIManager.Instance.HpBar, PlayerUIManager.Instance.HpBars);
-        hpBar.transform.position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 1.5f);
-        hpBarImg = hpBar.transform.GetChild(1).GetComponent<RectTransform>();
-        hpText = hpBar.GetComponentInChildren<TextMeshProUGUI>();
+        HpBar = Instantiate(PlayerUIManager.Instance.HpBar, PlayerUIManager.Instance.HpBars);
+        HpBar.transform.position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 1.5f);
+        hpBarImg = HpBar.transform.GetChild(1).GetComponent<RectTransform>();
+        hpText = HpBar.GetComponentInChildren<TextMeshProUGUI>();
     }
     protected virtual void Update()
     {
         if (GameManager.Instance.Map[position.X, position.Y].Onsight == 0)
         {
             meshRenderer.enabled = false;
-            hpBar.SetActive(false);
+            HpBar.SetActive(false);
             return;
         }
-        hpBar.SetActive(true);
+        HpBar.SetActive(true);
         meshRenderer.enabled = true;
-        hpBar.transform.position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 1.5f);
+        HpBar.transform.position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 1.5f);
         hpText.text = $"{Hp}/{MaxHp}";
         hpBarImg.sizeDelta = new Vector2(150 * (float)Hp / MaxHp, hpBarImg.sizeDelta.y);
         hpBarImg.transform.localPosition = new Vector3(-75 + 75 * (float)Hp / MaxHp, 0);
