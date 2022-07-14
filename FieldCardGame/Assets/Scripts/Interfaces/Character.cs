@@ -170,7 +170,7 @@ public abstract class Character : MonoBehaviour
             yield break;
         }
         //need animation for player
-        for (int i = DrawCardTry.Count - 1; !IsDie && i >= 0; i--)
+        for (int i = DrawCardTry.Count - 1; !DrawInterrupted && !IsDie && i >= 0; i--)
         {
             IEnumerator routine = DrawCardTry[i];
 
@@ -215,7 +215,7 @@ public abstract class Character : MonoBehaviour
     public IEnumerator DropCard(ICard card)
     {
         //need animation for player
-        for (int i = DropCardTry.Count - 1; !IsDie && i >= 0; i--)
+        for (int i = DropCardTry.Count - 1; !DropInterrupted && !IsDie && i >= 0; i--)
         {
             IEnumerator routine = DropCardTry[i];
             while (NeedWait != 0) yield return null;
@@ -256,7 +256,7 @@ public abstract class Character : MonoBehaviour
     public IEnumerator DropCard(int idx)
     {
         //need animation for player
-        for (int i = DropCardTry.Count - 1; !IsDie && i >= 0; i--)
+        for (int i = DropCardTry.Count - 1; !DropInterrupted && !IsDie && i >= 0; i--)
         {
             IEnumerator routine = DropCardTry[i];
             while (NeedWait != 0) yield return null;
@@ -293,7 +293,7 @@ public abstract class Character : MonoBehaviour
     {
         usedCard = HandCard[idx];
         yield return StartCoroutine(PayCost(usedCard.GetCost(), usedCard.GetCostType()));
-        for (int i = CardUseTry.Count - 1; !IsDie && i >= 0; i--)
+        for (int i = CardUseTry.Count - 1; !CardUseInterrupted && !IsDie && i >= 0; i--)
         {
             IEnumerator routine = CardUseTry[i];
             while (NeedWait != 0) yield return null;
@@ -322,7 +322,7 @@ public abstract class Character : MonoBehaviour
     public IEnumerator AddCard(ICard toAdd)
     {
         //need Animation for Player
-        for (int i = AddCardTry.Count - 1; !IsDie && i >= 0; i--)
+        for (int i = AddCardTry.Count - 1; !AddCardInterrupted && !IsDie && i >= 0; i--)
         {
             IEnumerator routine = AddCardTry[i];
             while (NeedWait != 0) yield return null;
@@ -352,7 +352,7 @@ public abstract class Character : MonoBehaviour
     public IEnumerator RemoveCard(ICard toRemove, bool discardedPileFirst)
     {
         //need Animation for Player
-        for (int i = RemoveCardTry.Count - 1; !IsDie && i >= 0; i--)
+        for (int i = RemoveCardTry.Count - 1; !RemoveCardInterrupted && !IsDie && i >= 0; i--)
         {
             IEnumerator routine = RemoveCardTry[i];
             while (NeedWait != 0) yield return null;
@@ -499,7 +499,7 @@ public abstract class Character : MonoBehaviour
     public IEnumerator Move(Coordinate target, float speed)
     {
 
-        for (int i = TryMoveRoutine.Count - 1; !IsDie && i >= 0; i--)
+        for (int i = TryMoveRoutine.Count - 1; !MoveInterrupted && !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
             if (!TryMoveRoutine[i].MoveNext())
@@ -560,7 +560,7 @@ public abstract class Character : MonoBehaviour
     public IEnumerator ForceMove(Character caster, Coordinate target, int speed)
     {
         ForceMovedBy = caster;
-        for (int i = TryForceMoveRoutine.Count - 1; !IsDie && i >= 0; i--)
+        for (int i = TryForceMoveRoutine.Count - 1; !ForceMoveInterrupted && !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
             if (!TryForceMoveRoutine[i].MoveNext())
@@ -624,7 +624,7 @@ public abstract class Character : MonoBehaviour
     {
         HitBy = caster;
         Dmg = dmg;
-        for (int i = TryGetDmgRoutine.Count - 1; !IsDie && i >= 0; i--)
+        for (int i = TryGetDmgRoutine.Count - 1; !GetDmgInterrupted && !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
             if (!TryGetDmgRoutine[i].MoveNext())
@@ -656,7 +656,7 @@ public abstract class Character : MonoBehaviour
     public IEnumerator HitAttack(Character target, int dmg)
     {
         HitDmg = dmg;
-        for (int i = TryHitAttackRoutine.Count - 1; !IsDie && i >= 0; i--)
+        for (int i = TryHitAttackRoutine.Count - 1; !HitInterrupted && !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
             if (!TryHitAttackRoutine[i].MoveNext())
@@ -683,7 +683,7 @@ public abstract class Character : MonoBehaviour
     public IEnumerator GiveHeal(Character target, int amount)
     {
         GiveHealAmount = amount;
-        for (int i = TryGiveHealRoutine.Count - 1; !IsDie && i >= 0; i--)
+        for (int i = TryGiveHealRoutine.Count - 1; !GiveHealInterrupted && !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
             if (!TryGiveHealRoutine[i].MoveNext())
@@ -711,7 +711,7 @@ public abstract class Character : MonoBehaviour
     {
         HealedBy = caster;
         HealAmount = amount;
-        for (int i = TryHealRoutine.Count - 1; !IsDie && i >= 0; i--)
+        for (int i = TryHealRoutine.Count - 1; !HealInterrupted && !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
             if (!TryHealRoutine[i].MoveNext())
@@ -739,7 +739,7 @@ public abstract class Character : MonoBehaviour
     public IEnumerator Die(Character caster)
     {
         KilledBy = caster;
-        for (int i = TryDieRoutine.Count - 1; !IsDie && i >= 0; i--)
+        for (int i = TryDieRoutine.Count - 1; !DieInterrupted && !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
             if (!TryDieRoutine[i].MoveNext())

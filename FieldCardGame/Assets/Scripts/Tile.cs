@@ -84,7 +84,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             Coordinate target = position + i;
             if (Coordinate.OutRange(target))
               continue;
-      GameManager.Instance.Map[target.X, target.Y].TileColor.material.color = GameManager.Instance.Map[target.X,target.Y].OriginColor;
+            GameManager.Instance.Map[target.X, target.Y].TileColor.material.color = GameManager.Instance.Map[target.X,target.Y].OriginColor;
         }
     }
     public void OnPointerClick(PointerEventData data)
@@ -98,6 +98,8 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         foreach (Coordinate i in PlayerUIManager.Instance.UseModeCard.GetAreaofEffect())
         {
             Coordinate target = GameManager.Instance.CurPlayer.position + i;
+            if (Coordinate.OutRange(target))
+                continue;
             GameManager.Instance.Map[target.X, target.Y].RestoreColor();
         }
 
