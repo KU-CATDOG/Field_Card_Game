@@ -44,7 +44,7 @@ public class Buff
         if (!isShieldEnd)
         {
             shieldValue += value;
-            isShieldEnd = shieldValue > 0;
+            isShieldEnd = shieldValue <= 0;
         }
         else
         {
@@ -65,7 +65,8 @@ public class Buff
         {
             shieldValue -= caster.Dmg;
             caster.Dmg = Mathf.Min(0, shieldValue) * (-1);
-            isShieldEnd = shieldValue > 0;
+            Debug.Log(caster.Dmg);
+            isShieldEnd = shieldValue <= 0;
             yield return null;
         }
     }
