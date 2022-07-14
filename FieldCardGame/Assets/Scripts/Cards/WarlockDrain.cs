@@ -122,7 +122,7 @@ public class WarlockDrain : IPlayerCard
     }
     public int GetCost()
     {
-        return 50;
+        return 20;
     }
     public CostType GetCostType()
     {
@@ -134,6 +134,6 @@ public class WarlockDrain : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3004100;
+        return 3104010;
     }
 }
