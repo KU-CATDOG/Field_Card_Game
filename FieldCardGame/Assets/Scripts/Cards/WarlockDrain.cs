@@ -134,6 +134,6 @@ public class WarlockDrain : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3004100;
+        return 3104010;
     }
 }
