@@ -65,8 +65,8 @@ public class Buff
         {
             shieldValue -= caster.Dmg;
             caster.Dmg = Mathf.Min(0, shieldValue) * (-1);
-            Debug.Log(caster.Dmg);
             isShieldEnd = shieldValue <= 0;
+            caster.GetDmgInterrupted = caster.Dmg == 0;
             yield return null;
         }
     }
