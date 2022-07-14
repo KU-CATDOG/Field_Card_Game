@@ -69,22 +69,26 @@ public class GameManager : MonoBehaviour
         card = new Attack();
         cardDict.Add(card.GetCardID(), card);
         cardObjectDict.Add(card.GetCardID(), cardObjectList[2]);
+
         card = new WarlockMove();
         cardDict.Add(card.GetCardID(), card);
         cardObjectDict.Add(card.GetCardID(), cardObjectList[3]);
+
         card = new WarlockSnatch();
         cardDict.Add(card.GetCardID(), card);
         cardObjectDict.Add(card.GetCardID(), cardObjectList[4]);
+
         card = new WarlockGathering();
         cardDict.Add(card.GetCardID(), card);
         cardObjectDict.Add(card.GetCardID(), cardObjectList[5]);
+
         card = new WarlockDrain();
         cardDict.Add(card.GetCardID(), card);
         cardObjectDict.Add(card.GetCardID(), cardObjectList[6]);
 
         card = new PaladinSMA();
         cardDict.Add(card.GetCardID(), card);
-        cardObjectDict.Add(card.GetCardID(), cardObjectList[3]);
+        cardObjectDict.Add(card.GetCardID(), cardObjectList[7]);
     }
 
     private void Start()

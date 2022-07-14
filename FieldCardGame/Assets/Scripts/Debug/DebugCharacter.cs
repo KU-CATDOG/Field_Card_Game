@@ -86,7 +86,7 @@ public class DebugCharacter : Player
 
     public void DebugGetDmg()
     {
-        StartCoroutine(this.GetDmg(10));
+        StartCoroutine(this.GetDmg(this, 10));
     }
 
     public void DebugGetShield()
