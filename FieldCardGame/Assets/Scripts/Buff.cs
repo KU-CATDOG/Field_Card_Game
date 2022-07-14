@@ -38,4 +38,42 @@ public class Buff
         isStrengthenEnd = true;
         yield break;
     }
+
+    public void Shield(int value)
+    {
+        if (!isShieldEnd)
+        {
+            shieldValue += value;
+            isShieldEnd = shieldValue <= 0;
+        }
+        else
+        {
+            shieldValue = value;
+            caster.TryGetDmgRoutine.Add(shield());
+            caster.TurnEndBuffHandler.Add(shieldEnd());
+        }
+    }
+    bool isShieldEnd = true;
+    int shieldValue;
+
+    public int ShieldValue => shieldValue;
+    
+    public IEnumerator shield()
+    {
+        isShieldEnd = false;
+        while(!isShieldEnd)
+        {
+            shieldValue -= caster.Dmg;
+            caster.Dmg = Mathf.Min(0, shieldValue) * (-1);
+            isShieldEnd = shieldValue <= 0;
+            caster.GetDmgInterrupted = caster.Dmg == 0;
+            yield return null;
+        }
+    }
+
+    public IEnumerator shieldEnd()
+    {
+        isShieldEnd = true;
+        yield break;
+    }
 }

@@ -83,6 +83,17 @@ public class DebugCharacter : Player
         base.Update();
         crystalText.text = $"{crystalCount}";
     }
+
+    public void DebugGetDmg()
+    {
+        StartCoroutine(this.GetDmg(10));
+    }
+
+    public void DebugGetShield()
+    {
+        this.BuffHandler.Shield(15);
+    }
+
     public void DebugAddCard()
     {/*
         if (addedCard is DebugCard)
@@ -92,7 +103,7 @@ public class DebugCharacter : Player
         {
             addedCard = new DebugCard();
         }*/
-        StartCoroutine(AddCard(new PaladinMove()));
+        StartCoroutine(AddCard(new PaladinSMA()));
     }
     public void AddSummonCard()
     {
