@@ -114,7 +114,7 @@ public class WarlockDrain : IPlayerCard
         pos = available[available.Count - 1];
         tmp = GameManager.Instance.Map[pos.X, pos.Y].CharacterOnTile;
         yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
-        yield return GameManager.Instance.StartCoroutine(caster.GiveHeal(caster, GetHealAmount()*available.Count));
+        yield return GameManager.Instance.StartCoroutine(caster.GiveHeal(caster, GetHealAmount() * available.Count));
     }
     public void CardRoutineInterrupt()
     {
@@ -122,7 +122,7 @@ public class WarlockDrain : IPlayerCard
     }
     public int GetCost()
     {
-        return 50;
+        return 20;
     }
     public CostType GetCostType()
     {

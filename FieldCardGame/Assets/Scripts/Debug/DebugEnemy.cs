@@ -8,6 +8,7 @@ public class DebugEnemy : Enemy
     {
         base.Start();
         Hp = MaxHp = 10;
+        GiveExp = 1;
         TurnStartDraw = 1;
     }
     protected override IEnumerator payCost(int cost, CostType type)
@@ -41,7 +42,7 @@ public class DebugEnemy : Enemy
     }
     protected override IEnumerator dieRoutine()
     {
-        yield break;
+        yield return base.dieRoutine();
     }
     public override IEnumerator EnemyRoutine()
     {

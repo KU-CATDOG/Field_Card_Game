@@ -7,6 +7,10 @@ public class DebugCharacter : Player
 {
     private TextMeshProUGUI crystalText;
     private int crystalCount;
+    protected override IEnumerator levelUp()
+    {
+        yield break;
+    }
     protected override IEnumerator getDmg(int dmg)
     {
         yield break;
@@ -40,7 +44,7 @@ public class DebugCharacter : Player
         }
         else if (type == CostType.Hp)
         {
-            yield return StartCoroutine(GetDmg(cost));
+            yield return StartCoroutine(GetDmg(this, cost));
         }
         else
         {
