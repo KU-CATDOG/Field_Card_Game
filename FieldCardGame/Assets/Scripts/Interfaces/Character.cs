@@ -14,7 +14,7 @@ public abstract class Character : MonoBehaviour
     private const int MAXHANDSIZE = 10;
     private MeshRenderer meshRenderer;
     public BuffHandler BuffHandler { get; private set; }
-    public Debuff DebuffHandler { get; private set; } = new Debuff();
+    public DebuffHandler DebuffHandler { get; private set; }
     public int TurnStartDraw { get; set; }
     public int NeedWait { get; set; }
     private Coordinate pos;
@@ -60,7 +60,7 @@ public abstract class Character : MonoBehaviour
 
     /// for UI
     public List<BuffType> BuffList { get; set; } = new List<BuffType>();
-    public List<Debuff> DebuffList { get; set; } = new List<Debuff>();
+    public List<DebuffHandler> DebuffList { get; set; } = new List<DebuffHandler>();
     /// 
 
     public List<IEnumerator> StartBuffHandler { get; private set; } = new List<IEnumerator>();
