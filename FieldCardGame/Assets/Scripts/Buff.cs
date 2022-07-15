@@ -27,7 +27,7 @@ public class Buff
     public IEnumerator strengthen()
     {
         isStrengthenEnd = false;
-        while(!isStrengthenEnd)
+        while (!isStrengthenEnd)
         {
             caster.HitDmg += strengthenValue;
             yield return null;
@@ -59,17 +59,21 @@ public class Buff
     int shieldValue;
 
     public int ShieldValue => shieldValue;
-    
+
     public IEnumerator shield()
     {
-        while(hasShield)
+        while (hasShield)
         {
-            int tmp = shieldValue - caster.Dmg;
-            caster.Dmg = Mathf.Min(0, tmp) * (-1);
-            shieldValue = Mathf.Max(0, tmp);
-            hasShield = shieldValue != 0;
-            caster.GetDmgInterrupted = caster.Dmg == 0;
+            if (caster.HitBy is Enemy)
+            {
+                int tmp = shieldValue - caster.Dmg;
+                caster.Dmg = Mathf.Min(0, tmp) * (-1);
+                shieldValue = Mathf.Max(0, tmp);
+                hasShield = shieldValue != 0;
+                caster.GetDmgInterrupted = caster.Dmg == 0;
+            }
             yield return null;
+
         }
     }
 
@@ -80,48 +84,4 @@ public class Buff
         yield break;
     }
 
-    public void Protect(int value)
-    {
-        if(!isProtectEnd)
-        {
-            protectValue += value;
-        }
-        else
-        {
-            protectValue = value;
-            caster.TryGetDmgRoutine.Add(protect());
-            caster.TurnEndBuffHandler.Add(protectEnd());
-        }
-    }
-    bool isProtectEnd = true;
-    int protectValue;
-    public IEnumerator protect()
-    {
-        isProtectEnd = false;
-        
-        while(!isProtectEnd)
-        {
-            if(protectValue == 0)
-                isProtectEnd = true;
-
-            if(protectValue >= caster.Dmg)
-            {
-                protectValue -= caster.Dmg;
-                caster.Dmg = 0;
-                caster.GetDmgInterrupted = true;
-            }
-            else
-            {
-                caster.Dmg -= protectValue;
-                protectValue = 0;
-            }
-            
-            yield return null;
-        }
-    }
-    public IEnumerator protectEnd()
-    {
-        isProtectEnd = true;
-        yield break;
-    }
 }

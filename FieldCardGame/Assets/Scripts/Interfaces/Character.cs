@@ -158,6 +158,7 @@ public abstract class Character : MonoBehaviour
     }
     public IEnumerator DrawCard()
     {
+        DrawInterrupted = false;
         if (CardPile.Count == 0)
         {
             yield return StartCoroutine(ShuffleDeck());
@@ -214,6 +215,7 @@ public abstract class Character : MonoBehaviour
     /// <returns></returns>
     public IEnumerator DropCard(ICard card)
     {
+        DrawInterrupted = false;
         //need animation for player
         for (int i = DropCardTry.Count - 1; !DropInterrupted && !IsDie && i >= 0; i--)
         {
@@ -255,6 +257,7 @@ public abstract class Character : MonoBehaviour
     /// <returns></returns>
     public IEnumerator DropCard(int idx)
     {
+        DrawInterrupted = false;
         //need animation for player
         for (int i = DropCardTry.Count - 1; !DropInterrupted && !IsDie && i >= 0; i--)
         {
@@ -267,7 +270,6 @@ public abstract class Character : MonoBehaviour
         }
         if (DropInterrupted || IsDie)
         {
-            Debug.Log(IsDie);
             DrawInterrupted = false;
             yield break;
         }
@@ -291,6 +293,7 @@ public abstract class Character : MonoBehaviour
     }
     public IEnumerator CardUse(Coordinate target, int idx)
     {
+        CardUseInterrupted = false;
         usedCard = HandCard[idx];
         yield return StartCoroutine(PayCost(usedCard.GetCost(), usedCard.GetCostType()));
         for (int i = CardUseTry.Count - 1; !CardUseInterrupted && !IsDie && i >= 0; i--)
@@ -321,6 +324,7 @@ public abstract class Character : MonoBehaviour
     }
     public IEnumerator AddCard(ICard toAdd)
     {
+        AddCardInterrupted = false;
         //need Animation for Player
         for (int i = AddCardTry.Count - 1; !AddCardInterrupted && !IsDie && i >= 0; i--)
         {
@@ -351,6 +355,7 @@ public abstract class Character : MonoBehaviour
     }
     public IEnumerator RemoveCard(ICard toRemove, bool discardedPileFirst)
     {
+        RemoveCardInterrupted = false;
         //need Animation for Player
         for (int i = RemoveCardTry.Count - 1; !RemoveCardInterrupted && !IsDie && i >= 0; i--)
         {
@@ -498,7 +503,7 @@ public abstract class Character : MonoBehaviour
     /// <returns></returns>
     public IEnumerator Move(Coordinate target, float speed)
     {
-
+        MoveInterrupted = false;
         for (int i = TryMoveRoutine.Count - 1; !MoveInterrupted && !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
@@ -559,6 +564,7 @@ public abstract class Character : MonoBehaviour
 
     public IEnumerator ForceMove(Character caster, Coordinate target, int speed)
     {
+        ForceMoveInterrupted = false;
         ForceMovedBy = caster;
         for (int i = TryForceMoveRoutine.Count - 1; !ForceMoveInterrupted && !IsDie && i >= 0; i--)
         {
@@ -622,6 +628,7 @@ public abstract class Character : MonoBehaviour
 
     public IEnumerator GetDmg(Character caster, int dmg)
     {
+        GetDmgInterrupted = false;
         HitBy = caster;
         Dmg = dmg;
         for (int i = TryGetDmgRoutine.Count - 1; !GetDmgInterrupted && !IsDie && i >= 0; i--)
@@ -655,6 +662,7 @@ public abstract class Character : MonoBehaviour
 
     public IEnumerator HitAttack(Character target, int dmg)
     {
+        HitInterrupted = false;
         HitDmg = dmg;
         for (int i = TryHitAttackRoutine.Count - 1; !HitInterrupted && !IsDie && i >= 0; i--)
         {
@@ -682,6 +690,7 @@ public abstract class Character : MonoBehaviour
     }
     public IEnumerator GiveHeal(Character target, int amount)
     {
+        GiveHealInterrupted = false;
         GiveHealAmount = amount;
         for (int i = TryGiveHealRoutine.Count - 1; !GiveHealInterrupted && !IsDie && i >= 0; i--)
         {
@@ -707,8 +716,9 @@ public abstract class Character : MonoBehaviour
             }
         }
     }
-    private IEnumerator Heal(Character caster, int amount)
+    private IEnumerator Heal(Character caster, int amount, bool allowOverMaxHp = false)
     {
+        HealInterrupted = false;
         HealedBy = caster;
         HealAmount = amount;
         for (int i = TryHealRoutine.Count - 1; !HealInterrupted && !IsDie && i >= 0; i--)
@@ -725,7 +735,8 @@ public abstract class Character : MonoBehaviour
             yield break;
         }
         Hp += HealAmount;
-        Hp = Mathf.Clamp(Hp, 0, MaxHp);
+        if(!allowOverMaxHp)
+            Hp = Mathf.Clamp(Hp, 0, MaxHp);
 
         for (int i = HealRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
@@ -739,6 +750,7 @@ public abstract class Character : MonoBehaviour
 
     public IEnumerator Die(Character caster)
     {
+        DieInterrupted = false;
         KilledBy = caster;
         for (int i = TryDieRoutine.Count - 1; !DieInterrupted && !IsDie && i >= 0; i--)
         {
