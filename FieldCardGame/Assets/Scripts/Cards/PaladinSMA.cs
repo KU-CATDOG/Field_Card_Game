@@ -70,9 +70,7 @@ public class PaladinSMA : IPlayerCard
         }
         int shieldValue = caster.BuffHandler.ShieldValue;
         caster.BuffHandler.Shield((-1) * shieldValue);
-        caster.Hp += shieldValue;
-
-        yield return null;
+        yield return GameManager.Instance.StartCoroutine(caster.GiveHeal(caster, shieldValue));
     }
     
     public void CardRoutineInterrupt()

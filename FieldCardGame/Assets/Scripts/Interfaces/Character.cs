@@ -491,7 +491,7 @@ public abstract class Character : MonoBehaviour
         }
     }
     /// <summary>
-    /// 1ĭ �̵�
+    /// 1ĭ �̵�
     /// </summary>
     /// <param name="target"></param>
     /// <param name="speed"></param>
@@ -725,6 +725,7 @@ public abstract class Character : MonoBehaviour
             yield break;
         }
         Hp += HealAmount;
+        Hp = Mathf.Clamp(Hp, 0, MaxHp);
 
         for (int i = HealRoutine.Count - 1; !IsDie && i >= 0; i--)
         {

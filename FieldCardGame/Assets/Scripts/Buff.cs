@@ -41,31 +41,33 @@ public class Buff
 
     public void Shield(int value)
     {
-        if (!isShieldEnd)
+        if (hasShield)
         {
             shieldValue += value;
-            isShieldEnd = shieldValue <= 0;
+            shieldValue = Mathf.Max(0, shieldValue);
+            hasShield = shieldValue != 0;
         }
         else
         {
             shieldValue = value;
+            hasShield = true;
             caster.TryGetDmgRoutine.Add(shield());
             caster.TurnEndBuffHandler.Add(shieldEnd());
         }
     }
-    bool isShieldEnd = true;
+    bool hasShield = false;
     int shieldValue;
 
     public int ShieldValue => shieldValue;
     
     public IEnumerator shield()
     {
-        isShieldEnd = false;
-        while(!isShieldEnd)
+        while(hasShield)
         {
-            shieldValue -= caster.Dmg;
-            caster.Dmg = Mathf.Min(0, shieldValue) * (-1);
-            isShieldEnd = shieldValue <= 0;
+            int tmp = shieldValue - caster.Dmg;
+            caster.Dmg = Mathf.Min(0, tmp) * (-1);
+            shieldValue = Mathf.Max(0, tmp);
+            hasShield = shieldValue != 0;
             caster.GetDmgInterrupted = caster.Dmg == 0;
             yield return null;
         }
@@ -73,7 +75,8 @@ public class Buff
 
     public IEnumerator shieldEnd()
     {
-        isShieldEnd = true;
+        shieldValue = 0;
+        hasShield = false;
         yield break;
     }
 }
