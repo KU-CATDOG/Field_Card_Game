@@ -13,7 +13,7 @@ public abstract class Character : MonoBehaviour
     private RectTransform hpBarImg;
     private const int MAXHANDSIZE = 10;
     private MeshRenderer meshRenderer;
-    public Buff BuffHandler { get; private set; }
+    public BuffHandler BuffHandler { get; private set; }
     public Debuff DebuffHandler { get; private set; } = new Debuff();
     public int TurnStartDraw { get; set; }
     public int NeedWait { get; set; }
@@ -824,7 +824,7 @@ public abstract class Character : MonoBehaviour
     {
         InitializeDeck();
         meshRenderer = GetComponent<MeshRenderer>();
-        BuffHandler = new Buff(this);
+        BuffHandler = new BuffHandler(this);
     }
     protected virtual void Start()
     {
