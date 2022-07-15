@@ -89,6 +89,11 @@ public class GameManager : MonoBehaviour
         card = new PaladinSMA();
         cardDict.Add(card.GetCardID(), card);
         cardObjectDict.Add(card.GetCardID(), cardObjectList[7]);
+        
+        card = new PaladinProtect();
+        cardDict.Add(card.GetCardID(), card);
+        cardObjectDict.Add(card.GetCardID(), cardObjectList[8]);
+        
     }
 
     private void Start()

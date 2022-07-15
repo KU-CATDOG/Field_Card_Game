@@ -89,6 +89,11 @@ public class DebugCharacter : Player
         StartCoroutine(this.GetDmg(this, 10));
     }
 
+    public void DebugGetDmg12()
+    {
+        StartCoroutine(this.GetDmg(this, 12));
+    }
+
     public void DebugGetShield()
     {
         this.BuffHandler.Shield(15);
@@ -135,5 +140,6 @@ public class DebugCharacter : Player
         CardPile.Add(new PaladinMove());
         CardPile.Add(new PaladinMove());
         CardPile.Add(new PaladinMove());
+        CardPile.Add(new PaladinProtect());
     }
 }

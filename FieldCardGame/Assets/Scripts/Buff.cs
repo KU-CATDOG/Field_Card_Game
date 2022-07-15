@@ -79,4 +79,49 @@ public class Buff
         hasShield = false;
         yield break;
     }
+
+    public void Protect(int value)
+    {
+        if(!isProtectEnd)
+        {
+            protectValue += value;
+        }
+        else
+        {
+            protectValue = value;
+            caster.TryGetDmgRoutine.Add(protect());
+            caster.TurnEndBuffHandler.Add(protectEnd());
+        }
+    }
+    bool isProtectEnd = true;
+    int protectValue;
+    public IEnumerator protect()
+    {
+        isProtectEnd = false;
+        
+        while(!isProtectEnd)
+        {
+            if(protectValue == 0)
+                isProtectEnd = true;
+
+            if(protectValue >= caster.Dmg)
+            {
+                protectValue -= caster.Dmg;
+                caster.Dmg = 0;
+                caster.GetDmgInterrupted = true;
+            }
+            else
+            {
+                caster.Dmg -= protectValue;
+                protectValue = 0;
+            }
+            
+            yield return null;
+        }
+    }
+    public IEnumerator protectEnd()
+    {
+        isProtectEnd = true;
+        yield break;
+    }
 }
