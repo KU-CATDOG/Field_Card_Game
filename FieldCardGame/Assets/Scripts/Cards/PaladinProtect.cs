@@ -67,7 +67,7 @@ public class PaladinProtect : IPlayerCard
              interrupted = false;
              yield break;
         }
-        caster.BuffHandler.Protect(GetAmount());
+        caster.BuffHandler.Shield(GetAmount());
         yield break;
     }
     public void CardRoutineInterrupt()
