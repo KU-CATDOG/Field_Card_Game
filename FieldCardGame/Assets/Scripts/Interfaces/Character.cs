@@ -626,19 +626,23 @@ public abstract class Character : MonoBehaviour
         }
     }
 
-    public IEnumerator GetDmg(Character caster, int dmg)
+    public IEnumerator GetDmg(Character caster, int dmg, bool isAbsolute = false)
     {
         GetDmgInterrupted = false;
         HitBy = caster;
         Dmg = dmg;
-        for (int i = TryGetDmgRoutine.Count - 1; !GetDmgInterrupted && !IsDie && i >= 0; i--)
+        if (!isAbsolute)
         {
-            while (NeedWait != 0) yield return null;
-            if (!TryGetDmgRoutine[i].MoveNext())
+            for (int i = TryGetDmgRoutine.Count - 1; !GetDmgInterrupted && !IsDie && i >= 0; i--)
             {
-                TryGetDmgRoutine.RemoveAt(i);
+                while (NeedWait != 0) yield return null;
+                if (!TryGetDmgRoutine[i].MoveNext())
+                {
+                    TryGetDmgRoutine.RemoveAt(i);
+                }
             }
         }
+
         if (GetDmgInterrupted || IsDie)
         {
             GetDmgInterrupted = false;
@@ -735,7 +739,7 @@ public abstract class Character : MonoBehaviour
             yield break;
         }
         Hp += HealAmount;
-        if(!allowOverMaxHp)
+        if (!allowOverMaxHp)
             Hp = Mathf.Clamp(Hp, 0, MaxHp);
 
         for (int i = HealRoutine.Count - 1; !IsDie && i >= 0; i--)
@@ -781,7 +785,7 @@ public abstract class Character : MonoBehaviour
         }
         else if (this is Player)
         {
-            if(this == GameManager.Instance.Allies[0])
+            if (this == GameManager.Instance.Allies[0])
             {
                 GameManager.Instance.GameOver = true;
             }
@@ -795,7 +799,7 @@ public abstract class Character : MonoBehaviour
             TurnManager.Instance.TurnEnd = true;
         }
         IsDie = true;
-        TurnStartDraw = 0; 
+        TurnStartDraw = 0;
         gameObject.SetActive(false);
         HpBar.SetActive(false);
     }
