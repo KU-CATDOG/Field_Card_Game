@@ -4,16 +4,19 @@ using UnityEngine;
 
 public abstract class Buff
 {
-    private Character caster;
-    public void Buff(Character caster)
+    protected Character caster;
+    public int Value {get; protected set;} = 0;
+    public int Duration {get; protected set;} = 0;
+    public int MaxDuration {get; protected set;} = 0;
+    public bool IsEnabled {get; protected set;} = false;
+    public abstract void SetBuff(int amount, int duration);
+    public virtual IEnumerator RemoveBuff()
     {
-        this.caster = caster;
+        Value = 0;
+        Duration = 1;
+        MaxDuration = 1;
+        IsEnabled = false;
+        yield return null;
     }
-    public int Value {public get; private set;} = 0;
-    public int Duration {public get; private set;} = 0;
-    public int MaxDuration {public get; private set;} = 0;
-    public bool IsEnabled {public get; private set;} = 0;
-    public void SetBuff(int amount, int duration);
-    public IEnumerator Effect();
-    public IEnumerator EffectEnd();
+    public abstract IEnumerator Effect();
 }

@@ -5,51 +5,16 @@ using UnityEngine;
 public class BuffHandler
 {
     private Character caster;
-    private Dictionary<BuffType, Buff> buffDict;
+    private Dictionary<BuffType, Buff> buffDict = new Dictionary<BuffType, Buff>();
     public IReadOnlyDictionary<BuffType, Buff> BuffDict {get {return buffDict;}}
     public BuffHandler(Character caster)
     {
         this.caster = caster;
 
-        Buff buff = new Strengthen(caster);
-        buffDict.Add(BuffType.strengthen, buff);
-    }
-}
-
-public class Strengthen : Buff
-{
-    public void SetBuff(int amount, int duration)
-    {
-        if (IsEnabled)
-        {
-            Value += amount;
-        }
-        else
-        {
-            strengthenValue = value;
-            MaxDuration = duration;
-            Duration = 1;
-            IsEnabled = true;
-            caster.TryHitAttackRoutine.Add(Effect());
-            caster.TurnEndBuffHandler.Add(EffectEnd());
-        }
-    }
-    public IEnumerator Effect()
-    {
-        while (IsEnabled)
-        {
-            caster.HitDmg += Value;
-            yield return null;
-        }
-    }
-    public IEnumerator EffectEnd()
-    {
-        if (MaxDuration > Duration) 
-        {
-            Duration++;
-            yield break;
-        }
-        IsEnabled = false;
-        yield break;
+        Buff strengthen = new Strengthen(caster);
+        Buff shield = new Shield(caster);
+        
+        buffDict.Add(BuffType.Strengthen, strengthen);
+        buffDict.Add(BuffType.Shield, shield);
     }
 }
