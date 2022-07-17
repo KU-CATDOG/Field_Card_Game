@@ -8,6 +8,7 @@ public abstract class Buff
     public int Value {get; protected set;} = 0;
     public int Duration {get; protected set;} = 0;
     public int MaxDuration {get; protected set;} = 0;
+    public int Priority {get; protected set;} = 0;
     public bool IsEnabled {get; protected set;} = false;
     public abstract void SetBuff(int amount, int duration);
     public virtual IEnumerator RemoveBuff()
