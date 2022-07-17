@@ -2,23 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Strengthen : Buff
+public class Strengthen : Buff 
 {
     public Strengthen(Character caster)
     {
         this.caster = caster;
     }
-    public override void SetBuff(int amount, int duration)
+    public override void SetBuff(int value)
     {
         if (IsEnabled)
         {
-            Value += amount;
+            Value += value;
         }
         else
         {
-            Value = amount;
-            MaxDuration = duration;
-            Duration = 1;
+            Value = value;
             IsEnabled = true;
             caster.TryHitAttackRoutine.Add(Effect());
             caster.TurnEndBuffHandler.Add(RemoveBuff());
