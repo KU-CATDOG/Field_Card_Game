@@ -67,7 +67,7 @@ public class WarlockGathering : IPlayerCard
              interrupted = false;
              yield break;
         }
-        caster.BuffHandler.Strengthen(GetAmount());
+        caster.BuffHandler.BuffDict[BuffType.Strengthen].SetBuff(GetAmount(), 1);
         yield break;
     }
     public void CardRoutineInterrupt()

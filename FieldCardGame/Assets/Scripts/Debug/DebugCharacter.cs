@@ -96,7 +96,7 @@ public class DebugCharacter : Player
 
     public void DebugGetShield()
     {
-        this.BuffHandler.Shield(15);
+        this.BuffHandler.BuffDict[BuffType.Shield].SetBuff(15, 2);
     }
 
     public void DebugAddCard()

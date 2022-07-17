@@ -11,7 +11,8 @@ public enum DebuffIcon
 }
 public enum BuffType
 {
-
+    Strengthen,
+    Shield,
 }
 public enum DebuffType
 {
