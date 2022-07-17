@@ -193,7 +193,7 @@ public abstract class Character : MonoBehaviour
         drawCard = CardPile[0];
         CardPile.RemoveAt(0);
         HandCard.Add(drawCard);
-        if (gameObject.tag == "Player")
+        if (this is Player)
         {
             yield return StartCoroutine(PlayerUIManager.Instance.DrawCard());
         }
@@ -443,7 +443,8 @@ public abstract class Character : MonoBehaviour
         bool[,] visited = new bool[128, 128];
         Queue<Coordinate> queue = new Queue<Coordinate>();
         Queue<Coordinate> nextQueue = new Queue<Coordinate>();
-        queue.Enqueue(center);
+        if(level>=0)
+            queue.Enqueue(center);
         while (dist++ <= level)
         {
             while (queue.Count != 0)
@@ -785,6 +786,7 @@ public abstract class Character : MonoBehaviour
         }
         else if (this is Player)
         {
+            SightUpdate(-1, false, null, true);
             if (this == GameManager.Instance.Allies[0])
             {
                 GameManager.Instance.GameOver = true;
@@ -798,6 +800,7 @@ public abstract class Character : MonoBehaviour
             PlayerUIManager.Instance.UseMode = PlayerUIManager.Instance.ReadyUseMode = PlayerUIManager.Instance.OnRoutine = false;
             TurnManager.Instance.TurnEnd = true;
         }
+        GameManager.Instance.Map[position.X, position.Y].CharacterOnTile = null;
         IsDie = true;
         TurnStartDraw = 0;
         gameObject.SetActive(false);
