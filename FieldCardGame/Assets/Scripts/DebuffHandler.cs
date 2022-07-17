@@ -5,8 +5,8 @@ using UnityEngine;
 public class DebuffHandler
 {
     private Character caster;
-    private Dictionary<DebuffType, Debuff> debuffDict = new Dictionary<DebuffType, Debuff>();
-    public IReadOnlyDictionary<DebuffType, Debuff> DebuffDict {get {return debuffDict;}}
+    private Dictionary<DebuffType, Effect> debuffDict = new Dictionary<DebuffType, Effect>();
+    public IReadOnlyDictionary<DebuffType, Effect> DebuffDict {get {return debuffDict;}}
     public DebuffHandler(Character caster)
     {
         this.caster = caster;

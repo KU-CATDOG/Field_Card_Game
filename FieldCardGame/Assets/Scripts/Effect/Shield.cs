@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Shield : Buff 
+public class Shield : Effect 
 {
     public Shield(Character caster)
     {
         this.caster = caster;
     }
-    public override void SetBuff(int value)
+    public override void SetEffect(int value)
     {
         if (IsEnabled)
         {
@@ -18,11 +18,11 @@ public class Shield : Buff
         {
             Value = value;
             IsEnabled = true;
-            caster.TryGetDmgRoutine.Add(Effect());
-            caster.TurnEndBuffHandler.Add(RemoveBuff());
+            caster.TryGetDmgRoutine.Add(ApplyEffect());
+            caster.TurnEndBuffHandler.Add(RemoveEffect());
         }
     }
-    public override IEnumerator Effect()
+    public override IEnumerator ApplyEffect()
     {
         while (IsEnabled)
         {
