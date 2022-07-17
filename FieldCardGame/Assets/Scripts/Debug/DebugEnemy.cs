@@ -9,7 +9,7 @@ public class DebugEnemy : Enemy
         base.Start();
         Hp = MaxHp = 10;
         GiveExp = 1;
-        TurnStartDraw = 1;
+        TurnStartDraw = 2;
     }
     protected override IEnumerator payCost(int cost, CostType type)
     {
@@ -46,13 +46,42 @@ public class DebugEnemy : Enemy
     }
     public override IEnumerator EnemyRoutine()
     {
-        HandCard[0].SetRange(3);
-        List<Coordinate> tiles = HandCard[0].GetAvailableTile(position);
-        int random = Random.Range(0, tiles.Count);
-        yield return StartCoroutine(CardUse(tiles[random], 0));
+        int moveCard;
+        if(HandCard[1] is EnemyAttack)
+        {
+            moveCard = 0;
+        }
+        else
+        {
+            moveCard = 1;
+        }
+
+        HandCard[moveCard].SetRange(3);
+        List<Coordinate> tiles = HandCard[moveCard].GetAvailableTile(position);
+        Coordinate toGo = tiles[0];
+        int minDist = 1000;
+        foreach(var i in tiles)
+        {
+            foreach(var j in GameManager.Instance.Allies)
+            {
+                if (minDist > Coordinate.Distance(i, j.position))
+                {
+                    minDist = Coordinate.Distance(i, j.position);
+                    toGo = i;
+                }
+            }
+        }
+        yield return StartCoroutine(CardUse(toGo, moveCard));
+        tiles = HandCard[0].GetAvailableTile(position);
+        if (tiles.Count != 0)
+        {
+            Coordinate toAttack = tiles[Random.Range(0, tiles.Count)];
+            yield return StartCoroutine(CardUse(toAttack, 0));
+        }
     }
     protected override void InitializeDeck()
     {
         CardPile.Add(new PaladinMove());
+        CardPile.Add(new EnemyAttack());
     }
 }
