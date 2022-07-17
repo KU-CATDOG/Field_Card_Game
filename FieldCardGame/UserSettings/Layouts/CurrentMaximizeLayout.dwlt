@@ -86,7 +86,7 @@ MonoBehaviour:
     m_HSlider: 0
     m_VSlider: 0
     m_IgnoreScrollWheelUntilClicked: 0
-    m_EnableMouseInput: 1
+    m_EnableMouseInput: 0
     m_EnableSliderZoomHorizontal: 0
     m_EnableSliderZoomVertical: 0
     m_UniformScale: 1
@@ -298,10 +298,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 254
-    y: 81
-    width: 1118
-    height: 628
+    x: 248
+    y: 73
+    width: 1128
+    height: 636
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -503,9 +503,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 28.963621, y: 49.181328, z: 81.33471}
+    m_Target: {x: 1828, y: 655, z: 0}
     speed: 2
-    m_Value: {x: 28.963621, y: 49.181328, z: 81.33471}
+    m_Value: {x: 1828, y: 655, z: 0}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -552,17 +552,17 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.014864959, y: 0.9743629, z: -0.06764032, w: 0.21410413}
+    m_Target: {x: 0.013468706, y: 0.067442335, z: -0.0009100447, w: 0.99762994}
     speed: 2
-    m_Value: {x: 0.014864812, y: 0.97435325, z: -0.06763965, w: 0.21410201}
+    m_Value: {x: 0.013468732, y: 0.06744246, z: -0.00091004645, w: 0.99763185}
   m_Size:
-    m_Target: 26.43337
+    m_Target: 276.04028
     speed: 2
-    m_Value: 26.43337
+    m_Value: 276.04028
   m_Ortho:
-    m_Target: 0
+    m_Target: 1
     speed: 2
-    m_Value: 0
+    m_Value: 1
   m_CameraSettings:
     m_Speed: 1
     m_SpeedNormalized: 0.5
@@ -687,7 +687,7 @@ MonoBehaviour:
   m_LastFolders:
   - Assets/Prefabs/Debug
   m_LastFoldersGridSize: -1
-  m_LastProjectPath: F:\GameProjects\Field_Card_Game\FieldCardGame
+  m_LastProjectPath: C:\Users\Merseong\Documents\Field_Card_Game\FieldCardGame
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
