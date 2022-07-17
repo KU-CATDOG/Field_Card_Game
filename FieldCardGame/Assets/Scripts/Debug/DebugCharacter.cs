@@ -44,7 +44,7 @@ public class DebugCharacter : Player
         }
         else if (type == CostType.Hp)
         {
-            yield return StartCoroutine(GetDmg(this, cost));
+            yield return StartCoroutine(GetDmg(this, cost, true));
         }
         else
         {

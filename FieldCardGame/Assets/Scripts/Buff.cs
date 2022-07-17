@@ -64,14 +64,11 @@ public class Buff
     {
         while (hasShield)
         {
-            if (caster.HitBy is Enemy)
-            {
-                int tmp = shieldValue - caster.Dmg;
-                caster.Dmg = Mathf.Min(0, tmp) * (-1);
-                shieldValue = Mathf.Max(0, tmp);
-                hasShield = shieldValue != 0;
-                caster.GetDmgInterrupted = caster.Dmg == 0;
-            }
+            int tmp = shieldValue - caster.Dmg;
+            caster.Dmg = Mathf.Min(0, tmp) * (-1);
+            shieldValue = Mathf.Max(0, tmp);
+            hasShield = shieldValue != 0;
+            caster.GetDmgInterrupted = caster.Dmg == 0;
             yield return null;
 
         }
