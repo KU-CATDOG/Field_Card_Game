@@ -2,30 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DebugCard : IPlayerCard
+public class PaladinDeliver : IPlayerCard
 {
-    private bool interrupted;
-    public bool Disposable { get; set; }
-    public Color GetColorOfEffect(Coordinate pos)
+    private int range = 1;
+
+    public int ShieldAmount { get; set; } = 12;
+
+    public int AttackDmg { get; set; } = 10;
+
+    public bool Disposable { get; set; } = true;
+
+    private bool interrupted = false;
+
+    public int GetRange()
     {
-        return Color.white;
+        return range;
     }
+
+    public void SetRange(int _range)
+    {
+        range = _range;
+    }
+
     public Color GetUnAvailableTileColor()
     {
         return Color.red;
     }
-    public Color GetAvailableTileColor()
-    {
-        return Color.blue;
-    }
-    public int GetRange()
-    {
-        return 5;
-    }
-    public void SetRange(int _range)
-    {
-        return;
-    }
+
     public List<Coordinate> GetAvailableTile(Coordinate pos)
     {
         List<Coordinate> ret = new List<Coordinate>();
@@ -39,7 +42,7 @@ public class DebugCard : IPlayerCard
             while (queue.Count != 0)
             {
                 Coordinate tmp = queue.Dequeue();
-                if ((tmp.X != pos.X || tmp.Y != pos.Y) && !GameManager.Instance.Map[tmp.X, tmp.Y].CharacterOnTile)
+                if ((tmp.X != pos.X || tmp.Y != pos.Y) && GameManager.Instance.Map[tmp.X, tmp.Y].CharacterOnTile is Enemy)
                     ret.Add(tmp);
                 Coordinate tile;
                 if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y])
@@ -68,16 +71,34 @@ public class DebugCard : IPlayerCard
         }
         while (queue.Count != 0)
         {
-            ret.Add(queue.Dequeue());
+            Coordinate tmp = queue.Dequeue();
+            if (GameManager.Instance.Map[tmp.X, tmp.Y].CharacterOnTile is Enemy)
+                ret.Add(tmp);
         }
         return ret;
     }
+
+    public Color GetAvailableTileColor()
+    {
+        return Color.blue;
+    }
+
     public List<Coordinate> GetAreaofEffect(Coordinate relativePos)
     {
         List<Coordinate> ret = new List<Coordinate>();
         ret.Add(new Coordinate(0, 0));
         return ret;
     }
+
+    public Color GetColorOfEffect(Coordinate pos)
+    {
+        if (pos.X == 0 && pos.Y == 0)
+        {
+            return Color.white;
+        }
+        return Color.black;
+    }
+
     public bool IsAvailablePosition(Coordinate caster, Coordinate target)
     {
         List<Coordinate> availablePositions = GetAvailableTile(caster);
@@ -87,35 +108,50 @@ public class DebugCard : IPlayerCard
         }
         return false;
     }
-    public IEnumerator CardRoutine(Character caster, Coordinate center)
+
+    public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
+        Character targetEnemy = GameManager.Instance.Map[target.X, target.Y].CharacterOnTile;
+
         if (interrupted)
         {
             interrupted = false;
             yield break;
         }
-        Enemy summoned = MonoBehaviour.Instantiate(GameManager.Instance.EnemyDict[0]);
-        summoned.position = center;
-        yield break;
+
+        caster.BuffHandler.BuffDict[BuffType.Shield].SetEffect(ShieldAmount);
+
+        if (interrupted)
+        {
+            interrupted = false;
+            yield break;
+        }
+
+        yield return caster.StartCoroutine(caster.HitAttack(targetEnemy, AttackDmg));
     }
+
     public void CardRoutineInterrupt()
     {
         interrupted = true;
     }
+
     public int GetCost()
     {
-        return 1;
+        return 2;
     }
+
     public CostType GetCostType()
     {
         return CostType.PaladinEnergy;
     }
+
     public CardType GetCardType()
     {
-        return 0;
+        return CardType.Attack;
     }
+
     public int GetCardID()
     {
-        return 0;
+        return 1108011;
     }
 }

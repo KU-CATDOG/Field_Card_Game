@@ -7,6 +7,7 @@ public class WarlockSoulBead : IPlayerCard
     private int range = 1;
     private int damage = 10;
     private bool interrupted;
+    public bool Disposable { get; set; }
     public int GetRange()
     {
         return range;

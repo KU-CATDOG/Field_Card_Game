@@ -8,6 +8,7 @@ public class WarlockSnatch : IPlayerCard
     private int damage = 15;
     private int healAmount = 20;
     private bool interrupted;
+    public bool Disposable { get; set; }
     public int GetRange()
     {
         return range;

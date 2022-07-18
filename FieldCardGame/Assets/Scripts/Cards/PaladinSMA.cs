@@ -6,7 +6,8 @@ public class PaladinSMA : IPlayerCard
 {
     private int range = 0;
     private bool interrupted;
-    
+    public bool Disposable { get; set; }
+
     public int GetRange()
     {
         //return range;

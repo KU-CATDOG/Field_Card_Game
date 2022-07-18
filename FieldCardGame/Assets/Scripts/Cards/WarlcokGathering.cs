@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class WarlockGathering : IPlayerCard
 {
+    public bool Disposable { get; set; }
     private int range = 0;
     private int amount = 5;
     private bool interrupted;

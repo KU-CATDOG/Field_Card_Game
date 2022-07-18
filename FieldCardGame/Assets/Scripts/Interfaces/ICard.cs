@@ -4,6 +4,7 @@ using UnityEngine;
 
 public interface ICard
 {
+    public bool Disposable { get; set; }
     public int GetCardID();
     public int GetRange();
     public void SetRange(int _range);
