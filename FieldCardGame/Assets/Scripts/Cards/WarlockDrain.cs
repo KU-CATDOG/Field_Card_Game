@@ -8,6 +8,7 @@ public class WarlockDrain : IPlayerCard
     private int damage = 10;
     private int healAmount = 10;
     private bool interrupted;
+    public bool Disposable { get; set; }
     public int GetRange()
     {
         return range;

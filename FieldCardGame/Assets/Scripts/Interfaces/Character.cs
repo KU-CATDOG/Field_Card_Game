@@ -209,48 +209,6 @@ public abstract class Character : MonoBehaviour
         yield break;
     }
     /// <summary>
-    /// drop from deck
-    /// </summary>
-    /// <param name="idx"></param>
-    /// <returns></returns>
-    public IEnumerator DropCard(ICard card)
-    {
-        DrawInterrupted = false;
-        //need animation for player
-        for (int i = DropCardTry.Count - 1; !DropInterrupted && !IsDie && i >= 0; i--)
-        {
-            IEnumerator routine = DropCardTry[i];
-            while (NeedWait != 0) yield return null;
-            if (!routine.MoveNext())
-            {
-                DropCardTry.RemoveAt(i);
-            }
-        }
-        if (DropInterrupted || IsDie)
-        {
-            DrawInterrupted = false;
-            yield break;
-        }
-        dropCard = CardPile.Find((x) => x.GetCardID() == card.GetCardID());
-        if (dropCard == null)
-        {
-            Debug.LogError("Wrong DropCard Operation");
-            yield break;
-        }
-        DiscardedPile.Add(dropCard);
-        CardPile.Remove(dropCard);
-        for (int i = DropCardRoutine.Count - 1; !IsDie && i >= 0; i--)
-        {
-            IEnumerator routine = DropCardRoutine[i];
-            while (NeedWait != 0) yield return null;
-            if (!routine.MoveNext())
-            {
-                DropCardRoutine.RemoveAt(i);
-            }
-        }
-        yield break;
-    }
-    /// <summary>
     /// drop from Hand
     /// </summary>
     /// <param name="idx"></param>
@@ -293,6 +251,7 @@ public abstract class Character : MonoBehaviour
     }
     public IEnumerator CardUse(Coordinate target, int idx)
     {
+        bool disposable = HandCard[idx].Disposable;
         CardUseInterrupted = false;
         usedCard = HandCard[idx];
         yield return StartCoroutine(PayCost(usedCard.GetCost(), usedCard.GetCostType()));
@@ -320,7 +279,10 @@ public abstract class Character : MonoBehaviour
                 CardUseRoutine.RemoveAt(i);
             }
         }
-        yield return StartCoroutine(DropCard(idx));
+        if (!disposable)
+            yield return StartCoroutine(DropCard(idx));
+        else
+            yield return StartCoroutine(RemoveCard(idx));
     }
     public IEnumerator AddCard(ICard toAdd)
     {
@@ -350,6 +312,43 @@ public abstract class Character : MonoBehaviour
             if (!routine.MoveNext())
             {
                 AddCardRoutine.RemoveAt(i);
+            }
+        }
+    }
+
+    public IEnumerator RemoveCard(int idx)
+    {
+        RemoveCardInterrupted = false;
+        //need Animation for Player
+        for (int i = RemoveCardTry.Count - 1; !RemoveCardInterrupted && !IsDie && i >= 0; i--)
+        {
+            IEnumerator routine = RemoveCardTry[i];
+            while (NeedWait != 0) yield return null;
+
+            if (!routine.MoveNext())
+            {
+                RemoveCardTry.RemoveAt(i);
+            }
+        }
+        if (RemoveCardInterrupted || IsDie)
+        {
+            RemoveCardInterrupted = false;
+            yield break;
+        }
+        removedCard = HandCard[idx];
+        HandCard.RemoveAt(idx);
+        if (this is Player)
+        {
+            PlayerUIManager.Instance.DropCard(PlayerUIManager.Instance.CardImages[idx]);
+        }
+
+        for (int i = RemoveCardRoutine.Count - 1; !IsDie && i >= 0; i--)
+        {
+            IEnumerator routine = RemoveCardRoutine[i];
+            while (NeedWait != 0) yield return null;
+            if (!routine.MoveNext())
+            {
+                RemoveCardRoutine.RemoveAt(i);
             }
         }
     }

@@ -130,6 +130,34 @@ public class GameManager : MonoBehaviour
         cardDict.Add(card.GetCardID(), card);
         cardObjectDict.Add(card.GetCardID(), cardObjectList[10]);
 
+        card = new PaladinRevelation1();
+        cardDict.Add(card.GetCardID(), card);
+        cardObjectDict.Add(card.GetCardID(), cardObjectList[11]);
+
+        card = new PaladinRevelation2();
+        cardDict.Add(card.GetCardID(), card);
+        cardObjectDict.Add(card.GetCardID(), cardObjectList[12]);
+
+        card = new PaladinRevelation3();
+        cardDict.Add(card.GetCardID(), card);
+        cardObjectDict.Add(card.GetCardID(), cardObjectList[13]);
+
+        card = new PaladinRevelation4();
+        cardDict.Add(card.GetCardID(), card);
+        cardObjectDict.Add(card.GetCardID(), cardObjectList[14]);
+
+        card = new PaladinRevelation5();
+        cardDict.Add(card.GetCardID(), card);
+        cardObjectDict.Add(card.GetCardID(), cardObjectList[15]);
+
+        card = new PaladinRevelation6();
+        cardDict.Add(card.GetCardID(), card);
+        cardObjectDict.Add(card.GetCardID(), cardObjectList[16]);
+
+        card = new PaladinRevelation7();
+        cardDict.Add(card.GetCardID(), card);
+        cardObjectDict.Add(card.GetCardID(), cardObjectList[17]);
+
     }
 
     private void Start()

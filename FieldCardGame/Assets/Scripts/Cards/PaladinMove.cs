@@ -6,6 +6,7 @@ public class PaladinMove : IPlayerCard
 {
     private int range = 10;
     private bool interrupted;
+    public bool Disposable { get; set; }
     public int GetRange()
     {
         //return range;

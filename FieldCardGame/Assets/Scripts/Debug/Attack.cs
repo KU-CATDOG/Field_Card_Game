@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Attack : IPlayerCard
 {
+    public bool Disposable { get; set; }
     private bool interrupted;
     int dmg = 5;
     public int GetCardID()

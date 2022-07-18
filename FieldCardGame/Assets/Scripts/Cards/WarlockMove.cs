@@ -6,6 +6,7 @@ public class WarlockMove : IPlayerCard
 {
     private int range = 4;
     private bool interrupted;
+    public bool Disposable { get; set; }
     public int GetRange()
     {
         return range;

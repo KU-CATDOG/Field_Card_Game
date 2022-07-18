@@ -7,6 +7,7 @@ public class PaladinShining : IPlayerCard
     private int range = 3;
     private int damage = 25;
     private bool interrupted;
+    public bool Disposable { get; set; }
     public int GetRange()
     {
         return range;

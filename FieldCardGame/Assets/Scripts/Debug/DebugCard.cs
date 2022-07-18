@@ -5,6 +5,7 @@ using UnityEngine;
 public class DebugCard : IPlayerCard
 {
     private bool interrupted;
+    public bool Disposable { get; set; }
     public Color GetColorOfEffect(Coordinate pos)
     {
         return Color.white;
