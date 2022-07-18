@@ -158,6 +158,10 @@ public class GameManager : MonoBehaviour
         cardDict.Add(card.GetCardID(), card);
         cardObjectDict.Add(card.GetCardID(), cardObjectList[17]);
 
+        card = new PaladinDeliver();
+        cardDict.Add(card.GetCardID(), card);
+        cardObjectDict.Add(card.GetCardID(), cardObjectList[18]);
+
     }
 
     private void Start()

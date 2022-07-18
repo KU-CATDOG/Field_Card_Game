@@ -146,6 +146,10 @@ public class DebugCharacter : Player
     {
         StartCoroutine(AddCard(new PaladinRevelation1()));
     }
+    public void AddPaladinDeliever()
+    {
+        StartCoroutine(AddCard(new PaladinDeliver()));
+    }
     protected override void InitializeDeck()
     {
         CardPile.Add(new PaladinMove());

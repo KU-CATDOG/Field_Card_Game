@@ -7,6 +7,8 @@ public class PaladinRevelation7 : IPlayerCard
     private int range = 3;
     public bool Disposable { get; set; } = true;
 
+    private bool interrupted = false;
+
     public int GetRange()
     {
         return range;
@@ -104,12 +106,15 @@ public class PaladinRevelation7 : IPlayerCard
 
     public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
-        Character targetEnemy;
-
-        targetEnemy = GameManager.Instance.Map[target.X, target.Y].CharacterOnTile;
+        Character targetEnemy = GameManager.Instance.Map[target.X, target.Y].CharacterOnTile;
 
         for (int i = 0; i < 7; i++)
         {
+            if (interrupted)
+            {
+                interrupted = false;
+                yield break;
+            }
             yield return caster.StartCoroutine(caster.HitAttack(targetEnemy, 7));
             yield return new WaitForSeconds(0.05f);
         }
@@ -118,6 +123,12 @@ public class PaladinRevelation7 : IPlayerCard
 
         for (int i = 0; i < 7; i++)
         {
+            if (interrupted)
+            {
+                interrupted = false;
+                yield break;
+            }
+
             yield return caster.StartCoroutine(caster.GiveHeal(caster, 7));
             yield return new WaitForSeconds(0.05f);
         }
@@ -127,6 +138,7 @@ public class PaladinRevelation7 : IPlayerCard
 
     public void CardRoutineInterrupt()
     {
+        interrupted = true;
     }
 
     public int GetCost()
