@@ -69,7 +69,7 @@ public class PaladinSMA : IPlayerCard
             yield break;
         }
         int shieldValue = caster.BuffHandler.BuffDict[BuffType.Shield].Value;
-        caster.BuffHandler.BuffDict[BuffType.Shield].RemoveBuff();
+        caster.BuffHandler.BuffDict[BuffType.Shield].RemoveEffect();
         yield return GameManager.Instance.StartCoroutine(caster.GiveHeal(caster, shieldValue));
     }
     
