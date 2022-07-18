@@ -221,7 +221,7 @@ public class PaladinMove : IPlayerCard
         }
         return null;
     }
-    public List<Coordinate> GetAreaofEffect()
+    public List<Coordinate> GetAreaofEffect(Coordinate relativePos)
     {
         List<Coordinate> ret = new List<Coordinate>();
         ret.Add(new Coordinate(0, 0));

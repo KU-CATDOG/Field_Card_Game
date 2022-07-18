@@ -12,7 +12,7 @@ public interface ICard
     public CardType GetCardType();
     public List<Coordinate> GetAvailableTile(Coordinate pos);
     public bool IsAvailablePosition(Coordinate caster, Coordinate target);
-    public List<Coordinate> GetAreaofEffect();
+    public List<Coordinate> GetAreaofEffect(Coordinate relativePos);
     public IEnumerator CardRoutine(Character caster, Coordinate center);
     public void CardRoutineInterrupt();
 }

@@ -40,6 +40,10 @@ public class Coordinate
         X = x;
         Y = y;
     }
+    public static Coordinate operator*(Coordinate p1, int scalar)
+    {
+        return new Coordinate(p1.X * scalar, p1.Y * scalar);
+    }
     public static int Distance(Coordinate p1, Coordinate p2)
     {
         return Mathf.Abs(p1.X - p2.X) + Mathf.Abs(p1.Y - p2.Y);

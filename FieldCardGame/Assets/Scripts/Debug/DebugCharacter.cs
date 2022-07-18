@@ -138,6 +138,10 @@ public class DebugCharacter : Player
     {
         StartCoroutine(AddCard(new PaladinShining()));
     }
+    public void AddWarlockSoulBeadCard()
+    {
+        StartCoroutine(AddCard(new WarlockSoulBead()));
+    }
     protected override void InitializeDeck()
     {
         CardPile.Add(new PaladinMove());
