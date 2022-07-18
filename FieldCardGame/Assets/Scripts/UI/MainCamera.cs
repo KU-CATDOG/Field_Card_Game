@@ -33,7 +33,7 @@ public class MainCamera : MonoBehaviour
     }
     void Start()
     {
-        posVec = transform.position - GameManager.Instance.CurPlayer.transform.position;
+        posVec = transform.position - GameManager.Instance.CharacterSelected.transform.position;
         posVecMaxThreshold = posVec.magnitude;
         posVecMinThreshold = 3f;
         //useModePos = posVec + Vector3.up * 4;

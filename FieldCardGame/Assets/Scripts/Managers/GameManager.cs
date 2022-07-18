@@ -5,7 +5,22 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     private Dictionary<int, ICard> cardDict = new Dictionary<int, ICard>();
-    public bool GameOver { get; set; }
+    private bool gameOver;
+    public bool GameOver
+    {
+        get
+        {
+            return gameOver;
+        }
+        set
+        {
+            if (value)
+            {
+                StartCoroutine(GameOverRoutine());
+            }
+            gameOver = true;
+        }
+    }
     public IReadOnlyDictionary<int, ICard> CardDict
     {
         get
@@ -21,6 +36,19 @@ public class GameManager : MonoBehaviour
             return cardObjectDict;
         }
     }
+    public bool DEBUGMOD;
+    [SerializeField]
+    private GameObject gameOverPanel;
+    [SerializeField]
+    private Loading loadingPanel;
+    public Loading LoadingPanel
+    {
+        get
+        {
+            return loadingPanel;
+        }
+    }
+    public Character CharacterSelected { get; set; }
     [SerializeField]
     private List<Enemy> enemyDict;
     public IReadOnlyList<Enemy> EnemyDict
@@ -38,7 +66,6 @@ public class GameManager : MonoBehaviour
     public const int MAPSIZE = 128;
     [SerializeField]
     private List<CardObject> cardObjectList;
-    [SerializeField]
     private GameObject MapObject;
     [SerializeField]
     private Tile tilePrefab;
@@ -54,6 +81,7 @@ public class GameManager : MonoBehaviour
             Destroy(this);
         }
         InitializeDictionary();
+        DontDestroyOnLoad(gameObject);
     }
     private void InitializeDictionary()
     {
@@ -89,28 +117,35 @@ public class GameManager : MonoBehaviour
         card = new PaladinSMA();
         cardDict.Add(card.GetCardID(), card);
         cardObjectDict.Add(card.GetCardID(), cardObjectList[7]);
-        
+
         card = new PaladinProtect();
         cardDict.Add(card.GetCardID(), card);
         cardObjectDict.Add(card.GetCardID(), cardObjectList[8]);
-        
+
     }
 
     private void Start()
     {
         //fixme
-        GameManager.Instance.CurPlayer = GameManager.Instance.Allies[0];
-        GenerateMap();
+        if (DEBUGMOD)
+        {
+            GameManager.Instance.CharacterSelected = GameManager.Instance.Allies[0];
+            GenerateMap();
+        }
         //fixme
     }
-
+    private IEnumerator GameOverRoutine()
+    { 
+        yield return StartCoroutine(LoadingPanel.StartLoad());
+        gameOverPanel.SetActive(true);
+    }
     public Tile GetTilePrefab()
     {
         return tilePrefab;
     }
-    private void GenerateMap()
+    public void GenerateMap()
     {
-        //fixme
+        MapObject = GameObject.Find("Map");
         for (int i = 0; i < MAPSIZE; i++)
         {
             for (int j = 0; j < MAPSIZE; j++)
@@ -122,8 +157,12 @@ public class GameManager : MonoBehaviour
             }
         }
         //fixme
-        CurPlayer.position = new Coordinate(10, 10);
-        Map[10, 10].CharacterOnTile = CurPlayer;
-        CurPlayer.SightUpdate(CurPlayer.Sight);
+        CharacterSelected.gameObject.SetActive(true);
+        CharacterSelected.position = new Coordinate(10, 10);
+        Map[10, 10].CharacterOnTile = CharacterSelected;
+        CharacterSelected.SightUpdate(CharacterSelected.Sight);
+        Character enemy = Instantiate(EnemyDict[0]);
+        enemy.position = new Coordinate(15, 15);
+        StartCoroutine(TurnManager.Instance.TurnRoutine());
     }
 }
