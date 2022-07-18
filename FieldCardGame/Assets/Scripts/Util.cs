@@ -44,6 +44,10 @@ public class Coordinate
     {
         return new Coordinate(p1.X * scalar, p1.Y * scalar);
     }
+    public static float EuclideanDist(Coordinate p1, Coordinate p2)
+    {
+        return Mathf.Sqrt((p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y));
+    }
     public static int Distance(Coordinate p1, Coordinate p2)
     {
         return Mathf.Abs(p1.X - p2.X) + Mathf.Abs(p1.Y - p2.Y);
