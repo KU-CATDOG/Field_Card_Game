@@ -527,11 +527,11 @@ public abstract class Character : MonoBehaviour
                 prevTile.OnCharacterExitRoutine.RemoveAt(i);
             }
         }
-        Vector3 moveVector = new Vector3(target.X - position.X, 0, target.Y - position.Y);
+        Vector3 moveVector = new Vector3(target.X - position.X, 0, target.Y - position.Y).normalized;
         float time = 0f;
         if (GameManager.Instance.Map[position.X, position.Y].Onsight != 0)
         {
-            while (time <= 1f / speed)
+            while (time <= Coordinate.EuclideanDist(target,position) / speed)
             {
                 time += Time.fixedDeltaTime;
                 transform.position += moveVector * Time.fixedDeltaTime * speed;
