@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PaladinShining : IPlayerCard
+public class WarlockSoulBead : IPlayerCard
 {
-    private int range = 3;
-    private int damage = 25;
+    private int range = 0;
+    private int damage = 10;
     private bool interrupted;
     public int GetRange()
     {
@@ -30,47 +30,15 @@ public class PaladinShining : IPlayerCard
     public List<Coordinate> GetAvailableTile(Coordinate pos)
     {
         List<Coordinate> ret = new List<Coordinate>();
-        int level = 1;
-        bool[,] visited = new bool[128, 128];
-        Queue<Coordinate> queue = new Queue<Coordinate>();
-        Queue<Coordinate> nextQueue = new Queue<Coordinate>();
-        queue.Enqueue(pos);
-        while (level++ <= GetRange())
-        {
-            while (queue.Count != 0)
-            {
-                Coordinate tmp = queue.Dequeue();
-                if (tmp.X != pos.X || tmp.Y != pos.Y)
-                    ret.Add(tmp);
-                Coordinate tile;
-                if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                };
-                if ((tile = tmp.GetLeftTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                };
-                if ((tile = tmp.GetRightTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                };
-                if ((tile = tmp.GetUpTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                }
-            }
-            queue = new Queue<Coordinate>(nextQueue);
-            nextQueue.Clear();
-        }
-        while (queue.Count != 0)
-        {
-            ret.Add(queue.Dequeue());
-        }
+        Coordinate tile;
+        if ((tile = pos.GetDownTile()) != null)
+            ret.Add(tile);
+        if ((tile = pos.GetUpTile()) != null)
+            ret.Add(tile);
+        if ((tile = pos.GetLeftTile()) != null)
+            ret.Add(tile);
+        if ((tile = pos.GetRightTile()) != null)
+            ret.Add(tile);
         return ret;
     }
     public Color GetAvailableTileColor()
@@ -80,16 +48,15 @@ public class PaladinShining : IPlayerCard
     public List<Coordinate> GetAreaofEffect(Coordinate relativePos)
     {
         List<Coordinate> ret = new List<Coordinate>();
+        int level = 1;
         Coordinate pos = new Coordinate(0, 0);
         Coordinate tile;
-        tile = pos.GetDownTilewithoutTest();
-        ret.Add(tile);
-        tile = pos.GetLeftTilewithoutTest();
-        ret.Add(tile);
-        tile = pos.GetRightTilewithoutTest();
-        ret.Add(tile);
-        tile = pos.GetUpTilewithoutTest();
-        ret.Add(tile);
+        ret.Add(pos);
+        while (level++ < 3)
+        {
+            tile = pos + relativePos;
+            ret.Add(tile);
+        }
         return ret;
     }
     public Color GetColorOfEffect(Coordinate pos)
@@ -134,17 +101,18 @@ public class PaladinShining : IPlayerCard
                 available.Add(pos);
             }
         }
-        if (available.Count == 0)
+        int enemyCount = available.Count;
+        if (enemyCount == 0)
             yield break;
-        for (int i = 0; i < available.Count - 1; i++)
+        for (int i = 0; i < enemyCount - 1; i++)
         {
             pos = available[i];
             tmp = GameManager.Instance.Map[pos.X, pos.Y].CharacterOnTile;
-            GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
+            GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage() + 5*i));
         }
-        pos = available[available.Count - 1];
+        pos = available[enemyCount - 1];
         tmp = GameManager.Instance.Map[pos.X, pos.Y].CharacterOnTile;
-        yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
+        yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage() + 5 * (enemyCount-1)));
     }
     public void CardRoutineInterrupt()
     {
@@ -152,11 +120,11 @@ public class PaladinShining : IPlayerCard
     }
     public int GetCost()
     {
-        return 3;
+        return 20;
     }
     public CostType GetCostType()
     {
-        return CostType.PaladinEnergy;
+        return CostType.Hp;
     }
     public CardType GetCardType()
     {
@@ -164,6 +132,6 @@ public class PaladinShining : IPlayerCard
     }
     public int GetCardID()
     {
-        return 1103010;
+        return 3106010;
     }
 }

@@ -46,7 +46,7 @@ public class WarlockDrain : IPlayerCard
     {
         return Color.blue;
     }
-    public List<Coordinate> GetAreaofEffect()
+    public List<Coordinate> GetAreaofEffect(Coordinate relativePos)
     {
         List<Coordinate> ret = new List<Coordinate>();
         Coordinate pos = new Coordinate(0, 0);
@@ -84,7 +84,7 @@ public class WarlockDrain : IPlayerCard
         List<Coordinate> available = new List<Coordinate>();
         Character tmp;
         Coordinate pos;
-        attack = GetAreaofEffect();
+        attack = GetAreaofEffect(target - caster.position);
         for (int i = 0; i<attack.Count;i++)
         {
             pos = attack[i] + target;
