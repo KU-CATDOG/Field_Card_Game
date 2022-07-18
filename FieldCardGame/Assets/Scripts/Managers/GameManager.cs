@@ -125,7 +125,11 @@ public class GameManager : MonoBehaviour
         card = new PaladinShining();
         cardDict.Add(card.GetCardID(), card);
         cardObjectDict.Add(card.GetCardID(), cardObjectList[9]);
-        
+
+        card = new WarlockSoulBead();
+        cardDict.Add(card.GetCardID(), card);
+        cardObjectDict.Add(card.GetCardID(), cardObjectList[10]);
+
     }
 
     private void Start()

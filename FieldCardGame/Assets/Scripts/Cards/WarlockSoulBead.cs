@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WarlockSoulBead : IPlayerCard
 {
-    private int range = 0;
+    private int range = 1;
     private int damage = 10;
     private bool interrupted;
     public int GetRange()
@@ -52,9 +52,9 @@ public class WarlockSoulBead : IPlayerCard
         Coordinate pos = new Coordinate(0, 0);
         Coordinate tile;
         ret.Add(pos);
-        while (level++ < 3)
+        while (level < 3)
         {
-            tile = pos + relativePos;
+            tile = pos + relativePos * level++;
             ret.Add(tile);
         }
         return ret;
