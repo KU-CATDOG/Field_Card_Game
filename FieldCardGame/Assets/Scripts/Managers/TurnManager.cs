@@ -36,12 +36,8 @@ public class TurnManager : MonoBehaviour
             Destroy(this);
         }
     }
-    private void Start()
-    {
-        StartCoroutine(TurnRoutine());
-    }
 
-    private IEnumerator TurnRoutine()
+    public IEnumerator TurnRoutine()
     {
         Character curChar;
         while (true)
@@ -52,8 +48,8 @@ public class TurnManager : MonoBehaviour
                 foreach (var j in GameManager.Instance.Allies)
                 {
                     if (j.IsDie) continue;
-                    (GameManager.Instance.CurPlayer as Player).PlayerUI.SetActive(true);
                     GameManager.Instance.CurPlayer = curChar = j;
+                    (GameManager.Instance.CurPlayer as Player).PlayerUI.SetActive(true);
                     yield return StartCoroutine(curChar.AwakeTurn());
                     if (curChar.StartBuffHandler.Count != 0)
                     {
@@ -97,7 +93,7 @@ public class TurnManager : MonoBehaviour
                 ApplyDie();
                 yield return StartCoroutine(TurnEndRoutine(null));
             }
-            else
+            else if(token == 1)
             {
                 foreach (var j in GameManager.Instance.EnemyList)
                 {
@@ -139,6 +135,10 @@ public class TurnManager : MonoBehaviour
                 }
                 ApplyDie();
                 yield return StartCoroutine(TurnEndRoutine(null));
+            }
+            else
+            {
+                break;
             }
         }
     }
@@ -253,6 +253,10 @@ public class TurnManager : MonoBehaviour
     private IEnumerator TurnEndRoutine(Character curChar)
     {
         token = token == 0 ? 1 : 0;
+        if (GameManager.Instance.GameOver)
+        {
+            token = 3;
+        }
         if (curChar != null)
         {
             yield return StartCoroutine(TurnEndBuffRoutine(curChar));
