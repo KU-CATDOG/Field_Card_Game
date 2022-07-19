@@ -13,8 +13,10 @@ public class BuffHandler
 
         Effect strengthen = new Strengthen(caster);
         Effect shield = new Shield(caster);
+        Effect debug = new DebugEffect(caster);
         
         buffDict.Add(BuffType.Strengthen, strengthen);
         buffDict.Add(BuffType.Shield, shield);
+        buffDict.Add(BuffType.Debug, debug);
     }
 }
