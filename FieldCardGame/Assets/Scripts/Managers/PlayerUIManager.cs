@@ -100,8 +100,9 @@ public class PlayerUIManager : MonoBehaviour
         }
         else
         {
-            Destroy(this);
+            Destroy(gameObject);
         }
+        DontDestroyOnLoad(gameObject);
         ExpBarPos = ExpBar.position;
     }
     private void Start()
@@ -422,7 +423,11 @@ public class PlayerUIManager : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.GameOver) return;
+        if (GameManager.Instance.GameOver || GameManager.Instance.GameClear)
+        {
+            Destroy(gameObject);
+            return;
+        }
         int lev = (GameManager.Instance.Allies[0] as Player).Level;
         int exp = (GameManager.Instance.Allies[0] as Player).Exp;
         HpText.text = $"Hp {GameManager.Instance.Allies[0].Hp}/{GameManager.Instance.Allies[0].MaxHp}";

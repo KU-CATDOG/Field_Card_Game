@@ -6,7 +6,18 @@ using TMPro;
 public abstract class Character : MonoBehaviour
 {
     public int MaxHp { get; set; }
-    public int Hp { get; set; }
+    protected int hp;
+    public virtual int Hp
+    {
+        get
+        {
+            return hp;
+        }
+        set
+        {
+            hp = value;
+        }
+    }
     public bool IsDie { get; set; }
     public GameObject HpBar { get; set; }
     private TextMeshProUGUI hpText;
@@ -451,18 +462,6 @@ public abstract class Character : MonoBehaviour
                 Coordinate tmp = queue.Dequeue();
                 GameManager.Instance.Map[tmp.X, tmp.Y].Discovered = discovered;
                 GameManager.Instance.Map[tmp.X, tmp.Y].Onsight += onSight;
-                if (GameManager.Instance.Map[tmp.X, tmp.Y].Onsight == 0)
-                {
-                    if (GameManager.Instance.Map[tmp.X, tmp.Y].CharacterOnTile)
-                    {
-                    }
-                }
-                else
-                {
-                    if (GameManager.Instance.Map[tmp.X, tmp.Y].CharacterOnTile)
-                    {
-                    }
-                }
                 Coordinate tile;
                 if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y])
                 {
@@ -680,6 +679,10 @@ public abstract class Character : MonoBehaviour
         {
             HitInterrupted = false;
             yield break;
+        }
+        if(this is Player)
+        {
+            StartCoroutine(MainCamera.Instance.Shake(0.2f, 0.15f, 0.07f));
         }
         yield return StartCoroutine(target.GetDmg(this, HitDmg));
 

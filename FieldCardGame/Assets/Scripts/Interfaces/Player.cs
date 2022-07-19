@@ -4,6 +4,23 @@ using UnityEngine;
 
 public abstract class Player : Character
 {
+    public override int Hp 
+    { 
+        get => base.Hp;
+        set
+        {
+            if(value < Hp)
+            {
+                GameManager.Instance.StartCoroutine(DmgEffect());
+            }
+            hp = value;
+        }
+    }
+    private IEnumerator DmgEffect()
+    {
+        yield return GameManager.Instance.StartCoroutine(GameManager.Instance.DmgEffect.StartLoad(0.3f, 0.08f));
+        yield return GameManager.Instance.StartCoroutine(GameManager.Instance.DmgEffect.LoadEnd(0.08f));
+    }
     public int Level { get; set; } = 1;
     public int Exp { get; set; }
     public int Gold { get; set; } = 0;
