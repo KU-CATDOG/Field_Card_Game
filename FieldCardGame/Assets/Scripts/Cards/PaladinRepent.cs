@@ -90,7 +90,8 @@ public class PaladinRepent : IPlayerConditionCard
             damage = 15;
         }
         Character enemy = GameManager.Instance.Map[target.X, target.Y].CharacterOnTile;
-        yield return GameManager.Instance.StartCoroutine(caster.HitAttack(enemy, GetDamage()));
+        if(enemy)
+            yield return GameManager.Instance.StartCoroutine(caster.HitAttack(enemy, GetDamage()));
     }
     public void CardRoutineInterrupt()
     {

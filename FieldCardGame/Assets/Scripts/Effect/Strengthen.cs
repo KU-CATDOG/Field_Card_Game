@@ -18,8 +18,10 @@ public class Strengthen : Effect
         {
             Value = value;
             IsEnabled = true;
-            caster.TryHitAttackRoutine.Add(ApplyEffect());
-            caster.TurnEndBuffHandler.Add(RemoveEffect());
+            //fixme
+            caster.AddTryHitAttackRoutine(ApplyEffect(), 0);
+            caster.AddTurnEndBuff(RemoveEffect(), 0);
+            //
         }
     }
     public override IEnumerator ApplyEffect()
