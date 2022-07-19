@@ -160,6 +160,6 @@ public class DebugCharacter : Player
         CardPile.Add(new PaladinMove());
         CardPile.Add(new PaladinMove());
         CardPile.Add(new PaladinMove());
-        CardPile.Add(new PaladinProtect());
+        CardPile.Add(new PaladinJump());
     }
 }
