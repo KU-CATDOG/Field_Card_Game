@@ -73,6 +73,12 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
               continue;
             GameManager.Instance.Map[target.X, target.Y].OriginColor = GameManager.Instance.Map[target.X, target.Y].TileColor.material.color;
             GameManager.Instance.Map[target.X, target.Y].TileColor.material.color = (PlayerUIManager.Instance.UseModeCard as IPlayerCard).GetColorOfEffect(i);
+
+            if (PlayerUIManager.Instance.UseModeCard is IPlayerConditionCard)
+            {
+                if((PlayerUIManager.Instance.UseModeCard as IPlayerConditionCard).isSatisfied(target))
+                    GameManager.Instance.Map[target.X, target.Y].TileColor.material.color = (PlayerUIManager.Instance.UseModeCard as IPlayerConditionCard).SatisfiedAreaColor();
+            }
         }
     }
     public void OnPointerExit(PointerEventData data)
