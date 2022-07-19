@@ -26,9 +26,10 @@ public class GameManager : MonoBehaviour
             {
                 StartCoroutine(GameOverRoutine());
             }
-            gameOver = true;
+            gameOver = value;
         }
     }
+    public bool GameClear { get; set; }
     public IReadOnlyDictionary<int, ICard> CardDict
     {
         get
@@ -47,6 +48,8 @@ public class GameManager : MonoBehaviour
     public bool DEBUGMOD;
     [SerializeField]
     private GameObject gameOverPanel;
+    [SerializeField]
+    private GameObject gameClearPanel;
     [SerializeField]
     private Loading loadingPanel;
     public Loading LoadingPanel
@@ -86,7 +89,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Destroy(this);
+            Destroy(gameObject);
         }
         InitializeDictionary();
         DontDestroyOnLoad(gameObject);
@@ -188,8 +191,28 @@ public class GameManager : MonoBehaviour
     private IEnumerator GameOverRoutine()
     { 
         yield return StartCoroutine(LoadingPanel.StartLoad());
+        Initialize();
+        TurnManager.Instance.Initialize();
         gameOverPanel.SetActive(true);
     }
+    public IEnumerator GameClearRoutine()
+    {
+        yield return StartCoroutine(LoadingPanel.StartLoad());
+        TurnManager.Instance.Initialize();
+        Destroy(CharacterSelected.gameObject);
+        Initialize();
+        gameClearPanel.SetActive(true);
+    }
+
+    public void Initialize()
+    {
+        GameOver = false;
+        GameClear = false;
+        CharacterSelected = null;
+        Allies.Clear();
+        EnemyList.Clear();
+    }
+
     public Tile GetTilePrefab()
     {
         return tilePrefab;
@@ -212,7 +235,7 @@ public class GameManager : MonoBehaviour
         CharacterSelected.position = new Coordinate(10, 10);
         Map[10, 10].CharacterOnTile = CharacterSelected;
         CharacterSelected.SightUpdate(CharacterSelected.Sight);
-        Character enemy = Instantiate(EnemyDict[0]);
+        Character enemy = Instantiate(EnemyDict[1]);
         enemy.position = new Coordinate(15, 15);
         StartCoroutine(TurnManager.Instance.TurnRoutine());
     }

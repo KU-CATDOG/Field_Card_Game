@@ -18,8 +18,8 @@ public abstract class Player : Character
     }
     private IEnumerator DmgEffect()
     {
-        yield return GameManager.Instance.StartCoroutine(GameManager.Instance.DmgEffect.StartLoad(0.3f, 0.04f));
-        yield return GameManager.Instance.StartCoroutine(GameManager.Instance.DmgEffect.LoadEnd(0.04f));
+        yield return GameManager.Instance.StartCoroutine(GameManager.Instance.DmgEffect.StartLoad(0.3f, 0.08f));
+        yield return GameManager.Instance.StartCoroutine(GameManager.Instance.DmgEffect.LoadEnd(0.08f));
     }
     public int Level { get; set; } = 1;
     public int Exp { get; set; }

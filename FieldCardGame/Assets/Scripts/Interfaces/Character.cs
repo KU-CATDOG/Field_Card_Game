@@ -680,6 +680,10 @@ public abstract class Character : MonoBehaviour
             HitInterrupted = false;
             yield break;
         }
+        if(this is Player)
+        {
+            StartCoroutine(MainCamera.Instance.Shake(0.2f, 0.15f, 0.07f));
+        }
         yield return StartCoroutine(target.GetDmg(this, HitDmg));
 
         for (int i = HitAttackRoutine.Count - 1; !IsDie && i >= 0; i--)

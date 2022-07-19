@@ -25,6 +25,17 @@ public class TurnManager : MonoBehaviour
     public List<IEnumerator> TurnStartRoutine { get; set; } = new List<IEnumerator>();
 
     public bool GameEnd { get; set; } = false;
+    public void Initialize()
+    {
+        DieAllyList.Clear();
+        DieEnemyList.Clear();
+        token = 0;
+        NeedWait = false;
+        IsPlayerTurn = true;
+        TurnEnd = false;
+        TurnStartRoutine.Clear();
+        GameEnd = false;
+    }
     private void Awake()
     {
         if (Instance == null)
@@ -33,8 +44,9 @@ public class TurnManager : MonoBehaviour
         }
         else
         {
-            Destroy(this);
+            Destroy(gameObject);
         }
+        DontDestroyOnLoad(gameObject);
     }
 
     public IEnumerator TurnRoutine()

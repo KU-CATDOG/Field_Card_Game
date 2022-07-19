@@ -9,7 +9,6 @@ public class Loading : MonoBehaviour
     void Start()
     {
         img = GetComponent<Image>();
-        DontDestroyOnLoad(gameObject.transform.parent);
     }
     public IEnumerator StartLoad(float margin = 1f, float speed = 0.02f)
     {

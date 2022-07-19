@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 public class MainCamera : MonoBehaviour
 {
+    private bool onShake;
     public static MainCamera Instance { get; private set; }
     public bool CameraLock { get; set; } = true;
     public bool HardLock { get; set; } = true;
@@ -42,6 +43,7 @@ public class MainCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (onShake) return;
         if (TurnManager.Instance.IsPlayerTurn)
         {
 
@@ -117,49 +119,75 @@ public class MainCamera : MonoBehaviour
         }
     }
 
-    /*
-    public IEnumerator moveCamera(bool useMode)
+    public IEnumerator Shake(float _amount, float _duration, float tick)
     {
-        OnMoving = true;
-        float timeLimit = 0.2f;
-        float time = 0f;
-        float threshold = 0.1f;
-        Vector3 moveVec;
-        Vector3 target;
-        if (useMode)
+        Vector3 originPos = transform.position;
+        onShake = true;
+        float timer = 0;
+        while (timer <= _duration)
         {
-            target = useModePos + GameManager.Instance.Player.transform.position;
-            moveVec = useModePos - posVec;
-            moveVec /= timeLimit;
-         
-            yield return new WaitUntil(() =>
+            Vector3 targetMov = new Vector3(Random.Range(0f,1f), Random.Range(0f,1f), Random.Range(0f,1f)).normalized * _amount;
+            float tickTimer = 0f;
+            while(tickTimer <= tick/2)
             {
-                time += Time.deltaTime;
-                transform.position += moveVec * Time.deltaTime;
-                transform.LookAt(GameManager.Instance.Player.transform.position);
-                return time > timeLimit || Vector3.Distance(transform.position,  target) < threshold;
-            });
-            transform.position = GameManager.Instance.Player.transform.position + useModePos;
-            transform.LookAt(GameManager.Instance.Player.transform.position);
+                transform.position += targetMov * Time.fixedDeltaTime / tick * 2;
+                tickTimer += Time.fixedDeltaTime;
+                yield return new WaitForFixedUpdate();
+            }
+            while (tickTimer <= tick)
+            {
+                transform.position -= targetMov * Time.fixedDeltaTime / tick * 2;
+                tickTimer += Time.fixedDeltaTime;
+                yield return new WaitForFixedUpdate();
+            }
+            transform.position = originPos;
+            timer += tick;
         }
-        else
+        onShake = false;
+    }
+        /*
+        public IEnumerator moveCamera(bool useMode)
         {
-            target = posVec + GameManager.Instance.Player.transform.position;
-            moveVec = posVec - useModePos;
-            moveVec /= timeLimit;
-            yield return new WaitUntil(() =>
+            OnMoving = true;
+            float timeLimit = 0.2f;
+            float time = 0f;
+            float threshold = 0.1f;
+            Vector3 moveVec;
+            Vector3 target;
+            if (useMode)
             {
-                time += Time.deltaTime;
-                transform.position += moveVec * Time.deltaTime;
-                transform.LookAt(GameManager.Instance.Player.transform.position);
-                return time > timeLimit || Vector3.Distance(transform.position, target) < threshold;
-            });
-            Debug.Log(transform.position);
-            Debug.Log(GameManager.Instance.Player.transform.position + posVec);
-            transform.position = GameManager.Instance.Player.transform.position + posVec;
-            transform.LookAt(GameManager.Instance.Player.transform.position);
-        }
-        OnMoving = false;
-    }*/
+                target = useModePos + GameManager.Instance.Player.transform.position;
+                moveVec = useModePos - posVec;
+                moveVec /= timeLimit;
 
-}
+                yield return new WaitUntil(() =>
+                {
+                    time += Time.deltaTime;
+                    transform.position += moveVec * Time.deltaTime;
+                    transform.LookAt(GameManager.Instance.Player.transform.position);
+                    return time > timeLimit || Vector3.Distance(transform.position,  target) < threshold;
+                });
+                transform.position = GameManager.Instance.Player.transform.position + useModePos;
+                transform.LookAt(GameManager.Instance.Player.transform.position);
+            }
+            else
+            {
+                target = posVec + GameManager.Instance.Player.transform.position;
+                moveVec = posVec - useModePos;
+                moveVec /= timeLimit;
+                yield return new WaitUntil(() =>
+                {
+                    time += Time.deltaTime;
+                    transform.position += moveVec * Time.deltaTime;
+                    transform.LookAt(GameManager.Instance.Player.transform.position);
+                    return time > timeLimit || Vector3.Distance(transform.position, target) < threshold;
+                });
+                Debug.Log(transform.position);
+                Debug.Log(GameManager.Instance.Player.transform.position + posVec);
+                transform.position = GameManager.Instance.Player.transform.position + posVec;
+                transform.LookAt(GameManager.Instance.Player.transform.position);
+            }
+            OnMoving = false;
+        }*/
+
+    }

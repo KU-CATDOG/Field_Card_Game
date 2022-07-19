@@ -987,7 +987,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1163621292}
         m_TargetAssemblyTypeName: DebugCharacter, Assembly-CSharp
-        m_MethodName: AddPaladinDeliever
+        m_MethodName: AddDebugJump
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5964,6 +5964,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6598237354727999962, guid: 3edbc0b4980a2ae4a939b53cef258fe8, type: 3}
+      propertyPath: DEBUGMOD
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6598237354727999962, guid: 3edbc0b4980a2ae4a939b53cef258fe8, type: 3}
       propertyPath: MapObject
       value: 
       objectReference: {fileID: 799070865}
@@ -5985,7 +5989,7 @@ PrefabInstance:
       objectReference: {fileID: 272578123582767711, guid: 6bf6862004037344691795cfac4b6b6a, type: 3}
     - target: {fileID: 6598237354727999962, guid: 3edbc0b4980a2ae4a939b53cef258fe8, type: 3}
       propertyPath: cardObjectList.Array.size
-      value: 19
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 6598237354727999962, guid: 3edbc0b4980a2ae4a939b53cef258fe8, type: 3}
       propertyPath: cardObjectList.Array.data[0]
@@ -6061,6 +6065,10 @@ PrefabInstance:
       objectReference: {fileID: -2726015609422013599, guid: 0bab12dc7cab847cbb72cc22f19a2027, type: 3}
     - target: {fileID: 6598237354727999962, guid: 3edbc0b4980a2ae4a939b53cef258fe8, type: 3}
       propertyPath: cardObjectList.Array.data[18]
+      value: 
+      objectReference: {fileID: -2726015609422013599, guid: 0bab12dc7cab847cbb72cc22f19a2027, type: 3}
+    - target: {fileID: 6598237354727999962, guid: 3edbc0b4980a2ae4a939b53cef258fe8, type: 3}
+      propertyPath: cardObjectList.Array.data[19]
       value: 
       objectReference: {fileID: -2726015609422013599, guid: 0bab12dc7cab847cbb72cc22f19a2027, type: 3}
     - target: {fileID: 6598237354727999963, guid: 3edbc0b4980a2ae4a939b53cef258fe8, type: 3}
