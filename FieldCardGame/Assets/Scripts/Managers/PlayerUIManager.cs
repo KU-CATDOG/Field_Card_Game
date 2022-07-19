@@ -426,6 +426,7 @@ public class PlayerUIManager : MonoBehaviour
         if (GameManager.Instance.GameOver || GameManager.Instance.GameClear)
         {
             Destroy(gameObject);
+            return;
         }
         int lev = (GameManager.Instance.Allies[0] as Player).Level;
         int exp = (GameManager.Instance.Allies[0] as Player).Exp;
