@@ -16,7 +16,7 @@ public enum BuffType
 }
 public enum DebuffType
 {
-
+    
 }
 public enum CostType
 {
@@ -24,6 +24,7 @@ public enum CostType
     MageFire,
     MageWater,
     Hp,
+    MonsterCrystal,
 }
 public enum CardType
 {

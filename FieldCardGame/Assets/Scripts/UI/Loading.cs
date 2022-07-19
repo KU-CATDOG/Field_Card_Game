@@ -11,22 +11,22 @@ public class Loading : MonoBehaviour
         img = GetComponent<Image>();
         DontDestroyOnLoad(gameObject.transform.parent);
     }
-    public IEnumerator StartLoad()
+    public IEnumerator StartLoad(float margin = 1f, float speed = 0.02f)
     {
-        while(img.color.a + speed <= 1)
+        while(img.color.a + speed <= margin)
         {
             img.color = img.color + new Color(0, 0, 0, speed);
             yield return null;
         }
-        img.color = new Color(0, 0, 0, 1);
+        img.color = new Color(img.color.r, img.color.g, img.color.b, margin);
     }
-    public IEnumerator LoadEnd()
+    public IEnumerator LoadEnd(float speed = 0.02f)
     {
         while (img.color.a - speed >= 0)
         {
             img.color = img.color - new Color(0, 0, 0, speed);
             yield return null;
         }
-        img.color = new Color(0, 0, 0, 0);
+        img.color = new Color(img.color.r, img.color.g, img.color.b, 0);
     }
 }

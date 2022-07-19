@@ -5,6 +5,14 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     private Dictionary<int, ICard> cardDict = new Dictionary<int, ICard>();
+    [SerializeField]
+    private Loading dmgEffect;
+    public Loading DmgEffect
+    {
+        get => dmgEffect;
+        set => dmgEffect = value;
+    }
+
     private bool gameOver;
     public bool GameOver
     {
