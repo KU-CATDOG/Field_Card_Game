@@ -169,6 +169,10 @@ public class GameManager : MonoBehaviour
         card = new PaladinJump();
         cardDict.Add(card.GetCardID(), card);
         cardObjectDict.Add(card.GetCardID(), cardObjectList[20]);
+
+        card = new PaladinRepent();
+        cardDict.Add(card.GetCardID(), card);
+        cardObjectDict.Add(card.GetCardID(), cardObjectList[21]);
     }
 
     private void Start()
