@@ -22,6 +22,8 @@ public class TurnManager : MonoBehaviour
     public bool NeedWait { get; set; }
     public bool IsPlayerTurn { get; set; } = true;
     public bool TurnEnd { get; set; } = false;
+    public int PlayerIdx { get; set; }
+    public int EnemyIdx { get; set; }
     private List<BuffRoutine> turnStartRoutine = new();
     public IReadOnlyList<BuffRoutine> TurnStartRoutine
     {
@@ -73,8 +75,9 @@ public class TurnManager : MonoBehaviour
             yield return StartCoroutine(TurnAwakeRoutine());
             if (token == 0)
             {
-                foreach (var j in GameManager.Instance.Allies)
+                for(PlayerIdx = 0; PlayerIdx < GameManager.Instance.Allies.Count; PlayerIdx++)
                 {
+                    var j = GameManager.Instance.Allies[PlayerIdx];
                     if (j.IsDie) continue;
                     GameManager.Instance.CurPlayer = curChar = j;
                     (GameManager.Instance.CurPlayer as Player).PlayerUI.SetActive(true);
@@ -123,8 +126,9 @@ public class TurnManager : MonoBehaviour
             }
             else if (token == 1)
             {
-                foreach (var j in GameManager.Instance.EnemyList)
+                for (EnemyIdx = 0; EnemyIdx < GameManager.Instance.EnemyList.Count; EnemyIdx++)
                 {
+                    var j = GameManager.Instance.EnemyList[EnemyIdx];
                     curChar = j;
                     if (j.IsDie) continue;
                     yield return StartCoroutine(curChar.AwakeTurn());
@@ -280,12 +284,11 @@ public class TurnManager : MonoBehaviour
     }
     private IEnumerator TurnEndRoutine(Character curChar)
     {
-        token = token == 0 ? 1 : 0;
         if (GameManager.Instance.GameOver)
         {
             token = 3;
         }
-        if (curChar != null)
+        else if (curChar != null)
         {
             yield return StartCoroutine(TurnEndBuffRoutine(curChar));
             yield return StartCoroutine(TurnEndDebuffRoutine(curChar));
@@ -293,6 +296,10 @@ public class TurnManager : MonoBehaviour
             {
                 yield return StartCoroutine(curChar.DropCard(i));
             }
+        }
+        else
+        {
+            token = token == 0 ? 1 : 0;
         }
     }
 }
