@@ -13,6 +13,7 @@ public enum BuffType
 {
     Strengthen,
     Shield,
+    Will,
     Debug,
 }
 public enum DebuffType
