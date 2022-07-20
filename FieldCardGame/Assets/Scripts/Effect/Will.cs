@@ -8,20 +8,35 @@ public class Will : Effect
     {
         this.caster = caster;
     }
+
+    private bool token = false;
     public override void SetEffect(int value)
     {
-        if (!caster.BuffHandler.BuffDict[BuffType.Shield].IsEnabled)
+        if (IsEnabled)
             return;
 
+        IsEnabled = true;
+        token = true;
+
+        // 우선순위 Shield 보다 높게 줘야함
         caster.TurnEndBuffHandler.Add(ApplyEffect());
         caster.StartBuffHandler.Add(ApplyEffect());
     }
     public override IEnumerator ApplyEffect()
     {
-        Value = caster.BuffHandler.BuffDict[BuffType.Shield].Value;
-        yield return null;
-        caster.BuffHandler.BuffDict[BuffType.Shield].SetEffect(Value);
-        Value = 0;
+        if (token)
+        {
+            Value = caster.BuffHandler.BuffDict[BuffType.Shield].Value;
+            Debug.Log(Value);
+            token = false;
+        }
+        else
+        {
+            caster.BuffHandler.BuffDict[BuffType.Shield].SetEffect(Value);
+            Debug.Log(Value);
+            Value = 0;
+            IsEnabled = false;
+        }
         yield return null;
     }
 }
