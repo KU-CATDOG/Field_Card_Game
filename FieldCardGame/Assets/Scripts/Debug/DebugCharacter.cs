@@ -102,6 +102,14 @@ public class DebugCharacter : Player
         }
     }
 
+    public void DebugGetDebuffList()
+    {
+        foreach(var debuff in this.DebuffHandler.GetEnabledDebuff())
+        {
+            Debug.Log(debuff);
+        }
+    }
+
     public void DebugGetShield()
     {
         this.BuffHandler.BuffDict[BuffType.Shield].SetEffect(15);
