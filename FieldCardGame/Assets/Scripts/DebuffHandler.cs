@@ -13,7 +13,7 @@ public class DebuffHandler
     }
 
     // For Debug
-    public IReadOnlyList<DebuffType> GetEnabledBuff()
+    public IReadOnlyList<DebuffType> GetEnabledDebuff()
     {
         List<DebuffType> tmp = new List<DebuffType>();
         foreach(var debuff in DebuffDict)
