@@ -99,9 +99,9 @@ public class DebugCharacter : Player
         this.BuffHandler.BuffDict[BuffType.Shield].SetEffect(15);
     }
 
-    public void DebugGetDebugEffect()
+    public void DebugGetWill()
     {
-        this.BuffHandler.BuffDict[BuffType.Debug].SetEffect(1);
+        this.BuffHandler.BuffDict[BuffType.Will].SetEffect(1);
     }
 
     public void DebugAddCard()
