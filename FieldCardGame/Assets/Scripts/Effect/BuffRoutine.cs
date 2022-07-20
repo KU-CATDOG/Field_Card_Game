@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuffRoutine : IComparer
+public class BuffRoutine : System.IComparable
 {
     public int Priority { get; set; }
     public IEnumerator Routine { get; set; }
@@ -11,9 +11,8 @@ public class BuffRoutine : IComparer
         Priority = priority;
         Routine = routine;
     }
-    public int Compare(object a, object b)
+    public int CompareTo(object a)
     {
-        return (a as BuffRoutine).Priority - (b as BuffRoutine).Priority;
+        return Priority - (a as BuffRoutine).Priority;
     }
-
 }
