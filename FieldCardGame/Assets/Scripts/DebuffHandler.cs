@@ -11,4 +11,16 @@ public class DebuffHandler
     {
         this.caster = caster;
     }
+
+    // For Debug
+    public IReadOnlyList<DebuffType> GetEnabledBuff()
+    {
+        List<DebuffType> tmp = new List<DebuffType>();
+        foreach(var debuff in DebuffDict)
+        {
+            if (debuff.Value.IsEnabled)
+                tmp.Add(debuff.Key);
+        }
+        return tmp;
+    }
 }

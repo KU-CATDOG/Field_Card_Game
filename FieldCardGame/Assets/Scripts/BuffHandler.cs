@@ -21,4 +21,16 @@ public class BuffHandler
         buffDict.Add(BuffType.Will, will);
         buffDict.Add(BuffType.Debug, debug);
     }
+
+    // For Debug
+    public IReadOnlyList<BuffType> GetEnabledBuff()
+    {
+        List<BuffType> tmp = new List<BuffType>();
+        foreach(var buff in BuffDict)
+        {
+            if (buff.Value.IsEnabled)
+                tmp.Add(buff.Key);
+        }
+        return tmp;
+    }
 }

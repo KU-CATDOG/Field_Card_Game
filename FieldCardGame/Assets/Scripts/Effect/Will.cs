@@ -19,11 +19,14 @@ public class Will : Effect
         token = true;
 
         // 우선순위 Shield 보다 높게 줘야함
-        caster.TurnEndBuffHandler.Add(ApplyEffect());
-        caster.StartBuffHandler.Add(ApplyEffect());
+        caster.AddTurnEndBuff(ApplyEffect(), 1);
+        caster.AddStartBuff(ApplyEffect(), 0);
     }
     public override IEnumerator ApplyEffect()
     {
+        if (!IsEnabled)
+            yield break;
+
         if (token)
         {
             Value = caster.BuffHandler.BuffDict[BuffType.Shield].Value;
@@ -32,7 +35,8 @@ public class Will : Effect
         }
         else
         {
-            caster.BuffHandler.BuffDict[BuffType.Shield].SetEffect(Value);
+            if (Value != 0)
+                caster.BuffHandler.BuffDict[BuffType.Shield].SetEffect(Value);
             Debug.Log(Value);
             Value = 0;
             IsEnabled = false;

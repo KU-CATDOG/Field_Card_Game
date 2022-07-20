@@ -94,6 +94,14 @@ public class DebugCharacter : Player
         StartCoroutine(this.GetDmg(this, 12));
     }
 
+    public void DebugGetBuffList()
+    {
+        foreach(var buff in this.BuffHandler.GetEnabledBuff())
+        {
+            Debug.Log(buff);
+        }
+    }
+
     public void DebugGetShield()
     {
         this.BuffHandler.BuffDict[BuffType.Shield].SetEffect(15);
