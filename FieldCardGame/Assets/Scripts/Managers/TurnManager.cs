@@ -92,6 +92,7 @@ public class TurnManager : MonoBehaviour
                     {
                         yield return StartCoroutine(ForceTurnEndDebuffRoutine(curChar));
                         yield return StartCoroutine(TurnEndRoutine(curChar));
+                        Debug.Log("Turn Skipped");
                         continue;
                     }
                     if (j.IsDie) continue;

@@ -10,6 +10,10 @@ public class DebuffHandler
     public DebuffHandler(Character caster)
     {
         this.caster = caster;
+
+        Effect stun = new Stun(caster);
+
+        debuffDict.Add(DebuffType.Stun, stun);
     }
 
     // For Debug

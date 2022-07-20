@@ -7,18 +7,20 @@ public class Stun : Effect
     public Stun(Character caster)
     {
         this.caster = caster;
+        
+        Effect strengthen = new Strengthen(caster);
     }
     public override void SetEffect(int value)
     {
         if (IsEnabled)
             return;
             
-        Value = value;
         IsEnabled = true;
+        caster.AddForceTurnEndDebuff(ApplyEffect(), 0);
     }
     public override IEnumerator ApplyEffect()
     {
-        if (!IsEnabled)
-            yield break;
+        IsEnabled = false;
+        yield break;
     }
 }

@@ -120,6 +120,11 @@ public class DebugCharacter : Player
         this.BuffHandler.BuffDict[BuffType.Will].SetEffect(1);
     }
 
+    public void DebugGetStun()
+    {
+        this.DebuffHandler.DebuffDict[DebuffType.Stun].SetEffect(1);
+    }
+
     public void DebugAddCard()
     {/*
         if (addedCard is DebugCard)
