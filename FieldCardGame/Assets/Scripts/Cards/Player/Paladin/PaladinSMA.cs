@@ -69,8 +69,8 @@ public class PaladinSMA : IPlayerCard
             interrupted = false;
             yield break;
         }
-        int shieldValue = caster.BuffHandler.BuffDict[BuffType.Shield].Value;
-        caster.BuffHandler.BuffDict[BuffType.Shield].RemoveEffect();
+        int shieldValue = caster.EffectHandler.BuffDict[BuffType.Shield].Value;
+        caster.EffectHandler.BuffDict[BuffType.Shield].RemoveEffect();
         yield return GameManager.Instance.StartCoroutine(caster.GiveHeal(caster, shieldValue));
     }
     

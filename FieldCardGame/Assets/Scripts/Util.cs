@@ -19,6 +19,8 @@ public enum BuffType
 public enum DebuffType
 {
     Stun,
+    Weakness,
+    Poison,
 }
 public enum CostType
 {

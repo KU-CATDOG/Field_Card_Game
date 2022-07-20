@@ -119,7 +119,7 @@ public class PaladinDeliver : IPlayerCard
             yield break;
         }
 
-        caster.BuffHandler.BuffDict[BuffType.Shield].SetEffect(ShieldAmount);
+        caster.EffectHandler.BuffDict[BuffType.Shield].SetEffect(ShieldAmount);
 
         if (interrupted)
         {

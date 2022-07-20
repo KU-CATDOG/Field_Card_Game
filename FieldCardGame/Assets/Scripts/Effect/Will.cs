@@ -29,14 +29,14 @@ public class Will : Effect
 
         if (token)
         {
-            Value = caster.BuffHandler.BuffDict[BuffType.Shield].Value;
+            Value = caster.EffectHandler.BuffDict[BuffType.Shield].Value;
             Debug.Log(Value);
             token = false;
         }
         else
         {
             if (Value != 0)
-                caster.BuffHandler.BuffDict[BuffType.Shield].SetEffect(Value);
+                caster.EffectHandler.BuffDict[BuffType.Shield].SetEffect(Value);
             Debug.Log(Value);
             Value = 0;
             IsEnabled = false;
