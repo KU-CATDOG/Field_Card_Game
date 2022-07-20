@@ -20,7 +20,7 @@ public class Shield : Effect
             IsEnabled = true;
             //fixme
             caster.AddTryGetDmgRoutine(ApplyEffect(), 0);
-            caster.AddTurnEndDebuff(RemoveEffect(), 0);
+            caster.AddStartBuff(RemoveEffect(), 1);
             //fixme
         }
     }

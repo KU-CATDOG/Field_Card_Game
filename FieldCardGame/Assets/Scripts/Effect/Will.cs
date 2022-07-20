@@ -19,7 +19,7 @@ public class Will : Effect
         token = true;
 
         // 우선순위 Shield 보다 높게 줘야함
-        caster.AddTurnEndBuff(ApplyEffect(), 1);
+        caster.AddTurnEndBuff(ApplyEffect(), 0);
         caster.AddStartBuff(ApplyEffect(), 0);
     }
     public override IEnumerator ApplyEffect()
