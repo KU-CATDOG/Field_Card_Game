@@ -74,79 +74,615 @@ public abstract class Character : MonoBehaviour
     public List<DebuffHandler> DebuffList { get; set; } = new List<DebuffHandler>();
     /// 
 
-    public List<IEnumerator> StartBuffHandler { get; private set; } = new List<IEnumerator>();
-    public List<IEnumerator> StartDebuffHandler { get; private set; } = new List<IEnumerator>();
-    public List<IEnumerator> DrawBuffHandler { get; private set; } = new List<IEnumerator>();
-    public List<IEnumerator> DrawDebuffHandler { get; private set; } = new List<IEnumerator>();
-    public List<IEnumerator> TurnEndBuffHandler { get; private set; } = new List<IEnumerator>();
-    public List<IEnumerator> TurnEndDebuffHandler { get; private set; } = new List<IEnumerator>();
-    public List<IEnumerator> ForceTurnEndDebuffHandler { get; private set; } = new List<IEnumerator>();
+    private List<BuffRoutine> startbuffHandler = new();
+    public IReadOnlyList<BuffRoutine> StartBuffHandler
+    {
+        get
+        {
+            return startbuffHandler.AsReadOnly();
+        }
+    }
+    public void AddStartBuff(IEnumerator routine, int priority)
+    {
+        startbuffHandler.Add(new BuffRoutine(routine, priority));
+        startbuffHandler.Sort();
+    }
+    public void RemoveStartBuffByIdx(int idx)
+    {
+        startbuffHandler.RemoveAt(idx);
+    }
+
+    private List<BuffRoutine> startDebuffHandler = new();
+    public IReadOnlyList<BuffRoutine> StartDebuffHandler
+    {
+        get
+        {
+            return startDebuffHandler.AsReadOnly();
+        }
+    }
+    public void AddStartDebuff(IEnumerator routine, int priority)
+    {
+        startDebuffHandler.Add(new BuffRoutine(routine, priority));
+        startDebuffHandler.Sort();
+    }
+    public void RemoveStartDebuffByIdx(int idx)
+    {
+        startDebuffHandler.RemoveAt(idx);
+    }
+
+    private List<BuffRoutine> drawBuffHandler = new();
+    public IReadOnlyList<BuffRoutine> DrawBuffHandler
+    {
+        get
+        {
+            return drawBuffHandler.AsReadOnly();
+        }
+    }
+    public void AddDrawBuff(IEnumerator routine, int priority)
+    {
+        drawBuffHandler.Add(new BuffRoutine(routine, priority));
+        drawBuffHandler.Sort();
+    }
+    public void RemoveDrawBuffByIdx(int idx)
+    {
+        drawBuffHandler.RemoveAt(idx);
+    }
+
+    private List<BuffRoutine> drawDebuffHandler = new();
+    public IReadOnlyList<BuffRoutine> DrawDebuffHandler
+    {
+        get
+        {
+            return drawDebuffHandler.AsReadOnly();
+        }
+    }
+    public void AddDrawDebuff(IEnumerator routine, int priority)
+    {
+        drawDebuffHandler.Add(new BuffRoutine(routine, priority));
+        drawDebuffHandler.Sort();
+    }
+    public void RemoveDrawDebuffByIdx(int idx)
+    {
+        drawDebuffHandler.RemoveAt(idx);
+    }
+
+    private List<BuffRoutine> turnEndBuffHandler = new();
+    public IReadOnlyList<BuffRoutine> TurnEndBuffHandler
+    {
+        get
+        {
+            return turnEndBuffHandler.AsReadOnly();
+        }
+    }
+    public void AddTurnEndBuff(IEnumerator routine, int priority)
+    {
+        turnEndBuffHandler.Add(new BuffRoutine(routine, priority));
+        turnEndBuffHandler.Sort();
+    }
+    public void RemoveTurnEndBuffByIdx(int idx)
+    {
+        turnEndBuffHandler.RemoveAt(idx);
+    }
+
+    private List<BuffRoutine> turnEndDebuffHandler = new();
+    public IReadOnlyList<BuffRoutine> TurnEndDebuffHandler
+    {
+        get
+        {
+            return turnEndDebuffHandler.AsReadOnly();
+        }
+    }
+    public void AddTurnEndDebuff(IEnumerator routine, int priority)
+    {
+        turnEndDebuffHandler.Add(new BuffRoutine(routine, priority));
+        turnEndDebuffHandler.Sort();
+    }
+    public void RemoveTurnEndDebuffByIdx(int idx)
+    {
+        turnEndDebuffHandler.RemoveAt(idx);
+    }
+
+    private List<BuffRoutine> forceTurnEndDebuffHandler = new();
+    public IReadOnlyList<BuffRoutine> ForceTurnEndDebuffHandler
+    {
+        get
+        {
+            return forceTurnEndDebuffHandler.AsReadOnly();
+        }
+    }
+    public void AddForceTurnEndDebuff(IEnumerator routine, int priority)
+    {
+        forceTurnEndDebuffHandler.Add(new BuffRoutine(routine, priority));
+        forceTurnEndDebuffHandler.Sort();
+    }
+    public void RemoveForceTurnEndDebuffByIdx(int idx)
+    {
+        forceTurnEndDebuffHandler.RemoveAt(idx);
+    }
 
 
     public bool MoveInterrupted { get; set; }
-    public List<IEnumerator> TryMoveRoutine { get; private set; } = new List<IEnumerator>();
-    public List<IEnumerator> MoveRoutine { get; private set; } = new List<IEnumerator>();
+
+    private List<BuffRoutine> tryMoveRoutine = new();
+    public IReadOnlyList<BuffRoutine> TryMoveRoutine
+    {
+        get
+        {
+            return tryMoveRoutine.AsReadOnly();
+        }
+    }
+    public void AddTryMoveRoutine(IEnumerator routine, int priority)
+    {
+        tryMoveRoutine.Add(new BuffRoutine(routine, priority));
+        tryMoveRoutine.Sort();
+    }
+    public void RemoveTryMoveRoutineByIdx(int idx)
+    {
+        tryMoveRoutine.RemoveAt(idx);
+    }
+
+    private List<BuffRoutine> moveRoutine = new();
+    public IReadOnlyList<BuffRoutine> MoveRoutine
+    {
+        get
+        {
+            return moveRoutine.AsReadOnly();
+        }
+    }
+    public void AddMoveRoutine(IEnumerator routine, int priority)
+    {
+        moveRoutine.Add(new BuffRoutine(routine, priority));
+        moveRoutine.Sort();
+    }
+    public void RemoveMoveRoutineByIdx(int idx)
+    {
+        moveRoutine.RemoveAt(idx);
+    }
 
     public Character ForceMovedBy { get; set; }
     public bool ForceMoveInterrupted { get; set; }
-    public List<IEnumerator> TryForceMoveRoutine { get; private set; } = new List<IEnumerator>();
-    public List<IEnumerator> ForceMoveRoutine { get; private set; } = new List<IEnumerator>();
 
+
+    private List<BuffRoutine> tryForceMoveRoutine = new();
+    public IReadOnlyList<BuffRoutine> TryForceMoveRoutine
+    {
+        get
+        {
+            return tryForceMoveRoutine.AsReadOnly();
+        }
+    }
+    public void AddTryForceMoveRoutine(IEnumerator routine, int priority)
+    {
+        tryForceMoveRoutine.Add(new BuffRoutine(routine, priority));
+        tryForceMoveRoutine.Sort();
+    }
+    public void RemoveTryForceMoveRoutineByIdx(int idx)
+    {
+        tryForceMoveRoutine.RemoveAt(idx);
+    }
+
+    private List<BuffRoutine> forceMoveRoutine = new();
+    public IReadOnlyList<BuffRoutine> ForceMoveRoutine
+    {
+        get
+        {
+            return forceMoveRoutine.AsReadOnly();
+        }
+    }
+    public void AddForceMoveRoutine(IEnumerator routine, int priority)
+    {
+        forceMoveRoutine.Add(new BuffRoutine(routine, priority));
+        forceMoveRoutine.Sort();
+    }
+    public void RemoveForceMoveRoutineByIdx(int idx)
+    {
+        forceMoveRoutine.RemoveAt(idx);
+    }
 
     public Character HitBy { get; set; }
     public int Dmg { get; set; }
     public bool GetDmgInterrupted { get; set; }
-    public List<IEnumerator> TryGetDmgRoutine { get; private set; } = new List<IEnumerator>();
-    public List<IEnumerator> GetDmgRoutine { get; private set; } = new List<IEnumerator>();
+    private List<BuffRoutine> tryGetDmgRoutine = new();
+    public IReadOnlyList<BuffRoutine> TryGetDmgRoutine
+    {
+        get
+        {
+            return tryGetDmgRoutine.AsReadOnly();
+        }
+    }
+    public void AddTryGetDmgRoutine(IEnumerator routine, int priority)
+    {
+        tryGetDmgRoutine.Add(new BuffRoutine(routine, priority));
+        tryGetDmgRoutine.Sort();
+    }
+    public void RemoveTryGetDmgRoutineByIdx(int idx)
+    {
+        tryGetDmgRoutine.RemoveAt(idx);
+    }
+
+    private List<BuffRoutine> getDmgRoutine = new();
+    public IReadOnlyList<BuffRoutine> GetDmgRoutine
+    {
+        get
+        {
+            return getDmgRoutine.AsReadOnly();
+        }
+    }
+    public void AddGetDmgRoutine(IEnumerator routine, int priority)
+    {
+        getDmgRoutine.Add(new BuffRoutine(routine, priority));
+        getDmgRoutine.Sort();
+    }
+    public void RemoveGetDmgRoutineByIdx(int idx)
+    {
+        getDmgRoutine.RemoveAt(idx);
+    }
 
     public bool HitInterrupted { get; set; }
     public int HitDmg { get; set; }
-    public List<IEnumerator> TryHitAttackRoutine { get; private set; } = new List<IEnumerator>();
-    public List<IEnumerator> HitAttackRoutine { get; private set; } = new List<IEnumerator>();
+
+    private List<BuffRoutine> tryHitAttackRoutine = new();
+    public IReadOnlyList<BuffRoutine> TryHitAttackRoutine
+    {
+        get
+        {
+            return tryHitAttackRoutine.AsReadOnly();
+        }
+    }
+    public void AddTryHitAttackRoutine(IEnumerator routine, int priority)
+    {
+        tryHitAttackRoutine.Add(new BuffRoutine(routine, priority));
+        tryHitAttackRoutine.Sort();
+    }
+    public void RemoveTryHitAttackRoutineByIdx(int idx)
+    {
+        tryHitAttackRoutine.RemoveAt(idx);
+    }
+
+    private List<BuffRoutine> hitAttackRoutine = new();
+    public IReadOnlyList<BuffRoutine> HitAttackRoutine
+    {
+        get
+        {
+            return hitAttackRoutine.AsReadOnly();
+        }
+    }
+    public void AddHitAttackRoutine(IEnumerator routine, int priority)
+    {
+        hitAttackRoutine.Add(new BuffRoutine(routine, priority));
+        hitAttackRoutine.Sort();
+    }
+    public void RemoveHitAttackRoutineByIdx(int idx)
+    {
+        hitAttackRoutine.RemoveAt(idx);
+    }
 
     public Character HealedBy;
     public bool HealInterrupted { get; set; }
     public int HealAmount { get; set; }
-    public List<IEnumerator> TryHealRoutine { get; private set; } = new List<IEnumerator>();
-    public List<IEnumerator> HealRoutine { get; private set; } = new List<IEnumerator>();
+
+    private List<BuffRoutine> tryHealRoutine = new();
+    public IReadOnlyList<BuffRoutine> TryHealRoutine
+    {
+        get
+        {
+            return tryHealRoutine.AsReadOnly();
+        }
+    }
+    public void AddTryHealRoutine(IEnumerator routine, int priority)
+    {
+        tryHealRoutine.Add(new BuffRoutine(routine, priority));
+        tryHealRoutine.Sort();
+    }
+    public void RemoveTryHealRoutineByIdx(int idx)
+    {
+        tryHealRoutine.RemoveAt(idx);
+    }
+
+    private List<BuffRoutine> healRoutine = new();
+    public IReadOnlyList<BuffRoutine> HealRoutine
+    {
+        get
+        {
+            return healRoutine.AsReadOnly();
+        }
+    }
+    public void AddHealRoutine(IEnumerator routine, int priority)
+    {
+        healRoutine.Add(new BuffRoutine(routine, priority));
+        healRoutine.Sort();
+    }
+    public void RemoveHealRoutineByIdx(int idx)
+    {
+        healRoutine.RemoveAt(idx);
+    }
+
 
     public bool GiveHealInterrupted { get; set; }
     public int GiveHealAmount { get; set; }
-    public List<IEnumerator> TryGiveHealRoutine { get; private set; } = new List<IEnumerator>();
-    public List<IEnumerator> GiveHealRoutine { get; private set; } = new List<IEnumerator>();
+    private List<BuffRoutine> tryGiveHealRoutine = new();
+    public IReadOnlyList<BuffRoutine> TryGiveHealRoutine
+    {
+        get
+        {
+            return tryGiveHealRoutine.AsReadOnly();
+        }
+    }
+    public void AddTryGiveHealRoutine(IEnumerator routine, int priority)
+    {
+        tryGiveHealRoutine.Add(new BuffRoutine(routine, priority));
+        tryGiveHealRoutine.Sort();
+    }
+    public void RemoveTryGiveHealRoutineByIdx(int idx)
+    {
+        tryGiveHealRoutine.RemoveAt(idx);
+    }
+
+    private List<BuffRoutine> giveHealRoutine = new();
+    public IReadOnlyList<BuffRoutine> GiveHealRoutine
+    {
+        get
+        {
+            return giveHealRoutine.AsReadOnly();
+        }
+    }
+    public void AddGiveHealRoutine(IEnumerator routine, int priority)
+    {
+        giveHealRoutine.Add(new BuffRoutine(routine, priority));
+        giveHealRoutine.Sort();
+    }
+    public void RemoveGiveHealRoutineByIdx(int idx)
+    {
+        giveHealRoutine.RemoveAt(idx);
+    }
 
     public Character KilledBy { get; set; }
     public bool DieInterrupted { get; set; }
-    public List<IEnumerator> TryDieRoutine { get; private set; } = new List<IEnumerator>();
-    public List<IEnumerator> DieRoutine { get; private set; } = new List<IEnumerator>();
+    private List<BuffRoutine> tryDieRoutine = new();
+    public IReadOnlyList<BuffRoutine> TryDieRoutine
+    {
+        get
+        {
+            return tryDieRoutine.AsReadOnly();
+        }
+    }
+    public void AddTryDieRoutine(IEnumerator routine, int priority)
+    {
+        tryDieRoutine.Add(new BuffRoutine(routine, priority));
+        tryDieRoutine.Sort();
+    }
+    public void RemoveTryDieRoutineByIdx(int idx)
+    {
+        tryDieRoutine.RemoveAt(idx);
+    }
+
+    private List<BuffRoutine> dieRoutineList = new();
+    public IReadOnlyList<BuffRoutine> DieRoutine
+    {
+        get
+        {
+            return dieRoutineList.AsReadOnly();
+        }
+    }
+    public void AddDieRoutine(IEnumerator routine, int priority)
+    {
+        dieRoutineList.Add(new BuffRoutine(routine, priority));
+        dieRoutineList.Sort();
+    }
+    public void RemoveDieRoutineByIdx(int idx)
+    {
+        dieRoutineList.RemoveAt(idx);
+    }
 
     public ICard drawCard { get; set; }
     public bool DrawInterrupted { get; set; }
-    public List<IEnumerator> DrawCardTry { get; private set; } = new List<IEnumerator>();
-    public List<IEnumerator> DrawCardRoutine { get; private set; } = new List<IEnumerator>();
+    private List<BuffRoutine> drawCardTry = new();
+    public IReadOnlyList<BuffRoutine> DrawCardTry
+    {
+        get
+        {
+            return drawCardTry.AsReadOnly();
+        }
+    }
+    public void AddTryDrawRoutine(IEnumerator routine, int priority)
+    {
+        drawCardTry.Add(new BuffRoutine(routine, priority));
+        drawCardTry.Sort();
+    }
+    public void RemoveTryDrawRoutineByIdx(int idx)
+    {
+        drawCardTry.RemoveAt(idx);
+    }
 
+    private List<BuffRoutine> drawCardRoutine = new();
+    public IReadOnlyList<BuffRoutine> DrawCardRoutine
+    {
+        get
+        {
+            return drawCardRoutine.AsReadOnly();
+        }
+    }
+    public void AddDrawCardRoutine(IEnumerator routine, int priority)
+    {
+        drawCardRoutine.Add(new BuffRoutine(routine, priority));
+        drawCardRoutine.Sort();
+    }
+    public void RemoveDrawCardRoutineByIdx(int idx)
+    {
+        drawCardRoutine.RemoveAt(idx);
+    }
 
     public ICard dropCard { get; set; }
     public bool DropInterrupted { get; set; }
-    public List<IEnumerator> DropCardTry { get; private set; } = new List<IEnumerator>();
-    public List<IEnumerator> DropCardRoutine { get; private set; } = new List<IEnumerator>();
-    public List<IEnumerator> PayCostRoutine { get; private set; } = new List<IEnumerator>();
+    private List<BuffRoutine> dropCardTry = new();
+    public IReadOnlyList<BuffRoutine> DropCardTry
+    {
+        get
+        {
+            return dropCardTry.AsReadOnly();
+        }
+    }
+    public void AddTryDropCardRoutine(IEnumerator routine, int priority)
+    {
+        dropCardTry.Add(new BuffRoutine(routine, priority));
+        dropCardTry.Sort();
+    }
+    public void RemoveTryDropCardRoutineByIdx(int idx)
+    {
+        dropCardTry.RemoveAt(idx);
+    }
+
+    private List<BuffRoutine> dropCardRoutine = new();
+    public IReadOnlyList<BuffRoutine> DropCardRoutine
+    {
+        get
+        {
+            return dropCardRoutine.AsReadOnly();
+        }
+    }
+    public void AddDropCardRoutine(IEnumerator routine, int priority)
+    {
+        dropCardRoutine.Add(new BuffRoutine(routine, priority));
+        dropCardRoutine.Sort();
+    }
+    public void RemoveDropCardRoutineByIdx(int idx)
+    {
+        dropCardRoutine.RemoveAt(idx);
+    }
+
+    private List<BuffRoutine> payCostRoutine = new();
+    public IReadOnlyList<BuffRoutine> PayCostRoutine
+    {
+        get
+        {
+            return payCostRoutine.AsReadOnly();
+        }
+    }
+    public void AddPayCostRoutine(IEnumerator routine, int priority)
+    {
+        payCostRoutine.Add(new BuffRoutine(routine, priority));
+        payCostRoutine.Sort();
+    }
+    public void RemovePayCostRoutineByIdx(int idx)
+    {
+        payCostRoutine.RemoveAt(idx);
+    }
 
     public ICard usedCard { get; set; }
     public bool CardUseInterrupted { get; set; }
-    public List<IEnumerator> CardUseTry { get; private set; } = new List<IEnumerator>();
-    public List<IEnumerator> CardUseRoutine { get; private set; } = new List<IEnumerator>();
+    private List<BuffRoutine> cardUseTry = new();
+    public IReadOnlyList<BuffRoutine> CardUseTry
+    {
+        get
+        {
+            return cardUseTry.AsReadOnly();
+        }
+    }
+    public void AddTryCardUseRoutine(IEnumerator routine, int priority)
+    {
+        cardUseTry.Add(new BuffRoutine(routine, priority));
+        cardUseTry.Sort();
+    }
+    public void RemoveTryCardUseRoutineByIdx(int idx)
+    {
+        cardUseTry.RemoveAt(idx);
+    }
 
+    private List<BuffRoutine> cardUseRoutine = new();
+    public IReadOnlyList<BuffRoutine> CardUseRoutine
+    {
+        get
+        {
+            return cardUseRoutine.AsReadOnly();
+        }
+    }
+    public void AddCardUseRoutine(IEnumerator routine, int priority)
+    {
+        cardUseRoutine.Add(new BuffRoutine(routine, priority));
+        cardUseRoutine.Sort();
+    }
+    public void RemoveCardUseRoutineByIdx(int idx)
+    {
+        cardUseRoutine.RemoveAt(idx);
+    }
 
     public ICard addedCard { get; set; }
     public bool AddCardInterrupted { get; set; }
-    public List<IEnumerator> AddCardTry { get; private set; } = new List<IEnumerator>();
-    public List<IEnumerator> AddCardRoutine { get; private set; } = new List<IEnumerator>();
+
+    private List<BuffRoutine> addCardTry = new();
+    public IReadOnlyList<BuffRoutine> AddCardTry
+    {
+        get
+        {
+            return addCardTry.AsReadOnly();
+        }
+    }
+    public void AddTryAddCardRoutine(IEnumerator routine, int priority)
+    {
+        addCardTry.Add(new BuffRoutine(routine, priority));
+        addCardTry.Sort();
+    }
+    public void RemoveTryAddCardRoutineByIdx(int idx)
+    {
+        addCardTry.RemoveAt(idx);
+    }
+
+    private List<BuffRoutine> addCardRoutine = new();
+    public IReadOnlyList<BuffRoutine> AddCardRoutine
+    {
+        get
+        {
+            return addCardRoutine.AsReadOnly();
+        }
+    }
+    public void AddAddCardRoutine(IEnumerator routine, int priority)
+    {
+        addCardRoutine.Add(new BuffRoutine(routine, priority));
+        addCardRoutine.Sort();
+    }
+    public void RemoveAddCardRoutineByIdx(int idx)
+    {
+        addCardRoutine.RemoveAt(idx);
+    }
 
     public ICard removedCard { get; set; }
     public bool RemoveCardInterrupted { get; set; }
-    public List<IEnumerator> RemoveCardTry { get; private set; } = new List<IEnumerator>();
-    public List<IEnumerator> RemoveCardRoutine { get; private set; } = new List<IEnumerator>();
+
+    private List<BuffRoutine> removeCardTry = new();
+    public IReadOnlyList<BuffRoutine> RemoveCardTry
+    {
+        get
+        {
+            return removeCardTry.AsReadOnly();
+        }
+    }
+    public void AddTryRemoveCardRoutine(IEnumerator routine, int priority)
+    {
+        removeCardTry.Add(new BuffRoutine(routine, priority));
+        removeCardTry.Sort();
+    }
+    public void RemoveTryRemoveCardByIdx(int idx)
+    {
+        removeCardTry.RemoveAt(idx);
+    }
+
+    private List<BuffRoutine> removeCardRoutine = new();
+    public IReadOnlyList<BuffRoutine> RemoveCardRoutine
+    {
+        get
+        {
+            return removeCardRoutine.AsReadOnly();
+        }
+    }
+    public void AddRemoveCardRoutine(IEnumerator routine, int priority)
+    {
+        removeCardRoutine.Add(new BuffRoutine(routine, priority));
+        removeCardRoutine.Sort();
+    }
+    public void RemoveRemoveCardRoutineByIdx(int idx)
+    {
+        removeCardRoutine.RemoveAt(idx);
+    }
 
     public IEnumerator ShuffleDeck()
     {
@@ -184,12 +720,12 @@ public abstract class Character : MonoBehaviour
         //need animation for player
         for (int i = DrawCardTry.Count - 1; !DrawInterrupted && !IsDie && i >= 0; i--)
         {
-            IEnumerator routine = DrawCardTry[i];
+            IEnumerator routine = DrawCardTry[i].Routine;
 
             while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
-                DrawCardTry.RemoveAt(i);
+                RemoveTryDrawRoutineByIdx(i);
             }
         }
         if (DrawInterrupted || IsDie)
@@ -210,11 +746,11 @@ public abstract class Character : MonoBehaviour
         }
         for (int i = DrawCardRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
-            IEnumerator routine = DrawCardRoutine[i];
+            IEnumerator routine = DrawCardRoutine[i].Routine;
             while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
-                DrawCardRoutine.RemoveAt(i);
+                RemoveDrawCardRoutineByIdx(i);
             }
         }
         yield break;
@@ -230,11 +766,11 @@ public abstract class Character : MonoBehaviour
         //need animation for player
         for (int i = DropCardTry.Count - 1; !DropInterrupted && !IsDie && i >= 0; i--)
         {
-            IEnumerator routine = DropCardTry[i];
+            IEnumerator routine = DropCardTry[i].Routine;
             while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
-                DropCardTry.RemoveAt(i);
+                RemoveTryDropCardRoutineByIdx(i);
             }
         }
         if (DropInterrupted || IsDie)
@@ -251,11 +787,11 @@ public abstract class Character : MonoBehaviour
         }
         for (int i = DropCardRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
-            IEnumerator routine = DropCardRoutine[i];
+            IEnumerator routine = DropCardRoutine[i].Routine;
             while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
-                DropCardRoutine.RemoveAt(i);
+                RemoveDropCardRoutineByIdx(i);
             }
         }
         yield break;
@@ -268,11 +804,11 @@ public abstract class Character : MonoBehaviour
         yield return StartCoroutine(PayCost(usedCard.GetCost(), usedCard.GetCostType()));
         for (int i = CardUseTry.Count - 1; !CardUseInterrupted && !IsDie && i >= 0; i--)
         {
-            IEnumerator routine = CardUseTry[i];
+            IEnumerator routine = CardUseTry[i].Routine;
             while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
-                CardUseTry.RemoveAt(i);
+                RemoveTryCardUseRoutineByIdx(i);
             }
         }
         if (CardUseInterrupted || IsDie)
@@ -283,11 +819,11 @@ public abstract class Character : MonoBehaviour
         yield return StartCoroutine(usedCard.CardRoutine(this, target));
         for (int i = CardUseRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
-            IEnumerator routine = CardUseRoutine[i];
+            IEnumerator routine = CardUseRoutine[i].Routine;
             while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
-                CardUseRoutine.RemoveAt(i);
+                RemoveCardUseRoutineByIdx(i);
             }
         }
         if (!disposable)
@@ -301,12 +837,12 @@ public abstract class Character : MonoBehaviour
         //need Animation for Player
         for (int i = AddCardTry.Count - 1; !AddCardInterrupted && !IsDie && i >= 0; i--)
         {
-            IEnumerator routine = AddCardTry[i];
+            IEnumerator routine = AddCardTry[i].Routine;
             while (NeedWait != 0) yield return null;
 
             if (!routine.MoveNext())
             {
-                AddCardTry.RemoveAt(i);
+                RemoveTryAddCardRoutineByIdx(i);
             }
         }
         if (AddCardInterrupted || IsDie)
@@ -318,11 +854,11 @@ public abstract class Character : MonoBehaviour
         CardPile.Add(addedCard);
         for (int i = AddCardRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
-            IEnumerator routine = AddCardRoutine[i];
+            IEnumerator routine = AddCardRoutine[i].Routine;
             while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
-                AddCardRoutine.RemoveAt(i);
+                RemoveAddCardRoutineByIdx(i);
             }
         }
     }
@@ -333,12 +869,12 @@ public abstract class Character : MonoBehaviour
         //need Animation for Player
         for (int i = RemoveCardTry.Count - 1; !RemoveCardInterrupted && !IsDie && i >= 0; i--)
         {
-            IEnumerator routine = RemoveCardTry[i];
+            IEnumerator routine = RemoveCardTry[i].Routine;
             while (NeedWait != 0) yield return null;
 
             if (!routine.MoveNext())
             {
-                RemoveCardTry.RemoveAt(i);
+                RemoveTryRemoveCardByIdx(i);
             }
         }
         if (RemoveCardInterrupted || IsDie)
@@ -355,11 +891,11 @@ public abstract class Character : MonoBehaviour
 
         for (int i = RemoveCardRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
-            IEnumerator routine = RemoveCardRoutine[i];
+            IEnumerator routine = RemoveCardRoutine[i].Routine;
             while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
-                RemoveCardRoutine.RemoveAt(i);
+                RemoveRemoveCardRoutineByIdx(i);
             }
         }
     }
@@ -369,12 +905,12 @@ public abstract class Character : MonoBehaviour
         //need Animation for Player
         for (int i = RemoveCardTry.Count - 1; !RemoveCardInterrupted && !IsDie && i >= 0; i--)
         {
-            IEnumerator routine = RemoveCardTry[i];
+            IEnumerator routine = RemoveCardTry[i].Routine;
             while (NeedWait != 0) yield return null;
 
             if (!routine.MoveNext())
             {
-                RemoveCardTry.RemoveAt(i);
+                RemoveTryRemoveCardByIdx(i);
             }
         }
         if (RemoveCardInterrupted || IsDie)
@@ -427,11 +963,11 @@ public abstract class Character : MonoBehaviour
 
         for (int i = RemoveCardRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
-            IEnumerator routine = RemoveCardRoutine[i];
+            IEnumerator routine = RemoveCardRoutine[i].Routine;
             while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
-                RemoveCardRoutine.RemoveAt(i);
+                RemoveRemoveCardRoutineByIdx(i);
             }
         }
     }
@@ -453,7 +989,7 @@ public abstract class Character : MonoBehaviour
         bool[,] visited = new bool[128, 128];
         Queue<Coordinate> queue = new Queue<Coordinate>();
         Queue<Coordinate> nextQueue = new Queue<Coordinate>();
-        if(level>=0)
+        if (level >= 0)
             queue.Enqueue(center);
         while (dist++ <= level)
         {
@@ -506,9 +1042,9 @@ public abstract class Character : MonoBehaviour
         for (int i = TryMoveRoutine.Count - 1; !MoveInterrupted && !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
-            if (!TryMoveRoutine[i].MoveNext())
+            if (!TryMoveRoutine[i].Routine.MoveNext())
             {
-                TryMoveRoutine.RemoveAt(i);
+                RemoveTryMoveRoutineByIdx(i);
             }
         }
         if (MoveInterrupted || IsDie)
@@ -521,16 +1057,16 @@ public abstract class Character : MonoBehaviour
         for (int i = prevTile.OnCharacterExitRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
-            if (!prevTile.OnCharacterExitRoutine[i].MoveNext())
+            if (!prevTile.OnCharacterExitRoutine[i].Routine.MoveNext())
             {
-                prevTile.OnCharacterExitRoutine.RemoveAt(i);
+                prevTile.RemoveOnCharacterExitRoutineByIdx(i);
             }
         }
         Vector3 moveVector = new Vector3(target.X - position.X, 0, target.Y - position.Y).normalized;
         float time = 0f;
         if (GameManager.Instance.Map[position.X, position.Y].Onsight != 0)
         {
-            while (time <= Coordinate.EuclideanDist(target,position) / speed)
+            while (time <= Coordinate.EuclideanDist(target, position) / speed)
             {
                 time += Time.fixedDeltaTime;
                 transform.position += moveVector * Time.fixedDeltaTime * speed;
@@ -545,18 +1081,18 @@ public abstract class Character : MonoBehaviour
         for (int i = targetTile.OnCharacterEnterRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
-            if (!targetTile.OnCharacterEnterRoutine[i].MoveNext())
+            if (!targetTile.OnCharacterEnterRoutine[i].Routine.MoveNext())
             {
-                targetTile.OnCharacterEnterRoutine.RemoveAt(i);
+                targetTile.RemoveOnCharacterEnterRoutineByIdx(i);
             }
         }
 
         for (int i = MoveRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
-            if (!MoveRoutine[i].MoveNext())
+            while (NeedWait != 0) yield return null;
+            if (!MoveRoutine[i].Routine.MoveNext())
             {
-                while (NeedWait != 0) yield return null;
-                MoveRoutine.RemoveAt(i);
+                RemoveMoveRoutineByIdx(i);
             }
         }
     }
@@ -568,9 +1104,9 @@ public abstract class Character : MonoBehaviour
         for (int i = TryForceMoveRoutine.Count - 1; !ForceMoveInterrupted && !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
-            if (!TryForceMoveRoutine[i].MoveNext())
+            if (!TryForceMoveRoutine[i].Routine.MoveNext())
             {
-                TryForceMoveRoutine.RemoveAt(i);
+                RemoveTryForceMoveRoutineByIdx(i);
             }
         }
         if (ForceMoveInterrupted || IsDie)
@@ -584,9 +1120,9 @@ public abstract class Character : MonoBehaviour
         for (int i = prevTile.OnCharacterExitRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
-            if (!prevTile.OnCharacterExitRoutine[i].MoveNext())
+            if (!prevTile.OnCharacterExitRoutine[i].Routine.MoveNext())
             {
-                prevTile.OnCharacterExitRoutine.RemoveAt(i);
+                prevTile.RemoveOnCharacterExitRoutineByIdx(i);
             }
         }
         Vector3 moveVector = new Vector3(target.X - position.X, 0, target.Y - position.Y);
@@ -609,18 +1145,18 @@ public abstract class Character : MonoBehaviour
         for (int i = targetTile.OnCharacterEnterRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
-            if (!targetTile.OnCharacterEnterRoutine[i].MoveNext())
+            if (!targetTile.OnCharacterEnterRoutine[i].Routine.MoveNext())
             {
-                targetTile.OnCharacterEnterRoutine.RemoveAt(i);
+                targetTile.RemoveOnCharacterEnterRoutineByIdx(i);
             }
         }
 
         for (int i = ForceMoveRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
-            if (!ForceMoveRoutine[i].MoveNext())
+            if (!ForceMoveRoutine[i].Routine.MoveNext())
             {
-                ForceMoveRoutine.RemoveAt(i);
+                RemoveForceMoveRoutineByIdx(i);
             }
         }
     }
@@ -635,9 +1171,9 @@ public abstract class Character : MonoBehaviour
             for (int i = TryGetDmgRoutine.Count - 1; !GetDmgInterrupted && !IsDie && i >= 0; i--)
             {
                 while (NeedWait != 0) yield return null;
-                if (!TryGetDmgRoutine[i].MoveNext())
+                if (!TryGetDmgRoutine[i].Routine.MoveNext())
                 {
-                    TryGetDmgRoutine.RemoveAt(i);
+                    RemoveTryGetDmgRoutineByIdx(i);
                 }
             }
         }
@@ -656,9 +1192,9 @@ public abstract class Character : MonoBehaviour
         for (int i = GetDmgRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
-            if (!GetDmgRoutine[i].MoveNext())
+            if (!GetDmgRoutine[i].Routine.MoveNext())
             {
-                GetDmgRoutine.RemoveAt(i);
+                RemoveGetDmgRoutineByIdx(i);
             }
         }
     }
@@ -670,9 +1206,9 @@ public abstract class Character : MonoBehaviour
         for (int i = TryHitAttackRoutine.Count - 1; !HitInterrupted && !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
-            if (!TryHitAttackRoutine[i].MoveNext())
+            if (!TryHitAttackRoutine[i].Routine.MoveNext())
             {
-                TryHitAttackRoutine.RemoveAt(i);
+                RemoveTryHitAttackRoutineByIdx(i);
             }
         }
         if (HitInterrupted || IsDie)
@@ -680,7 +1216,7 @@ public abstract class Character : MonoBehaviour
             HitInterrupted = false;
             yield break;
         }
-        if(this is Player)
+        if (this is Player)
         {
             StartCoroutine(MainCamera.Instance.Shake(0.2f, 0.15f, 0.07f));
         }
@@ -689,9 +1225,9 @@ public abstract class Character : MonoBehaviour
         for (int i = HitAttackRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
-            if (!HitAttackRoutine[i].MoveNext())
+            if (!HitAttackRoutine[i].Routine.MoveNext())
             {
-                HitAttackRoutine.RemoveAt(i);
+                RemoveHitAttackRoutineByIdx(i);
             }
         }
     }
@@ -702,9 +1238,9 @@ public abstract class Character : MonoBehaviour
         for (int i = TryGiveHealRoutine.Count - 1; !GiveHealInterrupted && !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
-            if (!TryGiveHealRoutine[i].MoveNext())
+            if (!TryGiveHealRoutine[i].Routine.MoveNext())
             {
-                TryGiveHealRoutine.RemoveAt(i);
+                RemoveTryGiveHealRoutineByIdx(i);
             }
         }
         if (GiveHealInterrupted || IsDie)
@@ -717,9 +1253,9 @@ public abstract class Character : MonoBehaviour
         for (int i = GiveHealRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
-            if (!GiveHealRoutine[i].MoveNext())
+            if (!GiveHealRoutine[i].Routine.MoveNext())
             {
-                GiveHealRoutine.RemoveAt(i);
+                RemoveGiveHealRoutineByIdx(i);
             }
         }
     }
@@ -731,9 +1267,9 @@ public abstract class Character : MonoBehaviour
         for (int i = TryHealRoutine.Count - 1; !HealInterrupted && !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
-            if (!TryHealRoutine[i].MoveNext())
+            if (!TryHealRoutine[i].Routine.MoveNext())
             {
-                TryHealRoutine.RemoveAt(i);
+                RemoveTryHealRoutineByIdx(i);
             }
         }
         if (HealInterrupted || IsDie)
@@ -748,9 +1284,9 @@ public abstract class Character : MonoBehaviour
         for (int i = HealRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
-            if (!HealRoutine[i].MoveNext())
+            if (!HealRoutine[i].Routine.MoveNext())
             {
-                HealRoutine.RemoveAt(i);
+                RemoveHealRoutineByIdx(i);
             }
         }
     }
@@ -762,9 +1298,9 @@ public abstract class Character : MonoBehaviour
         for (int i = TryDieRoutine.Count - 1; !DieInterrupted && !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
-            if (!TryDieRoutine[i].MoveNext())
+            if (!TryDieRoutine[i].Routine.MoveNext())
             {
-                TryDieRoutine.RemoveAt(i);
+                RemoveTryDieRoutineByIdx(i);
             }
         }
         if (DieInterrupted)
@@ -777,9 +1313,9 @@ public abstract class Character : MonoBehaviour
         for (int i = DieRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
-            if (!DieRoutine[i].MoveNext())
+            if (!DieRoutine[i].Routine.MoveNext())
             {
-                DieRoutine.RemoveAt(i);
+                RemoveDieRoutineByIdx(i);
             }
         }
         if (this is Enemy)
@@ -814,9 +1350,9 @@ public abstract class Character : MonoBehaviour
         for (int i = PayCostRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
-            if (!PayCostRoutine[i].MoveNext())
+            if (!PayCostRoutine[i].Routine.MoveNext())
             {
-                PayCostRoutine.RemoveAt(i);
+                RemovePayCostRoutineByIdx(i);
             }
         }
     }

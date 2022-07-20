@@ -56,10 +56,60 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     public Character CharacterOnTile { get; set; }
     public List<object> EntityOnTile { get; set; } = new List<object>();
     public MeshRenderer TileColor { get; set; }
-    public List<IEnumerator> OnCharacterEnterRoutine { get; private set; } = new List<IEnumerator>();
-    public List<IEnumerator> OnCharacterStayRoutine { get; private set; } = new List<IEnumerator>();
-    public List<IEnumerator> OnCharacterExitRoutine { get; private set; } = new List<IEnumerator>();
 
+    private List<BuffRoutine> onCharacterEnterRoutine = new();
+    public IReadOnlyList<BuffRoutine> OnCharacterEnterRoutine
+    {
+        get
+        {
+            return onCharacterEnterRoutine.AsReadOnly();
+        }
+    }
+    public void AddOnCharacterEnterRoutine(IEnumerator routine, int priority)
+    {
+        onCharacterEnterRoutine.Add(new BuffRoutine(routine, priority));
+        onCharacterEnterRoutine.Sort();
+    }
+    public void RemoveOnCharacterEnterRoutineByIdx(int idx)
+    {
+        onCharacterEnterRoutine.RemoveAt(idx);
+    }
+
+    private List<BuffRoutine> onCharacterStayRoutine = new();
+    public IReadOnlyList<BuffRoutine> OnCharacterStayRoutine
+    {
+        get
+        {
+            return onCharacterStayRoutine.AsReadOnly();
+        }
+    }
+    public void AddOnCharacterStayRoutine(IEnumerator routine, int priority)
+    {
+        onCharacterStayRoutine.Add(new BuffRoutine(routine, priority));
+        onCharacterStayRoutine.Sort();
+    }
+    public void RemoveOnCharacterStayRoutineByIdx(int idx)
+    {
+        onCharacterStayRoutine.RemoveAt(idx);
+    }
+
+    private List<BuffRoutine> onCharacterExitRoutine = new();
+    public IReadOnlyList<BuffRoutine> OnCharacterExitRoutine
+    {
+        get
+        {
+            return onCharacterExitRoutine.AsReadOnly();
+        }
+    }
+    public void AddOnCharacterExitRoutine(IEnumerator routine, int priority)
+    {
+        onCharacterExitRoutine.Add(new BuffRoutine(routine, priority));
+        onCharacterExitRoutine.Sort();
+    }
+    public void RemoveOnCharacterExitRoutineByIdx(int idx)
+    {
+        onCharacterExitRoutine.RemoveAt(idx);
+    }
     //fixme
     public void OnPointerEnter(PointerEventData data)
     {

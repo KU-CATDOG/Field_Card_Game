@@ -18,8 +18,10 @@ public class Shield : Effect
         {
             Value = value;
             IsEnabled = true;
-            caster.TryGetDmgRoutine.Add(ApplyEffect());
-            caster.TurnEndBuffHandler.Add(RemoveEffect());
+            //fixme
+            caster.AddTryGetDmgRoutine(ApplyEffect(), 0);
+            caster.AddTurnEndDebuff(RemoveEffect(), 0);
+            //fixme
         }
     }
     public override IEnumerator ApplyEffect()
