@@ -24,6 +24,9 @@ public class Will : Effect
     }
     public override IEnumerator ApplyEffect()
     {
+        if (!IsEnabled)
+            yield break;
+
         if (token)
         {
             Value = caster.BuffHandler.BuffDict[BuffType.Shield].Value;
@@ -32,7 +35,8 @@ public class Will : Effect
         }
         else
         {
-            caster.BuffHandler.BuffDict[BuffType.Shield].SetEffect(Value);
+            if (Value != 0)
+                caster.BuffHandler.BuffDict[BuffType.Shield].SetEffect(Value);
             Debug.Log(Value);
             Value = 0;
             IsEnabled = false;
