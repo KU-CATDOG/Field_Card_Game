@@ -1370,6 +1370,7 @@ public abstract class Character : MonoBehaviour
         InitializeDeck();
         meshRenderer = GetComponent<MeshRenderer>();
         BuffHandler = new BuffHandler(this);
+        DebuffHandler = new DebuffHandler(this);
     }
     protected virtual void Start()
     {

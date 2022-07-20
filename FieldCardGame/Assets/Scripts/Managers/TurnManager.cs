@@ -73,8 +73,10 @@ public class TurnManager : MonoBehaviour
             yield return StartCoroutine(TurnAwakeRoutine());
             if (token == 0)
             {
+                Debug.Log("Player's turn");
                 foreach (var j in GameManager.Instance.Allies)
                 {
+                    Debug.Log(j);
                     if (j.IsDie) continue;
                     GameManager.Instance.CurPlayer = curChar = j;
                     (GameManager.Instance.CurPlayer as Player).PlayerUI.SetActive(true);
@@ -89,6 +91,7 @@ public class TurnManager : MonoBehaviour
                     {
                         yield return StartCoroutine(ForceTurnEndDebuffRoutine(curChar));
                         yield return StartCoroutine(TurnEndRoutine(curChar));
+                        Debug.Log("Turn Skipped");
                         continue;
                     }
                     if (j.IsDie) continue;
@@ -123,8 +126,10 @@ public class TurnManager : MonoBehaviour
             }
             else if (token == 1)
             {
+                Debug.Log("Enemies' turn");
                 foreach (var j in GameManager.Instance.EnemyList)
                 {
+                    Debug.Log(j);
                     curChar = j;
                     if (j.IsDie) continue;
                     yield return StartCoroutine(curChar.AwakeTurn());
