@@ -180,6 +180,10 @@ public class DebugCharacter : Player
     {
         StartCoroutine(AddCard(new DebugJump()));
     }
+    public void AddWarlockGrip()
+    {
+        StartCoroutine(AddCard(new WarlockGrip()));
+    }
     protected override void InitializeDeck()
     {
         CardPile.Add(new PaladinMove());

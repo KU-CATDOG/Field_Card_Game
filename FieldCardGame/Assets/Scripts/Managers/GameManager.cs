@@ -184,6 +184,10 @@ public class GameManager : MonoBehaviour
         card = new PaladinRepent();
         cardDict.Add(card.GetCardID(), card);
         cardObjectDict.Add(card.GetCardID(), cardObjectList[21]);
+
+        card = new WarlockGrip();
+        cardDict.Add(card.GetCardID(), card);
+        cardObjectDict.Add(card.GetCardID(), cardObjectList[22]);
     }
 
     private void Start()
