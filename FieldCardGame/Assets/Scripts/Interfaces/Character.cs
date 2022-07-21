@@ -24,8 +24,7 @@ public abstract class Character : MonoBehaviour
     private RectTransform hpBarImg;
     private const int MAXHANDSIZE = 10;
     private MeshRenderer meshRenderer;
-    public BuffHandler BuffHandler { get; private set; }
-    public DebuffHandler DebuffHandler { get; private set; }
+    public EffectHandler EffectHandler { get; private set; }
     public int TurnStartDraw { get; set; }
     public int NeedWait { get; set; }
     private Coordinate pos;
@@ -68,11 +67,6 @@ public abstract class Character : MonoBehaviour
     public List<ICard> HandCard { get; private set; } = new List<ICard>();
     public List<ICard> CardPile { get; private set; } = new List<ICard>();
     public List<ICard> DiscardedPile { get; private set; } = new List<ICard>();
-
-    /// for UI
-    public List<BuffType> BuffList { get; set; } = new List<BuffType>();
-    public List<DebuffHandler> DebuffList { get; set; } = new List<DebuffHandler>();
-    /// 
 
     private List<BuffRoutine> startbuffHandler = new();
     public IReadOnlyList<BuffRoutine> StartBuffHandler
@@ -1369,8 +1363,7 @@ public abstract class Character : MonoBehaviour
     {
         InitializeDeck();
         meshRenderer = GetComponent<MeshRenderer>();
-        BuffHandler = new BuffHandler(this);
-        DebuffHandler = new DebuffHandler(this);
+        EffectHandler = new EffectHandler(this);
     }
     protected virtual void Start()
     {

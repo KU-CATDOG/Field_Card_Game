@@ -96,7 +96,7 @@ public class DebugCharacter : Player
 
     public void DebugGetBuffList()
     {
-        foreach(var buff in this.BuffHandler.GetEnabledBuff())
+        foreach(var buff in this.EffectHandler.GetEnabledBuff())
         {
             Debug.Log(buff);
         }
@@ -104,7 +104,7 @@ public class DebugCharacter : Player
 
     public void DebugGetDebuffList()
     {
-        foreach(var debuff in this.DebuffHandler.GetEnabledDebuff())
+        foreach(var debuff in this.EffectHandler.GetEnabledDebuff())
         {
             Debug.Log(debuff);
         }
@@ -112,17 +112,27 @@ public class DebugCharacter : Player
 
     public void DebugGetShield()
     {
-        this.BuffHandler.BuffDict[BuffType.Shield].SetEffect(15);
+        this.EffectHandler.BuffDict[BuffType.Shield].SetEffect(15);
     }
 
     public void DebugGetWill()
     {
-        this.BuffHandler.BuffDict[BuffType.Will].SetEffect(1);
+        this.EffectHandler.BuffDict[BuffType.Will].SetEffect(1);
     }
 
     public void DebugGetStun()
     {
-        this.DebuffHandler.DebuffDict[DebuffType.Stun].SetEffect(1);
+        this.EffectHandler.DebuffDict[DebuffType.Stun].SetEffect(1);
+    }
+
+    public void DebugGetWeakness()
+    {
+        this.EffectHandler.DebuffDict[DebuffType.Weakness].SetEffect(1);
+    }
+
+    public void DebugGetPoison()
+    {
+        this.EffectHandler.DebuffDict[DebuffType.Poison].SetEffect(5);
     }
 
     public void DebugAddCard()
