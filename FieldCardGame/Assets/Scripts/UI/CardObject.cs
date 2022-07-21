@@ -5,6 +5,15 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
+    [SerializeField]
+    private int id;
+    public int ID
+    {
+        get
+        {
+            return id;
+        }
+    }
     public bool Usable { get; private set; }
     public bool isPileCard { get; set; }
     public static List<IEnumerator> MouseEvent { get; private set; } = new List<IEnumerator>();

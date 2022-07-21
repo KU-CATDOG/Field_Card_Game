@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4899360329481768548}
   - component: {fileID: -2726015609422013599}
   m_Layer: 5
-  m_Name: DebugAttack
+  m_Name: PaladinProtect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -67,7 +67,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 70f0cb23e4f9936489834d9722af8317, type: 3}
+  m_Texture: {fileID: 2800000, guid: f591499f35d224f44834fa2f5e81ddde, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -86,3 +86,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59eca5a0a97da9b4a8e1bf8a35010e87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 1104001

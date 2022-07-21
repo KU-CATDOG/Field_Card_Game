@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Reflection;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
@@ -60,13 +62,12 @@ public class GameManager : MonoBehaviour
         }
     }
     public Character CharacterSelected { get; set; }
-    [SerializeField]
-    private List<Enemy> enemyDict;
-    public IReadOnlyList<Enemy> EnemyDict
+    private Dictionary<int, Enemy> enemyDict = new();
+    public IReadOnlyDictionary<int, Enemy> EnemyDict
     {
         get
         {
-            return enemyDict.AsReadOnly();
+            return enemyDict;
         }
     }
 
@@ -75,8 +76,6 @@ public class GameManager : MonoBehaviour
     public Character CurPlayer { get; set; }
     public List<Character> Allies { get; private set; } = new List<Character>();
     public const int MAPSIZE = 128;
-    [SerializeField]
-    private List<CardObject> cardObjectList;
     private GameObject MapObject;
     [SerializeField]
     private Tile tilePrefab;
@@ -91,99 +90,39 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        InitializeDictionary();
         DontDestroyOnLoad(gameObject);
+        InitializeEnemyDict();
+    }
+    private void InitializeEnemyDict()
+    {
+        Enemy[] enemyList = new Enemy[0];
+        enemyList = Resources.LoadAll<Enemy>("Prefabs/Character/Enemy");
+        foreach(var i in enemyList)
+        {
+            enemyDict.Add(i.ID, i);
+        }
     }
     private void InitializeDictionary()
     {
-        ICard card;
-        card = new DebugCard();
-        cardDict.Add(card.GetCardID(), card);
-        cardObjectDict.Add(card.GetCardID(), cardObjectList[0]);
-
-        card = new PaladinMove();
-        cardDict.Add(card.GetCardID(), card);
-        cardObjectDict.Add(card.GetCardID(), cardObjectList[1]);
-
-        card = new Attack();
-        cardDict.Add(card.GetCardID(), card);
-        cardObjectDict.Add(card.GetCardID(), cardObjectList[2]);
-
-        card = new WarlockMove();
-        cardDict.Add(card.GetCardID(), card);
-        cardObjectDict.Add(card.GetCardID(), cardObjectList[3]);
-
-        card = new WarlockSnatch();
-        cardDict.Add(card.GetCardID(), card);
-        cardObjectDict.Add(card.GetCardID(), cardObjectList[4]);
-
-        card = new WarlockGathering();
-        cardDict.Add(card.GetCardID(), card);
-        cardObjectDict.Add(card.GetCardID(), cardObjectList[5]);
-
-        card = new WarlockDrain();
-        cardDict.Add(card.GetCardID(), card);
-        cardObjectDict.Add(card.GetCardID(), cardObjectList[6]);
-
-        card = new PaladinSMA();
-        cardDict.Add(card.GetCardID(), card);
-        cardObjectDict.Add(card.GetCardID(), cardObjectList[7]);
-
-        card = new PaladinProtect();
-        cardDict.Add(card.GetCardID(), card);
-        cardObjectDict.Add(card.GetCardID(), cardObjectList[8]);
-
-        card = new PaladinShining();
-        cardDict.Add(card.GetCardID(), card);
-        cardObjectDict.Add(card.GetCardID(), cardObjectList[9]);
-
-        card = new WarlockSoulBead();
-        cardDict.Add(card.GetCardID(), card);
-        cardObjectDict.Add(card.GetCardID(), cardObjectList[10]);
-
-        card = new PaladinRevelation1();
-        cardDict.Add(card.GetCardID(), card);
-        cardObjectDict.Add(card.GetCardID(), cardObjectList[11]);
-
-        card = new PaladinRevelation2();
-        cardDict.Add(card.GetCardID(), card);
-        cardObjectDict.Add(card.GetCardID(), cardObjectList[12]);
-
-        card = new PaladinRevelation3();
-        cardDict.Add(card.GetCardID(), card);
-        cardObjectDict.Add(card.GetCardID(), cardObjectList[13]);
-
-        card = new PaladinRevelation4();
-        cardDict.Add(card.GetCardID(), card);
-        cardObjectDict.Add(card.GetCardID(), cardObjectList[14]);
-
-        card = new PaladinRevelation5();
-        cardDict.Add(card.GetCardID(), card);
-        cardObjectDict.Add(card.GetCardID(), cardObjectList[15]);
-
-        card = new PaladinRevelation6();
-        cardDict.Add(card.GetCardID(), card);
-        cardObjectDict.Add(card.GetCardID(), cardObjectList[16]);
-
-        card = new PaladinRevelation7();
-        cardDict.Add(card.GetCardID(), card);
-        cardObjectDict.Add(card.GetCardID(), cardObjectList[17]);
-
-        card = new PaladinDeliver();
-        cardDict.Add(card.GetCardID(), card);
-        cardObjectDict.Add(card.GetCardID(), cardObjectList[18]);
-
-        card = new DebugJump();
-        cardDict.Add(card.GetCardID(), card);
-        cardObjectDict.Add(card.GetCardID(), cardObjectList[19]);
-
-        card = new PaladinJump();
-        cardDict.Add(card.GetCardID(), card);
-        cardObjectDict.Add(card.GetCardID(), cardObjectList[20]);
-
-        card = new PaladinRepent();
-        cardDict.Add(card.GetCardID(), card);
-        cardObjectDict.Add(card.GetCardID(), cardObjectList[21]);
+        Debug.Log(CharacterSelected is Paladin);
+        CardObject[] cardObjectList = new CardObject[0];
+        if(CharacterSelected is Paladin || DEBUGMOD)
+        {
+           cardObjectList = Resources.LoadAll<CardObject>("Prefabs/CardObject");
+        }
+        foreach(var i in cardObjectList)
+        {
+            cardObjectDict.Add(i.ID, i);
+        }
+        var cardList = Assembly
+          .GetAssembly(typeof(ICard))
+          .GetTypes()
+          .Where(t => t.IsSubclassOf(typeof(ICard)));
+        foreach(var i in cardList)
+        {
+            ICard card = System.Activator.CreateInstance(i) as ICard;
+            cardDict.Add(card.GetCardID(), card);
+        }
     }
 
     private void Start()
@@ -227,6 +166,7 @@ public class GameManager : MonoBehaviour
     }
     public void GenerateMap()
     {
+        InitializeDictionary();
         MapObject = GameObject.Find("Map");
         for (int i = 0; i < MAPSIZE; i++)
         {

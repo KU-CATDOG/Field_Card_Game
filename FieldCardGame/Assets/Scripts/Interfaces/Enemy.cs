@@ -4,6 +4,15 @@ using UnityEngine;
 
 public abstract class Enemy : Character
 {
+    [SerializeField]
+    private int Id;
+    public int ID
+    {
+        get
+        {
+            return Id;
+        }
+    }
     public int GiveExp { get; set; }
     protected override void Awake()
     {

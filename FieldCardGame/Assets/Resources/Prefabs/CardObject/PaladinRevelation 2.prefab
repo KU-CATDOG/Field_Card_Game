@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 8509223197248850498}
   - component: {fileID: 4837338463428886220}
   - component: {fileID: 4899360329481768548}
-  - component: {fileID: 6830255987249379778}
+  - component: {fileID: -2726015609422013599}
   m_Layer: 5
-  m_Name: PaladinSMA
+  m_Name: PaladinRevelation 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -67,14 +67,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 05765a431a717a74bbf74a814ba25cf9, type: 3}
+  m_Texture: {fileID: 2800000, guid: f547d6749eea9ca4d8eb0cddd338bf91, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
     y: 0
     width: 1
     height: 1
---- !u!114 &6830255987249379778
+--- !u!114 &-2726015609422013599
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -86,3 +86,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59eca5a0a97da9b4a8e1bf8a35010e87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 1210001
