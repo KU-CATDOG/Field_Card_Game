@@ -44,22 +44,22 @@ public class PaladinShining : IPlayerCard
                 if (tmp.X != pos.X || tmp.Y != pos.Y)
                     ret.Add(tmp);
                 Coordinate tile;
-                if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y])
                 {
                     visited[tile.X, tile.Y] = true;
                     nextQueue.Enqueue(tile);
                 };
-                if ((tile = tmp.GetLeftTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                if ((tile = tmp.GetLeftTile()) != null && !visited[tile.X, tile.Y])
                 {
                     visited[tile.X, tile.Y] = true;
                     nextQueue.Enqueue(tile);
                 };
-                if ((tile = tmp.GetRightTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                if ((tile = tmp.GetRightTile()) != null && !visited[tile.X, tile.Y])
                 {
                     visited[tile.X, tile.Y] = true;
                     nextQueue.Enqueue(tile);
                 };
-                if ((tile = tmp.GetUpTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
+                if ((tile = tmp.GetUpTile()) != null && !visited[tile.X, tile.Y])
                 {
                     visited[tile.X, tile.Y] = true;
                     nextQueue.Enqueue(tile);
@@ -83,6 +83,8 @@ public class PaladinShining : IPlayerCard
         List<Coordinate> ret = new List<Coordinate>();
         Coordinate pos = new Coordinate(0, 0);
         Coordinate tile;
+        tile = pos;
+        ret.Add(tile);
         tile = pos.GetDownTilewithoutTest();
         ret.Add(tile);
         tile = pos.GetLeftTilewithoutTest();
