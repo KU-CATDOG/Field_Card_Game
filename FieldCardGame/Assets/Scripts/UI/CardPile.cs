@@ -37,7 +37,7 @@ public class CardPile : MonoBehaviour
         minThreshold = originPos.y + space.y;
         softMinThreshold = originPos.y;
     }
-    public IEnumerator ShowPile(List<ICard> cardList, bool blindOrder = true)
+    public void ShowPile(List<ICard> cardList, bool blindOrder = true)
     {
         gameObject.SetActive(true);
         Initialize();
@@ -64,9 +64,8 @@ public class CardPile : MonoBehaviour
         }
         panel.position += Vector3.up * space.y / 3;
         scrollLock = false;
-        yield break;
     }
-    public IEnumerator ClosePile()
+    public void ClosePile()
     {
         panel.position = originPos;
         scrollLock = true;
@@ -78,7 +77,6 @@ public class CardPile : MonoBehaviour
         gameObject.SetActive(false);
         PlayerUIManager.Instance.PanelOpenned = false;
         scrollLock = false;
-        yield break;
     }
     private void Update()
     {
@@ -89,7 +87,7 @@ public class CardPile : MonoBehaviour
         if (Close)
         {
             Close = false;
-            StartCoroutine(ClosePile());
+            ClosePile();
         }
         movVec = movVec*0.9f;
         if (panel.position.y > softMaxThreshold)

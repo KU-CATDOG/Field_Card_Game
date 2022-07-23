@@ -10,7 +10,7 @@ public class Attack : IPlayerCard
     int dmg = 5;
     public int GetCardID()
     {
-        return 1;
+        return 1000000;
     }
     public int GetRange()
     {

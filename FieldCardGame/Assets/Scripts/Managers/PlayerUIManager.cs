@@ -58,6 +58,8 @@ public class PlayerUIManager : MonoBehaviour
     private Transform HighlightedAnchor;
     [SerializeField]
     private Transform playerSpecificArea;
+    [SerializeField]
+    private RewardPanel rewardPanel;
     public Transform PlayerSpecificArea
     {
         get
@@ -412,13 +414,24 @@ public class PlayerUIManager : MonoBehaviour
     public void OpenCardPilePanel()
     {
         PanelOpenned = true;
-        StartCoroutine(CardPilePanel.ShowPile(GameManager.Instance.CurPlayer.CardPile));
+        CardPilePanel.ShowPile(GameManager.Instance.CurPlayer.CardPile);
     }
 
     public void OpenDiscardedPilePanel()
     {
         PanelOpenned = true;
-        StartCoroutine(DiscardedPilePanel.ShowPile(GameManager.Instance.CurPlayer.DiscardedPile, false));
+        DiscardedPilePanel.ShowPile(GameManager.Instance.CurPlayer.DiscardedPile, false);
+    }
+
+    public void OpenRewardPanel(List<ICard> cards)
+    {
+        PanelOpenned = true;
+        rewardPanel.ShowReward(cards);
+    }
+    public void CloseRewardPanel()
+    {
+        PanelOpenned = false;
+        rewardPanel.RewardEnd();
     }
 
     private void Update()
