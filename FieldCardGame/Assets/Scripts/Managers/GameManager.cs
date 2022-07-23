@@ -153,11 +153,14 @@ public class GameManager : MonoBehaviour
 
     public void Initialize()
     {
+        CharacterSelected = null;
         GameOver = false;
         GameClear = false;
         CharacterSelected = null;
         Allies.Clear();
         EnemyList.Clear();
+        cardDict.Clear();
+        cardObjectDict.Clear();
     }
 
     public Tile GetTilePrefab()

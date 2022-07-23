@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TurnManager : MonoBehaviour
 {
-    public static TurnManager Instance;
+    public static TurnManager Instance { get; set; }
     public List<Player> DieAllyList { get; private set; } = new List<Player>();
     public List<Enemy> DieEnemyList { get; private set; } = new List<Enemy>();
     private int token = 0;
@@ -92,7 +92,6 @@ public class TurnManager : MonoBehaviour
                     {
                         yield return StartCoroutine(ForceTurnEndDebuffRoutine(curChar));
                         yield return StartCoroutine(TurnEndRoutine(curChar));
-                        Debug.Log("Turn Skipped");
                         continue;
                     }
                     if (j.IsDie) continue;

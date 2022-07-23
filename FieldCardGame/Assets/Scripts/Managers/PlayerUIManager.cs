@@ -423,9 +423,8 @@ public class PlayerUIManager : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.GameOver || GameManager.Instance.GameClear)
+        if (GameManager.Instance.GameOver || GameManager.Instance.GameClear || !GameManager.Instance.CharacterSelected)
         {
-            Destroy(gameObject);
             return;
         }
         int lev = (GameManager.Instance.Allies[0] as Player).Level;
