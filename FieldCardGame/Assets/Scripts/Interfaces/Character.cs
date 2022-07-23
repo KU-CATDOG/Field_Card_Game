@@ -1175,6 +1175,10 @@ public abstract class Character : MonoBehaviour
             GetDmgInterrupted = false;
             yield break;
         }
+        ///fixme
+        SoundManager.Instance.SFX.clip = SoundManager.Instance.SFXDict["hit_1"];
+        SoundManager.Instance.SFX.Play();
+        /////
         Hp -= Dmg;
         yield return StartCoroutine(getDmg(Dmg));
         if (Hp <= 0)
