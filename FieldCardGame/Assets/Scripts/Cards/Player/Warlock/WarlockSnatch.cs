@@ -98,7 +98,7 @@ public class WarlockSnatch : IPlayerCard
                 yield break;
             }
             yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
-            yield return GameManager.Instance.StartCoroutine(caster.GiveHeal(caster, GetHealAmount()));
+            yield return GameManager.Instance.StartCoroutine(caster.GiveHeal(caster, GetHealAmount(),true));
         }
         yield break;
     }

@@ -14,7 +14,7 @@ public class Fragility : Effect
             return;
             
         IsEnabled = true;
-        caster.AddForceTurnEndDebuff(ApplyEffect(), 0);
+        caster.AddTryGetDmgRoutine(ApplyEffect(), 5);
         caster.AddStartBuff(RemoveEffect(), 0);
     }
     public override IEnumerator ApplyEffect()

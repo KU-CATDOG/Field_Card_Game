@@ -14,12 +14,17 @@ public class Rooted : Effect
             return;
             
         IsEnabled = true;
-        caster.MoveInterrupted = true;
+
+        caster.AddTryMoveRoutine(ApplyEffect(), 0);
         caster.AddTurnEndDebuff(RemoveEffect(), 0);
     }
     public override IEnumerator ApplyEffect()
     {
-        yield return null;
+        while (IsEnabled)
+        {
+            caster.MoveInterrupted = true;
+            yield return null;
+        }
     }
     public override IEnumerator RemoveEffect()
     {
