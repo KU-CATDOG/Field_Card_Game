@@ -6,6 +6,7 @@ public class PaladinMercy : IPlayerCard
 {
     private int range = 0;
     private bool interrupted;
+    private int cost = 1;
     public bool Disposable { get; set; }
     public int GetRange()
     {
@@ -68,7 +69,11 @@ public class PaladinMercy : IPlayerCard
     }
     public int GetCost()
     {
-        return 1;
+        return cost;
+    }
+    public void SetCost(int value)
+    {
+        cost = value;
     }
     public CostType GetCostType()
     {

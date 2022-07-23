@@ -86,6 +86,10 @@ public class PaladinWill : IPlayerCard
     {
         return cost;
     }
+    public void SetCost(int value)
+    {
+        cost = value;
+    }
 
     public CostType GetCostType()
     {
