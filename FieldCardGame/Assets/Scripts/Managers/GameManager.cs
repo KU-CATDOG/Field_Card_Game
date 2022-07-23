@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour
         var cardList = Assembly
           .GetAssembly(typeof(ICard))
           .GetTypes()
-          .Where(t => t.IsSubclassOf(typeof(ICard)));
+          .Where(t => typeof(ICard).IsAssignableFrom(t) && !t.IsInterface);
         foreach(var i in cardList)
         {
             ICard card = System.Activator.CreateInstance(i) as ICard;
