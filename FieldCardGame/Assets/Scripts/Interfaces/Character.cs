@@ -1223,7 +1223,7 @@ public abstract class Character : MonoBehaviour
             }
         }
     }
-    public IEnumerator GiveHeal(Character target, int amount)
+    public IEnumerator GiveHeal(Character target, int amount, bool allowOverMaxHp = false)
     {
         GiveHealInterrupted = false;
         GiveHealAmount = amount;
@@ -1240,7 +1240,7 @@ public abstract class Character : MonoBehaviour
             GiveHealInterrupted = false;
             yield break;
         }
-        yield return StartCoroutine(target.Heal(this, GiveHealAmount));
+        yield return StartCoroutine(target.Heal(this, GiveHealAmount, allowOverMaxHp));
 
         for (int i = GiveHealRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
@@ -1251,7 +1251,7 @@ public abstract class Character : MonoBehaviour
             }
         }
     }
-    private IEnumerator Heal(Character caster, int amount, bool allowOverMaxHp = false)
+    private IEnumerator Heal(Character caster, int amount, bool allowOverMaxHp)
     {
         HealInterrupted = false;
         HealedBy = caster;
