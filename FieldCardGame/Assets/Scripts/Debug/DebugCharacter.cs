@@ -144,7 +144,7 @@ public class DebugCharacter : Player
         {
             addedCard = new DebugCard();
         }*/
-        StartCoroutine(AddCard(new PaladinSMA()));
+        StartCoroutine(AddCard(new WarlockEarthbound()));
     }
     public void AddSummonCard()
     {
