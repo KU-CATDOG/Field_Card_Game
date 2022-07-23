@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarlockFalseContract : IPlayerCard
+public class WarlockSacrifice : IPlayerCard
 {
-    public bool Disposable { get; set; }
     private int range = 0;
-    private int cost = 25;
+    private int draw = 3;
+    private int cost = 20;
     private bool interrupted;
+    public bool Disposable { get; set; }
     public int GetRange()
     {
         return range;
@@ -33,7 +34,8 @@ public class WarlockFalseContract : IPlayerCard
     public List<Coordinate> GetAreaofEffect(Coordinate relativePos)
     {
         List<Coordinate> ret = new List<Coordinate>();
-        ret.Add(new Coordinate(0, 0));
+        Coordinate pos = new Coordinate(0, 0);
+        ret.Add(pos);
         return ret;
     }
     public Color GetColorOfEffect(Coordinate pos)
@@ -42,7 +44,7 @@ public class WarlockFalseContract : IPlayerCard
         {
             return Color.white;
         }
-        return Color.black;
+        return Color.red;
     }
     public bool IsAvailablePosition(Coordinate caster, Coordinate target)
     {
@@ -55,41 +57,15 @@ public class WarlockFalseContract : IPlayerCard
     }
     public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
-        List<ICard> InHand = caster.HandCard;
-        foreach(var i in InHand)
+        if (interrupted)
         {
-            i.SetCost(0);
+             interrupted = false;
+             yield break;
         }
-        caster.AddTurnEndDebuff(RetrieveCost(caster, InHand), 0);
-        yield return null;
-    }
-    private IEnumerator RetrieveCost(Character caster, List<ICard> toRetrieve)
-    {
-        List<ICard> InHand = caster.HandCard;
-        List<ICard> InDiscarded = caster.DiscardedPile;
-        List<ICard> InDummy = caster.CardPile;
-        foreach(var i in InHand)
+        for (int i = 0; i < draw; i++)
         {
-            if(toRetrieve.Exists(j => j==i))
-            {
-                i.SetCost(GameManager.Instance.CardDict[i.GetCardID()].GetCost());
-            }
+            yield return GameManager.Instance.StartCoroutine(caster.DrawCard());
         }
-        foreach(var i in InDiscarded)
-        {
-            if(toRetrieve.Exists(j => j==i))
-            {
-                i.SetCost(GameManager.Instance.CardDict[i.GetCardID()].GetCost());
-            }
-        }
-        foreach(var i in InDummy)
-        {
-            if(toRetrieve.Exists(j => j==i))
-            {
-                i.SetCost(GameManager.Instance.CardDict[i.GetCardID()].GetCost());
-            }
-        }
-        yield return null;
     }
     public void CardRoutineInterrupt()
     {
@@ -113,7 +89,6 @@ public class WarlockFalseContract : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3107001;
+        return 3011001;
     }
-
 }

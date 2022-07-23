@@ -122,6 +122,7 @@ public class GameManager : MonoBehaviour
         {
             ICard card = System.Activator.CreateInstance(i) as ICard;
             cardDict.Add(card.GetCardID(), card);
+            Debug.Log($"ID:{card.GetCardID()}");
         }
     }
 
