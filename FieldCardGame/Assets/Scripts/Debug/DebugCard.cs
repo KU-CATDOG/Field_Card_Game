@@ -121,6 +121,6 @@ public class DebugCard : IPlayerCard
     }
     public int GetCardID()
     {
-        return 0;
+        return 1000001;
     }
 }
