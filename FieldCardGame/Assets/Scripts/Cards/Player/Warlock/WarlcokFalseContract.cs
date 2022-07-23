@@ -55,12 +55,13 @@ public class WarlockFalseContract : IPlayerCard
     }
     public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
-        List<ICard> InHand = caster.HandCard;
+        List<ICard> InHand = new(caster.HandCard);
         foreach(var i in InHand)
         {
             i.SetCost(0);
         }
         caster.AddTurnEndDebuff(RetrieveCost(caster, InHand), 0);
+        caster.EffectHandler.DebuffDict[DebuffType.Fragility].SetEffect(1);
         yield return null;
     }
     private IEnumerator RetrieveCost(Character caster, List<ICard> toRetrieve)

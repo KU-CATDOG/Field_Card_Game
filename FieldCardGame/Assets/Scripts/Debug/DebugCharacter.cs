@@ -206,6 +206,10 @@ public class DebugCharacter : Player
     {
         StartCoroutine(AddCard(new WarlockFalseContract()));
     }
+    public void AddWarlockEarthbound()
+    {
+        StartCoroutine(AddCard(new WarlockEarthbound()));
+    }
     protected override void InitializeDeck()
     {
         CardPile.Add(new PaladinMove());

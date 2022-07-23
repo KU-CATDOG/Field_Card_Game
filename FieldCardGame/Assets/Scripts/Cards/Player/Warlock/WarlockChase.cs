@@ -67,7 +67,7 @@ public class WarlockChase : IPlayerCard
             interrupted = false;
             yield break;
         }
-        yield return GameManager.Instance.StartCoroutine(caster.Move(tile, speed));
+        yield return GameManager.Instance.StartCoroutine(caster.Move(tile, speed*50));
     }
     private Coordinate GetAvailableChasingTile(Coordinate playerPos)
     {
