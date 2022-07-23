@@ -187,7 +187,7 @@ public class GameManager : MonoBehaviour
         CharacterSelected.position = new Coordinate(10, 10);
         Map[10, 10].CharacterOnTile = CharacterSelected;
         CharacterSelected.SightUpdate(CharacterSelected.Sight);
-        Character enemy = Instantiate(EnemyDict[1]);
+        Character enemy = Instantiate(EnemyDict[2]);
         enemy.position = new Coordinate(15, 15);
         StartCoroutine(TurnManager.Instance.TurnRoutine());
     }
