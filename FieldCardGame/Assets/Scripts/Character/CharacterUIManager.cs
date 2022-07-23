@@ -28,46 +28,24 @@ public class CharacterUIManager : MonoBehaviour
         foreach (var buff in character.EffectHandler.BuffDict)
         {
             if (buff.Value.IsEnabled)
-            {
-                switch (buff.Key)
-                {
-                    case BuffType.Debug:
-                        tmp1 += "Debug/";
-                        break;
-                    case BuffType.Shield:
-                        tmp1 += $"Shield({buff.Value.Value})/";
-                        break;
-                    case BuffType.Strengthen:
-                        tmp1 += $"Strengthen({buff.Value.Value})/";
-                        break;
-                    case BuffType.Will:
-                        tmp1 += $"Will({buff.Value.Value})/";
-                        break;
-                }
-            }
+                tmp1 += $"{buff.Key.ToString()}({buff.Value.Value})/";
         }
 
         string tmp2 = "";
         foreach (var debuff in character.EffectHandler.DebuffDict)
         {
             if (debuff.Value.IsEnabled)
-            {
-                switch (debuff.Key)
-                {
-                    case DebuffType.Poison:
-                        tmp2 += $"Poison({debuff.Value.Value})/";
-                        break;
-                    case DebuffType.Stun:
-                        tmp2 += $"Stun({debuff.Value.Value})/";
-                        break;
-                    case DebuffType.Weakness:
-                        tmp2 += $"Weakness({debuff.Value.Value})/";
-                        break;
-                }
-            }
+                tmp2 += $"{debuff.Key.ToString()}({debuff.Value.Value})/";
         }
 
         buffListText.text = tmp1;
         debuffListText.text = tmp2;
+
+        LookCamera();
+    }
+
+    private void LookCamera()
+    {
+        transform.LookAt(transform.position + MainCamera.Instance.transform.rotation * Vector3.forward, MainCamera.Instance.transform.rotation * Vector3.up);
     }
 }
