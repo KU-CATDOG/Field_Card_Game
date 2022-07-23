@@ -14,6 +14,11 @@ public abstract class Enemy : Character
         }
     }
     public int GiveExp { get; set; }
+    //fixme
+    protected int Gold { get; set; } = 10;
+    //fixme
+    protected int rewardTier { get; set; } = 1;
+
     protected override void Awake()
     {
         base.Awake();
@@ -21,10 +26,18 @@ public abstract class Enemy : Character
     }
     protected override IEnumerator dieRoutine()
     {
-        if(KilledBy == GameManager.Instance.Allies[0])
+        if(KilledBy is Player)
         {
-            yield return (KilledBy as Player).GainExp(GiveExp);
+            yield return (GameManager.Instance.CharacterSelected as Player).GainExp(GiveExp);
+            DropItem();
         }
+    }
+    //fixme
+    private void DropItem()
+    {
+        DropCardObject dropCardObj = Instantiate(GameManager.Instance.DropCardObject);
+        dropCardObj.position = position;
+        GameManager.Instance.Map[position.X, position.Y].AddOnCharacterEnterRoutine(dropCardObj.GiveReward(), 0);
     }
     public abstract IEnumerator EnemyRoutine();
 }

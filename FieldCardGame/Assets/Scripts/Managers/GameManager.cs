@@ -14,7 +14,15 @@ public class GameManager : MonoBehaviour
         get => dmgEffect;
         set => dmgEffect = value;
     }
-
+    [SerializeField]
+    private DropCardObject dropCardObject;
+    public DropCardObject DropCardObject
+    {
+        get
+        {
+            return dropCardObject;
+        }
+    }
     private bool gameOver;
     public bool GameOver
     {
@@ -106,23 +114,41 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log(CharacterSelected is Paladin);
         CardObject[] cardObjectList = new CardObject[0];
-        if(CharacterSelected is Paladin || DEBUGMOD)
-        {
-           cardObjectList = Resources.LoadAll<CardObject>("Prefabs/CardObject");
-        }
-        foreach(var i in cardObjectList)
-        {
-            cardObjectDict.Add(i.ID, i);
-        }
         var cardList = Assembly
           .GetAssembly(typeof(ICard))
           .GetTypes()
           .Where(t => typeof(ICard).IsAssignableFrom(t) && !t.IsInterface);
-        foreach(var i in cardList)
+        if (DEBUGMOD)
         {
-            ICard card = System.Activator.CreateInstance(i) as ICard;
-            cardDict.Add(card.GetCardID(), card);
-            Debug.Log($"ID:{card.GetCardID()}");
+            foreach (var i in cardList)
+            {
+                ICard card = System.Activator.CreateInstance(i) as ICard;
+                cardDict.Add(card.GetCardID(), card);
+            }
+            cardObjectList = Resources.LoadAll<CardObject>("Prefabs/CardObject");
+            foreach(var i in cardObjectList)
+            {
+                cardObjectDict.Add(i.ID, i);
+            }
+        }
+        else if(CharacterSelected is Paladin)
+        {
+            foreach (var i in cardList)
+            {
+                ICard card = System.Activator.CreateInstance(i) as ICard;
+                if (card.GetCardID() / 1000000 == 1)
+                {
+                    cardDict.Add(card.GetCardID(), card);
+                }
+            }
+            cardObjectList = Resources.LoadAll<CardObject>("Prefabs/CardObject");
+            foreach (var i in cardObjectList)
+            {
+                if (i.ID / 1000000 == 1)
+                {
+                    cardObjectDict.Add(i.ID, i);
+                }
+            }
         }
     }
 
@@ -187,8 +213,26 @@ public class GameManager : MonoBehaviour
         CharacterSelected.position = new Coordinate(10, 10);
         Map[10, 10].CharacterOnTile = CharacterSelected;
         CharacterSelected.SightUpdate(CharacterSelected.Sight);
-        Character enemy = Instantiate(EnemyDict[1]);
+        Character enemy = Instantiate(EnemyDict[0]);
         enemy.position = new Coordinate(15, 15);
         StartCoroutine(TurnManager.Instance.TurnRoutine());
+    }
+    //fixme
+    public void GetCardReward(int rewardNum)
+    {
+        List<ICard> rewardList = new();
+        bool[] visited = new bool[cardDict.Count];
+        int num = cardDict.Count;
+        for(int i=0; i<rewardNum; i++)
+        {
+            int rand = Random.Range(0, num);
+            if (visited[rand])
+            {
+                i--;
+                continue;
+            }
+            rewardList.Add(cardDict.Values.ElementAt(rand));
+        }
+        PlayerUIManager.Instance.OpenRewardPanel(rewardList);
     }
 }
