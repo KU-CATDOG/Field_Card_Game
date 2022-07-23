@@ -5,6 +5,7 @@ using UnityEngine;
 public class WarlockDrain : IPlayerCard
 {
     private int range = 0;
+    private int cost = 20;
     private int damage = 10;
     private int healAmount = 10;
     private bool interrupted;
@@ -123,7 +124,11 @@ public class WarlockDrain : IPlayerCard
     }
     public int GetCost()
     {
-        return 20;
+        return cost;
+    }
+    public void SetCost(int _cost)
+    {
+        cost = _cost;
     }
     public CostType GetCostType()
     {

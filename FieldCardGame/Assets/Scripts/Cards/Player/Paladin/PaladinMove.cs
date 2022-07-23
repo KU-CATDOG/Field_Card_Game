@@ -5,6 +5,7 @@ using UnityEngine;
 public class PaladinMove : IPlayerCard
 {
     private int range = 10;
+    private int cost =0;
     private bool interrupted;
     public bool Disposable { get; set; }
     public int GetRange()
@@ -267,6 +268,10 @@ public class PaladinMove : IPlayerCard
     public int GetCost()
     {
         return 0;
+    }
+    public void SetCost(int _cost)
+    {
+        cost = _cost;
     }
     public CostType GetCostType()
     {

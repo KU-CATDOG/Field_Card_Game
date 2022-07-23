@@ -5,6 +5,7 @@ using UnityEngine;
 public class DebugCard : IPlayerCard
 {
     private bool interrupted;
+    private int cost = 1;
     public bool Disposable { get; set; }
     public Color GetColorOfEffect(Coordinate pos)
     {
@@ -104,7 +105,11 @@ public class DebugCard : IPlayerCard
     }
     public int GetCost()
     {
-        return 1;
+        return cost;
+    }
+    public void SetCost(int _cost)
+    {
+        cost = _cost;
     }
     public CostType GetCostType()
     {

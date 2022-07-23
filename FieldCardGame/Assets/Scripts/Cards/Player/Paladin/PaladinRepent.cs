@@ -6,6 +6,7 @@ public class PaladinRepent : IPlayerConditionCard
 {
     public bool Disposable { get; set; }
     private int range = 1;
+    private int cost = 1;
     public int damage = 5;
     private bool interrupted;
     public int GetRange()
@@ -99,7 +100,11 @@ public class PaladinRepent : IPlayerConditionCard
     }
     public int GetCost()
     {
-        return 1;
+        return cost;
+    }
+    public void SetCost(int _cost)
+    {
+        cost = _cost;
     }
     public CostType GetCostType()
     {

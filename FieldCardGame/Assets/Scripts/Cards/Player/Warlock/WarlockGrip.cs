@@ -5,6 +5,7 @@ using UnityEngine;
 public class WarlockGrip : IPlayerCard
 {
     private int range = 2;
+    private int cost = 20;
     private int damage = 8;
     private int healAmount = 2;
     private bool interrupted;
@@ -141,7 +142,11 @@ public class WarlockGrip : IPlayerCard
     }
     public int GetCost()
     {
-        return 20;
+        return cost;
+    }
+    public void SetCost(int _cost)
+    {
+        cost = _cost;
     }
     public CostType GetCostType()
     {

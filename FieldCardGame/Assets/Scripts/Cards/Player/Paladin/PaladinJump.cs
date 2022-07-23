@@ -5,6 +5,7 @@ using UnityEngine;
 public class PaladinJump : IPlayerCard
 {
     private int range = 3;
+    private int cost = 1;
     private int damage = 7;
     private bool interrupted;
     public bool Disposable { get; set; }
@@ -208,7 +209,11 @@ public class PaladinJump : IPlayerCard
     }
     public int GetCost()
     {
-        return 1;
+        return cost;
+    }
+    public void SetCost(int _cost)
+    {
+        cost = _cost;
     }
     public CostType GetCostType()
     {
