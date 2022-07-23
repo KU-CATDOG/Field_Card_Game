@@ -7,6 +7,7 @@ public class PaladinFirm : IPlayerConditionCard
     public bool Disposable { get; set; }
     private int range = 0;
     public int amount = 10;
+    private int cost = 1;
     private bool interrupted;
     public int GetRange()
     {
@@ -91,7 +92,11 @@ public class PaladinFirm : IPlayerConditionCard
     }
     public int GetCost()
     {
-        return 1;
+        return cost;
+    }
+    public void SetCost(int value)
+    {
+        cost = value;
     }
     public CostType GetCostType()
     {
