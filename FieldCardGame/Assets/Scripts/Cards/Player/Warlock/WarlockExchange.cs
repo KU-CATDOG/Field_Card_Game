@@ -5,6 +5,7 @@ using UnityEngine;
 public class WarlockExchange : IPlayerCard
 {
     private int range = 1;
+    private int cost = 35;
     private int damage = 35;
     private bool interrupted;
     public bool Disposable { get; set; }
@@ -97,7 +98,11 @@ public class WarlockExchange : IPlayerCard
     }
     public int GetCost()
     {
-        return 35;
+        return cost;
+    }
+    public void SetCost(int _cost)
+    {
+        cost = _cost;
     }
     public CostType GetCostType()
     {

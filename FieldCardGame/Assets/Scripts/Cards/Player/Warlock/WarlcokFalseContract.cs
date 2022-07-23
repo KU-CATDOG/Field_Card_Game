@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarlockGathering : IPlayerCard
+public class WarlockFalseContract : IPlayerCard
 {
     public bool Disposable { get; set; }
     private int range = 0;
-    private int cost = 20;
-    private int amount = 5;
+    private int cost = 25;
     private bool interrupted;
     public int GetRange()
     {
@@ -16,14 +15,6 @@ public class WarlockGathering : IPlayerCard
     public void SetRange(int _range)
     {
         range = _range;
-    }
-    public int GetAmount()
-    {
-        return amount;
-    }
-    public void SetAmount(int _amount)
-    {
-        amount = _amount;
     }
     public Color GetUnAvailableTileColor()
     {
@@ -64,13 +55,16 @@ public class WarlockGathering : IPlayerCard
     }
     public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
+        List<ICard> InHand = caster.HandCard;
+        foreach(var i in InHand)
+        {
+
+        }
         if (interrupted)
         {
              interrupted = false;
              yield break;
         }
-        caster.EffectHandler.BuffDict[BuffType.Strengthen].SetEffect(GetAmount());
-        yield break;
     }
     public void CardRoutineInterrupt()
     {
@@ -94,7 +88,7 @@ public class WarlockGathering : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3103001;
+        return 3107001;
     }
 
 }

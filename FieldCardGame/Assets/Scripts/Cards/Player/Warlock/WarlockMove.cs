@@ -5,6 +5,7 @@ using UnityEngine;
 public class WarlockMove : IPlayerCard
 {
     private int range = 4;
+    private int cost = 2;
     private bool interrupted;
     public bool Disposable { get; set; }
     public int GetRange()
@@ -265,7 +266,11 @@ public class WarlockMove : IPlayerCard
     }
     public int GetCost()
     {
-        return 2;
+        return cost;
+    }
+    public void SetCost(int _cost)
+    {
+        cost = _cost;
     }
     public CostType GetCostType()
     {

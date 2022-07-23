@@ -5,6 +5,7 @@ using UnityEngine;
 public class WarlockSnatch : IPlayerCard
 {
     private int range = 1;
+    private int cost = 15;
     private int damage = 15;
     private int healAmount = 20;
     private bool interrupted;
@@ -107,7 +108,11 @@ public class WarlockSnatch : IPlayerCard
     }
     public int GetCost()
     {
-        return 15;
+        return cost;
+    }
+    public void SetCost(int _cost)
+    {
+        cost = _cost;
     }
     public CostType GetCostType()
     {

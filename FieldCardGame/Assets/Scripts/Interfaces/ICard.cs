@@ -9,6 +9,7 @@ public interface ICard
     public int GetRange();
     public void SetRange(int _range);
     public int GetCost();
+    public void SetCost(int _cost);
     public CostType GetCostType();
     public CardType GetCardType();
     public List<Coordinate> GetAvailableTile(Coordinate pos);

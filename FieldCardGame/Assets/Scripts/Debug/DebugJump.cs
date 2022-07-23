@@ -6,6 +6,7 @@ public class DebugJump : IPlayerCard
 {
 
     private int range = 20;
+    private int cost = 1;
     public bool Disposable { get; set; }
 
     private bool interrupted = false;
@@ -128,7 +129,11 @@ public class DebugJump : IPlayerCard
 
     public int GetCost()
     {
-        return 1;
+        return cost;
+    }
+    public void SetCost(int _cost)
+    {
+        cost = _cost;
     }
 
     public CostType GetCostType()
