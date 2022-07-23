@@ -2113,7 +2113,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1171379687}
         m_TargetAssemblyTypeName: TurnManager, Assembly-CSharp
         m_MethodName: set_TurnEnd
         m_Mode: 6
@@ -4358,7 +4358,7 @@ GameObject:
   - component: {fileID: 1253994631}
   - component: {fileID: 1253994634}
   - component: {fileID: 1253994633}
-  - component: {fileID: 1253994632}
+  - component: {fileID: 1253994635}
   m_Layer: 5
   m_Name: Skip
   m_TagString: Untagged
@@ -4386,19 +4386,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -400}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1253994632
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1253994630}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb34c2b096feb6a49b048a57141a8789, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Panel: {fileID: 340136685}
 --- !u!114 &1253994633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4496,6 +4483,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1253994630}
   m_CullTransparentMesh: 1
+--- !u!114 &1253994635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1253994630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2799505a3847bb14795f8d3db68c97c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Panel: {fileID: 0}
 --- !u!1 &1277947461
 GameObject:
   m_ObjectHideFlags: 0

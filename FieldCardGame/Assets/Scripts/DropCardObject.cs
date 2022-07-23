@@ -55,7 +55,6 @@ public class DropCardObject : MonoBehaviour
             yield return null;
         }
         GameManager.Instance.GetCardReward(3);
-
-
+        DestroyOffer = true;
     }
 }

@@ -231,6 +231,7 @@ public class GameManager : MonoBehaviour
                 i--;
                 continue;
             }
+            visited[rand] = true;
             rewardList.Add(cardDict.Values.ElementAt(rand));
         }
         PlayerUIManager.Instance.OpenRewardPanel(rewardList);
