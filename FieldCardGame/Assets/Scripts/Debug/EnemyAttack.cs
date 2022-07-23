@@ -10,7 +10,7 @@ public class EnemyAttack : ICard
     int dmg = 5;
     public int GetCardID()
     {
-        return 1;
+        return -1;
     }
     public int GetRange()
     {
