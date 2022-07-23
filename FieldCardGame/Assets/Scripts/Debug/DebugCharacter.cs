@@ -194,6 +194,18 @@ public class DebugCharacter : Player
     {
         StartCoroutine(AddCard(new WarlockGrip()));
     }
+    public void AddWarlockSacrifice()
+    {
+        StartCoroutine(AddCard(new WarlockSacrifice()));
+    }
+    public void AddWarlockChase()
+    {
+        StartCoroutine(AddCard(new WarlockChase()));
+    }
+    public void AddWarlockFalseContract()
+    {
+        StartCoroutine(AddCard(new WarlockFalseContract()));
+    }
     protected override void InitializeDeck()
     {
         CardPile.Add(new PaladinMove());

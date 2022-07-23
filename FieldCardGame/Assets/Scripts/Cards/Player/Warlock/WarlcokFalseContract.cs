@@ -58,13 +58,38 @@ public class WarlockFalseContract : IPlayerCard
         List<ICard> InHand = caster.HandCard;
         foreach(var i in InHand)
         {
-
+            i.SetCost(0);
         }
-        if (interrupted)
+        caster.AddTurnEndDebuff(RetrieveCost(caster, InHand), 0);
+        yield return null;
+    }
+    private IEnumerator RetrieveCost(Character caster, List<ICard> toRetrieve)
+    {
+        List<ICard> InHand = caster.HandCard;
+        List<ICard> InDiscarded = caster.DiscardedPile;
+        List<ICard> InDummy = caster.CardPile;
+        foreach(var i in InHand)
         {
-             interrupted = false;
-             yield break;
+            if(toRetrieve.Exists(j => j==i))
+            {
+                i.SetCost(GameManager.Instance.CardDict[i.GetCardID()].GetCost());
+            }
         }
+        foreach(var i in InDiscarded)
+        {
+            if(toRetrieve.Exists(j => j==i))
+            {
+                i.SetCost(GameManager.Instance.CardDict[i.GetCardID()].GetCost());
+            }
+        }
+        foreach(var i in InDummy)
+        {
+            if(toRetrieve.Exists(j => j==i))
+            {
+                i.SetCost(GameManager.Instance.CardDict[i.GetCardID()].GetCost());
+            }
+        }
+        yield return null;
     }
     public void CardRoutineInterrupt()
     {
