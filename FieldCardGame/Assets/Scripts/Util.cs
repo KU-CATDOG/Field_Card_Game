@@ -21,6 +21,8 @@ public enum DebuffType
     Stun,
     Weakness,
     Poison,
+    Rooted,
+    Fragility,
 }
 public enum CostType
 {

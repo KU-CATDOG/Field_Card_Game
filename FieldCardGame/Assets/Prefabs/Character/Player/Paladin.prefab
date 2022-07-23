@@ -96,4 +96,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38586f3228a48204aadd258fbe5cc5d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HealedBy: {fileID: 0}
   playerUI: {fileID: 1632723056526928107, guid: bd5bc4ded2e77b848a74e6c6bd0c60bf, type: 3}
