@@ -24,8 +24,10 @@ public abstract class Enemy : Character
         base.Awake();
         GameManager.Instance.EnemyList.Add(this);
     }
+    protected abstract IEnumerator enemyDieRoutine();
     protected override IEnumerator dieRoutine()
     {
+        yield return enemyDieRoutine();
         if(KilledBy is Player)
         {
             yield return (GameManager.Instance.CharacterSelected as Player).GainExp(GiveExp);

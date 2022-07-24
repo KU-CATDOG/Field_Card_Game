@@ -232,7 +232,7 @@ public class GameManager : MonoBehaviour
                 continue;
             }
             visited[rand] = true;
-            rewardList.Add(cardDict.Values.ElementAt(rand));
+            rewardList.Add(System.Activator.CreateInstance(cardDict.Values.ElementAt(rand).GetType()) as ICard);
         }
         PlayerUIManager.Instance.OpenRewardPanel(rewardList);
     }

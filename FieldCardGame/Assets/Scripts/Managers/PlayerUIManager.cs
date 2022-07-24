@@ -138,7 +138,12 @@ public class PlayerUIManager : MonoBehaviour
         CardImages.Add(Instantiate(GameManager.Instance.CardObjectDict[GameManager.Instance.CurPlayer.drawCard.GetCardID()], CardArea.transform));
         CardImages[CardImages.Count - 1].isPileCard = false;
         yield return StartCoroutine(Rearrange());
-
+    }
+    public IEnumerator GenerateCardToHand()
+    {
+        CardImages.Add(Instantiate(GameManager.Instance.CardObjectDict[GameManager.Instance.CurPlayer.addedCard.GetCardID()], CardArea.transform));
+        CardImages[CardImages.Count - 1].isPileCard = false;
+        yield return StartCoroutine(Rearrange());
     }
     public void DropCard(CardObject card)
     {

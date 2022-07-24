@@ -8,7 +8,7 @@ public class Queen : Enemy
     protected override void Start()
     {
         base.Start();
-        Hp = MaxHp = 80;
+        Hp = MaxHp = 10;
         GiveExp = 1;
         TurnStartDraw = 4;
         crystalCount = 4;
@@ -43,10 +43,9 @@ public class Queen : Enemy
     {
         yield break;
     }
-    protected override IEnumerator dieRoutine()
+    protected override IEnumerator enemyDieRoutine()
     {
-        GameManager.Instance.GameClear = true;
-        yield return GameManager.Instance.StartCoroutine(GameManager.Instance.GameClearRoutine());
+        yield break;
     }
 
     private bool[] calcAtkWheater(int queenAtxIdx, int bishopAtxIdx)

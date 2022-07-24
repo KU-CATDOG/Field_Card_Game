@@ -40,7 +40,7 @@ public class MainBoss : Enemy
     {
         yield break;
     }
-    protected override IEnumerator dieRoutine()
+    protected override IEnumerator enemyDieRoutine()
     {
         GameManager.Instance.GameClear = true;
         yield return GameManager.Instance.StartCoroutine(GameManager.Instance.GameClearRoutine());
