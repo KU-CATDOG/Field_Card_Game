@@ -75,7 +75,7 @@ public class DebugCharacter : Player
     {
         base.Start();
         TurnStartDraw = 5;
-        MaxHp = Hp = 50;
+        MaxHp = Hp = 100;
         crystalText = PlayerUI.GetComponentInChildren<TextMeshProUGUI>();
     }
     protected override void Update()
@@ -209,6 +209,14 @@ public class DebugCharacter : Player
     public void AddWarlockEarthbound()
     {
         StartCoroutine(AddCard(new WarlockEarthbound()));
+    }
+    public void AddWarlockSmite()
+    {
+        StartCoroutine(AddCard(new WarlockSmite()));
+    }
+    public void AddWarlockBatWizard()
+    {
+        StartCoroutine(AddCard(new WarlockBatWizard()));
     }
     protected override void InitializeDeck()
     {
