@@ -1046,7 +1046,7 @@ public abstract class Character : MonoBehaviour
         }
         if (MoveInterrupted || IsDie)
         {
-            MoveInterrupted = false;
+            //MoveInterrupted = false;
             yield break;
         }
         Tile prevTile = GameManager.Instance.Map[position.X, position.Y];

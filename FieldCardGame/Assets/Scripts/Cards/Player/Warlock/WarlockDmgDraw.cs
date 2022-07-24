@@ -2,23 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QueenBMove : ICard
+public class WarlockDmgDraw : IPlayerCard
 {
-
-    private int range = 6;
-    private int cost = 1;
+    private int range = 2;
+    private int cost = 10;
+    private int damage = 10;
+    private int drawNum = 2;
+    private bool interrupted;
     public bool Disposable { get; set; }
-
-    private bool interrupted = false;
-
     public int GetRange()
     {
         return range;
     }
-
     public void SetRange(int _range)
     {
         range = _range;
+    }
+    public int GetDamage()
+    {
+        return damage;
+    }
+    public void SetDamage(int _damage)
+    {
+        damage = _damage;
+    }
+    public Color GetUnAvailableTileColor()
+    {
+        return Color.red;
     }
     public List<Coordinate> GetAvailableTile(Coordinate pos)
     {
@@ -33,10 +43,8 @@ public class QueenBMove : ICard
             while (queue.Count != 0)
             {
                 Coordinate tmp = queue.Dequeue();
-
-                if ((tmp.X != pos.X || tmp.Y != pos.Y) && !(GameManager.Instance.Map[tmp.X, tmp.Y].CharacterOnTile) && ((tmp.X - pos.X) == (tmp.Y - pos.Y)))
+                if(tmp.X != pos.X || tmp.Y != pos.Y)
                     ret.Add(tmp);
-                    
                 Coordinate tile;
                 if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y])
                 {
@@ -64,11 +72,13 @@ public class QueenBMove : ICard
         }
         while (queue.Count != 0)
         {
-            Coordinate tmp = queue.Dequeue();
-            if (!(GameManager.Instance.Map[tmp.X, tmp.Y].CharacterOnTile) && (tmp.X - pos.X) == (tmp.Y - pos.Y))
-                ret.Add(tmp);
+            ret.Add(queue.Dequeue());
         }
         return ret;
+    }
+    public Color GetAvailableTileColor()
+    {
+        return Color.blue;
     }
     public List<Coordinate> GetAreaofEffect(Coordinate relativePos)
     {
@@ -76,7 +86,14 @@ public class QueenBMove : ICard
         ret.Add(new Coordinate(0, 0));
         return ret;
     }
-
+    public Color GetColorOfEffect(Coordinate pos)
+    {
+        if (pos.X == 0 && pos.Y == 0)
+        {
+            return Color.white;
+        }
+        return Color.black;
+    }
     public bool IsAvailablePosition(Coordinate caster, Coordinate target)
     {
         List<Coordinate> availablePositions = GetAvailableTile(caster);
@@ -86,28 +103,26 @@ public class QueenBMove : ICard
         }
         return false;
     }
-
     public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
-        caster.StartCoroutine(JumpRoutine(caster, target, 3));
-        yield return caster.StartCoroutine(caster.Move(target, 5f));
-    }
-    private IEnumerator JumpRoutine(Character caster, Coordinate target, float height)
-    {
-        float distance = Coordinate.EuclideanDist(caster.position, target);
-        float slope = 4 * (height - 0.5f) / distance / distance;
-        while(caster.position != target && !caster.MoveInterrupted)
+        Character tmp = GameManager.Instance.Map[target.X, target.Y].CharacterOnTile;
+        if (tmp)
         {
-            float x = Mathf.Sqrt(Mathf.Pow(target.X - caster.transform.position.x, 2) + Mathf.Pow(target.Y - caster.transform.position.z, 2));
-            caster.transform.position = new Vector3(caster.transform.position.x, height - slope * (x - distance/2) * (x - distance/2),caster.transform.position.z);
-            yield return new WaitForFixedUpdate();
+            if (interrupted)
+            {
+                interrupted = false;
+                yield break;
+            }
+            yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
+            for(int i = 0; i< drawNum;i++)
+                yield return GameManager.Instance.StartCoroutine(caster.DrawCard());
         }
+        yield break;
     }
     public void CardRoutineInterrupt()
     {
         interrupted = true;
     }
-
     public int GetCost()
     {
         return cost;
@@ -116,19 +131,16 @@ public class QueenBMove : ICard
     {
         cost = _cost;
     }
-
     public CostType GetCostType()
     {
-        return CostType.MonsterCrystal;
+        return CostType.Hp;
     }
-
     public CardType GetCardType()
     {
-        return CardType.Move;
+        return CardType.Attack;
     }
-
     public int GetCardID()
     {
-        return 0099100;
+        return 3022010;
     }
 }
