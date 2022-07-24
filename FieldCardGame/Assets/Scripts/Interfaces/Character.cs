@@ -846,10 +846,17 @@ public abstract class Character : MonoBehaviour
             yield break;
         }
         addedCard = toAdd;
-        CardPile.Add(addedCard);
-        if(this is Player && toHand)
+        if(toHand)
         {
-            yield return StartCoroutine(PlayerUIManager.Instance.GenerateCardToHand());
+            HandCard.Add(addedCard);
+            if(this is Player)
+            {
+                yield return StartCoroutine(PlayerUIManager.Instance.GenerateCardToHand());
+            }
+        }
+        else
+        {
+            CardPile.Add(addedCard);
         }
         for (int i = AddCardRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
