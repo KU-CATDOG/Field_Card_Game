@@ -8,7 +8,7 @@ public class WarlockSoul : IPlayerCard
     private int cost = 0;
     private int healAmount = 7;
     private bool interrupted;
-    public bool Disposable { get; set; }
+    public bool Disposable { get; set; } = true;
     public int GetRange()
     {
         return range;

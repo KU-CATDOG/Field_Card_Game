@@ -8,7 +8,7 @@ public class WarlockSmite : IPlayerCard
     private int cost = 3;
     private int damage = 6;
     private bool interrupted;
-    public bool Disposable { get; set; }
+    public bool Disposable { get; set; } = true;
     public int GetRange()
     {
         return range;
@@ -103,7 +103,6 @@ public class WarlockSmite : IPlayerCard
     }
     public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
-        Disposable = true;
         Character tmp = GameManager.Instance.Map[target.X, target.Y].CharacterOnTile;
         if (tmp)
         {
