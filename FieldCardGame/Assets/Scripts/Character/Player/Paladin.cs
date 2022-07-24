@@ -74,10 +74,19 @@ public class Paladin : Player
 
     protected override void InitializeDeck()
     {
+        //fixme
+
         CardPile.Add(new PaladinMove());
         CardPile.Add(new PaladinMove());
-        CardPile.Add(new Attack());
+        CardPile.Add(new PaladinMove());
         CardPile.Add(new Attack());
         CardPile.Add(new PaladinProtect());
+        CardPile.Add(new PaladinShining());
+        CardPile.Add(new PaladinSMA());
+        CardPile.Add(new PaladinDeliver());
+        CardPile.Add(new PaladinJump());
+        CardPile.Add(new PaladinFirm());
+        CardPile.Add(new PaladinChecking());
+        StartCoroutine(ShuffleDeck());
     }
 }

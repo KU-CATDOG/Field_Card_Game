@@ -307,6 +307,8 @@ public class PlayerUIManager : MonoBehaviour
         {
             GameManager.Instance.Map[i.X, i.Y].RestoreColor();
         }
+        //fixme
+        GameManager.Instance.CurPlayer.transform.LookAt(new Vector3(CardUsePos.X, 1, CardUsePos.Y));
        // yield return StartCoroutine(MainCamera.Instance.moveCamera(false));
         yield return StartCoroutine(GameManager.Instance.CurPlayer.CardUse(CardUsePos, cardIdx));
         OnRoutine = false;
