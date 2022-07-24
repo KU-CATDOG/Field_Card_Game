@@ -8,7 +8,7 @@ public class QueenAttack : ICard
     private int cost = 3;
     private bool interrupted;
     private int range = 1;
-    int dmg = 5;
+    int dmg = 35;
     public int GetCardID()
     {
         return 0097010;

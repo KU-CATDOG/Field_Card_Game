@@ -38,7 +38,7 @@ public class BishopBomb : ICard
     public List<Coordinate> GetAreaofEffect(Coordinate relativePos)
     {
         List<Coordinate> ret = new List<Coordinate>();
-        Coordinate pos = new Coordinate(0, 0);
+        Coordinate pos = relativePos;
         Coordinate tile;
         tile = pos.GetDownTilewithoutTest();
         ret.Add(tile);
