@@ -222,7 +222,7 @@ public class Queen : Enemy
                     }
                     crystalCount -= 1;
                     yield return StartCoroutine(CardUse(toGo[distance[0] < distance[1] ? 0 : 1], cardIdx[distance[0] < distance[1] ? 2 : 3]));
-                    Debug.Log(crystalCount);
+                    Debug.Log(crystalCount);    
                 }
                 else
                 {
