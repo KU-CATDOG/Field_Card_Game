@@ -56,11 +56,9 @@ public class WarlockBatWizard : IPlayerCard
     }
     public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
-        List<ICard> InHand = new(caster.HandCard);
-        int handSize = InHand.Count;
         for (int i = 0; i < giveCard; i++)
         {
-            caster.HandCard.Add(GameManager.Instance.CardDict[3014010]);
+            yield return GameManager.Instance.StartCoroutine(caster.AddCard(GameManager.Instance.CardDict[3014010],true));
         }
         yield return null;
     }
