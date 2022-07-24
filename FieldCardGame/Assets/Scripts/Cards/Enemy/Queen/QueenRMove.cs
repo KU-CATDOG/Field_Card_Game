@@ -35,25 +35,25 @@ public class QueenRMove : ICard
                 if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
                 {
                     visited[tile.X, tile.Y] = true;
-                    if(tmp.X == pos.X || tmp.Y == pos.Y)
+                    if(tile.X == pos.X || tile.Y == pos.Y)
                         nextQueue.Enqueue(tile);
                 };
                 if ((tile = tmp.GetLeftTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile )
                 {
                     visited[tile.X, tile.Y] = true;
-                    if (tmp.X == pos.X || tmp.Y == pos.Y)
+                    if (tile.X == pos.X || tile.Y == pos.Y)
                         nextQueue.Enqueue(tile);
                 };
                 if ((tile = tmp.GetRightTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile )
                 {
                     visited[tile.X, tile.Y] = true;
-                    if (tmp.X == pos.X || tmp.Y == pos.Y)
+                    if (tile.X == pos.X || tile.Y == pos.Y)
                         nextQueue.Enqueue(tile);
                 };
                 if ((tile = tmp.GetUpTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile )
                 {
                     visited[tile.X, tile.Y] = true;
-                    if (tmp.X == pos.X || tmp.Y == pos.Y)
+                    if (tile.X == pos.X || tile.Y == pos.Y)
                         nextQueue.Enqueue(tile);
                 }
             }
