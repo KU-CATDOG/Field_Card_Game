@@ -24,6 +24,7 @@ public abstract class Character : MonoBehaviour
     private RectTransform hpBarImg;
     private const int MAXHANDSIZE = 10;
     private MeshRenderer meshRenderer;
+    private Animator animator;
     public EffectHandler EffectHandler { get; private set; }
     public int TurnStartDraw { get; set; }
     public int NeedWait { get; set; }
@@ -1055,6 +1056,9 @@ public abstract class Character : MonoBehaviour
             }
         }
         Vector3 moveVector = new Vector3(target.X - position.X, 0, target.Y - position.Y).normalized;
+        //fixme
+        transform.LookAt(transform.position + moveVector);
+        //
         float time = 0f;
         if (GameManager.Instance.Map[position.X, position.Y].Discovered)
         {
@@ -1365,6 +1369,7 @@ public abstract class Character : MonoBehaviour
     {
         InitializeDeck();
         meshRenderer = GetComponent<MeshRenderer>();
+        animator = GetComponent<Animator>();
         EffectHandler = new EffectHandler(this);
     }
     protected virtual void Start()
@@ -1378,12 +1383,21 @@ public abstract class Character : MonoBehaviour
     {
         if (!GameManager.Instance.Map[position.X, position.Y].Discovered)
         {
-            meshRenderer.enabled = false;
+            if(meshRenderer)
+                meshRenderer.enabled = false;
+            if (animator)
+                animator.enabled = false;
+
             HpBar.SetActive(false);
             return;
         }
-        HpBar.SetActive(true);
-        meshRenderer.enabled = true;
+        HpBar.SetActive(true); 
+
+        if (meshRenderer)
+            meshRenderer.enabled = true;
+        if (animator)
+            animator.enabled = true;
+
         HpBar.transform.position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 1.5f);
         hpText.text = $"{Hp}/{MaxHp}";
         hpBarImg.sizeDelta = new Vector2(150 * (float)Hp / MaxHp, hpBarImg.sizeDelta.y);
