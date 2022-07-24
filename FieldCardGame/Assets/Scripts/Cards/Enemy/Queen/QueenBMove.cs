@@ -33,32 +33,30 @@ public class QueenBMove : ICard
             while (queue.Count != 0)
             {
                 Coordinate tmp = queue.Dequeue();
-                if ((tmp.X != pos.X || tmp.Y != pos.Y) && !(GameManager.Instance.Map[tmp.X, tmp.Y].CharacterOnTile is Enemy) && (tmp.X - pos.X) == (tmp.Y - pos.Y))
+
+                if ((tmp.X != pos.X || tmp.Y != pos.Y) && !(GameManager.Instance.Map[tmp.X, tmp.Y].CharacterOnTile) && ((tmp.X - pos.X) == (tmp.Y - pos.Y)))
                     ret.Add(tmp);
+                    
                 Coordinate tile;
                 if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y])
                 {
                     visited[tile.X, tile.Y] = true;
-                    if((tmp.X - pos.X) == (tmp.Y - pos.Y))
-                        nextQueue.Enqueue(tile);
+                    nextQueue.Enqueue(tile);
                 };
                 if ((tile = tmp.GetLeftTile()) != null && !visited[tile.X, tile.Y])
                 {
                     visited[tile.X, tile.Y] = true;
-                    if ((tmp.X - pos.X) == (tmp.Y - pos.Y))
-                        nextQueue.Enqueue(tile);
+                    nextQueue.Enqueue(tile);
                 };
                 if ((tile = tmp.GetRightTile()) != null && !visited[tile.X, tile.Y])
                 {
                     visited[tile.X, tile.Y] = true;
-                    if ((tmp.X - pos.X) == (tmp.Y - pos.Y))
-                        nextQueue.Enqueue(tile);
+                    nextQueue.Enqueue(tile);
                 };
                 if ((tile = tmp.GetUpTile()) != null && !visited[tile.X, tile.Y])
                 {
                     visited[tile.X, tile.Y] = true;
-                    if ((tmp.X - pos.X) == (tmp.Y - pos.Y))
-                        nextQueue.Enqueue(tile);
+                    nextQueue.Enqueue(tile);
                 }
             }
             queue = new Queue<Coordinate>(nextQueue);
@@ -67,7 +65,7 @@ public class QueenBMove : ICard
         while (queue.Count != 0)
         {
             Coordinate tmp = queue.Dequeue();
-            if (!(GameManager.Instance.Map[tmp.X, tmp.Y].CharacterOnTile is Enemy) && (tmp.X - pos.X) == (tmp.Y - pos.Y))
+            if (!(GameManager.Instance.Map[tmp.X, tmp.Y].CharacterOnTile) && (tmp.X - pos.X) == (tmp.Y - pos.Y))
                 ret.Add(tmp);
         }
         return ret;
