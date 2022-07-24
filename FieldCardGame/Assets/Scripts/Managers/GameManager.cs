@@ -6,6 +6,7 @@ using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
+    private List<SpawnEntity> worldEntityList;
     private Dictionary<int, ICard> cardDict = new Dictionary<int, ICard>();
     [SerializeField]
     private Loading dmgEffect;
@@ -100,6 +101,11 @@ public class GameManager : MonoBehaviour
         }
         DontDestroyOnLoad(gameObject);
         InitializeEnemyDict();
+        InitializeSpawnEntityList();
+    }
+    private void InitializeSpawnEntityList()
+    {
+        worldEntityList = new(Resources.LoadAll<SpawnEntity>("Prefabs/WorldEntity"));
     }
     private void InitializeEnemyDict()
     {
@@ -198,6 +204,7 @@ public class GameManager : MonoBehaviour
     {
         InitializeDictionary();
         MapObject = GameObject.Find("Map");
+        int entityIdx = 0;
         for (int i = 0; i < MAPSIZE; i++)
         {
             for (int j = 0; j < MAPSIZE; j++)
@@ -206,6 +213,17 @@ public class GameManager : MonoBehaviour
                 tile.transform.position = new Vector3(i, 0, j);
                 tile.position = new Coordinate(i, j);
                 Map[i, j] = tile;
+                for (int k = 0; k < worldEntityList.Count; k++, entityIdx = (entityIdx+1) % worldEntityList.Count)
+                {
+                    var entity = worldEntityList[entityIdx];
+                    if(Random.Range(0,1f) <= entity.GenerateProbability)
+                    {
+                        var inst = Instantiate(entity);
+                        inst.position = new Coordinate(i, j);
+                        break;
+                    }
+
+                }
             }
         }
         //fixme
