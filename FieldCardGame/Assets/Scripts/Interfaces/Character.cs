@@ -45,7 +45,7 @@ public abstract class Character : MonoBehaviour
             }
             pos = value;
             GameManager.Instance.Map[pos.X, pos.Y].CharacterOnTile = this;
-            transform.position = new Vector3(value.X, 1, value.Y);
+            transform.position = new Vector3(value.X, 0.5f, value.Y);
         }
     }
     private int sight = 10;
@@ -1057,7 +1057,8 @@ public abstract class Character : MonoBehaviour
         }
         Vector3 moveVector = new Vector3(target.X - position.X, 0, target.Y - position.Y).normalized;
         //fixme
-        transform.LookAt(transform.position + moveVector);
+        if(this is Player)
+            transform.LookAt(transform.position + moveVector);
         //
         float time = 0f;
         if (GameManager.Instance.Map[position.X, position.Y].Discovered)
@@ -1180,8 +1181,8 @@ public abstract class Character : MonoBehaviour
             yield break;
         }
         ///fixme
-        //SoundManager.Instance.SFX.clip = SoundManager.Instance.SFXDict["hit_1"];
-        //SoundManager.Instance.SFX.Play();
+        SoundManager.Instance.SFX.clip = SoundManager.Instance.SFXDict["hit_1"];
+        SoundManager.Instance.SFX.Play();
         /////
         Hp -= Dmg;
         yield return StartCoroutine(getDmg(Dmg));
