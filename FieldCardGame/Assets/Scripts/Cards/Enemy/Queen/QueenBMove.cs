@@ -95,7 +95,7 @@ public class QueenBMove : ICard
     private IEnumerator JumpRoutine(Character caster, Coordinate target, float height)
     {
         float distance = Coordinate.EuclideanDist(caster.position, target);
-        float slope = 4 * (height - 1) / distance / distance;
+        float slope = 4 * (height - 0.5f) / distance / distance;
         while(caster.position != target && !caster.MoveInterrupted)
         {
             float x = Mathf.Sqrt(Mathf.Pow(target.X - caster.transform.position.x, 2) + Mathf.Pow(target.Y - caster.transform.position.z, 2));
