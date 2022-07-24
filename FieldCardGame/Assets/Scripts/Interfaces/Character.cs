@@ -1057,7 +1057,8 @@ public abstract class Character : MonoBehaviour
         }
         Vector3 moveVector = new Vector3(target.X - position.X, 0, target.Y - position.Y).normalized;
         //fixme
-        transform.LookAt(transform.position + moveVector);
+        if(this is Player)
+            transform.LookAt(transform.position + moveVector);
         //
         float time = 0f;
         if (GameManager.Instance.Map[position.X, position.Y].Discovered)
