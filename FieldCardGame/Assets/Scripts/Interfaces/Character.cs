@@ -45,7 +45,7 @@ public abstract class Character : MonoBehaviour
             }
             pos = value;
             GameManager.Instance.Map[pos.X, pos.Y].CharacterOnTile = this;
-            transform.position = new Vector3(value.X, 1, value.Y);
+            transform.position = new Vector3(value.X, 0.5f, value.Y);
         }
     }
     private int sight = 10;
