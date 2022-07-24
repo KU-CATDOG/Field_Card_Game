@@ -826,7 +826,7 @@ public abstract class Character : MonoBehaviour
         else
             yield return StartCoroutine(RemoveCard(idx));
     }
-    public IEnumerator AddCard(ICard toAdd)
+    public IEnumerator AddCard(ICard toAdd, bool toHand = false)
     {
         AddCardInterrupted = false;
         //need Animation for Player
@@ -847,6 +847,10 @@ public abstract class Character : MonoBehaviour
         }
         addedCard = toAdd;
         CardPile.Add(addedCard);
+        if(this is Player && toHand)
+        {
+            yield return StartCoroutine(PlayerUIManager.Instance.GenerateCardToHand());
+        }
         for (int i = AddCardRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
             IEnumerator routine = AddCardRoutine[i].Routine;
