@@ -51,7 +51,7 @@ public class Bael : Enemy
     {
         yield break;
     }
-    protected override IEnumerator dieRoutine()
+    protected override IEnumerator enemyDieRoutine()
     {
         yield return base.dieRoutine();
     }

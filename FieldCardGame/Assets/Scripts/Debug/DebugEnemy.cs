@@ -40,7 +40,7 @@ public class DebugEnemy : Enemy
     {
         yield break;
     }
-    protected override IEnumerator dieRoutine()
+    protected override IEnumerator enemyDieRoutine()
     {
         yield return base.dieRoutine();
     }
