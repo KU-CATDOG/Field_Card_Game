@@ -222,9 +222,8 @@ public class Queen : Enemy
                     }
                     crystalCount -= 1;
                     yield return StartCoroutine(CardUse(toGo[distance[0] < distance[1] ? 0 : 1], cardIdx[distance[0] < distance[1] ? 2 : 3]));
-                    Debug.Log(crystalCount);    
                 }
-                else
+                else if (cardIdx[2] > -1 && cardIdx[3] > -1)
                 {
                     distance = new int[] { int.MinValue, int.MinValue };
                     if (cardIdx[2] > -1)
@@ -263,7 +262,10 @@ public class Queen : Enemy
                     }
                     crystalCount -= 1;
                     yield return StartCoroutine(CardUse(toGo[distance[0] > distance[1] ? 0 : 1], cardIdx[distance[0] > distance[1] ? 2 : 3]));
-
+                }
+                else
+                {
+                    break;
                 }
             }
         }
