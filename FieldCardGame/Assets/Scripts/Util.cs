@@ -45,10 +45,17 @@ public class Coordinate
 {
     public int X { get; set; }
     public int Y { get; set; }
+    public int distance { get; set; }
     public Coordinate(int x, int y)
     {
         X = x;
         Y = y;
+    }
+    public Coordinate(int x, int y, int _distance)
+    {
+        X = x;
+        Y = y;
+        distance = _distance;
     }
     public static Coordinate operator*(Coordinate p1, int scalar)
     {
@@ -105,7 +112,66 @@ public class Coordinate
             return null;
         }
         return ret;
-  }
+    }
+
+    public List<Coordinate> GetDistanceAvailableTile(int _distance)
+    {
+        List<Coordinate> ret = new List<Coordinate> ();
+        List<string> path = new List<string>();
+
+        ret.AddRange(findTileInRange(_distance, new Coordinate(X, Y)));
+
+        return ret;
+    }
+
+    public List<Coordinate> findTileInRange(int _distance, Coordinate _pos)
+    {
+        List<Coordinate> ret = new List<Coordinate>();
+
+        Queue<Coordinate> checkNext = new Queue<Coordinate>();
+        Queue<Coordinate> checkNow = new Queue<Coordinate>();
+
+        int[][] dirs = new int[][] 
+        {
+            new int[] {0, 1},
+            new int[] {0, -1},
+            new int[] {1, 0},
+            new int[] {-1, 0},
+        };
+
+        _pos.distance = 0;
+        checkNow.Enqueue(_pos);
+
+        // 검사 시작
+        while (checkNow.Count > 0)
+        {
+            Coordinate t = checkNow.Dequeue();
+            for (int i = 0; i < 4; ++i)
+            {
+                Coordinate next = new Coordinate(t.X + dirs[i][0], t.Y + dirs[i][1], 0);
+
+                if (OutRange(next) || next.distance <= t.distance + 1)
+                    continue;
+
+                // 이동 가능 거리 내에 있는 타일인지 검사.
+                if (GameManager.Instance.Map[next.X, next.Y].CharacterOnTile != null)
+                {
+                    next.distance = t.distance + 1;
+                    checkNext.Enqueue(next);
+                    ret.Add(new Coordinate(next.X, next.Y));
+                }
+            }
+
+            if (checkNow.Count == 0)
+            {
+                checkNow = checkNext;
+                checkNext.Clear();
+            }
+        }
+
+        return ret;
+    }
+
   public Coordinate GetUpTilewithoutTest()
   {
     Coordinate ret = new Coordinate(X, Y + 1);

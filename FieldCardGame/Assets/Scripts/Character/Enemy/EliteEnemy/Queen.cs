@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Queen : Enemy
 {
-    private int crystalCount;
     protected override void Start()
     {
         base.Start();

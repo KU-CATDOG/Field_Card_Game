@@ -19,7 +19,9 @@ public abstract class Enemy : Character
     //fixme
     protected int rewardTier { get; set; } = 1;
 
-    protected override void Awake()
+    protected int crystalCount;
+
+    protected void Awake()
     {
         base.Awake();
         GameManager.Instance.EnemyList.Add(this);
