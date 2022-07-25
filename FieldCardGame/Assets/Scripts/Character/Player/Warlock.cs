@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 public class Warlock : Player
 {
+    private TextMeshProUGUI bloodText;
     protected override IEnumerator levelUp()
     {
         yield break;
@@ -62,12 +63,14 @@ public class Warlock : Player
     protected override void Start()
     {
         base.Start();
+        bloodText = PlayerUI.GetComponentInChildren<TextMeshProUGUI>();
         TurnStartDraw = 5;
         MaxHp = Hp = 50;
     }
     protected override void Update()
     {
         base.Update();
+        bloodText.text = $"{Hp}";
     }
 
 
