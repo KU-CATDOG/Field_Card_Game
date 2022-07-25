@@ -14,6 +14,9 @@ public enum BuffType
     Strengthen,
     Shield,
     Will,
+    Illusion,
+    Regeneration,
+    Growth,
     Debug,
 }
 public enum DebuffType

@@ -16,11 +16,17 @@ public class EffectHandler
         Effect strengthen = new Strengthen(caster);
         Effect shield = new Shield(caster);
         Effect will = new Will(caster);
+        Effect illusion = new Illusion(caster);
+        Effect regeneration = new Regeneration(caster);
+        Effect growth = new Growth(caster);
         Effect debug = new DebugEffect(caster);
         
         buffDict.Add(BuffType.Strengthen, strengthen);
         buffDict.Add(BuffType.Shield, shield);
         buffDict.Add(BuffType.Will, will);
+        buffDict.Add(BuffType.Illusion, illusion);
+        buffDict.Add(BuffType.Regeneration, regeneration);
+        buffDict.Add(BuffType.Growth, growth);
         buffDict.Add(BuffType.Debug, debug);
 
         Effect stun = new Stun(caster);
