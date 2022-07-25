@@ -190,7 +190,7 @@ public class PlayerUIManager : MonoBehaviour
             return false;
         });
         card.MoveInterrupted = false;
-        Vector2 movVec = target - (Vector2)card.transform.position;
+        Vector2 movVec = target - (Vector2)card.position;
         float time = 0f;
         movVec /= timeLimit;
         yield return new WaitUntil(() =>
@@ -200,13 +200,13 @@ public class PlayerUIManager : MonoBehaviour
                 interrupted = true;
                 return true;
             }
-            card.transform.position += (Vector3)movVec * Time.deltaTime;
+            card.position += (Vector3)movVec * Time.deltaTime;
             time += Time.deltaTime;
             return time > timeLimit;
         });
         if (!interrupted)
         {
-            card.transform.position = target;
+            card.position = target;
         }
         card.OnMoving = false;
     }
@@ -225,7 +225,7 @@ public class PlayerUIManager : MonoBehaviour
                 CardObject obj = CardImages[i];
                 obj.SiblingIndex = defaultSiblingIndex + i;
                 StartCoroutine(MoveCard(obj, centerPos + evenVectors[5 - size / 2 + i]));
-                obj.transform.rotation = Quaternion.Euler(Vector3.back * evenAngles[5 - size / 2 + i] * 70f);
+                obj.rotation = Quaternion.Euler(Vector3.back * evenAngles[5 - size / 2 + i] * 70f);
             }
         }
         else
@@ -239,7 +239,7 @@ public class PlayerUIManager : MonoBehaviour
                 CardObject obj = CardImages[i];
                 obj.SiblingIndex = defaultSiblingIndex + i;
                 StartCoroutine(MoveCard(obj, centerPos + oddVectors[4 - size / 2 + i]));
-                obj.transform.rotation = Quaternion.Euler(Vector3.back * oddAngles[4 - size / 2 + i] * 70f);
+                obj.rotation = Quaternion.Euler(Vector3.back * oddAngles[4 - size / 2 + i] * 70f);
             }
         }
         yield break;
@@ -269,7 +269,7 @@ public class PlayerUIManager : MonoBehaviour
         target = new Vector2(centerPos.x + (cards.Count % 2 == 0 ? evenVectors[5 - size / 2 + cardIndex] : oddVectors[4 - size / 2 + cardIndex]).x, HighlightedAnchor.position.y);
         StartCoroutine(MoveCard(card, target, 0.05f));
         card.SetAsLastSibling();
-        card.transform.rotation = Quaternion.Euler(Vector2.zero);
+        card.rotation = Quaternion.Euler(Vector2.zero);
         yield break;
     }
     public IEnumerator DehighlightCard(CardObject card)
@@ -431,7 +431,7 @@ public class PlayerUIManager : MonoBehaviour
                 return !ReadyUseMode;
             }
             movVec = movVec.normalized;
-            card.transform.position += (Vector3)movVec * Time.deltaTime * speed;
+            card.position += (Vector3)movVec * Time.deltaTime * speed;
             return !ReadyUseMode;
         });
     }

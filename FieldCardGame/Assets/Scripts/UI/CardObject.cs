@@ -8,6 +8,38 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
 {
     private CardUsableEffect usableEffect;
     private Transform parent;
+    public Vector3 pos;
+    public Vector3 position
+    {
+        get
+        {
+            return transform.position;
+        }
+        set
+        {
+            if (usableEffect)
+            {
+                usableEffect.transform.position = value;
+            }
+            pos = transform.position = value;
+        }
+    }
+    private Quaternion rot;
+    public Quaternion rotation
+    {
+        get
+        {
+            return rot;
+        }
+        set
+        {
+            if (usableEffect)
+            {
+                usableEffect.transform.rotation = value;
+            }
+            rot = transform.rotation = value;
+        }
+    }
     public CardUsableEffect UsableEffect
     {
         get
@@ -18,7 +50,8 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
                 usableEffect = Instantiate(PlayerUIManager.Instance.CardUsableEffect, parent);
                 transform.parent = parent;
                 parent.parent = PlayerUIManager.Instance.CardArea.transform;
-                usableEffect.Target = this;                
+                usableEffect.transform.rotation = transform.rotation;
+                usableEffect.transform.position = transform.position;
             }
             return usableEffect;
         }

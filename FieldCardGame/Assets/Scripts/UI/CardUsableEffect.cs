@@ -45,7 +45,6 @@ public class CardUsableEffect : MonoBehaviour
     private float a4;
     private RawImage img4;
     private Vector2 originSizeLayer4;
-    public CardObject Target { get; set; }
 
     private RectTransform defaultOuterLayer;
     private RectTransform usableEffectLayer1;
@@ -113,8 +112,6 @@ public class CardUsableEffect : MonoBehaviour
 
     void Update()
     {
-        transform.position = Target.transform.position;
-        transform.rotation = Target.transform.rotation;
         if(time <= 12f / speed)
         {
             UsableEffectLayer1.sizeDelta += Vector2.one * speed * Time.deltaTime;
