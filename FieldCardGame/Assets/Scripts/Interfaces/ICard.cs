@@ -11,10 +11,10 @@ public interface ICard
     public int GetCost();
     public void SetCost(int _cost);
     public CostType GetCostType();
-    public CardType GetCardType();
     public List<Coordinate> GetAvailableTile(Coordinate pos);
     public bool IsAvailablePosition(Coordinate caster, Coordinate target);
     public List<Coordinate> GetAreaofEffect(Coordinate relativePos);
     public IEnumerator CardRoutine(Character caster, Coordinate center);
     public void CardRoutineInterrupt();
+    public IEnumerator GetCardRoutine(Character owner);
 }

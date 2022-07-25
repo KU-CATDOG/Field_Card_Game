@@ -9,6 +9,10 @@ public class WarlockSmite : IPlayerCard
     private int damage = 6;
     private bool interrupted;
     public bool Disposable { get; set; } = true;
+    public IEnumerator GetCardRoutine(Character owner)
+    {
+        yield break;
+    }
     public int GetRange()
     {
         return range;

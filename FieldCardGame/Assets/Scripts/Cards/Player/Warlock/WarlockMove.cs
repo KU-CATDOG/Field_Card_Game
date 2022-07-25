@@ -8,6 +8,10 @@ public class WarlockMove : IPlayerCard
     private int cost = 2;
     private bool interrupted;
     public bool Disposable { get; set; }
+    public IEnumerator GetCardRoutine(Character owner)
+    {
+        yield break;
+    }
     public int GetRange()
     {
         return range;

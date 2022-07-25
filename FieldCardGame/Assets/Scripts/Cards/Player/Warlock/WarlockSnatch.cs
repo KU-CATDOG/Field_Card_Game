@@ -9,6 +9,11 @@ public class WarlockSnatch : IPlayerCard
     private int damage = 15;
     private int healAmount = 20;
     private bool interrupted;
+
+    public IEnumerator GetCardRoutine(Character owner)
+    {
+        yield break;
+    }
     public bool Disposable { get; set; }
     public int GetRange()
     {

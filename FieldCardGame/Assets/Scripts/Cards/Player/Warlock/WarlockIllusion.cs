@@ -9,6 +9,10 @@ public class WarlockIllusion : IPlayerCard
     private int buffCount = 1;
     private bool interrupted;
     public bool Disposable { get; set; } = true;
+    public IEnumerator GetCardRoutine(Character owner)
+    {
+        yield break;
+    }
     public int GetRange()
     {
         return range;

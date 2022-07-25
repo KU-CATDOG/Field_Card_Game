@@ -7,6 +7,10 @@ public class DebugCard : IPlayerCard
     private bool interrupted;
     private int cost = 1;
     public bool Disposable { get; set; }
+    public IEnumerator GetCardRoutine(Character owner)
+    {
+        yield break;
+    }
     public Color GetColorOfEffect(Coordinate pos)
     {
         return Color.white;

@@ -846,6 +846,7 @@ public abstract class Character : MonoBehaviour
             yield break;
         }
         addedCard = toAdd;
+        yield return StartCoroutine(addedCard.GetCardRoutine(this));
         if(toHand)
         {
             HandCard.Add(addedCard);

@@ -8,6 +8,10 @@ public class Attack : IPlayerCard
     private int cost = 1;
     private bool interrupted;
     int dmg = 5;
+    public IEnumerator GetCardRoutine(Character owner)
+    {
+        yield break;
+    }
     public int GetCardID()
     {
         return 1000000;

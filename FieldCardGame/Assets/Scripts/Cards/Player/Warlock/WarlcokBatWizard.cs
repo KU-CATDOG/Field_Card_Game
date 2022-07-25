@@ -9,6 +9,10 @@ public class WarlockBatWizard : IPlayerCard
     private int cost = 10;
     private int giveCard = 3;
     private bool interrupted;
+    public IEnumerator GetCardRoutine(Character owner)
+    {
+        yield break;
+    }
     public int GetRange()
     {
         return range;

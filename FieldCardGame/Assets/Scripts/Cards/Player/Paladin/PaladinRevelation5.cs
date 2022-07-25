@@ -8,6 +8,11 @@ public class PaladinRevelation5 : IPlayerCard
     private int cost = 1;
     public bool Disposable { get; set; } = true;
 
+    public IEnumerator GetCardRoutine(Character owner)
+    {
+        yield break;
+    }
+
     public int GetRange()
     {
         return range;

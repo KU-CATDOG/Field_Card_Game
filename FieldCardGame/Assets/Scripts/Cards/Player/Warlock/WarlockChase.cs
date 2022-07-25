@@ -9,6 +9,10 @@ public class WarlockChase : IPlayerCard
     private int cost = 15;
     private bool interrupted;
     public bool Disposable { get; set; }
+    public IEnumerator GetCardRoutine(Character owner)
+    {
+        yield break;
+    }
     public int GetRange()
     {
         return range;
