@@ -5,10 +5,11 @@ using UnityEngine;
 public class WarlockMosquito : IPlayerCard
 {
     private int range = 1;
+    private bool notRemoved = true;
     private int cost = 500;
     private int damage = 100;
     private bool interrupted;
-    public bool Disposable { get; set; } = true;
+    public bool Disposable { get; set; }
     public int GetRange()
     {
         return range;
@@ -90,6 +91,24 @@ public class WarlockMosquito : IPlayerCard
             }
             yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
         }
+        SetCost(500);
+        yield break;
+    }
+    public IEnumerator GetCardRoutine(Character owner)
+    {
+        owner.AddGetDmgRoutine(ReduceCost(),0);
+    }
+    private IEnumerator ReduceCost()
+    {
+        while(notRemoved)
+        {
+            SetCost(GetCost() - 10);
+            yield return null;
+        }
+    }
+    private IEnumerator RemoveCard()
+    {
+        notRemoved = true;
         yield break;
     }
     public void CardRoutineInterrupt()
