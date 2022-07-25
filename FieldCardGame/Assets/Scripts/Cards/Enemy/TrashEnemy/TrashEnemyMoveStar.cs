@@ -17,6 +17,14 @@ public class TrashEnemyMoveStar : ICard
     private int range;
 
     private bool interrupted;
+    public IEnumerator GetCardRoutine(Character owner)
+    {
+        yield break;
+    }
+    public IEnumerator RemoveCardRoutine(Character owner)
+    {
+        yield break;
+    }
 
     public int GetCardID()
     {

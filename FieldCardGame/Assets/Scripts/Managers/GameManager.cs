@@ -10,6 +10,15 @@ public class GameManager : MonoBehaviour
     private List<SpawnEntity> worldEntityList;
     private Dictionary<int, ICard> cardDict = new Dictionary<int, ICard>();
     [SerializeField]
+    private GameObject empty;
+    public GameObject Empty
+    {
+        get
+        {
+            return empty;
+        }
+    }
+    [SerializeField]
     private Loading dmgEffect;
     public Loading DmgEffect
     {

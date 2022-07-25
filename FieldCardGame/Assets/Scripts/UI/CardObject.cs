@@ -6,6 +6,24 @@ using UnityEngine.UI;
 using TMPro;
 public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
+    private CardUsableEffect usableEffect;
+    private Transform parent;
+    public CardUsableEffect UsableEffect
+    {
+        get
+        {
+            if (!usableEffect)
+            {
+                parent = Instantiate(GameManager.Instance.Empty).transform;
+                usableEffect = Instantiate(PlayerUIManager.Instance.CardUsableEffect, parent);
+                transform.parent = parent;
+                parent.parent = PlayerUIManager.Instance.CardArea.transform;
+                usableEffect.Target = this;                
+            }
+            return usableEffect;
+        }
+    }
+
     [SerializeField]
     private int id;
     public int ID
@@ -52,7 +70,26 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
         }
     }
     public ICard ReferenceCard { get; set; }
-    public bool Usable { get; private set; } = true;
+    private bool usable;
+    public bool Usable
+    {
+        get
+        {
+            return usable;
+        }
+        set
+        {
+            if(value)
+            {
+                UsableEffect.gameObject.SetActive(true);
+            }
+            else
+            {
+                UsableEffect.gameObject.SetActive(false);
+            }
+            usable = value;
+        }
+    }
     public bool isPileCard { get; set; }
     public bool IsRewardCard { get; set; }
     public static List<IEnumerator> MouseEvent { get; private set; } = new List<IEnumerator>();
@@ -69,6 +106,7 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
             OriginCardSize = transform.localScale;
             HighlightedCardSize = OriginCardSize * 1.5f;
         }
+        Usable = true;
     }
     private void Start()
     {
@@ -156,5 +194,49 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
         Usable = false;
         yield return StartCoroutine(GameManager.Instance.CharacterSelected.AddCard(GameManager.Instance.CardDict[ID]));
         PlayerUIManager.Instance.CloseRewardPanel();
+    }
+    public void SetSiblingIndex(int idx)
+    {
+        if (parent)
+        {
+            parent.SetSiblingIndex(idx);
+        }
+        else
+        {
+            SetSiblingIndex(idx);
+        }
+    }
+    public void SetAsLastSibling()
+    {
+        if (parent)
+        {
+            parent.SetAsLastSibling();
+        }
+        else
+        {
+            SetAsLastSibling();
+        }
+    }
+    public void SetActive(bool value)
+    {
+        if (parent)
+        {
+            parent.gameObject.SetActive(value);
+        }
+        else
+        {
+            gameObject.SetActive(value);
+        }
+    }
+    public void Destroy()
+    {
+        if (parent)
+        {
+            Destroy(parent.gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 }

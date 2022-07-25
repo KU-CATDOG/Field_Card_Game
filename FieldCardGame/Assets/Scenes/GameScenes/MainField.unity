@@ -1777,6 +1777,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turnEndButton: {fileID: 0}
+  cardUsableEffect: {fileID: 579519668730313841, guid: 9ffc6b4366caf3d4dba9d31f6664c74c, type: 3}
   hpBars: {fileID: 2092123621}
   hpBar: {fileID: 3816978082077273840, guid: 675caf9f47e03354e8ad65695df11fb6, type: 3}
   LevelText: {fileID: 1461276806}
@@ -1786,7 +1787,7 @@ MonoBehaviour:
   CardPilePanel: {fileID: 673866573}
   DiscardedPilePanel: {fileID: 1194655906}
   CenterPoint: {fileID: 728206349}
-  CardArea: {fileID: 1455474763}
+  cardArea: {fileID: 1455474763}
   LeftSide: {fileID: 255461257}
   HighlightedAnchor: {fileID: 237028524}
   playerSpecificArea: {fileID: 259933323}

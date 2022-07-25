@@ -17,7 +17,15 @@ public class TrashEnemyAttack : ICard
     private int range;
 
     private bool interrupted;
-    
+    public IEnumerator GetCardRoutine(Character owner)
+    {
+        yield break;
+    }
+    public IEnumerator RemoveCardRoutine(Character owner)
+    {
+        yield break;
+    }
+
     /*public TrashEnemyAttack (int _cost, int _dmg, int _range)
     {
         cost = _cost;

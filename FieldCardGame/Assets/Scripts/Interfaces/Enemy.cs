@@ -22,7 +22,7 @@ public abstract class Enemy : Character
     protected int maxCrystalCount;
     protected int crystalCount;
 
-    protected void Awake()
+    protected override void Awake()
     {
         base.Awake();
         GameManager.Instance.EnemyList.Add(this);

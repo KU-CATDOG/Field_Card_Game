@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Totem : Enemy
 {
-    protected void Start()
+    protected override void Start()
     {
         base.Start();
         Hp = MaxHp = 15;

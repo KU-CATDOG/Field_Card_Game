@@ -10,6 +10,15 @@ public class PlayerUIManager : MonoBehaviour
     public float CardUseHeight { get; set; }
     [SerializeField]
     private Button turnEndButton;
+    [SerializeField]
+    private CardUsableEffect cardUsableEffect;
+    public CardUsableEffect CardUsableEffect
+    {
+        get
+        {
+            return cardUsableEffect;
+        }
+    }
     public Button TurnEndButton
     {
         get
@@ -51,7 +60,14 @@ public class PlayerUIManager : MonoBehaviour
     [SerializeField]
     private GameObject CenterPoint;
     [SerializeField]
-    private GameObject CardArea;
+    private GameObject cardArea;
+    public GameObject CardArea
+    {
+        get
+        {
+            return cardArea;
+        }
+    }
     [SerializeField]
     private Transform LeftSide;
     [SerializeField]
@@ -110,9 +126,9 @@ public class PlayerUIManager : MonoBehaviour
     }
     private void Start()
     {
-        RectTransform rect = CardArea.GetComponent<RectTransform>();
+        RectTransform rect = cardArea.GetComponent<RectTransform>();
         CardUseHeight = rect.position.y + rect.sizeDelta.y;
-        defaultSiblingIndex = CardArea.transform.childCount;
+        defaultSiblingIndex = cardArea.transform.childCount;
         centerPos = new Vector2(CenterPoint.transform.position.x, -Mathf.Tan(80f / 180f * Mathf.PI) * (RightSide.position - LeftSide.position).magnitude / 2);
         CenterPoint.transform.position = centerPos;
         LeftSideVector = LeftSide.position - centerPos;
@@ -136,7 +152,7 @@ public class PlayerUIManager : MonoBehaviour
     }
     public IEnumerator DrawCard()
     {
-        CardObject card = Instantiate(GameManager.Instance.CardObjectDict[GameManager.Instance.CurPlayer.drawCard.GetCardID()], CardArea.transform);
+        CardObject card = Instantiate(GameManager.Instance.CardObjectDict[GameManager.Instance.CurPlayer.drawCard.GetCardID()], cardArea.transform);
         card.ReferenceCard = GameManager.Instance.CurPlayer.drawCard;
         CardImages.Add(card);
         
@@ -145,9 +161,9 @@ public class PlayerUIManager : MonoBehaviour
     }
     public IEnumerator GenerateCardToHand()
     {
-        CardObject card = Instantiate(GameManager.Instance.CardObjectDict[GameManager.Instance.CurPlayer.addedCard.GetCardID()], CardArea.transform);
+        CardObject card = Instantiate(GameManager.Instance.CardObjectDict[GameManager.Instance.CurPlayer.addedCard.GetCardID()], cardArea.transform);
         card.ReferenceCard = GameManager.Instance.CurPlayer.drawCard;
-        CardImages.Add(Instantiate(GameManager.Instance.CardObjectDict[GameManager.Instance.CurPlayer.addedCard.GetCardID()], CardArea.transform));
+        CardImages.Add(Instantiate(GameManager.Instance.CardObjectDict[GameManager.Instance.CurPlayer.addedCard.GetCardID()], cardArea.transform));
         
         CardImages[CardImages.Count - 1].isPileCard = false;
         yield return StartCoroutine(Rearrange());
@@ -157,7 +173,7 @@ public class PlayerUIManager : MonoBehaviour
         int idx = card.SiblingIndex - defaultSiblingIndex;
         CardImages.RemoveAt(idx);
         //needAnimation
-        Destroy(card.gameObject);
+        card.Destroy();
         StartCoroutine(Rearrange());
     }
     private IEnumerator MoveCard(CardObject card, Vector2 target, float timeLimit = 0.3f)
@@ -248,16 +264,19 @@ public class PlayerUIManager : MonoBehaviour
             StartCoroutine(MoveCard(obj, target));
         }
         card.transform.localScale = CardObject.HighlightedCardSize;
+        card.UsableEffect.transform.localScale = card.UsableEffect.HighlightedScale;
+
         target = new Vector2(centerPos.x + (cards.Count % 2 == 0 ? evenVectors[5 - size / 2 + cardIndex] : oddVectors[4 - size / 2 + cardIndex]).x, HighlightedAnchor.position.y);
         StartCoroutine(MoveCard(card, target, 0.05f));
-        card.transform.SetAsLastSibling();
+        card.SetAsLastSibling();
         card.transform.rotation = Quaternion.Euler(Vector2.zero);
         yield break;
     }
     public IEnumerator DehighlightCard(CardObject card)
     {
         card.transform.localScale = CardObject.OriginCardSize;
-        card.transform.SetSiblingIndex(card.SiblingIndex);
+        card.UsableEffect.transform.localScale = card.UsableEffect.OriginScale;
+        card.SetSiblingIndex(card.SiblingIndex);
         StartCoroutine(Rearrange());
         yield break;
     }
@@ -277,7 +296,7 @@ public class PlayerUIManager : MonoBehaviour
             Vector3 target = obj.transform.position - new Vector3(0, CardUseHeight, 0);
             StartCoroutine(MoveCard(obj, target));
         }
-        card.gameObject.SetActive(false);
+        card.SetActive(false);
         int range = UseModeCard.GetRange();
         List<Coordinate> inRange = new List<Coordinate>();
         bool[,] visited = new bool[128, 128];
@@ -299,7 +318,7 @@ public class PlayerUIManager : MonoBehaviour
         });
         if (UseCancel)
         {
-            card.gameObject.SetActive(true);
+            card.SetActive(true);
             yield return new WaitForSeconds(0.1f);
             StartCoroutine(DehighlightCard(card));
             UseMode = false;
@@ -307,12 +326,15 @@ public class PlayerUIManager : MonoBehaviour
             {
                 GameManager.Instance.Map[i.X, i.Y].RestoreColor();
             }
-            foreach (Coordinate i in UseModeCard.GetAreaofEffect(UseReadyPos - GameManager.Instance.CurPlayer.position))
+            if (UseReadyPos != null)
             {
-                Coordinate target = UseReadyPos + i;
-                if (Coordinate.OutRange(target))
-                    continue;
-                GameManager.Instance.Map[target.X, target.Y].RestoreColor();
+                foreach (Coordinate i in UseModeCard.GetAreaofEffect(UseReadyPos - GameManager.Instance.CurPlayer.position))
+                {
+                    Coordinate target = UseReadyPos + i;
+                    if (Coordinate.OutRange(target))
+                        continue;
+                    GameManager.Instance.Map[target.X, target.Y].RestoreColor();
+                }
             }
             yield break;
         }
