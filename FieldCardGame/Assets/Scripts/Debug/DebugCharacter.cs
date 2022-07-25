@@ -246,6 +246,10 @@ public class DebugCharacter : Player
     {
         StartCoroutine(AddCard(new WarlockMemento()));
     }
+    public void AddWarlockHeal()
+    {
+        StartCoroutine(AddCard(new WarlockHeal()));
+    }
     protected override void InitializeDeck()
     {
         CardPile.Add(new PaladinMove());
