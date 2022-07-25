@@ -29,8 +29,9 @@ public class GameStartButton : MonoBehaviour, IPointerClickHandler, IPointerEnte
         yield return GameManager.Instance.StartCoroutine(GameManager.Instance.LoadingPanel.StartLoad());
         AsyncOperation async = SceneManager.LoadSceneAsync("MainField");
         yield return new WaitUntil(() => {  return async.isDone; });
-        GameManager.Instance.StartCoroutine(GameManager.Instance.LoadingPanel.LoadEnd());
         GameManager.Instance.GenerateMap();
+        yield return new WaitForSeconds(0.5f);
+        GameManager.Instance.StartCoroutine(GameManager.Instance.LoadingPanel.LoadEnd());
     }
 
     public void OnPointerEnter(PointerEventData data)

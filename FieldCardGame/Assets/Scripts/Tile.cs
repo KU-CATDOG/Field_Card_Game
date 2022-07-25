@@ -24,6 +24,8 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             {
                 TileColor.material = DiscoveredColor;
                 discovered = value;
+                if(OnSightRoutine != null)
+                    OnSightRoutine();
             }
             else
             {
@@ -31,7 +33,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             }
         }
     }
-
+    public System.Action OnSightRoutine { get; set; }
     public Character CharacterOnTile { get; set; }
     public List<object> EntityOnTile { get; set; } = new List<object>();
     public MeshRenderer TileColor { get; set; }

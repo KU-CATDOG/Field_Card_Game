@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 4068269855793044119}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.97, y: 1, z: 0.97}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d64939ac9880c1c4eb1487a6b71775a0, type: 2}
+  - {fileID: 2100000, guid: a4762d3cf56819f4592cb6056ffe300b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -110,5 +110,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dce4ef868e5c0c140b02041558e6275e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DiscoveredColor: {fileID: 2100000, guid: d64939ac9880c1c4eb1487a6b71775a0, type: 2}
+  DiscoveredColor: {fileID: 2100000, guid: a4762d3cf56819f4592cb6056ffe300b, type: 2}
   DefaultColor: {fileID: 2100000, guid: 1d6ce9ca851c9ba49827f007539791bb, type: 2}
