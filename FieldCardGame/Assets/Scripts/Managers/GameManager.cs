@@ -85,7 +85,7 @@ public class GameManager : MonoBehaviour
     public List<Character> EnemyList { get; private set; } = new List<Character>();
     public Character CurPlayer { get; set; }
     public List<Character> Allies { get; private set; } = new List<Character>();
-    public const int MAPSIZE = 128;
+    public const int MAPSIZE = 32;
     private GameObject MapObject;
     [SerializeField]
     private Tile tilePrefab;

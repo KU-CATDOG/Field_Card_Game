@@ -128,7 +128,7 @@ public class Coordinate
   }
   public static bool OutRange(Coordinate toTest)
     {
-        if (toTest.X < 0 || toTest.X >= 128 || toTest.Y < 0 || toTest.Y >= 128)
+        if (toTest.X < 0 || toTest.X >= GameManager.MAPSIZE || toTest.Y < 0 || toTest.Y >= GameManager.MAPSIZE)
         {
             return true;
         }
