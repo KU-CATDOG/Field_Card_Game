@@ -7,7 +7,7 @@ public class DebugEnemy : Enemy
     protected override void Start()
     {
         base.Start();
-        Hp = MaxHp = 10;
+        Hp = MaxHp = 50;
         GiveExp = 1;
         TurnStartDraw = 2;
     }

@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarlockBatWizard : IPlayerCard
+public class WarlockGetSoul : IPlayerCard
 {
     public bool Disposable { get; set; }
     private int range = 0;
-    private int cost = 10;
+    private int cost = 12;
     private int giveCard = 3;
     private bool interrupted;
     public int GetRange()
@@ -58,7 +58,7 @@ public class WarlockBatWizard : IPlayerCard
     {
         for (int i = 0; i < giveCard; i++)
         {
-            yield return GameManager.Instance.StartCoroutine(caster.AddCard(GameManager.Instance.CardDict[3014010],true));
+            yield return GameManager.Instance.StartCoroutine(caster.AddCard(GameManager.Instance.CardDict[3026001],true));
         }
         yield return null;
     }
@@ -84,7 +84,7 @@ public class WarlockBatWizard : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3012001;
+        return 3125001;
     }
 
 }

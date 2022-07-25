@@ -645,7 +645,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1163621292}
         m_TargetAssemblyTypeName: DebugCharacter, Assembly-CSharp
-        m_MethodName: AddWarlockBatWizard
+        m_MethodName: AddWarlockGetSoul
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -853,7 +853,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1163621292}
         m_TargetAssemblyTypeName: DebugCharacter, Assembly-CSharp
-        m_MethodName: AddWarlockSmite
+        m_MethodName: AddWarlockInflation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
