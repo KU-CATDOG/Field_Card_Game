@@ -78,6 +78,7 @@ public class TurnManager : MonoBehaviour
                 for(PlayerIdx = 0; PlayerIdx < GameManager.Instance.Allies.Count; PlayerIdx++)
                 {
                     var j = GameManager.Instance.Allies[PlayerIdx];
+                    j.cardUseInTurn = 0;
                     if (j.IsDie) continue;
                     GameManager.Instance.CurPlayer = curChar = j;
                     (GameManager.Instance.CurPlayer as Player).PlayerUI.SetActive(true);
@@ -130,6 +131,7 @@ public class TurnManager : MonoBehaviour
                 {
                     var j = GameManager.Instance.EnemyList[EnemyIdx];
                     curChar = j;
+                    j.cardUseInTurn = 0;
                     if (j.IsDie) continue;
                     yield return StartCoroutine(curChar.AwakeTurn());
                     if (curChar.StartBuffHandler.Count != 0)
