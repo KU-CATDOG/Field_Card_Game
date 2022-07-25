@@ -242,6 +242,30 @@ public class DebugCharacter : Player
     {
         StartCoroutine(AddCard(new WarlockInflation()));
     }
+    public void AddWarlockMemento()
+    {
+        StartCoroutine(AddCard(new WarlockMemento()));
+    }
+    public void AddWarlockHeal()
+    {
+        StartCoroutine(AddCard(new WarlockHeal()));
+    }
+    public void AddWarlockIllusion()
+    {
+        StartCoroutine(AddCard(new WarlockIllusion()));
+    }
+    public void AddWarlockLegend()
+    {
+        StartCoroutine(AddCard(new WarlockLegend()));
+    }
+    public void AddWarlockSoulBomb()
+    {
+        StartCoroutine(AddCard(new WarlockSoulBomb()));
+    }
+    public void AddWarlockLissandra()
+    {
+        StartCoroutine(AddCard(new WarlockLissandra()));
+    }
     protected override void InitializeDeck()
     {
         CardPile.Add(new PaladinMove());

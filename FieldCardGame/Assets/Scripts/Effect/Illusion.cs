@@ -28,7 +28,7 @@ public class Illusion : Effect
     {
         while (IsEnabled)
         {
-            caster.GiveHeal(caster, caster.Dmg);
+            caster.StartCoroutine(caster.GiveHeal(caster, caster.Dmg, true));
             caster.Dmg = 0;
             caster.GetDmgInterrupted = true;
             yield return null;

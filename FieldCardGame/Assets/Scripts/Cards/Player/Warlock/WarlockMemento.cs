@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarlockRegeneration : IPlayerCard
+public class WarlockMemento : IPlayerCard
 {
     private int range = 0;
-    private int cost = 15;
-    private int healAmount = 7;
+    private int cost = 10;
+    private int healAmount = 30;
     private bool interrupted;
     public bool Disposable { get; set; }
     public int GetRange()
@@ -69,7 +69,7 @@ public class WarlockRegeneration : IPlayerCard
             interrupted = false;
             yield break;
         }
-        caster.EffectHandler.BuffDict[BuffType.Regeneration].SetEffect(GetHealAmount());
+        caster.EffectHandler.BuffDict[BuffType.Growth].SetEffect(GetHealAmount());
         yield break;
     }
     public void CardRoutineInterrupt()
@@ -94,6 +94,6 @@ public class WarlockRegeneration : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3223001;
+        return 3120001;
     }
 }

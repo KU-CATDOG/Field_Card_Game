@@ -23,7 +23,7 @@ public class Growth : Effect
     }
     public override IEnumerator RemoveEffect()
     {
-        caster.GiveHeal(caster, Value);
+        caster.StartCoroutine(caster.GiveHeal(caster, Value, true));
         IsEnabled = false;
         yield return null;
     }

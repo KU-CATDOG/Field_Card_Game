@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarlockRegeneration : IPlayerCard
+public class WarlockIllusion : IPlayerCard
 {
     private int range = 0;
-    private int cost = 15;
-    private int healAmount = 7;
+    private int cost = 20;
+    private int buffCount = 1;
     private bool interrupted;
-    public bool Disposable { get; set; }
+    public bool Disposable { get; set; } = true;
     public int GetRange()
     {
         return range;
@@ -16,14 +16,6 @@ public class WarlockRegeneration : IPlayerCard
     public void SetRange(int _range)
     {
         range = _range;
-    }
-    public int GetHealAmount()
-    {
-        return healAmount;
-    }
-    public void SetHealAmount(int _healAmount)
-    {
-        healAmount = _healAmount;
     }
     public Color GetUnAvailableTileColor()
     {
@@ -69,7 +61,7 @@ public class WarlockRegeneration : IPlayerCard
             interrupted = false;
             yield break;
         }
-        caster.EffectHandler.BuffDict[BuffType.Regeneration].SetEffect(GetHealAmount());
+        caster.EffectHandler.BuffDict[BuffType.Illusion].SetEffect(buffCount);
         yield break;
     }
     public void CardRoutineInterrupt()
@@ -94,6 +86,6 @@ public class WarlockRegeneration : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3223001;
+        return 3224001;
     }
 }
