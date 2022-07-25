@@ -96,6 +96,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     {
         if (!PlayerUIManager.Instance.UseMode) return;
         if (!PlayerUIManager.Instance.UseModeCard.IsAvailablePosition(GameManager.Instance.CurPlayer.position, position)) return;
+        PlayerUIManager.Instance.UseReadyPos = position;
         OriginColor = TileColor.material.color;
         foreach (Coordinate i in PlayerUIManager.Instance.UseModeCard.GetAreaofEffect(position - GameManager.Instance.CurPlayer.position))
         {

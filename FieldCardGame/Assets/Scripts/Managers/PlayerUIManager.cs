@@ -72,6 +72,7 @@ public class PlayerUIManager : MonoBehaviour
     public bool OnRoutine { get; set; }
     public bool UseMode { get; set; }
     public ICard UseModeCard;
+    public Coordinate UseReadyPos { get; set; }
     public Coordinate CardUsePos { get; set; }
     public bool UseTileSelected { get; set; }
     public bool ReadyUseMode { get; set; }
@@ -135,13 +136,19 @@ public class PlayerUIManager : MonoBehaviour
     }
     public IEnumerator DrawCard()
     {
-        CardImages.Add(Instantiate(GameManager.Instance.CardObjectDict[GameManager.Instance.CurPlayer.drawCard.GetCardID()], CardArea.transform));
+        CardObject card = Instantiate(GameManager.Instance.CardObjectDict[GameManager.Instance.CurPlayer.drawCard.GetCardID()], CardArea.transform);
+        card.ReferenceCard = GameManager.Instance.CurPlayer.drawCard;
+        CardImages.Add(card);
+        
         CardImages[CardImages.Count - 1].isPileCard = false;
         yield return StartCoroutine(Rearrange());
     }
     public IEnumerator GenerateCardToHand()
     {
+        CardObject card = Instantiate(GameManager.Instance.CardObjectDict[GameManager.Instance.CurPlayer.addedCard.GetCardID()], CardArea.transform);
+        card.ReferenceCard = GameManager.Instance.CurPlayer.drawCard;
         CardImages.Add(Instantiate(GameManager.Instance.CardObjectDict[GameManager.Instance.CurPlayer.addedCard.GetCardID()], CardArea.transform));
+        
         CardImages[CardImages.Count - 1].isPileCard = false;
         yield return StartCoroutine(Rearrange());
     }
@@ -299,6 +306,13 @@ public class PlayerUIManager : MonoBehaviour
             foreach (Coordinate i in inRange)
             {
                 GameManager.Instance.Map[i.X, i.Y].RestoreColor();
+            }
+            foreach (Coordinate i in UseModeCard.GetAreaofEffect(UseReadyPos - GameManager.Instance.CurPlayer.position))
+            {
+                Coordinate target = UseReadyPos + i;
+                if (Coordinate.OutRange(target))
+                    continue;
+                GameManager.Instance.Map[target.X, target.Y].RestoreColor();
             }
             yield break;
         }
