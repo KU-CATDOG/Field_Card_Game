@@ -14,7 +14,7 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
             return id;
         }
     }
-    public bool Usable { get; private set; }
+    public bool Usable { get; private set; } = true;
     public bool isPileCard { get; set; }
     public bool IsRewardCard { get; set; }
     public static List<IEnumerator> MouseEvent { get; private set; } = new List<IEnumerator>();
@@ -74,12 +74,15 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
     public void OnPointerClick(PointerEventData eventData)
     {
         //fixme
+        if (!Usable)
+        {
+            return;
+        }
         if (PlayerUIManager.Instance.PanelOpenned)
         {
             if(IsRewardCard)
             {
-                StartCoroutine(GameManager.Instance.CharacterSelected.AddCard(GameManager.Instance.CardDict[ID]));
-                PlayerUIManager.Instance.CloseRewardPanel();
+                StartCoroutine(rewardRoutine());
             }
             else
             {
@@ -105,5 +108,11 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
                 MouseEvent.Add(PlayerUIManager.Instance.ReadyUseCard(this));
 
         }
+    }
+    private IEnumerator rewardRoutine()
+    {
+        Usable = false;
+        yield return StartCoroutine(GameManager.Instance.CharacterSelected.AddCard(GameManager.Instance.CardDict[ID]));
+        PlayerUIManager.Instance.CloseRewardPanel();
     }
 }

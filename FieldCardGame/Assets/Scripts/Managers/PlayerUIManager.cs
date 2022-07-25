@@ -256,10 +256,6 @@ public class PlayerUIManager : MonoBehaviour
     }
     public IEnumerator UseCard(CardObject card)
     {
-        if (!card.Usable)
-        {
-            yield break;
-        }
         ReadyUseMode = false;
         UseMode = true;
         //StartCoroutine(MainCamera.Instance.moveCamera(true));
