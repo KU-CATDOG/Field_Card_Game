@@ -892,6 +892,7 @@ public abstract class Character : MonoBehaviour
             yield break;
         }
         removedCard = HandCard[idx];
+        yield return StartCoroutine(removedCard.RemoveCardRoutine(this));
         HandCard.RemoveAt(idx);
         if (this is Player)
         {
@@ -928,6 +929,7 @@ public abstract class Character : MonoBehaviour
             yield break;
         }
         removedCard = toRemove;
+        yield return StartCoroutine(removedCard.RemoveCardRoutine(this));
         if (discardedPileFirst)
         {
             ICard card = DiscardedPile.Find((x) => x.GetCardID() == removedCard.GetCardID());

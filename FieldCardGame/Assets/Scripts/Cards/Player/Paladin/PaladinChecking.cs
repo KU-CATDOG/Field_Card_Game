@@ -12,6 +12,10 @@ public class PaladinChecking : IPlayerCard
     {
         yield break;
     }
+    public IEnumerator RemoveCardRoutine(Character owner)
+    {
+        yield break;
+    }
     public int GetRange()
     {
         return range;

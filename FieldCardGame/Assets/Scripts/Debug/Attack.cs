@@ -12,6 +12,10 @@ public class Attack : IPlayerCard
     {
         yield break;
     }
+    public IEnumerator RemoveCardRoutine(Character owner)
+    {
+        yield break;
+    }
     public int GetCardID()
     {
         return 1000000;

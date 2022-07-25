@@ -13,6 +13,10 @@ public class QueenAttack : ICard
     {
         yield break;
     }
+    public IEnumerator RemoveCardRoutine(Character owner)
+    {
+        yield break;
+    }
     public int GetCardID()
     {
         return 0097010;

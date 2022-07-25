@@ -11,6 +11,10 @@ public class PaladinRevelation3 : IPlayerCard
     {
         yield break;
     }
+    public IEnumerator RemoveCardRoutine(Character owner)
+    {
+        yield break;
+    }
 
     public int GetRange()
     {
