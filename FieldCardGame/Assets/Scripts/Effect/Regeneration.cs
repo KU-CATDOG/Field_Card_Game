@@ -22,7 +22,7 @@ public class Regeneration : Effect
     {
         while (IsEnabled)
         {
-            caster.GiveHeal(caster, Value);
+            caster.StartCoroutine(caster.GiveHeal(caster, Value, true));
             yield return null;
         }
     }
