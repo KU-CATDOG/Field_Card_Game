@@ -102,7 +102,7 @@ public class WarlockGathering : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3103001;
+        return 3003001;
     }
 
 }
