@@ -4729,6 +4729,7 @@ MonoBehaviour:
   LeftSide: {fileID: 1732760623}
   HighlightedAnchor: {fileID: 433253021}
   playerSpecificArea: {fileID: 1219778928}
+  rewardPanel: {fileID: 0}
   RightSide: {fileID: 1142829739}
 --- !u!1 &1474256176
 GameObject:
@@ -7110,6 +7111,30 @@ PrefabInstance:
     - target: {fileID: 1846555704339768339, guid: 0e6b77a91ce53a644aa2bc2944eab646, type: 3}
       propertyPath: m_Name
       value: DebugCharacter
+      objectReference: {fileID: 0}
+    - target: {fileID: 5066602044308225748, guid: 0e6b77a91ce53a644aa2bc2944eab646, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5066602044308225748, guid: 0e6b77a91ce53a644aa2bc2944eab646, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.8544424
+      objectReference: {fileID: 0}
+    - target: {fileID: 5066602044308225748, guid: 0e6b77a91ce53a644aa2bc2944eab646, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.3513996
+      objectReference: {fileID: 0}
+    - target: {fileID: 5066602044308225748, guid: 0e6b77a91ce53a644aa2bc2944eab646, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.35392162
+      objectReference: {fileID: 0}
+    - target: {fileID: 5066602044308225748, guid: 0e6b77a91ce53a644aa2bc2944eab646, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.14555447
+      objectReference: {fileID: 0}
+    - target: {fileID: 5066602044308225748, guid: 0e6b77a91ce53a644aa2bc2944eab646, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0e6b77a91ce53a644aa2bc2944eab646, type: 3}
