@@ -255,7 +255,7 @@ public class GameManager : MonoBehaviour
         Character enemy = Instantiate(EnemyDict[6]);
         enemy.position = new Coordinate(15, 15);
         Character enemy2 = Instantiate(EnemyDict[2]);
-        enemy2.position = new Coordinate(30, 30);
+        enemy2.position = new Coordinate(10, 15);
         StartCoroutine(TurnManager.Instance.TurnRoutine());
     }
     //fixme
