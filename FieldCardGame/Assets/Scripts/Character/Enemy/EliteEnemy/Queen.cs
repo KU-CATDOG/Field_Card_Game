@@ -7,7 +7,7 @@ public class Queen : Enemy
     protected override void Start()
     {
         base.Start();
-        Hp = MaxHp = 10;
+        Hp = MaxHp = 40;
         GiveExp = 1;
         TurnStartDraw = 4;
         crystalCount = 4;

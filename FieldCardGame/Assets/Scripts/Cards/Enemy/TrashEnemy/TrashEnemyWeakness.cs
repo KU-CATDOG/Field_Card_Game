@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TrashEnemyAttack : ICard
+public class TrashEnemyWeakness : ICard
 {
     public bool Disposable { get; set; }
 
@@ -13,40 +13,32 @@ public class TrashEnemyAttack : ICard
         get { return dmg; }
         set { dmg = value; }
     }
-    
+
     private int range;
 
     private bool interrupted;
-    
-    /*public TrashEnemyAttack (int _cost, int _dmg, int _range)
-    {
-        cost = _cost;
-        dmg = _dmg;
-        range = _range;
-    }
-    */
 
     public int GetCardID()
     {
-        return 0001123;
+        return 0002123;
     }
-    
+
     public CostType GetCostType()
     {
         return CostType.MonsterCrystal;
     }
     public CardType GetCardType()
     {
-        return CardType.Attack;
+        return CardType.Skill;
     }
     public List<Coordinate> GetAvailableTile(Coordinate pos)
     {
         List<Coordinate> ret = new List<Coordinate>();
         List<Coordinate> canTile = pos.GetDistanceAvailableTile(range);
-        
+
         foreach (var t in canTile)
         {
-            if(GameManager.Instance.Map[t.X, t.Y].CharacterOnTile is Player)
+            if (GameManager.Instance.Map[t.X, t.Y].CharacterOnTile is Player)
             {
                 ret.Add(t);
             }
@@ -54,7 +46,7 @@ public class TrashEnemyAttack : ICard
         //Debug.Log(ret.Count);
 
         return ret;
-    }   
+    }
     public bool IsAvailablePosition(Coordinate caster, Coordinate target)
     {
         List<Coordinate> availablePositions = GetAvailableTile(caster);
@@ -72,9 +64,17 @@ public class TrashEnemyAttack : ICard
     }
     public IEnumerator CardRoutine(Character caster, Coordinate center)
     {
-        if (interrupted)
-            yield break;
-        GameManager.Instance.StartCoroutine(caster.HitAttack(GameManager.Instance.Map[center.X, center.Y].CharacterOnTile, dmg));
+        Character tmp = GameManager.Instance.Map[center.X, center.Y].CharacterOnTile;
+
+        if (tmp)
+        {
+            if (interrupted)
+            {
+                interrupted = false;
+                yield break;
+            }
+            tmp.EffectHandler.DebuffDict[DebuffType.Weakness].SetEffect(dmg);
+        }
     }
     public void CardRoutineInterrupt()
     {

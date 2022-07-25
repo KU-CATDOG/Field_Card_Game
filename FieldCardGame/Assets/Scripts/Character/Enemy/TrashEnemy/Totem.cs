@@ -30,35 +30,72 @@ public class Totem : Enemy
 
     public override IEnumerator EnemyRoutine()
     {
-        while (crystalCount > 0)
+        bool atkIsFst = false;
+
+        if (HandCard[0] is TrashEnemyAttack)
         {
+            atkIsFst = true;
+        }
+        else
+        {
+            atkIsFst = false;
+        }
 
-            bool atkIsFst = false;
+        List<Coordinate> tiles;
 
-            if (HandCard[0] is EnemyAttack)
+        if (GameManager.Instance.EnemyList.Count == 1 && (tiles = HandCard[atkIsFst ? 0 : 1].GetAvailableTile(position)).Count > 0)
+        {
+            int minDist = int.MaxValue;
+            Debug.Log(tiles.Count);
+            Coordinate toATK = tiles[0];
+
+            foreach (var i in tiles)
             {
-                atkIsFst = true;
-            }
-            else
-            {
-                atkIsFst = false;
-            }
-
-            int enemycount = 0;
-
-            foreach (var j in GameManager.Instance.Allies)
-            {
-                if (j is Enemy)
+                foreach (var j in GameManager.Instance.Allies)
                 {
-                    enemycount++;
+                    if (minDist > Coordinate.Distance(i, j.position))
+                    {
+                        minDist = Coordinate.Distance(i, j.position);
+                        toATK = i;
+                    }
                 }
             }
 
-            List<Coordinate> tiles;
+            crystalCount -= 1;
+            yield return StartCoroutine(CardUse(toATK, atkIsFst ? 0 : 1));
+        }
+        else
+        {
+            if ((tiles = HandCard[atkIsFst ? 1 : 0].GetAvailableTile(position)).Count > 0)
+            {
 
-            if (enemycount == 1 && (tiles = HandCard[atkIsFst ? 0 : 1].GetAvailableTile(position)).Count != 0)
+                int minDist = int.MaxValue;
+                Coordinate toATK = tiles[0];
+
+                foreach (var i in tiles)
+                {
+                    foreach (var j in GameManager.Instance.Allies)
+                    {
+                        if (i.X == j.position.X && i.Y == j.position.Y && j.EffectHandler.DebuffDict.GetValueOrDefault(DebuffType.Weakness).IsEnabled == false && minDist > Coordinate.Distance(i, j.position))
+                        {
+                            minDist = Coordinate.Distance(i, j.position);
+                            toATK = i;
+                        }
+                    }
+                }
+
+                if (minDist != int.MaxValue)
+                {
+                    crystalCount -= 1;
+                    yield return StartCoroutine(CardUse(toATK, atkIsFst ? 1 : 0));
+                    yield break;
+                }
+            }
+
+            if ((tiles = HandCard[atkIsFst ? 0 : 1].GetAvailableTile(position)).Count > 0)
             {
                 int minDist = int.MaxValue;
+                
                 Coordinate toATK = tiles[0];
 
                 foreach (var i in tiles)
@@ -76,18 +113,11 @@ public class Totem : Enemy
                 crystalCount -= 1;
                 yield return StartCoroutine(CardUse(toATK, atkIsFst ? 0 : 1));
             }
-            else
-            {
-                //공격 범위 내에 약화 상태가 아닌 사람이 있으면 약화. 없으면 가까운 사람 공격.
-               /* if((tiles = HandCard[atkIsFst ? 0 : 1].GetAvailableTile(position)).Count != 0 && )
-                {
-
-                }*/
-
-            }
-
-            yield break;
+            
         }
+
+        yield break;
+        
     }
 
     public override bool PayTest(int cost, CostType type)
@@ -113,7 +143,17 @@ public class Totem : Enemy
 
     protected override void InitializeDeck()
     {
-        CardPile.Add(new TrashEnemyAttack(1, 10, 4));
+        TrashEnemyAttack a = new TrashEnemyAttack();
+        a.SetCost(1);
+        a.SetRange(4);
+        a._dmg = 10;
+        CardPile.Add(a);
+
+        TrashEnemyWeakness b = new TrashEnemyWeakness();
+        b.SetCost(1);
+        b.SetRange(3);
+        b._dmg = 2;
+        CardPile.Add(b);
     }
 
     protected override IEnumerator payCost(int cost, CostType type)
