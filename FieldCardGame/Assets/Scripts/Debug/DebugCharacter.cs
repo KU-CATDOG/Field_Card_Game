@@ -250,6 +250,10 @@ public class DebugCharacter : Player
     {
         StartCoroutine(AddCard(new WarlockHeal()));
     }
+    public void AddWarlockIllusion()
+    {
+        StartCoroutine(AddCard(new WarlockIllusion()));
+    }
     protected override void InitializeDeck()
     {
         CardPile.Add(new PaladinMove());
