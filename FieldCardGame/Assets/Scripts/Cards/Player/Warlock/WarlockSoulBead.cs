@@ -9,6 +9,13 @@ public class WarlockSoulBead : IPlayerCard
     private int damage = 10;
     private bool interrupted;
     public bool Disposable { get; set; }
+    public string ExplainText
+    {
+        get
+        {
+            return $"시전 중심에서 시전한 방향으로 2칸 뒤까지 {damage}의 피해를 준다. 적이 1명 맞을 때마다 다음 대상에 주는 피해가 5씩 증가합니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

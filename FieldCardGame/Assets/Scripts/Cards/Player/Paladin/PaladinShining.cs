@@ -9,6 +9,13 @@ public class PaladinShining : IPlayerCard
     private int damage = 25;
     private bool interrupted;
     public bool Disposable { get; set; }
+    public string ExplainText
+    {
+        get
+        {
+            return $"십자 범위의 적들에게 {GetDamage()}의 피해를 줍니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

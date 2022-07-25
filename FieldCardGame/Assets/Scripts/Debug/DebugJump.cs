@@ -7,6 +7,13 @@ public class DebugJump : IPlayerCard
 
     private int range = 20;
     private int cost = 1;
+    public string ExplainText
+    {
+        get
+        {
+            return "DEBUG JUMP";
+        }
+    }
     public bool Disposable { get; set; }
 
     private bool interrupted = false;

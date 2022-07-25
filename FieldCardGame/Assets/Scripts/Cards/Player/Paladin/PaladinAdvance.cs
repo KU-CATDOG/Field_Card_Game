@@ -8,6 +8,13 @@ public class PaladinAdvance : IPlayerCard
     private bool interrupted;
     private int cost = 0;
     public bool Disposable { get; set; }
+    public string ExplainText
+    {
+        get
+        {
+            return $"한 방향으로 최대 {GetRange()}칸 이동합니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

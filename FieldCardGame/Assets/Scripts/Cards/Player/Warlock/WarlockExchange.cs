@@ -9,6 +9,13 @@ public class WarlockExchange : IPlayerCard
     private int damage = 35;
     private bool interrupted;
     public bool Disposable { get; set; }
+    public string ExplainText
+    {
+        get
+        {
+            return $"적에게 {damage}의 피해를 줍니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

@@ -9,6 +9,13 @@ public class PaladinProtect : IPlayerCard
     private int cost = 2;
     private int amount = 20;
     private bool interrupted;
+    public string ExplainText
+    {
+        get
+        {
+            return $"20의 '보호’를 얻습니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

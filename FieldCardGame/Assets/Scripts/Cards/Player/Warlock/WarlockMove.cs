@@ -8,6 +8,13 @@ public class WarlockMove : IPlayerCard
     private int cost = 2;
     private bool interrupted;
     public bool Disposable { get; set; }
+    public string ExplainText
+    {
+        get
+        {
+            return $"최대 {range}칸 이동합니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

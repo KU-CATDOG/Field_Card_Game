@@ -8,6 +8,13 @@ public class WarlockFalseContract : IPlayerCard
     private int range = 0;
     private int cost = 25;
     private bool interrupted;
+    public string ExplainText
+    {
+        get
+        {
+            return $"이번 턴 동안 패에 있는 모든 카드의 코스트를 0으로 만듭니다. ‘허약’ 디버프 1을 받습니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

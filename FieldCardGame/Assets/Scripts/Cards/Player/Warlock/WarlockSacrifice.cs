@@ -9,6 +9,13 @@ public class WarlockSacrifice : IPlayerCard
     private int cost = 20;
     private bool interrupted;
     public bool Disposable { get; set; }
+    public string ExplainText
+    {
+        get
+        {
+            return $"뽑을 카드 더미에서 카드를 {draw}장 드로우한다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

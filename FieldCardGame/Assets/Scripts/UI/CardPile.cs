@@ -57,6 +57,7 @@ public class CardPile : MonoBehaviour
         for (int i = 0; i < ordered.Count; i++)
         {
             CardObject card = Instantiate(GameManager.Instance.CardObjectDict[ordered[i].GetCardID()], panel);
+            card.ReferenceCard = ordered[i];
             cardObjects.Add(card);
             card.isPileCard = true;
             card.transform.position = nextPos;

@@ -9,6 +9,13 @@ public class WarlockGetSoul : IPlayerCard
     private int cost = 12;
     private int giveCard = 3;
     private bool interrupted;
+    public string ExplainText
+    {
+        get
+        {
+            return $"이 카드를 사용하면 영혼 {giveCard}장을 손 패에 추가합니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

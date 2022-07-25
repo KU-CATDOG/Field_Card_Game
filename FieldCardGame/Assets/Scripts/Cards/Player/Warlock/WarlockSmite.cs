@@ -9,6 +9,13 @@ public class WarlockSmite : IPlayerCard
     private int damage = 6;
     private bool interrupted;
     public bool Disposable { get; set; } = true;
+    public string ExplainText
+    {
+        get
+        {
+            return $"해당 위치에 위치한 생명체에게 {damage}의 피해를 준다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

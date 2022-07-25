@@ -9,6 +9,13 @@ public class PaladinWill : IPlayerCard
     private int amount = 0;
     private int cost = 1;
     public bool Disposable { get; set; }
+    public string ExplainText
+    {
+        get
+        {
+            return $"다음 턴이 시작할 때 ‘보호’를 잃지 않습니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

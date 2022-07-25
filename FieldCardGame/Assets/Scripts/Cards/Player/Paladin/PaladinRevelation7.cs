@@ -8,7 +8,13 @@ public class PaladinRevelation7 : IPlayerCard
     private int cost = 1;
     public bool Disposable { get; set; } = true;
 
-    private bool interrupted = false;
+    private bool interrupted = false; public string ExplainText
+    {
+        get
+        {
+            return $"적에게 피해를 7만큼 7번 줍니다. 내 체력을 7만큼 7번 회복합니다. 묵시록_1.txt를 뽑을 카드 더미에 넣습니다.";
+        }
+    }
 
     public IEnumerator GetCardRoutine(Character owner)
     {

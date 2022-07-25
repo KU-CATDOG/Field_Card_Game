@@ -8,6 +8,13 @@ public class PaladinSMA : IPlayerCard
     private int cost = 2;
     private bool interrupted;
     public bool Disposable { get; set; }
+    public string ExplainText
+    {
+        get
+        {
+            return $"‘보호’ 수치만큼 회복합니다. 모든 ‘보호’를 제거합니다.";
+        }
+    }
 
     public IEnumerator GetCardRoutine(Character owner)
     {

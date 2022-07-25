@@ -10,6 +10,13 @@ public class WarlockDmgDraw : IPlayerCard
     private int drawNum = 2;
     private bool interrupted;
     public bool Disposable { get; set; }
+    public string ExplainText
+    {
+        get
+        {
+            return $"적에게 {damage}의 데미지를 주고 그러면 카드를 {drawNum}장 드로우합니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

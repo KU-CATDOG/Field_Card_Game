@@ -9,6 +9,13 @@ public class WarlockLissandra : IPlayerCard
     private int damage = 10;
     private bool interrupted;
     public bool Disposable { get; set; }
+    public string ExplainText
+    {
+        get
+        {
+            return $"기본 4방향만 사용가능, 해당 위치로 이동하는 경로에 있는 적에게 {damage} 데미지를 줍니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

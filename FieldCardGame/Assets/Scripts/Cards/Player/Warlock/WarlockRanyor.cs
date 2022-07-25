@@ -9,6 +9,13 @@ public class WarlockRanyor : IPlayerCard
     private int damage = 10;
     private bool interrupted;
     public bool Disposable { get; set; }
+    public string ExplainText
+    {
+        get
+        {
+            return $"적에게 {damage}의 피해를 줍니다. 이 카드로 적을 처치할 때 마다 이 카드의 데미지가 5 증가합니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

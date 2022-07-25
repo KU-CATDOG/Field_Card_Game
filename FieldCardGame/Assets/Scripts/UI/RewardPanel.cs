@@ -24,6 +24,7 @@ public class RewardPanel : MonoBehaviour
         {
             ICard card = _rewardList[i];
             CardObject obj = Instantiate(GameManager.Instance.CardObjectDict[card.GetCardID()], transform);
+            obj.ReferenceCard = card;
             obj.IsRewardCard = true;
             obj.transform.localPosition = defaultPos + (i - _rewardList.Count / 2) * Vector3.right * distance;
             rewardList.Add(obj);

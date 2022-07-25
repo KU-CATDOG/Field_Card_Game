@@ -9,6 +9,13 @@ public class WarlockIllusion : IPlayerCard
     private int buffCount = 1;
     private bool interrupted;
     public bool Disposable { get; set; } = true;
+    public string ExplainText
+    {
+        get
+        {
+            return $"환각버프가 {buffCount} 적용됩니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

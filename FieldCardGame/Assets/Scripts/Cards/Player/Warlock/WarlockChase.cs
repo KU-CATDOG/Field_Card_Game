@@ -9,6 +9,13 @@ public class WarlockChase : IPlayerCard
     private int cost = 15;
     private bool interrupted;
     public bool Disposable { get; set; }
+    public string ExplainText
+    {
+        get
+        {
+            return $"시전자 기준 {transferRange} X {transferRange} 내에 있는 가장 가까운 적 1칸 범위 내로 이동합니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

@@ -9,6 +9,13 @@ public class WarlockSoulBomb : IPlayerCard
     private int damage = 0;
     private bool interrupted;
     public bool Disposable { get; set; }
+    public string ExplainText
+    {
+        get
+        {
+            return $"패에 가지고 있는 ‘영혼’카드 개수의 5배만큼 피해를 입힙니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

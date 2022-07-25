@@ -9,6 +9,13 @@ public class WarlockGathering : IPlayerCard
     private int cost = 20;
     private int amount = 5;
     private bool interrupted;
+    public string ExplainText
+    {
+        get
+        {
+            return $"대상에게 ‘강화’ 버프 {amount}를 부여합니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

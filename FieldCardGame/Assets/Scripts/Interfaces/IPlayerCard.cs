@@ -4,6 +4,7 @@ using UnityEngine;
 
 public interface IPlayerCard : ICard
 {
+    public string ExplainText { get; }
     public Color GetUnAvailableTileColor();
     public Color GetAvailableTileColor();
     public Color GetColorOfEffect(Coordinate pos);

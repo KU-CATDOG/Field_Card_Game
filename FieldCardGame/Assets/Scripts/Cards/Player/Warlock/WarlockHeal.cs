@@ -9,6 +9,13 @@ public class WarlockHeal : IPlayerCard
     private int healAmount = 30;
     private bool interrupted;
     public bool Disposable { get; set; }
+    public string ExplainText
+    {
+        get
+        {
+            return $"{healAmount}의 생명력을 회복합니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

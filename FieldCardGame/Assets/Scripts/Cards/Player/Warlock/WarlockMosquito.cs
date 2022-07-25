@@ -10,6 +10,13 @@ public class WarlockMosquito : IPlayerCard
     private int damage = 100;
     private bool interrupted;
     public bool Disposable { get; set; } = true;
+    public string ExplainText
+    {
+        get
+        {
+            return $"플레이어가 데미지를 입을 때마다 비용이 10 감소한다. 사용하면 적에게 {GetDamage()}의 피해를 주고, 비용이 다시 500으로 초기화된다.";
+        }
+    }
     public int GetRange()
     {
         return range;

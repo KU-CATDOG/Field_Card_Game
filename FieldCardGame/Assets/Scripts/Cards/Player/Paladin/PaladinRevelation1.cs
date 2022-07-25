@@ -7,6 +7,13 @@ public class PaladinRevelation1 : IPlayerCard
     private int range = 0;
     private int cost = 1;
     public bool Disposable { get; set; } = true;
+    public string ExplainText
+    {
+        get
+        {
+            return $"묵시록_2.txt를 뽑을 카드 더미에 넣습니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

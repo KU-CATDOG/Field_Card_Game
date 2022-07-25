@@ -8,6 +8,13 @@ public class PaladinMercy : IPlayerCard
     private bool interrupted;
     private int cost = 1;
     public bool Disposable { get; set; }
+    public string ExplainText
+    {
+        get
+        {
+            return $"카드를 {3}장 뽑습니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

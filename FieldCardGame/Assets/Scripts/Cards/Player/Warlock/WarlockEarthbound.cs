@@ -9,6 +9,13 @@ public class WarlockEarthbound : IPlayerCard
     private int damage = 5;
     private bool interrupted;
     public bool Disposable { get; set; }
+    public string ExplainText
+    {
+        get
+        {
+            return $"적에게 {damage}의 피해를 주고, ‘속박’ 디버프를 부여합니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

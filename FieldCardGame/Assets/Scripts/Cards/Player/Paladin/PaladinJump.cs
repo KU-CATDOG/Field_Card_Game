@@ -9,6 +9,13 @@ public class PaladinJump : IPlayerCard
     private int damage = 7;
     private bool interrupted;
     public bool Disposable { get; set; }
+    public string ExplainText
+    {
+        get
+        {
+            return $"한 방향으로 최대 {GetRange()}칸 거리의 빈 지점에 뛰어들어 도착 지점 주변 {1}칸 거리의 적들에게 {GetDamage()}의 피해를 줍니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

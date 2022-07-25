@@ -9,6 +9,13 @@ public class PaladinRepent : IPlayerConditionCard
     private int cost = 1;
     public int damage = 5;
     private bool interrupted;
+    public string ExplainText
+    {
+        get
+        {
+            return $"{GetDamage()}의 피해를 줍니다. 적의 체력이 15 이하라면 {GetDamage()+5}의 피해를 줍니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;
@@ -94,13 +101,17 @@ public class PaladinRepent : IPlayerConditionCard
              interrupted = false;
              yield break;
         }
-        if (isSatisfied(target))
-        {
-            damage = 15;
-        }
         Character enemy = GameManager.Instance.Map[target.X, target.Y].CharacterOnTile;
-        if(enemy)
-            yield return GameManager.Instance.StartCoroutine(caster.HitAttack(enemy, GetDamage()));
+        if (enemy)
+        {
+            int dmg = GetDamage();
+            if (isSatisfied(target))
+            {
+                dmg += 5;
+            }
+            yield return GameManager.Instance.StartCoroutine(caster.HitAttack(enemy, dmg));
+        }
+        
     }
     public void CardRoutineInterrupt()
     {

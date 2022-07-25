@@ -9,6 +9,13 @@ public class WarlockRegeneration : IPlayerCard
     private int healAmount = 7;
     private bool interrupted;
     public bool Disposable { get; set; }
+    public string ExplainText
+    {
+        get
+        {
+            return $"{healAmount}의 재생버프를 획득합니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

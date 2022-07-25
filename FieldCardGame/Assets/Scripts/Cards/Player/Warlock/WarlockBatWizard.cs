@@ -9,6 +9,13 @@ public class WarlockBatWizard : IPlayerCard
     private int cost = 10;
     private int giveCard = 3;
     private bool interrupted;
+    public string ExplainText
+    {
+        get
+        {
+            return $"이 카드를 사용하면 강타 {giveCard}장을 손 패로 가져온다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

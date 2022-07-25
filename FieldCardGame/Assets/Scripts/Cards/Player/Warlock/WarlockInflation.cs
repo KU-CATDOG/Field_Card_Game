@@ -9,6 +9,13 @@ public class WarlockInflation : IPlayerCard
     private int damage = 5;
     private bool interrupted;
     public bool Disposable { get; set; }
+    public string ExplainText
+    {
+        get
+        {
+            return $"적에게 {damage}의 피해를 줍니다. 카드를 사용할 때 마다 이 카드의 코스트가 5 증가하고 데미지가 7 증가합니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

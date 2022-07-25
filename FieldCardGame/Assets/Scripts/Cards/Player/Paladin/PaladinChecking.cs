@@ -8,6 +8,13 @@ public class PaladinChecking : IPlayerCard
     private bool interrupted;
     private int cost = 0;
     public bool Disposable { get; set; }
+    public string ExplainText
+    {
+        get
+        {
+            return $"카드를 1장 뽑습니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

@@ -8,6 +8,13 @@ public class Attack : IPlayerCard
     private int cost = 1;
     private bool interrupted;
     int dmg = 5;
+    public string ExplainText
+    {
+        get
+        {
+            return $"DEBUGATTACK";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

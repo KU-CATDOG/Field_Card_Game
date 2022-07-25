@@ -9,6 +9,13 @@ public class WarlockSnatch : IPlayerCard
     private int damage = 15;
     private int healAmount = 20;
     private bool interrupted;
+    public string ExplainText
+    {
+        get
+        {
+            return $"적에게 {damage}의 피해를 줍니다. 이후 {healAmount}의 생명력을 회복합니다.";
+        }
+    }
 
     public IEnumerator GetCardRoutine(Character owner)
     {

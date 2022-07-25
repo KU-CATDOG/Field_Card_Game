@@ -8,6 +8,13 @@ public class PaladinMove : IPlayerCard
     private int cost =0;
     private bool interrupted;
     public bool Disposable { get; set; }
+    public string ExplainText
+    {
+        get
+        {
+            return $"최대 {GetRange()}칸 이동합니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

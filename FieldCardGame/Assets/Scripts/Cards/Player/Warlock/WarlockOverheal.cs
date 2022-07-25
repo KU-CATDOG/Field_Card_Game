@@ -9,6 +9,13 @@ public class WarlockOvverheal : IPlayerCard
     private int healAmount = 0;
     private bool interrupted;
     public bool Disposable { get; set; }
+    public string ExplainText
+    {
+        get
+        {
+            return $"생명력을 이번 턴에 사용한 카드의 개수의 5배만큼 회복합니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

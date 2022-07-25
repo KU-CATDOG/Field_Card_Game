@@ -13,6 +13,13 @@ public class PaladinDeliver : IPlayerCard
     public int AttackDmg { get; set; } = 10;
 
     public bool Disposable { get; set; } = true;
+    public string ExplainText
+    {
+        get
+        {
+            return $"‘보호’를 {ShieldAmount} 얻습니다. {AttackDmg}의 피해를 줍니다.";
+        }
+    }
 
     private bool interrupted = false;
     public IEnumerator GetCardRoutine(Character owner)

@@ -10,6 +10,13 @@ public class WarlockDrain : IPlayerCard
     private int healAmount = 10;
     private bool interrupted;
     public bool Disposable { get; set; }
+    public string ExplainText
+    {
+        get
+        {
+            return $"기본 4방향에 있는 1칸 거리의 모든 생명체에게 {damage}의 데미지를 준다. 이후 생명체 당 {healAmount}의 생명력을 회복합니다.";
+        }
+    }
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;

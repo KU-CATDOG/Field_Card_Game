@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField]
@@ -14,6 +15,43 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
             return id;
         }
     }
+    private TextMeshProUGUI costText;
+    private TextMeshProUGUI CostText
+    {
+        get
+        {
+            if (!costText)
+            {
+                costText = transform.Find("Cost").GetComponent<TextMeshProUGUI>();
+            }
+            return costText;
+        }
+    }
+    private TextMeshProUGUI rangeText;
+    private TextMeshProUGUI RangeText
+    {
+        get
+        {
+            if (!rangeText)
+            {
+                rangeText = transform.Find("Range").GetComponent<TextMeshProUGUI>();
+            }
+            return rangeText;
+        }
+    }
+    private TextMeshProUGUI explainText;
+    private TextMeshProUGUI ExplainText
+    {
+        get
+        {
+            if (!explainText)
+            {
+                explainText = transform.Find("ExplainText").GetComponent<TextMeshProUGUI>();
+            }
+            return explainText;
+        }
+    }
+    public ICard ReferenceCard { get; set; }
     public bool Usable { get; private set; } = true;
     public bool isPileCard { get; set; }
     public bool IsRewardCard { get; set; }
@@ -38,6 +76,10 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
     }
     private void Update()
     {
+        CostText.text =  $"{ReferenceCard.GetCost()}";
+        RangeText.text = $"{ReferenceCard.GetRange()}";
+        ExplainText.text = $"{(ReferenceCard as IPlayerCard).ExplainText}";
+
         if (isPileCard || IsRewardCard)
             return;
         int idx = SiblingIndex - PlayerUIManager.Instance.DefaultSiblingIndex;
