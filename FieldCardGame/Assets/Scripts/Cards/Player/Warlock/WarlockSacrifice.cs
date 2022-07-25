@@ -15,7 +15,7 @@ public class WarlockSacrifice : IPlayerCard
     }
     public IEnumerator RemoveCardRoutine(Character owner)
     {
-
+        yield break;
     }
     public int GetRange()
     {
