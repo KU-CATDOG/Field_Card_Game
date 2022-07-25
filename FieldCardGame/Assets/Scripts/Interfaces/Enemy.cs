@@ -19,6 +19,7 @@ public abstract class Enemy : Character
     //fixme
     protected int rewardTier { get; set; } = 1;
 
+    protected int maxCrystalCount;
     protected int crystalCount;
 
     protected void Awake()
@@ -42,6 +43,11 @@ public abstract class Enemy : Character
         DropCardObject dropCardObj = Instantiate(GameManager.Instance.DropCardObject);
         dropCardObj.position = position;
         GameManager.Instance.Map[position.X, position.Y].AddOnCharacterEnterRoutine(dropCardObj.GiveReward(), 0);
+    }
+    public override IEnumerator StartTurn()
+    {
+        crystalCount = maxCrystalCount;
+        yield break;
     }
     public abstract IEnumerator EnemyRoutine();
 }

@@ -10,7 +10,7 @@ public class Totem : Enemy
         Hp = MaxHp = 15;
         GiveExp = 0;
         TurnStartDraw = 2;
-        crystalCount = 1;
+        crystalCount = maxCrystalCount = 1;
     }
 
     public override IEnumerator AfterBuff()
@@ -123,12 +123,6 @@ public class Totem : Enemy
     public override bool PayTest(int cost, CostType type)
     {
         return true;
-    }
-
-    public override IEnumerator StartTurn()
-    {
-        crystalCount = 1;
-        yield break;
     }
 
     protected override IEnumerator enemyDieRoutine()

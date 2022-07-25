@@ -10,7 +10,7 @@ public class Slime : Enemy
         Hp = MaxHp = 30;
         GiveExp = 0;
         TurnStartDraw = 2;
-        crystalCount = 1;
+        crystalCount = maxCrystalCount = 1;
     }
 
     public override IEnumerator AfterBuff()
@@ -95,12 +95,6 @@ public class Slime : Enemy
         return true;
     }
 
-    public override IEnumerator StartTurn()
-    {
-        crystalCount = 1;
-        yield break;
-    }
-
     protected override IEnumerator enemyDieRoutine()
     {
         yield break;
@@ -120,6 +114,7 @@ public class Slime : Enemy
         CardPile.Add(a);
 
         PaladinMove b = new PaladinMove();
+        b.SetCost(1);
         b.SetRange(4);
         CardPile.Add(b);
     }

@@ -7,10 +7,10 @@ public class SuicideBomber : Enemy
     protected void Start()
     {
         base.Start();
-        Hp = MaxHp = 30;
+        Hp = MaxHp = 20;
         GiveExp = 0;
         TurnStartDraw = 2;
-        crystalCount = 2;
+        crystalCount = maxCrystalCount = 2;
     }
 
     public override IEnumerator AfterBuff()
@@ -31,74 +31,68 @@ public class SuicideBomber : Enemy
     public override IEnumerator EnemyRoutine()
     {
         bool atkIsFst = false;
-
-        if (HandCard[0] is TrashEnemyAttack)
+        
+        while (crystalCount > 0)
         {
-            atkIsFst = true;
-        }
-        else
-        {
-            atkIsFst = false;
-        }
-
-        List<Coordinate> tiles;
-
-        if((tiles = HandCard[atkIsFst ? 0 : 1].GetAvailableTile(position)).Count > 0)
-        {
-            Coordinate toATK = tiles[0];
-            int minDist = int.MaxValue;
-
-            foreach (var i in tiles)
+            if (HandCard[0] is TrashEnemyAttack)
             {
-                foreach (var j in GameManager.Instance.Allies)
+                atkIsFst = true;
+            }
+            else
+            {
+                atkIsFst = false;
+            }
+            List<Coordinate> tiles;
+
+            if ((tiles = HandCard[atkIsFst ? 0 : 1].GetAvailableTile(position)).Count > 0)
+            {
+                Coordinate toATK = tiles[0];
+                int minDist = int.MaxValue;
+
+                foreach (var i in tiles)
                 {
-                    Coordinate pos = j.position;
-                    if (i.X == pos.X && i.Y == pos.Y && minDist > Coordinate.Distance(i, pos))
+                    foreach (var j in GameManager.Instance.Allies)
                     {
-                        minDist = Coordinate.Distance(i, pos);
-                        toATK = i;
+                        Coordinate pos = j.position;
+                        if (i.X == pos.X && i.Y == pos.Y && minDist > Coordinate.Distance(i, pos))
+                        {
+                            minDist = Coordinate.Distance(i, pos);
+                            toATK = i;
+                        }
                     }
                 }
+
+                crystalCount -= HandCard[atkIsFst ? 0 : 1].GetCost();
+                yield return StartCoroutine(CardUse(toATK, atkIsFst ? 0 : 1));
             }
-
-            crystalCount -= HandCard[atkIsFst ? 0 : 1].GetCost();
-            yield return StartCoroutine(CardUse(toATK, atkIsFst ? 0 : 1));
-            yield break;
-        }
-        else
-        {
-            tiles = HandCard[atkIsFst ? 1 : 0].GetAvailableTile(position);
-            Coordinate toGo = tiles[0];
-            int minDist = int.MaxValue;
-
-            foreach (var i in tiles)
+            else
             {
-                foreach (var j in GameManager.Instance.Allies)
+                tiles = HandCard[atkIsFst ? 1 : 0].GetAvailableTile(position);
+                Coordinate toGo = tiles[0];
+                int minDist = int.MaxValue;
+
+                foreach (var i in tiles)
                 {
-                    Coordinate pos = j.position;
-                    if (minDist > Coordinate.Distance(i, pos))
+                    foreach (var j in GameManager.Instance.Allies)
                     {
-                        minDist = Coordinate.Distance(i, pos);
-                        toGo = i;
+                        Coordinate pos = j.position;
+                        if (minDist > Coordinate.Distance(i, pos))
+                        {
+                            minDist = Coordinate.Distance(i, pos);
+                            toGo = i;
+                        }
                     }
                 }
-            }
 
-            crystalCount -= HandCard[atkIsFst ? 1 : 0].GetCost();
-            yield return StartCoroutine(CardUse(toGo, atkIsFst ? 1 : 0));
-            yield break;
+                crystalCount -= HandCard[atkIsFst ? 1 : 0].GetCost();
+                yield return StartCoroutine(CardUse(toGo, atkIsFst ? 1 : 0));
+            }
         }
     }
 
     public override bool PayTest(int cost, CostType type)
     {
         return true;
-    }
-
-    public override IEnumerator StartTurn()
-    {
-        crystalCount = 1;
-        yield break;
     }
 
     protected override IEnumerator enemyDieRoutine()
@@ -120,6 +114,7 @@ public class SuicideBomber : Enemy
         CardPile.Add(a);
 
         PaladinMove b = new PaladinMove();
+        b.SetCost(1);
         b.SetRange(4);
         CardPile.Add(b);
     }
