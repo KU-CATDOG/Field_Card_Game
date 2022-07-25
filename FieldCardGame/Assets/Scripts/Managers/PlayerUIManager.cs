@@ -58,6 +58,8 @@ public class PlayerUIManager : MonoBehaviour
     private Transform HighlightedAnchor;
     [SerializeField]
     private Transform playerSpecificArea;
+    [SerializeField]
+    private RewardPanel rewardPanel;
     public Transform PlayerSpecificArea
     {
         get
@@ -412,20 +414,30 @@ public class PlayerUIManager : MonoBehaviour
     public void OpenCardPilePanel()
     {
         PanelOpenned = true;
-        StartCoroutine(CardPilePanel.ShowPile(GameManager.Instance.CurPlayer.CardPile));
+        CardPilePanel.ShowPile(GameManager.Instance.CurPlayer.CardPile);
     }
 
     public void OpenDiscardedPilePanel()
     {
         PanelOpenned = true;
-        StartCoroutine(DiscardedPilePanel.ShowPile(GameManager.Instance.CurPlayer.DiscardedPile, false));
+        DiscardedPilePanel.ShowPile(GameManager.Instance.CurPlayer.DiscardedPile, false);
+    }
+
+    public void OpenRewardPanel(List<ICard> cards)
+    {
+        PanelOpenned = true;
+        rewardPanel.ShowReward(cards);
+    }
+    public void CloseRewardPanel()
+    {
+        PanelOpenned = false;
+        rewardPanel.RewardEnd();
     }
 
     private void Update()
     {
-        if (GameManager.Instance.GameOver || GameManager.Instance.GameClear)
+        if (GameManager.Instance.GameOver || GameManager.Instance.GameClear || !GameManager.Instance.CharacterSelected)
         {
-            Destroy(gameObject);
             return;
         }
         int lev = (GameManager.Instance.Allies[0] as Player).Level;

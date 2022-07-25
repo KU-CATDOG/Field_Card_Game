@@ -6,6 +6,8 @@ public class PaladinDeliver : IPlayerCard
 {
     private int range = 1;
 
+    private int cost = 2;
+
     public int ShieldAmount { get; set; } = 12;
 
     public int AttackDmg { get; set; } = 10;
@@ -137,7 +139,12 @@ public class PaladinDeliver : IPlayerCard
 
     public int GetCost()
     {
-        return 2;
+        return cost;
+    }
+
+    public void SetCost(int _cost)
+    {
+        cost = _cost;
     }
 
     public CostType GetCostType()

@@ -5,8 +5,18 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
+    [SerializeField]
+    private int id;
+    public int ID
+    {
+        get
+        {
+            return id;
+        }
+    }
     public bool Usable { get; private set; }
     public bool isPileCard { get; set; }
+    public bool IsRewardCard { get; set; }
     public static List<IEnumerator> MouseEvent { get; private set; } = new List<IEnumerator>();
     public int SiblingIndex { get; set; }
     public bool MoveInterrupted { get; set; } = false;
@@ -28,7 +38,7 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
     }
     private void Update()
     {
-        if (isPileCard)
+        if (isPileCard || IsRewardCard)
             return;
         int idx = SiblingIndex - PlayerUIManager.Instance.DefaultSiblingIndex;
         ICard card = GameManager.Instance.CurPlayer.HandCard[idx];
@@ -63,8 +73,18 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
     }
     public void OnPointerClick(PointerEventData eventData)
     {
+        //fixme
         if (PlayerUIManager.Instance.PanelOpenned)
         {
+            if(IsRewardCard)
+            {
+                StartCoroutine(GameManager.Instance.CharacterSelected.AddCard(GameManager.Instance.CardDict[ID]));
+                PlayerUIManager.Instance.CloseRewardPanel();
+            }
+            else
+            {
+
+            }
             return;
         }
         if (PlayerUIManager.Instance.ReadyUseMode && !PlayerUIManager.Instance.UseMode)

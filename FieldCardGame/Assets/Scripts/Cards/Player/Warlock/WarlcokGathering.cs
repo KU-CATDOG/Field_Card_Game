@@ -6,6 +6,7 @@ public class WarlockGathering : IPlayerCard
 {
     public bool Disposable { get; set; }
     private int range = 0;
+    private int cost = 20;
     private int amount = 5;
     private bool interrupted;
     public int GetRange()
@@ -77,7 +78,11 @@ public class WarlockGathering : IPlayerCard
     }
     public int GetCost()
     {
-        return 20;
+        return cost;
+    }
+    public void SetCost(int _cost)
+    {
+        cost = _cost;
     }
     public CostType GetCostType()
     {

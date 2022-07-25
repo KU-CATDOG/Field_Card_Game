@@ -144,7 +144,7 @@ public class DebugCharacter : Player
         {
             addedCard = new DebugCard();
         }*/
-        StartCoroutine(AddCard(new PaladinSMA()));
+        StartCoroutine(AddCard(new WarlockEarthbound()));
     }
     public void AddSummonCard()
     {
@@ -190,12 +190,32 @@ public class DebugCharacter : Player
     {
         StartCoroutine(AddCard(new DebugJump()));
     }
+    public void AddWarlockGrip()
+    {
+        StartCoroutine(AddCard(new WarlockGrip()));
+    }
+    public void AddWarlockSacrifice()
+    {
+        StartCoroutine(AddCard(new WarlockSacrifice()));
+    }
+    public void AddWarlockChase()
+    {
+        StartCoroutine(AddCard(new WarlockChase()));
+    }
+    public void AddWarlockFalseContract()
+    {
+        StartCoroutine(AddCard(new WarlockFalseContract()));
+    }
+    public void AddWarlockEarthbound()
+    {
+        StartCoroutine(AddCard(new WarlockEarthbound()));
+    }
     protected override void InitializeDeck()
     {
         CardPile.Add(new PaladinMove());
         CardPile.Add(new PaladinMove());
         CardPile.Add(new PaladinMove());
-        CardPile.Add(new PaladinJump());
-        CardPile.Add(new PaladinRepent());
+        CardPile.Add(new PaladinProtect());
+        CardPile.Add(new PaladinFirm());
     }
 }

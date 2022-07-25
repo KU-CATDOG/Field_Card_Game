@@ -5,11 +5,12 @@ using UnityEngine;
 public class EnemyAttack : ICard
 {
     public bool Disposable { get; set; }
+    private int cost = 1;
     private bool interrupted;
     int dmg = 5;
     public int GetCardID()
     {
-        return 1;
+        return -1;
     }
     public int GetRange()
     {
@@ -21,7 +22,11 @@ public class EnemyAttack : ICard
     }
     public int GetCost()
     {
-        return 1;
+        return cost;
+    }
+    public void SetCost(int _cost)
+    {
+        cost = _cost;
     }
     public CostType GetCostType()
     {

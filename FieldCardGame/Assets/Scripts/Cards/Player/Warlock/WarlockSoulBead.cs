@@ -5,6 +5,7 @@ using UnityEngine;
 public class WarlockSoulBead : IPlayerCard
 {
     private int range = 1;
+    private int cost = 20;
     private int damage = 10;
     private bool interrupted;
     public bool Disposable { get; set; }
@@ -121,7 +122,11 @@ public class WarlockSoulBead : IPlayerCard
     }
     public int GetCost()
     {
-        return 20;
+        return cost;
+    }
+    public void SetCost(int _cost)
+    {
+        cost = _cost;
     }
     public CostType GetCostType()
     {

@@ -8,8 +8,6 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     [SerializeField]
     private Material DiscoveredColor;
     [SerializeField]
-    private Material OnSightColor;
-    [SerializeField]
     private Material DefaultColor;
     private Color OriginColor;
     public Coordinate position { get; set; }
@@ -22,7 +20,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         }
         set
         {
-            if (value == true && Onsight == 0)
+            if (value)
             {
                 TileColor.material = DiscoveredColor;
                 discovered = value;
@@ -33,26 +31,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             }
         }
     }
-    private int onSight;
-    public int Onsight
-    {
-        get
-        {
-            return onSight;
-        }
-        set
-        {
-            if (value != 0)
-            {
-                TileColor.material = OnSightColor;
-            }
-            else
-            {
-                TileColor.material = DiscoveredColor;
-            }
-            onSight = value;
-        }
-    }
+
     public Character CharacterOnTile { get; set; }
     public List<object> EntityOnTile { get; set; } = new List<object>();
     public MeshRenderer TileColor { get; set; }
@@ -169,11 +148,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     }
     public void RestoreColor()
     {
-        if (Onsight>0)
-        {
-            TileColor.material = OnSightColor;
-        }
-        else if (Discovered)
+        if (Discovered)
         {
             TileColor.material = DiscoveredColor;
         }

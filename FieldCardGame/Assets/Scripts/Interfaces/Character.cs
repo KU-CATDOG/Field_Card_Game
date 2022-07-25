@@ -969,15 +969,15 @@ public abstract class Character : MonoBehaviour
     {
         if (!posChange && sightChange)
         {
-            bfs(sight, position, true, -1);
+            bfs(sight, position, true);
         }
         if (posChange && !sightChange)
         {
-            bfs(sight, prevPos, true, -1);
+            bfs(sight, prevPos, true);
         }
-        bfs(newSight, position, true, 1);
+        bfs(newSight, position, true);
     }
-    private void bfs(int level, Coordinate center, bool discovered, int onSight)
+    private void bfs(int level, Coordinate center, bool discovered)
     {
         int dist = 1;
         bool[,] visited = new bool[128, 128];
@@ -991,7 +991,6 @@ public abstract class Character : MonoBehaviour
             {
                 Coordinate tmp = queue.Dequeue();
                 GameManager.Instance.Map[tmp.X, tmp.Y].Discovered = discovered;
-                GameManager.Instance.Map[tmp.X, tmp.Y].Onsight += onSight;
                 Coordinate tile;
                 if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y])
                 {
@@ -1021,7 +1020,6 @@ public abstract class Character : MonoBehaviour
         {
             Coordinate tmp = queue.Dequeue();
             GameManager.Instance.Map[tmp.X, tmp.Y].Discovered = discovered;
-            GameManager.Instance.Map[tmp.X, tmp.Y].Onsight += onSight;
         }
     }
     /// <summary>
@@ -1058,7 +1056,7 @@ public abstract class Character : MonoBehaviour
         }
         Vector3 moveVector = new Vector3(target.X - position.X, 0, target.Y - position.Y).normalized;
         float time = 0f;
-        if (GameManager.Instance.Map[position.X, position.Y].Onsight != 0)
+        if (GameManager.Instance.Map[position.X, position.Y].Discovered)
         {
             while (time <= Coordinate.EuclideanDist(target, position) / speed)
             {
@@ -1121,7 +1119,7 @@ public abstract class Character : MonoBehaviour
         }
         Vector3 moveVector = new Vector3(target.X - position.X, 0, target.Y - position.Y);
         float time = 0f;
-        if (GameManager.Instance.Map[position.X, position.Y].Onsight != 0)
+        if (GameManager.Instance.Map[position.X, position.Y].Discovered)
         {
             while (time <= 1f / speed)
             {
@@ -1177,6 +1175,10 @@ public abstract class Character : MonoBehaviour
             GetDmgInterrupted = false;
             yield break;
         }
+        ///fixme
+        SoundManager.Instance.SFX.clip = SoundManager.Instance.SFXDict["hit_1"];
+        SoundManager.Instance.SFX.Play();
+        /////
         Hp -= Dmg;
         yield return StartCoroutine(getDmg(Dmg));
         if (Hp <= 0)
@@ -1225,7 +1227,7 @@ public abstract class Character : MonoBehaviour
             }
         }
     }
-    public IEnumerator GiveHeal(Character target, int amount)
+    public IEnumerator GiveHeal(Character target, int amount, bool allowOverMaxHp = false)
     {
         GiveHealInterrupted = false;
         GiveHealAmount = amount;
@@ -1242,7 +1244,7 @@ public abstract class Character : MonoBehaviour
             GiveHealInterrupted = false;
             yield break;
         }
-        yield return StartCoroutine(target.Heal(this, GiveHealAmount));
+        yield return StartCoroutine(target.Heal(this, GiveHealAmount, allowOverMaxHp));
 
         for (int i = GiveHealRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
@@ -1253,7 +1255,7 @@ public abstract class Character : MonoBehaviour
             }
         }
     }
-    private IEnumerator Heal(Character caster, int amount, bool allowOverMaxHp = false)
+    private IEnumerator Heal(Character caster, int amount, bool allowOverMaxHp)
     {
         HealInterrupted = false;
         HealedBy = caster;
@@ -1374,7 +1376,7 @@ public abstract class Character : MonoBehaviour
     }
     protected virtual void Update()
     {
-        if (GameManager.Instance.Map[position.X, position.Y].Onsight == 0)
+        if (!GameManager.Instance.Map[position.X, position.Y].Discovered)
         {
             meshRenderer.enabled = false;
             HpBar.SetActive(false);
