@@ -8,6 +8,10 @@ public class WarlockFalseContract : IPlayerCard
     private int range = 0;
     private int cost = 25;
     private bool interrupted;
+    public IEnumerator GetCardRoutine(Character owner)
+    {
+        yield break;
+    }
     public int GetRange()
     {
         return range;

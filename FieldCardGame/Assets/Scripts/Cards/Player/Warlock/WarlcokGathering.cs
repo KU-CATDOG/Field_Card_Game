@@ -9,6 +9,10 @@ public class WarlockGathering : IPlayerCard
     private int cost = 20;
     private int amount = 5;
     private bool interrupted;
+    public IEnumerator GetCardRoutine(Character owner)
+    {
+        yield break;
+    }
     public int GetRange()
     {
         return range;

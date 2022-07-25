@@ -9,6 +9,10 @@ public class PaladinProtect : IPlayerCard
     private int cost = 2;
     private int amount = 20;
     private bool interrupted;
+    public IEnumerator GetCardRoutine(Character owner)
+    {
+        yield break;
+    }
     public int GetRange()
     {
         return range;

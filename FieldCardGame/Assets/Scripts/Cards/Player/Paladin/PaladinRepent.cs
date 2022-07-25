@@ -9,6 +9,10 @@ public class PaladinRepent : IPlayerConditionCard
     private int cost = 1;
     public int damage = 5;
     private bool interrupted;
+    public IEnumerator GetCardRoutine(Character owner)
+    {
+        yield break;
+    }
     public int GetRange()
     {
         return range;

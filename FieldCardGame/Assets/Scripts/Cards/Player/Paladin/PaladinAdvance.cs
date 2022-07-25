@@ -8,6 +8,10 @@ public class PaladinAdvance : IPlayerCard
     private bool interrupted;
     private int cost = 0;
     public bool Disposable { get; set; }
+    public IEnumerator GetCardRoutine(Character owner)
+    {
+        yield break;
+    }
 
     public int GetRange()
     {

@@ -15,6 +15,10 @@ public class PaladinDeliver : IPlayerCard
     public bool Disposable { get; set; } = true;
 
     private bool interrupted = false;
+    public IEnumerator GetCardRoutine(Character owner)
+    {
+        yield break;
+    }
 
     public int GetRange()
     {

@@ -10,6 +10,10 @@ public class DebugJump : IPlayerCard
     public bool Disposable { get; set; }
 
     private bool interrupted = false;
+    public IEnumerator GetCardRoutine(Character owner)
+    {
+        yield break;
+    }
 
     public int GetRange()
     {

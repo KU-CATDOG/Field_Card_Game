@@ -10,6 +10,10 @@ public class PaladinRevelation7 : IPlayerCard
 
     private bool interrupted = false;
 
+    public IEnumerator GetCardRoutine(Character owner)
+    {
+        yield break;
+    }
     public int GetRange()
     {
         return range;

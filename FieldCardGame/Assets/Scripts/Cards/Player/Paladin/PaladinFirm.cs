@@ -9,6 +9,10 @@ public class PaladinFirm : IPlayerConditionCard
     public int amount = 10;
     private int cost = 1;
     private bool interrupted;
+    public IEnumerator GetCardRoutine(Character owner)
+    {
+        yield break;
+    }
     public int GetRange()
     {
         return range;

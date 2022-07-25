@@ -9,6 +9,10 @@ public class WarlockEarthbound : IPlayerCard
     private int damage = 5;
     private bool interrupted;
     public bool Disposable { get; set; }
+    public IEnumerator GetCardRoutine(Character owner)
+    {
+        yield break;
+    }
     public int GetRange()
     {
         return range;

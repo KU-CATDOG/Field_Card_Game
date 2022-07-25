@@ -9,6 +9,10 @@ public class QueenAttack : ICard
     private bool interrupted;
     private int range = 1;
     int dmg = 35;
+    public IEnumerator GetCardRoutine(Character owner)
+    {
+        yield break;
+    }
     public int GetCardID()
     {
         return 0097010;
