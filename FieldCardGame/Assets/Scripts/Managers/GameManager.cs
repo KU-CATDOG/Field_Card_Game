@@ -90,6 +90,10 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Tile tilePrefab;
     public Tile[,] Map = new Tile[MAPSIZE, MAPSIZE];
+    //[SerializeField]
+    //private int[,] EnemyID;
+    //private ArrayForInspector EnemyID = new ArrayForInspector();
+
     private void Awake()
     {
         if (Instance == null)
@@ -239,8 +243,10 @@ public class GameManager : MonoBehaviour
         CharacterSelected.position = new Coordinate(10, 10);
         Map[10, 10].CharacterOnTile = CharacterSelected;
         CharacterSelected.SightUpdate(CharacterSelected.Sight);
-        Character enemy = Instantiate(EnemyDict[2]);
+        Character enemy = Instantiate(EnemyDict[6]);
         enemy.position = new Coordinate(15, 15);
+        Character enemy2 = Instantiate(EnemyDict[2]);
+        enemy2.position = new Coordinate(30, 30);
         StartCoroutine(TurnManager.Instance.TurnRoutine());
     }
     //fixme

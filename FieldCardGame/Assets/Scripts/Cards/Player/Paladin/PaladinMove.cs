@@ -282,7 +282,7 @@ public class PaladinMove : IPlayerCard
     }
     public int GetCost()
     {
-        return 0;
+        return cost;
     }
     public void SetCost(int _cost)
     {

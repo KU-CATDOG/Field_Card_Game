@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class Queen : Enemy
 {
-    private int crystalCount;
     protected override void Start()
     {
         base.Start();
-        Hp = MaxHp = 10;
+        Hp = MaxHp = 40;
         GiveExp = 1;
         TurnStartDraw = 4;
-        crystalCount = 4;
+        crystalCount = maxCrystalCount = 4;
 }
     protected override IEnumerator payCost(int cost, CostType type)
     {
@@ -32,11 +31,6 @@ public class Queen : Enemy
     }
     public override IEnumerator AfterDraw()
     {
-        yield break;
-    }
-    public override IEnumerator StartTurn()
-    {
-        crystalCount = 4;
         yield break;
     }
     protected override IEnumerator getDmg(int dmg)
