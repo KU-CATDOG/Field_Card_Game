@@ -6,6 +6,7 @@ using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
+    private Dictionary<System.Type, int> CharacterIDDict;
     private List<SpawnEntity> worldEntityList;
     private Dictionary<int, ICard> cardDict = new Dictionary<int, ICard>();
     [SerializeField]
@@ -102,6 +103,13 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         InitializeEnemyDict();
         InitializeSpawnEntityList();
+        InitializeCharacterIDDict();
+    }
+    private void InitializeCharacterIDDict()
+    {
+        CharacterIDDict = new();
+        CharacterIDDict.Add(typeof(Paladin), 1);
+        CharacterIDDict.Add(typeof(Warlock), 3);
     }
     private void InitializeSpawnEntityList()
     {
@@ -137,12 +145,12 @@ public class GameManager : MonoBehaviour
                 cardObjectDict.Add(i.ID, i);
             }
         }
-        else if(CharacterSelected is Paladin)
+        else
         {
             foreach (var i in cardList)
             {
                 ICard card = System.Activator.CreateInstance(i) as ICard;
-                if (card.GetCardID() / 1000000 == 1)
+                if (card.GetCardID() / 1000000 == CharacterIDDict[CharacterSelected.GetType()])
                 {
                     cardDict.Add(card.GetCardID(), card);
                 }
@@ -150,7 +158,7 @@ public class GameManager : MonoBehaviour
             cardObjectList = Resources.LoadAll<CardObject>("Prefabs/CardObject");
             foreach (var i in cardObjectList)
             {
-                if (i.ID / 1000000 == 1)
+                if (i.ID / 1000000 == CharacterIDDict[CharacterSelected.GetType()])
                 {
                     cardObjectDict.Add(i.ID, i);
                 }
