@@ -10,14 +10,6 @@ public class WarlockMosquito : IPlayerCard
     private int damage = 100;
     private bool interrupted;
     public bool Disposable { get; set; } = true;
-    public IEnumerator GetCardRoutine(Character owner)
-    {
-        yield break;
-    }
-    public IEnumerator RemoveCardRoutine(Character owner)
-    {
-        yield break;
-    }
     public int GetRange()
     {
         return range;
@@ -105,6 +97,7 @@ public class WarlockMosquito : IPlayerCard
     public IEnumerator GetCardRoutine(Character owner)
     {
         owner.AddGetDmgRoutine(ReduceCost(),0);
+        yield break;
     }
     private IEnumerator ReduceCost()
     {
@@ -114,7 +107,7 @@ public class WarlockMosquito : IPlayerCard
             yield return null;
         }
     }
-    private IEnumerator RemoveCard()
+    public IEnumerator RemoveCardRoutine(Character owner)
     {
         notRemoved = true;
         yield break;
