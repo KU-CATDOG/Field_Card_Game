@@ -11,6 +11,10 @@ public class DebugCard : IPlayerCard
     {
         yield break;
     }
+    public IEnumerator RemoveCardRoutine(Character owner)
+    {
+        yield break;
+    }
     public Color GetColorOfEffect(Coordinate pos)
     {
         return Color.white;

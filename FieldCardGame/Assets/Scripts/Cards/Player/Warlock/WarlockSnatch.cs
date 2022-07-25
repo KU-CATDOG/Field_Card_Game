@@ -14,6 +14,10 @@ public class WarlockSnatch : IPlayerCard
     {
         yield break;
     }
+    public IEnumerator RemoveCardRoutine(Character owner)
+    {
+        yield break;
+    }
     public bool Disposable { get; set; }
     public int GetRange()
     {

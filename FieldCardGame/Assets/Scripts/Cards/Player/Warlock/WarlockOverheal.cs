@@ -9,6 +9,14 @@ public class WarlockOvverheal : IPlayerCard
     private int healAmount = 0;
     private bool interrupted;
     public bool Disposable { get; set; }
+    public IEnumerator GetCardRoutine(Character owner)
+    {
+        yield break;
+    }
+    public IEnumerator RemoveCardRoutine(Character owner)
+    {
+        yield break;
+    }
     public int GetRange()
     {
         return range;

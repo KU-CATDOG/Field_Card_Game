@@ -17,4 +17,5 @@ public interface ICard
     public IEnumerator CardRoutine(Character caster, Coordinate center);
     public void CardRoutineInterrupt();
     public IEnumerator GetCardRoutine(Character owner);
+    public IEnumerator RemoveCardRoutine(Character owner);
 }
