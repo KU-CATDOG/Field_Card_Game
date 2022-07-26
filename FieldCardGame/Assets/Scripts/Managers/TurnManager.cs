@@ -8,6 +8,7 @@ public class TurnManager : MonoBehaviour
     public List<Player> DieAllyList { get; private set; } = new List<Player>();
     public List<Enemy> DieEnemyList { get; private set; } = new List<Enemy>();
     public bool TurnRoutineEnd { get; private set; }
+    public bool TurnPreParing { get; private set; }
     private int token = 0;
     public int Token
     {
@@ -74,6 +75,7 @@ public class TurnManager : MonoBehaviour
             yield return StartCoroutine(TurnAwakeRoutine());
             if (token == 0)
             {
+                TurnPreParing = true;
                 for(PlayerIdx = 0; PlayerIdx < GameManager.Instance.Allies.Count; PlayerIdx++)
                 {
                     var j = GameManager.Instance.Allies[PlayerIdx];
@@ -110,6 +112,7 @@ public class TurnManager : MonoBehaviour
                     yield return StartCoroutine(curChar.StartTurn());
                     TurnEnd = false;
                     if (j.IsDie) continue;
+                    TurnPreParing = false;
                     yield return new WaitUntil(() => { return !PlayerUIManager.Instance.UseMode && TurnEnd; });
                     if (curChar.TurnEndBuffHandler.Count != 0)
                         yield return StartCoroutine(TurnEndBuffRoutine(curChar));

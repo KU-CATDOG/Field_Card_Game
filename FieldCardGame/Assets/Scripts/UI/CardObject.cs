@@ -150,7 +150,7 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
         RangeText.text = $"{ReferenceCard.GetRange()}";
         ExplainText.text = $"{(ReferenceCard as IPlayerCard).ExplainText}";
 
-        if (isPileCard || IsRewardCard)
+        if (isPileCard || IsRewardCard || TurnManager.Instance.TurnPreParing)
             return;
         int idx = SiblingIndex - PlayerUIManager.Instance.DefaultSiblingIndex;
         ICard card = GameManager.Instance.CurPlayer.HandCard[idx];
@@ -170,7 +170,7 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
             transform.localScale = HighlightedCardSize;
             return;
         }
-        if (PlayerUIManager.Instance.ReadyUseMode || PlayerUIManager.Instance.UseMode) return;
+        if (PlayerUIManager.Instance.ReadyUseMode || PlayerUIManager.Instance.UseMode || TurnManager.Instance.TurnPreParing) return;
         MouseEvent.Add(PlayerUIManager.Instance.HighlightCard(this));
     }
     public void OnPointerExit(PointerEventData eventData)
@@ -180,7 +180,7 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
             transform.localScale = OriginCardSize;
             return;
         }
-        if (PlayerUIManager.Instance.ReadyUseMode || PlayerUIManager.Instance.UseMode) return;
+        if (PlayerUIManager.Instance.ReadyUseMode || PlayerUIManager.Instance.UseMode || TurnManager.Instance.TurnPreParing) return;
         MouseEvent.Add(PlayerUIManager.Instance.DehighlightCard(this));
     }
     public void OnPointerClick(PointerEventData eventData)
@@ -198,7 +198,7 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
             }
             return;
         }
-        else if (!Usable) return;
+        else if (!Usable || TurnManager.Instance.TurnPreParing) return;
         if (PlayerUIManager.Instance.ReadyUseMode && !PlayerUIManager.Instance.UseMode)
         {
             if (Input.mousePosition.y > PlayerUIManager.Instance.CardUseHeight && eventData.button == 0)
