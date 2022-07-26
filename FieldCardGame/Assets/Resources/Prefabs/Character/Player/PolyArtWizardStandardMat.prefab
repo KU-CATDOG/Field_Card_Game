@@ -656,6 +656,7 @@ GameObject:
   - component: {fileID: 95538263452871118}
   - component: {fileID: 136306802490482818}
   - component: {fileID: 7700569561388735120}
+  - component: {fileID: -8060394475599381800}
   m_Layer: 0
   m_Name: PolyArtWizardStandardMat
   m_TagString: Untagged
@@ -728,6 +729,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HealedBy: {fileID: 0}
   playerUI: {fileID: 1632723056526928107, guid: adf7aa662429648488a7555a710f9408, type: 3}
+--- !u!114 &-8060394475599381800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1248815240492774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 0.2166485, g: 0.8301887, b: 0, a: 1}
+  outlineWidth: 4.45
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &1251583507443948
 GameObject:
   m_ObjectHideFlags: 0

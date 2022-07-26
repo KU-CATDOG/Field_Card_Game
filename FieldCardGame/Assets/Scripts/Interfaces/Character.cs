@@ -1073,7 +1073,7 @@ public abstract class Character : MonoBehaviour
         }
         Vector3 moveVector = new Vector3(target.X - position.X, 0, target.Y - position.Y).normalized;
         //fixme
-        if(this is Player)
+        if(tag != "Chess")
             transform.LookAt(transform.position + moveVector);
         //
         float time = 0f;

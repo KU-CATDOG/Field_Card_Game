@@ -2367,6 +2367,7 @@ GameObject:
   - component: {fileID: 8855052669661678444}
   - component: {fileID: 9036980633323257398}
   - component: {fileID: -1150046137920569278}
+  - component: {fileID: 545024004598738899}
   m_Layer: 0
   m_Name: MaleCharacter
   m_TagString: Untagged
@@ -2428,6 +2429,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HealedBy: {fileID: 0}
   playerUI: {fileID: 1632723056526928107, guid: bd5bc4ded2e77b848a74e6c6bd0c60bf, type: 3}
+--- !u!114 &545024004598738899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8189980434977739222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 0.2166485, g: 0.8301887, b: 0, a: 1}
+  outlineWidth: 4.45
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &8206070634150816031
 GameObject:
   m_ObjectHideFlags: 0
