@@ -48,7 +48,7 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
             {
                 parent = Instantiate(GameManager.Instance.Empty).transform;
                 usableEffect = Instantiate(PlayerUIManager.Instance.CardUsableEffect, parent);
-                transform.parent = parent;
+                transform.SetParent(parent);
                 parent.parent = PlayerUIManager.Instance.CardArea.transform;
                 usableEffect.transform.rotation = transform.rotation;
                 usableEffect.transform.position = transform.position;

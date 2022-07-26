@@ -406,7 +406,6 @@ public class PlayerUIManager : MonoBehaviour
     {
         StartCoroutine(HighlightCard(card));
         ReadyUseMode = true;
-        RectTransform rect = card.GetComponent<RectTransform>();
         float speed = 10000f;
         float threshold = 1000f;
         Vector2 movVec;
@@ -424,10 +423,10 @@ public class PlayerUIManager : MonoBehaviour
         }*/
         yield return new WaitUntil(() =>
         {
-            movVec = (Input.mousePosition - rect.position);
+            movVec = (Input.mousePosition - card.position);
             if (movVec.magnitude < threshold)
             {
-                rect.position = Input.mousePosition;
+                card.position = Input.mousePosition;
                 return !ReadyUseMode;
             }
             movVec = movVec.normalized;
