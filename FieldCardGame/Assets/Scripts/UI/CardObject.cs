@@ -139,7 +139,6 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
             OriginCardSize = transform.localScale;
             HighlightedCardSize = OriginCardSize * 1.5f;
         }
-        Usable = true;
     }
     private void Start()
     {
@@ -187,13 +186,9 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
     public void OnPointerClick(PointerEventData eventData)
     {
         //fixme
-        if (!Usable)
-        {
-            return;
-        }
         if (PlayerUIManager.Instance.PanelOpenned)
         {
-            if(IsRewardCard)
+            if (IsRewardCard)
             {
                 StartCoroutine(rewardRoutine());
             }
@@ -203,6 +198,7 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
             }
             return;
         }
+        else if (!Usable) return;
         if (PlayerUIManager.Instance.ReadyUseMode && !PlayerUIManager.Instance.UseMode)
         {
             if (Input.mousePosition.y > PlayerUIManager.Instance.CardUseHeight && eventData.button == 0)

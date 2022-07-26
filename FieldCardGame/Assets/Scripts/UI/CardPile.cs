@@ -35,14 +35,14 @@ public class CardPile : MonoBehaviour
         padding = leftTopAnchor.position;
         space = new Vector2((rightTopAnchor.position.x - leftTopAnchor.position.x) / cardNumperRow, secondRowAnchor.position.y - leftTopAnchor.position.y);
         minThreshold = originPos.y + space.y;
-        softMinThreshold = originPos.y;
+        softMinThreshold = originPos.y - 10f;
     }
     public void ShowPile(List<ICard> cardList, bool blindOrder = true)
     {
         gameObject.SetActive(true);
         Initialize();
         maxThreshold = originPos.y - Mathf.Max(((cardList.Count - 1) / 5 - 1), 1) * space.y;
-        softMaxThreshold = maxThreshold + space.y;
+        softMaxThreshold = maxThreshold + space.y + 10f;
         Vector2 nextPos = padding;
         scrollLock = true;
         List<ICard> ordered = new List<ICard>(cardList);

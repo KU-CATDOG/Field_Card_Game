@@ -12,7 +12,7 @@ public class Attack : IPlayerCard
     {
         get
         {
-            return $"DEBUGATTACK";
+            return $"{dmg}의 피해를 줍니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
