@@ -19,7 +19,7 @@ public class GameEndButton : MonoBehaviour, IPointerClickHandler, IPointerEnterH
         transform.parent.gameObject.SetActive(false);
         AsyncOperation async = SceneManager.LoadSceneAsync("MainMenu");
         while (!async.isDone) yield return null;
-        Destroy(TurnManager.Instance.gameObject);
+        yield return StartCoroutine(TurnManager.Instance.Destroy());
         Destroy(PlayerUIManager.Instance.gameObject); 
         yield return GameManager.Instance.StartCoroutine(GameManager.Instance.LoadingPanel.LoadEnd());
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Slime : Enemy
 { 
-    protected void Start()
+    protected override void Start()
     {
         base.Start();
         Hp = MaxHp = 30;

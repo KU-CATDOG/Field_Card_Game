@@ -252,7 +252,7 @@ public class GameManager : MonoBehaviour
         CharacterSelected.position = new Coordinate(10, 10);
         Map[10, 10].CharacterOnTile = CharacterSelected;
         CharacterSelected.SightUpdate(CharacterSelected.Sight);
-        Character enemy = Instantiate(EnemyDict[6]);
+        Character enemy = Instantiate(EnemyDict[3]);
         enemy.position = new Coordinate(15, 15);
         Character enemy2 = Instantiate(EnemyDict[2]);
         enemy2.position = new Coordinate(10, 15);

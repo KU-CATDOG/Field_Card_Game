@@ -286,7 +286,7 @@ public class TurnManager : MonoBehaviour
     }
     private IEnumerator TurnEndRoutine(Character curChar)
     {
-        if (GameManager.Instance.GameOver)
+        if (GameManager.Instance.GameOver || GameManager.Instance.GameClear)
         {
             token = 3;
         }
@@ -303,5 +303,13 @@ public class TurnManager : MonoBehaviour
         {
             token = token == 0 ? 1 : 0;
         }
+    }
+    public IEnumerator Destroy()
+    {
+        while(token != 3)
+        {
+            yield return null;
+        }
+        Destroy(gameObject);
     }
 }
