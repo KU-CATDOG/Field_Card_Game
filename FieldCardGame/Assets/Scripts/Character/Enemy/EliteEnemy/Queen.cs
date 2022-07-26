@@ -150,6 +150,7 @@ public class Queen : Enemy
 
                 crystalCount -= 3;
                 yield return StartCoroutine(CardUse(toAtk, cardIdx[0]));
+                yield return new WaitForSeconds(0.5f);
             }
             else if (atkAvilable[1] && crystalCount >= 2)
             {
@@ -170,6 +171,7 @@ public class Queen : Enemy
                 }
                 crystalCount -= 2;
                 yield return StartCoroutine(CardUse(toAtk, cardIdx[1]));
+                yield return new WaitForSeconds(0.5f);
             }
             else
             {
@@ -215,6 +217,7 @@ public class Queen : Enemy
                     }
                     crystalCount -= 1;
                     yield return StartCoroutine(CardUse(toGo[distance[0] < distance[1] ? 0 : 1], cardIdx[distance[0] < distance[1] ? 2 : 3]));
+                    yield return new WaitForSeconds(0.5f);
                 }
                 else if (cardIdx[2] > -1 && cardIdx[3] > -1)
                 {
@@ -255,6 +258,7 @@ public class Queen : Enemy
                     }
                     crystalCount -= 1;
                     yield return StartCoroutine(CardUse(toGo[distance[0] > distance[1] ? 0 : 1], cardIdx[distance[0] > distance[1] ? 2 : 3]));
+                    yield return new WaitForSeconds(0.5f);
                 }
                 else
                 {
