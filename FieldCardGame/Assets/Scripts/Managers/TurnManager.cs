@@ -7,6 +7,7 @@ public class TurnManager : MonoBehaviour
     public static TurnManager Instance { get; set; }
     public List<Player> DieAllyList { get; private set; } = new List<Player>();
     public List<Enemy> DieEnemyList { get; private set; } = new List<Enemy>();
+    public bool TurnRoutineEnd { get; private set; }
     private int token = 0;
     public int Token
     {
@@ -45,9 +46,6 @@ public class TurnManager : MonoBehaviour
     public bool GameEnd { get; set; } = false;
     public void Initialize()
     {
-        DieAllyList.Clear();
-        DieEnemyList.Clear();
-        token = 0;
         NeedWait = false;
         IsPlayerTurn = true;
         TurnEnd = false;
@@ -69,6 +67,7 @@ public class TurnManager : MonoBehaviour
 
     public IEnumerator TurnRoutine()
     {
+        TurnRoutineEnd = false;
         Character curChar;
         while (true)
         {
@@ -175,6 +174,7 @@ public class TurnManager : MonoBehaviour
                 break;
             }
         }
+        TurnRoutineEnd = true;
     }
 
     private void ApplyDie()
@@ -286,11 +286,7 @@ public class TurnManager : MonoBehaviour
     }
     private IEnumerator TurnEndRoutine(Character curChar)
     {
-        if (GameManager.Instance.GameOver || GameManager.Instance.GameClear)
-        {
-            token = 3;
-        }
-        else if (curChar != null)
+        if (curChar != null)
         {
             yield return StartCoroutine(TurnEndBuffRoutine(curChar));
             yield return StartCoroutine(TurnEndDebuffRoutine(curChar));
@@ -299,15 +295,16 @@ public class TurnManager : MonoBehaviour
                 yield return StartCoroutine(curChar.DropCard(i));
             }
         }
-        else
+        else if(token != 3)
         {
             token = token == 0 ? 1 : 0;
         }
     }
     public IEnumerator Destroy()
     {
-        while(token != 3)
+        while (!TurnRoutineEnd)
         {
+            token = 3;
             yield return null;
         }
         Destroy(gameObject);

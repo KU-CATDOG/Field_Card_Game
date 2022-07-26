@@ -45,6 +45,10 @@ public class PlayerUIManager : MonoBehaviour
         }
     }
     [SerializeField]
+    private Transform drawCardStartPos;
+    [SerializeField]
+    private Transform discardedPileButton;
+    [SerializeField]
     private TextMeshProUGUI LevelText;
     [SerializeField]
     private RectTransform ExpBar;
@@ -153,11 +157,13 @@ public class PlayerUIManager : MonoBehaviour
     public IEnumerator DrawCard()
     {
         CardObject card = Instantiate(GameManager.Instance.CardObjectDict[GameManager.Instance.CurPlayer.drawCard.GetCardID()], cardArea.transform);
+        card.position = drawCardStartPos.position;
         card.ReferenceCard = GameManager.Instance.CurPlayer.drawCard;
         CardImages.Add(card);
         
         CardImages[CardImages.Count - 1].isPileCard = false;
-        yield return StartCoroutine(Rearrange());
+        yield return StartCoroutine(Rearrange(0.1f));
+        yield return new WaitForSeconds(0.1f);
     }
     public IEnumerator GenerateCardToHand()
     {
@@ -210,7 +216,7 @@ public class PlayerUIManager : MonoBehaviour
         }
         card.OnMoving = false;
     }
-    public IEnumerator Rearrange(int exceptFor = -1)
+    public IEnumerator Rearrange(float timeLimit = 0.3f, int exceptFor = -1)
     {
         List<ICard> cards = GameManager.Instance.CurPlayer.HandCard;
         int size = cards.Count;
@@ -224,7 +230,7 @@ public class PlayerUIManager : MonoBehaviour
                 }
                 CardObject obj = CardImages[i];
                 obj.SiblingIndex = defaultSiblingIndex + i;
-                StartCoroutine(MoveCard(obj, centerPos + evenVectors[5 - size / 2 + i]));
+                StartCoroutine(MoveCard(obj, centerPos + evenVectors[5 - size / 2 + i], timeLimit));
                 obj.rotation = Quaternion.Euler(Vector3.back * evenAngles[5 - size / 2 + i] * 70f);
             }
         }
@@ -238,7 +244,7 @@ public class PlayerUIManager : MonoBehaviour
                 }
                 CardObject obj = CardImages[i];
                 obj.SiblingIndex = defaultSiblingIndex + i;
-                StartCoroutine(MoveCard(obj, centerPos + oddVectors[4 - size / 2 + i]));
+                StartCoroutine(MoveCard(obj, centerPos + oddVectors[4 - size / 2 + i], timeLimit));
                 obj.rotation = Quaternion.Euler(Vector3.back * oddAngles[4 - size / 2 + i] * 70f);
             }
         }

@@ -1342,12 +1342,13 @@ public abstract class Character : MonoBehaviour
         else if (this is Player)
         {
             SightUpdate(-1, false, null, true);
-            if (this == GameManager.Instance.Allies[0])
+            if (this == GameManager.Instance.CharacterSelected)
             {
                 GameManager.Instance.GameOver = true;
             }
             TurnManager.Instance.DieAllyList.Add(this as Player);
-            for (int i = HandCard.Count - 1; !IsDie && i >= 0; i--)
+
+            for (int i = HandCard.Count - 1; i >= 0; i--)
             {
                 yield return StartCoroutine(DropCard(i));
             }

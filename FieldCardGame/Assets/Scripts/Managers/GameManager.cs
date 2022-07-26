@@ -207,7 +207,6 @@ public class GameManager : MonoBehaviour
 
     public void Initialize()
     {
-        CharacterSelected = null;
         GameOver = false;
         GameClear = false;
         CharacterSelected = null;
