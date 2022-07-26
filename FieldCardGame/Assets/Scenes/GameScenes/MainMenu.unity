@@ -2276,6 +2276,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2121881227}
     - target: {fileID: 6598237354727999962, guid: 3edbc0b4980a2ae4a939b53cef258fe8, type: 3}
+      propertyPath: emptyCanvas
+      value: 
+      objectReference: {fileID: 841805708656459903, guid: 760b1149cfb308c4fbdb72d6ab67c631, type: 3}
+    - target: {fileID: 6598237354727999962, guid: 3edbc0b4980a2ae4a939b53cef258fe8, type: 3}
       propertyPath: loadingPanel
       value: 
       objectReference: {fileID: 618607912}
@@ -2287,6 +2291,14 @@ PrefabInstance:
       propertyPath: gameoverPanel
       value: 
       objectReference: {fileID: 2010369846}
+    - target: {fileID: 6598237354727999962, guid: 3edbc0b4980a2ae4a939b53cef258fe8, type: 3}
+      propertyPath: effectUICanvas
+      value: 
+      objectReference: {fileID: 841805708656459903, guid: 760b1149cfb308c4fbdb72d6ab67c631, type: 3}
+    - target: {fileID: 6598237354727999962, guid: 3edbc0b4980a2ae4a939b53cef258fe8, type: 3}
+      propertyPath: effectUIPrefab
+      value: 
+      objectReference: {fileID: 5469013886978074238, guid: b6ef70cbbec9d3f46849fc8c7534e1bf, type: 3}
     - target: {fileID: 6598237354727999962, guid: 3edbc0b4980a2ae4a939b53cef258fe8, type: 3}
       propertyPath: gameClearPanel
       value: 

@@ -20,6 +20,19 @@ public abstract class Character : MonoBehaviour
         }
     }
     public bool IsDie { get; set; }
+    private CharacterUIManager effectUI;
+    public CharacterUIManager EffectUI
+    {
+        get
+        {
+            if (!effectUI)
+            {
+                effectUI = Instantiate(GameManager.Instance.EffectUIPrefab, PlayerUIManager.Instance.EffectUIs);
+                effectUI.Owner = this;
+            }
+            return effectUI;
+        }
+    }
     public GameObject HpBar { get; set; }
     private TextMeshProUGUI hpText;
     private RectTransform hpBarImg;
@@ -1407,15 +1420,17 @@ public abstract class Character : MonoBehaviour
                 animator.enabled = false;
 
             HpBar.SetActive(false);
+            EffectUI.gameObject.SetActive(false);
             return;
         }
-        HpBar.SetActive(true); 
+        HpBar.SetActive(true);
+        EffectUI.gameObject.SetActive(true);
 
         if (meshRenderer)
             meshRenderer.enabled = true;
         if (animator)
             animator.enabled = true;
-
+        EffectUI.transform.position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 3f);
         HpBar.transform.position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 1.5f);
         hpText.text = $"{Hp}/{MaxHp}";
         hpBarImg.sizeDelta = new Vector2(150 * (float)Hp / MaxHp, hpBarImg.sizeDelta.y);

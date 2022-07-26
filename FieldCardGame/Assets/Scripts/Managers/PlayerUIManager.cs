@@ -9,6 +9,15 @@ public class PlayerUIManager : MonoBehaviour
     public static PlayerUIManager Instance { get; set; }
     public float CardUseHeight { get; set; }
     [SerializeField]
+    private Transform effectUIs;
+    public Transform EffectUIs
+    {
+        get
+        {
+            return effectUIs;
+        }
+    }
+    [SerializeField]
     private Button turnEndButton;
     [SerializeField]
     private CardUsableEffect cardUsableEffect;

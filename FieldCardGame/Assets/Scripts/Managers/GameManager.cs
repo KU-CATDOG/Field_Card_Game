@@ -10,6 +10,9 @@ public class GameManager : MonoBehaviour
     private List<SpawnEntity> worldEntityList;
     private Dictionary<int, ICard> cardDict = new Dictionary<int, ICard>();
     [SerializeField]
+    private CharacterUIManager effectUIPrefab;
+    public CharacterUIManager EffectUIPrefab => effectUIPrefab;
+    [SerializeField]
     private GameObject empty;
     public GameObject Empty
     {
