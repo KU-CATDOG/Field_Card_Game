@@ -19,6 +19,11 @@ public class CharacterUIManager : MonoBehaviour
 
     private void Update()
     {
+        if(!Owner)
+        {
+            Destroy(this);
+            return;
+        }
         string tmp1 = "";
         foreach (var buff in Owner.EffectHandler.BuffDict)
         {
