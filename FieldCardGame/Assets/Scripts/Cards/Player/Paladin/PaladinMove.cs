@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PaladinMove : IPlayerCard
 {
-    private int range = 10;
+    private int range = 4;
     private int cost =0;
     private bool interrupted;
     public bool Disposable { get; set; }

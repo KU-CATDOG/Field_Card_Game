@@ -61,7 +61,7 @@ public class Paladin : Player
     protected override void Start()
     {
         base.Start();
-        TurnStartDraw = 10;
+        TurnStartDraw = 5;
         MaxHp = Hp = 50;
         crystalText = PlayerUI.GetComponentInChildren<TextMeshProUGUI>();
     }
