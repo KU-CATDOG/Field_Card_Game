@@ -7,7 +7,7 @@ public class Attack : IPlayerCard
     public bool Disposable { get; set; }
     private int cost = 1;
     private bool interrupted;
-    int dmg = 5;
+    int dmg = 10;
     public string ExplainText
     {
         get

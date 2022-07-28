@@ -5,7 +5,7 @@ using UnityEngine;
 public class PaladinShining : IPlayerCard
 {
     private int range = 3;
-    private int cost = 3;
+    private int cost = 2;
     private int damage = 25;
     private bool interrupted;
     public bool Disposable { get; set; }

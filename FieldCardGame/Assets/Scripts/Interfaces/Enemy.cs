@@ -31,7 +31,7 @@ public abstract class Enemy : Character
     protected override IEnumerator dieRoutine()
     {
         yield return enemyDieRoutine();
-        if(KilledBy is Player)
+        if(KilledBy is Player && GameManager.Instance.CharacterSelected)
         {
             yield return (GameManager.Instance.CharacterSelected as Player).GainExp(GiveExp);
             DropItem();

@@ -62,7 +62,7 @@ public class Paladin : Player
     {
         base.Start();
         TurnStartDraw = 5;
-        MaxHp = Hp = 50;
+        MaxHp = Hp = 120;
         crystalText = PlayerUI.GetComponentInChildren<TextMeshProUGUI>();
     }
     protected override void Update()

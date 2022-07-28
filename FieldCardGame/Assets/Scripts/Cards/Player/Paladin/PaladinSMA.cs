@@ -5,7 +5,7 @@ using UnityEngine;
 public class PaladinSMA : IPlayerCard 
 {
     private int range = 0;
-    private int cost = 2;
+    private int cost = 0;
     private bool interrupted;
     public bool Disposable { get; set; }
     public string ExplainText

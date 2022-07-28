@@ -6,7 +6,7 @@ public class PaladinJump : IPlayerCard
 {
     private int range = 3;
     private int cost = 1;
-    private int damage = 7;
+    private int damage = 14;
     private bool interrupted;
     public bool Disposable { get; set; }
     public string ExplainText

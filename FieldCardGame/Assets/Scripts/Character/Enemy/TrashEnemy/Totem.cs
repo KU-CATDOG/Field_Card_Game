@@ -127,7 +127,10 @@ public class Totem : Enemy
 
     protected override IEnumerator enemyDieRoutine()
     {
-        yield break;
+        //fixme
+        GameManager.Instance.GameClear = true;
+        yield return GameManager.Instance.StartCoroutine(GameManager.Instance.GameClearRoutine());
+        ///
     }
 
     protected override IEnumerator getDmg(int dmg)

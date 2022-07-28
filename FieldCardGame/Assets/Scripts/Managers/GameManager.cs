@@ -201,10 +201,13 @@ public class GameManager : MonoBehaviour
     }
     public IEnumerator GameClearRoutine()
     {
+        PlayerUIManager.Instance.UseMode = PlayerUIManager.Instance.ReadyUseMode = PlayerUIManager.Instance.OnRoutine = false;
+        TurnManager.Instance.Token = 3;
+        TurnManager.Instance.TurnEnd = true;
         yield return StartCoroutine(LoadingPanel.StartLoad());
-        TurnManager.Instance.Initialize();
         Destroy(CharacterSelected.gameObject);
         Initialize();
+        TurnManager.Instance.Initialize();
         gameClearPanel.SetActive(true);
     }
 
