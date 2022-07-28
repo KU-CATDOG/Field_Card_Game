@@ -132,12 +132,30 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
     public static Vector3 HighlightedCardSize { get; private set; } = Vector3.zero;
     public static Vector3 OriginCardSize { get; private set; } = Vector3.zero;
     private RawImage image;
+    private List<GameObject> keywordPanels = new();
+    public IReadOnlyList<GameObject> KeywordPanels
+    {
+        get
+        {
+            return keywordPanels.AsReadOnly();
+        }
+    }
     private void Awake()
     {
-        if(OriginCardSize == Vector3.zero)
+        if (OriginCardSize == Vector3.zero)
         {
             OriginCardSize = transform.localScale;
             HighlightedCardSize = OriginCardSize * 1.5f;
+        }
+        if (GameManager.Instance.CardDict[ID] is IKeyword)
+        {
+            List <Keyword> keywords = (GameManager.Instance.CardDict[ID] as IKeyword).GetKeywordList();
+            foreach(var i in keywords)
+            {
+                var obj = Instantiate(PlayerUIManager.Instance.KeywordPrefabDict[i]);
+                keywordPanels.Add(obj);
+                obj.SetActive(false);
+            }
         }
     }
     private void Start()

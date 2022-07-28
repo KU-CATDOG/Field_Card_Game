@@ -35,6 +35,11 @@ public enum CostType
     Hp,
     MonsterCrystal,
 }
+public enum Keyword
+{
+    Protect,
+}
+
 public enum CardType
 {
     Move,

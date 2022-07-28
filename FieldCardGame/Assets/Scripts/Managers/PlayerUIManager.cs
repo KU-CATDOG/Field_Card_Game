@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
 public class PlayerUIManager : MonoBehaviour
 {
@@ -106,6 +107,19 @@ public class PlayerUIManager : MonoBehaviour
     public bool UseTileSelected { get; set; }
     public bool ReadyUseMode { get; set; }
     public bool PanelOpenned { get; set; }
+    private Dictionary<Keyword, GameObject> keywordPrefabDict;
+    public IReadOnlyDictionary<Keyword, GameObject> KeywordPrefabDict
+    {
+        get
+        {
+            if (keywordPrefabDict == null)
+            {
+                List<GameObject> list = new(Resources.LoadAll<GameObject>("Prefabs/KeywordPanel"));
+                list.ForEach(x => keywordPrefabDict.Add((Keyword)System.Enum.Parse(typeof(Keyword), x.name), x));
+            }
+            return keywordPrefabDict;
+        }
+    }
     private float angle;
     private float[] evenAngles = new float[10];
     private float[] oddAngles = new float[9];
