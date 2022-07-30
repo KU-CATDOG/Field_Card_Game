@@ -12,7 +12,7 @@ public class PaladinMove : IPlayerCard
     {
         get
         {
-            return $"ÃÖ´ë {GetRange()}Ä­ ÀÌµ¿ÇÕ´Ï´Ù.";
+            return $"ï¿½Ö´ï¿½ {GetRange()}Ä­ ï¿½Ìµï¿½ï¿½Õ´Ï´ï¿½.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -275,6 +275,8 @@ public class PaladinMove : IPlayerCard
             }
             yield return GameManager.Instance.StartCoroutine(caster.Move(i, speed));
         }
+        //Delete After Test
+        yield return caster.StartCoroutine(caster.AddCard(new PaladinDefilement()));
     }
     public void CardRoutineInterrupt()
     {
