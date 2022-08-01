@@ -34,6 +34,7 @@ public enum CostType
     MageWater,
     Hp,
     MonsterCrystal,
+    Unpayable,
 }
 public enum CardType
 {
@@ -143,7 +144,7 @@ public class Coordinate
         checkNow.Enqueue(_pos);
         useTile.Add(_pos);
 
-        // °Ë»ç ½ÃÀÛ
+        // ï¿½Ë»ï¿½ ï¿½ï¿½ï¿½ï¿½
         while (checkNow.Count > 0)
         {
             Coordinate t = useTile[findTileIDX(useTile, checkNow.Dequeue())];
@@ -177,7 +178,7 @@ public class Coordinate
                 if(useTile[id].distance <= t.distance + 1)
                     continue;
 
-                // ÀÌµ¿ °¡´É °Å¸® ³»¿¡ ÀÖ´Â Å¸ÀÏÀÎÁö °Ë»ç.
+                // ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½.
                 if (forATK)
                 {
                     if (GameManager.Instance.Map[useTile[id].X, useTile[id].Y].CharacterOnTile == null)
