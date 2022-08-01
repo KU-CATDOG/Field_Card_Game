@@ -27,7 +27,6 @@ public class Poison : Effect
         while (IsEnabled)
         {
             caster.StartCoroutine(caster.GetDmg(caster, Value));
-            Debug.Log(Value);
             yield return null;
         }
     }

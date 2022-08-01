@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Vampire : Effect 
 {
+    private Character player;
+    private bool isTargetAlive = false;
     public Vampire(Character caster)
     {
         this.caster = caster;
@@ -18,18 +20,20 @@ public class Vampire : Effect
         {
             Value = value;
             IsEnabled = true;
-            caster.AddTurnEndDebuff(ApplyEffect(), 5);
-            caster.AddStartDebuff(RemoveEffect(), 0);
+            isTargetAlive = true;
+            player = GameManager.Instance.CurPlayer;
+            player.AddTurnEndDebuff(ApplyEffect(), 5);
+            player.AddStartDebuff(RemoveEffect(), 0);
         }
     }
     public override IEnumerator ApplyEffect()
     {
-        while (IsEnabled)
+        while (IsEnabled && isTargetAlive)
         {
             caster.StartCoroutine(caster.GetDmg(caster, Value));
-            var player = GameManager.Instance.CurPlayer;
+            if (caster.IsDie)
+                isTargetAlive = false;
             player.StartCoroutine(player.GiveHeal(player, Value, true));
-            Debug.Log(Value);
             yield return null;
         }
     }
