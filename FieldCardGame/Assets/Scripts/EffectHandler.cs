@@ -34,12 +34,13 @@ public class EffectHandler
         Effect poison = new Poison(caster);
         Effect fragility = new Fragility(caster);
         Effect rooted = new Rooted(caster);
+        Effect vampire = new Vampire(caster);
 
         debuffDict.Add(DebuffType.Stun, stun);
         debuffDict.Add(DebuffType.Weakness, weakness);
         debuffDict.Add(DebuffType.Poison, poison);
         debuffDict.Add(DebuffType.Fragility, fragility);
-        debuffDict.Add(DebuffType.Rooted, rooted);
+        debuffDict.Add(DebuffType.Vampire, vampire);
     }
 
     // For Debug
