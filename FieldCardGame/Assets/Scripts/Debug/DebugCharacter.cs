@@ -274,6 +274,18 @@ public class DebugCharacter : Player
     {
         StartCoroutine(AddCard(new WarlockMosquito()));
     }
+    public void AddWarlockAdvancedMove()
+    {
+        StartCoroutine(AddCard(new WarlockAdvancedMove()));
+    }
+    public void AddWarlockRecover()
+    {
+        StartCoroutine(AddCard(new WarlockRecover()));
+    }
+    public void AddWarlockCurse()
+    {
+        StartCoroutine(AddCard(new WarlockCurse()));
+    }
     protected override void InitializeDeck()
     {
         CardPile.Add(new PaladinMove());
