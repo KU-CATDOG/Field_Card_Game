@@ -26,6 +26,7 @@ public enum DebuffType
     Poison,
     Fragility,
     Rooted,
+    Vampire,
 }
 public enum CostType
 {
