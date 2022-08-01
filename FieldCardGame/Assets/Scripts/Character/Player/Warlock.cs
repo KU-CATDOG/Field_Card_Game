@@ -80,7 +80,7 @@ public class Warlock : Player
         CardPile.Add(new WarlockMove());
         CardPile.Add(new WarlockMove());
         CardPile.Add(new WarlockSnatch());
-        CardPile.Add(new WarlockSnatch());
+        CardPile.Add(new WarlockVampire());
         StartCoroutine(ShuffleDeck());
     }
 }
