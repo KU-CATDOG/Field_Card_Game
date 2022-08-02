@@ -15,5 +15,10 @@ public abstract class Effect
         IsEnabled = false;
         yield return null;
     }
+    public virtual void  ForceRemoveEffect()
+    {
+        Value = 0;
+        IsEnabled = false;
+    }
     public abstract IEnumerator ApplyEffect();
 }
