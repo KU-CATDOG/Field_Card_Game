@@ -57,7 +57,8 @@ public class WarlockVampire : IPlayerCard
             while (queue.Count != 0)
             {
                 Coordinate tmp = queue.Dequeue();
-                ret.Add(tmp);
+                if(tmp.X != pos.X || tmp.Y != pos.Y)
+                    ret.Add(tmp);
                 Coordinate tile;
                 if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y])
                 {
