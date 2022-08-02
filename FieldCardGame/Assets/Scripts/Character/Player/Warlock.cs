@@ -78,12 +78,9 @@ public class Warlock : Player
     {
         CardPile.Add(new WarlockMove());
         CardPile.Add(new WarlockMove());
-        CardPile.Add(new WarlockMove());
-        CardPile.Add(new WarlockMove());
-        CardPile.Add(new WarlockDebuffDraw());
-        CardPile.Add(new WarlockDebuffDraw());
-        CardPile.Add(new WarlockVampire());
-        CardPile.Add(new WarlockDebuffDraw());
+        CardPile.Add(new WarlockSnatch());
+        CardPile.Add(new WarlockDebuff());
+        CardPile.Add(new WarlockRemove());
         StartCoroutine(ShuffleDeck());
     }
 }
