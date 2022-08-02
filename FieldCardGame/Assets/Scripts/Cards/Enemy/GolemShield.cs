@@ -23,7 +23,7 @@ public class GolemShield : ICard
 
     public int GetCardID()
     {
-        return 0002123;
+        return 0093001;
     }
 
     public CostType GetCostType()
