@@ -77,8 +77,8 @@ public class Warlock : Player
     protected override void InitializeDeck()
     {
         CardPile.Add(new WarlockMove());
-        CardPile.Add(new WarlockDebuff());
-        CardPile.Add(new WarlockDebuffHeal());
+        CardPile.Add(new WarlockWeakness());
+        CardPile.Add(new WarlockRangeVamp());
         CardPile.Add(new WarlockDebuff());
         CardPile.Add(new WarlockDebuffDraw());
         StartCoroutine(ShuffleDeck());
