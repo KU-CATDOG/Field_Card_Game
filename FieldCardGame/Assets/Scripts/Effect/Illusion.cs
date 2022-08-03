@@ -17,11 +17,8 @@ public class Illusion : Effect
         else
         {
             Value = value;
-            IsEnabled = true;
-            //fixme
             caster.AddTryGetDmgRoutine(ApplyEffect(), 5);
             caster.AddStartBuff(RemoveEffect(), 0);
-            //fixme
         }
     }
     public override IEnumerator ApplyEffect()

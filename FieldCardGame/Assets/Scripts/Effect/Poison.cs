@@ -42,4 +42,11 @@ public class Poison : Effect
         IsEnabled = false;
         yield return null;
     }
+    public override void ForceRemoveEffect()
+    {
+        if (!IsEnabled)
+            return;
+        base.ForceRemoveEffect();
+        caster.RemoveStartDebuffByIdx(FindRoutineIndex(RemoveEffect(), caster.StartDebuffHandler));
+    }
 }

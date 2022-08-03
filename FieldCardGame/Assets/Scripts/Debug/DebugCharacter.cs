@@ -135,6 +135,11 @@ public class DebugCharacter : Player
         this.EffectHandler.DebuffDict[DebuffType.Poison].SetEffect(5);
     }
 
+    public void DebugForceRemovePoison()
+    {
+        this.EffectHandler.DebuffDict[DebuffType.Poison].ForceRemoveEffect();
+    }
+
     public void DebugAddCard()
     {/*
         if (addedCard is DebugCard)
