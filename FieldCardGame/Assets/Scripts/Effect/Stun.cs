@@ -21,4 +21,11 @@ public class Stun : Effect
         IsEnabled = false;
         yield break;
     }
+    public override void ForceRemoveEffect()
+    {
+        if (!IsEnabled)
+            return;
+        caster.RemoveForceTurnEndDebuffByIdx(FindRoutineIndex(RemoveEffect(), caster.ForceTurnEndDebuffHandler));
+        IsEnabled = false;
+    }
 }

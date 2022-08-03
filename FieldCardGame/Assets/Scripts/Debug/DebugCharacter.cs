@@ -135,9 +135,19 @@ public class DebugCharacter : Player
         this.EffectHandler.DebuffDict[DebuffType.Poison].SetEffect(5);
     }
 
+    public void DebugGetFragility()
+    {
+        this.EffectHandler.DebuffDict[DebuffType.Fragility].SetEffect(5);
+    }
+
     public void DebugForceRemovePoison()
     {
         this.EffectHandler.DebuffDict[DebuffType.Poison].ForceRemoveEffect();
+    }
+
+    public void DebugForceRemoveFragility()
+    {
+        this.EffectHandler.DebuffDict[DebuffType.Fragility].ForceRemoveEffect();
     }
 
     public void DebugAddCard()

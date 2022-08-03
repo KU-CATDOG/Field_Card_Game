@@ -46,7 +46,9 @@ public class Poison : Effect
     {
         if (!IsEnabled)
             return;
-        base.ForceRemoveEffect();
+        caster.RemoveTurnEndDebuffByIdx(FindRoutineIndex(RemoveEffect(), caster.TurnEndDebuffHandler));
         caster.RemoveStartDebuffByIdx(FindRoutineIndex(RemoveEffect(), caster.StartDebuffHandler));
+        Value = 0;
+        IsEnabled = false;
     }
 }

@@ -1210,8 +1210,8 @@ public abstract class Character : MonoBehaviour
             yield break;
         }
         ///fixme
-        SoundManager.Instance.SFX.clip = SoundManager.Instance.SFXDict["hit_1"];
-        SoundManager.Instance.SFX.Play();
+        // SoundManager.Instance.SFX.clip = SoundManager.Instance.SFXDict["hit_1"];
+        // SoundManager.Instance.SFX.Play();
         /////
         Hp -= Dmg;
         yield return StartCoroutine(getDmg(Dmg));
