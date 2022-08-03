@@ -78,7 +78,7 @@ public class Warlock : Player
     {
         CardPile.Add(new WarlockMove());
         CardPile.Add(new WarlockWeakness());
-        CardPile.Add(new WarlockRangeVamp());
+        CardPile.Add(new WarlockFinalBlow());
         CardPile.Add(new WarlockDebuff());
         CardPile.Add(new WarlockDebuffDraw());
         StartCoroutine(ShuffleDeck());
