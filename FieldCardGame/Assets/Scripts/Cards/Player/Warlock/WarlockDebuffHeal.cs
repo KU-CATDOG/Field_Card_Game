@@ -2,18 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarlockDebuffDraw : IPlayerCard
+public class WarlockDebuffHeal : IPlayerCard
 {
     private int range = 0;
-    private int cost = 10;
-    private int drawNum = 0;
+    private int cost = 15;
+    private int healCount = 0;
     private bool interrupted;
     public bool Disposable { get; set; }
     public string ExplainText
     {
         get
         {
-            return $"플레이어에게 걸린 디버프 수만큼 카드를 드로우합니다.";
+            return $"플레이어에게 걸린 디버프 카운트 수만큼 2의 생명력을 회복합니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -76,11 +76,11 @@ public class WarlockDebuffDraw : IPlayerCard
             interrupted = false;
             yield break;
         }
-        drawNum = caster.EffectHandler.GetEnabledDebuff().Count;
-
-        for(int i = 0; i< drawNum;i++)
-            yield return GameManager.Instance.StartCoroutine(caster.DrawCard());
-        yield break;
+        foreach (var i in caster.EffectHandler.DebuffDict)
+        {
+            healCount += i.Value.Value;
+        }
+        yield return GameManager.Instance.StartCoroutine(caster.GiveHeal(caster, healCount*2, true));
     }
     public void CardRoutineInterrupt()
     {
@@ -104,6 +104,6 @@ public class WarlockDebuffDraw : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3034001;
+        return 3036001;
     }
 }
