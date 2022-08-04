@@ -6,6 +6,17 @@ public class Paladin : Player
 {
     private TextMeshProUGUI crystalText;
     private int crystalCount;
+    public virtual int CrystalCount
+    {
+        get
+        {
+            return crystalCount;
+        }
+        set
+        {
+            crystalCount = value;
+        }
+    }
     protected override IEnumerator levelUp()
     {
         yield break;
