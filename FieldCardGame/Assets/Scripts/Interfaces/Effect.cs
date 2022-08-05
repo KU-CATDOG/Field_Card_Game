@@ -5,9 +5,9 @@ using UnityEngine;
 public abstract class Effect
 {
     protected Character caster;
-    public int Value {get; protected set;} = 0;
-    public int Priority {get; protected set;} = 0;
-    public bool IsEnabled {get; protected set;} = false;
+    public int Value { get; protected set; } = 0;
+    public int Priority { get; protected set; } = 0;
+    public bool IsEnabled { get; protected set; } = false;
     public abstract void SetEffect(int value);
     public virtual IEnumerator RemoveEffect()
     {
@@ -15,10 +15,15 @@ public abstract class Effect
         IsEnabled = false;
         yield return null;
     }
-    public virtual void  ForceRemoveEffect()
+    public abstract void ForceRemoveEffect();
+    protected virtual int FindRoutineIndex(IEnumerator routine, IReadOnlyList<BuffRoutine> handler)
     {
-        Value = 0;
-        IsEnabled = false;
+        for (int i = 0; i < handler.Count; i++)
+        {
+            if (routine.GetType() == handler[i].Routine.GetType())
+                return i;
+        }
+        return -1;
     }
     public abstract IEnumerator ApplyEffect();
 }

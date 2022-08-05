@@ -25,4 +25,12 @@ public class Fragility : Effect
             yield return null;
         }
     }
+    public override void ForceRemoveEffect()
+    {
+        if (!IsEnabled)
+            return;
+        caster.RemoveTryGetDmgRoutineByIdx(FindRoutineIndex(RemoveEffect(), caster.TryGetDmgRoutine));
+        caster.RemoveStartBuffByIdx(FindRoutineIndex(RemoveEffect(), caster.StartBuffHandler));
+        IsEnabled = false;
+    }
 }

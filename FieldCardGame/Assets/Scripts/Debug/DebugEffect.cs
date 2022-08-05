@@ -44,4 +44,8 @@ public class DebugEffect : Effect
         IsEnabled = false;
         yield return null;
     }
+    public override void ForceRemoveEffect()
+    {
+        throw new System.NotImplementedException();
+    }
 }

@@ -39,4 +39,13 @@ public class Rooted : Effect
         caster.MoveInterrupted = false;
         yield return null;
     }
+    public override void ForceRemoveEffect()
+    {
+        if (!IsEnabled)
+            return;
+        caster.RemoveTryMoveRoutineByIdx(FindRoutineIndex(RemoveEffect(), caster.TryMoveRoutine));
+        caster.RemoveTurnEndDebuffByIdx(FindRoutineIndex(RemoveEffect(), caster.TurnEndDebuffHandler));
+        Value = 0;
+        IsEnabled = false;
+    }
 }

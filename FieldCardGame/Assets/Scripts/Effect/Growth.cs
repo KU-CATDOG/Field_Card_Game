@@ -27,4 +27,12 @@ public class Growth : Effect
         IsEnabled = false;
         yield return null;
     }
+    public override void ForceRemoveEffect()
+    {
+        if (!IsEnabled)
+            return;
+        caster.RemoveStartBuffByIdx(FindRoutineIndex(RemoveEffect(), caster.StartBuffHandler));
+        Value = 0;
+        IsEnabled = false;
+    }
 }

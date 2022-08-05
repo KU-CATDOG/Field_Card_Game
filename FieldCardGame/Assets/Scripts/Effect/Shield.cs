@@ -18,10 +18,8 @@ public class Shield : Effect
         {
             Value = value;
             IsEnabled = true;
-            //fixme
             caster.AddTryGetDmgRoutine(ApplyEffect(), 0);
             caster.AddStartBuff(RemoveEffect(), 1);
-            //fixme
         }
     }
     public override IEnumerator ApplyEffect()
@@ -35,5 +33,14 @@ public class Shield : Effect
                 caster.GetDmgInterrupted = caster.Dmg == 0;
             yield return null;
         }
+    }
+    public override void ForceRemoveEffect()
+    {
+        if (!IsEnabled)
+            return;
+        caster.RemoveTryGetDmgRoutineByIdx(FindRoutineIndex(RemoveEffect(), caster.TryGetDmgRoutine));
+        caster.RemoveStartBuffByIdx(FindRoutineIndex(RemoveEffect(), caster.StartBuffHandler));
+        Value = 0;
+        IsEnabled = false;
     }
 }

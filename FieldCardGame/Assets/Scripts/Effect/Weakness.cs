@@ -42,4 +42,13 @@ public class Weakness : Effect
         IsEnabled = false;
         yield return null;
     }
+    public override void ForceRemoveEffect()
+    {
+        if (!IsEnabled)
+            return;
+        caster.RemoveTryHitAttackRoutineByIdx(FindRoutineIndex(RemoveEffect(), caster.TryHitAttackRoutine));
+        caster.RemoveTurnEndDebuffByIdx(FindRoutineIndex(RemoveEffect(), caster.TurnEndDebuffHandler));
+        Value = 0;
+        IsEnabled = false;
+    }
 }

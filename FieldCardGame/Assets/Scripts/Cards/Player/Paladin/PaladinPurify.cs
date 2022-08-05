@@ -2,18 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarlockVampire : IPlayerCard
+public class PaladinPurify : IPlayerCard
 {
     public bool Disposable { get; set; }
-    private int range = 2;
-    private int cost = 20;
-    private int amount = 5;
+    private int range = 0;
+    private int cost = 2;
+    private int amount = 0;
     private bool interrupted;
     public string ExplainText
     {
         get
         {
-            return $"대상에게 ‘흡혈’ 디버프 {amount}를 부여합니다.";
+            return $"적용된 모든 디버프를 해제합니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -47,49 +47,7 @@ public class WarlockVampire : IPlayerCard
     public List<Coordinate> GetAvailableTile(Coordinate pos)
     {
         List<Coordinate> ret = new List<Coordinate>();
-        int level = 1;
-        bool[,] visited = new bool[128, 128];
-        Queue<Coordinate> queue = new Queue<Coordinate>();
-        Queue<Coordinate> nextQueue = new Queue<Coordinate>();
-        queue.Enqueue(pos);
-        while (level++ <= GetRange())
-        {
-            while (queue.Count != 0)
-            {
-                Coordinate tmp = queue.Dequeue();
-                if (tmp.X != pos.X || tmp.Y != pos.Y)
-                    ret.Add(tmp);
-                Coordinate tile;
-                if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y])
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                };
-                if ((tile = tmp.GetLeftTile()) != null && !visited[tile.X, tile.Y])
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                };
-                if ((tile = tmp.GetRightTile()) != null && !visited[tile.X, tile.Y])
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                };
-                if ((tile = tmp.GetUpTile()) != null && !visited[tile.X, tile.Y])
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                }
-            }
-            queue = new Queue<Coordinate>(nextQueue);
-            nextQueue.Clear();
-        }
-        while (queue.Count != 0)
-        {
-            Coordinate tmp = queue.Dequeue();
-            if (tmp.X != pos.X || tmp.Y != pos.Y)
-                ret.Add(tmp);
-        }
+        ret.Add(pos);
         return ret;
     }
     public Color GetAvailableTileColor()
@@ -126,9 +84,11 @@ public class WarlockVampire : IPlayerCard
              interrupted = false;
              yield break;
         }
-        Character tmp = GameManager.Instance.Map[target.X, target.Y].CharacterOnTile;
-        if(tmp)
-            tmp.EffectHandler.DebuffDict[DebuffType.Vampire].SetEffect(GetAmount());
+        foreach (var debuff in caster.EffectHandler.DebuffDict.Values)
+        {
+            if (debuff.IsEnabled)
+                debuff.ForceRemoveEffect();
+        }
         yield break;
     }
     public void CardRoutineInterrupt()
@@ -145,7 +105,7 @@ public class WarlockVampire : IPlayerCard
     }
     public CostType GetCostType()
     {
-        return CostType.Hp;
+        return CostType.PaladinEnergy;
     }
     public CardType GetCardType()
     {
@@ -153,7 +113,6 @@ public class WarlockVampire : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3131001;
+        return 1127001;
     }
-
 }
