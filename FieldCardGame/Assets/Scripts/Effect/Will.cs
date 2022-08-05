@@ -43,4 +43,13 @@ public class Will : Effect
         }
         yield return null;
     }
+    public override void ForceRemoveEffect()
+    {
+        if (!IsEnabled)
+            return;
+        caster.RemoveTurnEndBuffByIdx(FindRoutineIndex(RemoveEffect(), caster.TurnEndBuffHandler));
+        caster.RemoveStartBuffByIdx(FindRoutineIndex(RemoveEffect(), caster.StartBuffHandler));
+        Value = 0;
+        IsEnabled = false;
+    }
 }

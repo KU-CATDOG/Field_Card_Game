@@ -16,12 +16,10 @@ public class Illusion : Effect
         }
         else
         {
-            Value = value;
             IsEnabled = true;
-            //fixme
+            Value = value;
             caster.AddTryGetDmgRoutine(ApplyEffect(), 5);
             caster.AddStartBuff(RemoveEffect(), 0);
-            //fixme
         }
     }
     public override IEnumerator ApplyEffect()
@@ -45,5 +43,14 @@ public class Illusion : Effect
         }
         IsEnabled = false;
         yield return null;
+    }
+    public override void ForceRemoveEffect()
+    {
+        if (!IsEnabled)
+            return;
+        caster.RemoveTryGetDmgRoutineByIdx(FindRoutineIndex(RemoveEffect(), caster.TryGetDmgRoutine));
+        caster.RemoveStartBuffByIdx(FindRoutineIndex(RemoveEffect(), caster.StartBuffHandler));
+        Value = 0;
+        IsEnabled = false;
     }
 }

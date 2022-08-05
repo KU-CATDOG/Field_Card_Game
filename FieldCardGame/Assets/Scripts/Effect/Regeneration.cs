@@ -26,4 +26,13 @@ public class Regeneration : Effect
             yield return null;
         }
     }
+    public override void ForceRemoveEffect()
+    {
+        if (!IsEnabled)
+            return;
+        caster.RemoveCardUseRoutineByIdx(FindRoutineIndex(RemoveEffect(), caster.CardUseRoutine));
+        caster.RemoveTurnEndBuffByIdx(FindRoutineIndex(RemoveEffect(), caster.TurnEndBuffHandler));
+        Value = 0;
+        IsEnabled = false;
+    }
 }

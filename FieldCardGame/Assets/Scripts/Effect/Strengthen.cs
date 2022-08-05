@@ -18,10 +18,8 @@ public class Strengthen : Effect
         {
             Value = value;
             IsEnabled = true;
-            //fixme
             caster.AddTryHitAttackRoutine(ApplyEffect(), 0);
             caster.AddTurnEndBuff(RemoveEffect(), 0);
-            //
         }
     }
     public override IEnumerator ApplyEffect()
@@ -31,5 +29,14 @@ public class Strengthen : Effect
             caster.HitDmg += Value;
             yield return null;
         }
+    }
+    public override void ForceRemoveEffect()
+    {
+        if (!IsEnabled)
+            return;
+        caster.RemoveTryHitAttackRoutineByIdx(FindRoutineIndex(RemoveEffect(), caster.TryHitAttackRoutine));
+        caster.RemoveTurnEndBuffByIdx(FindRoutineIndex(RemoveEffect(), caster.TurnEndBuffHandler));
+        Value = 0;
+        IsEnabled = false;
     }
 }
