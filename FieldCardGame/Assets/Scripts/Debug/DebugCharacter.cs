@@ -309,7 +309,7 @@ public class DebugCharacter : Player
     {
         CardPile.Add(new PaladinMove());
         CardPile.Add(new PaladinMove());
-        CardPile.Add(new PaladinMove());
+        CardPile.Add(new PaladinSatanMark());
         CardPile.Add(new PaladinProtect());
         CardPile.Add(new PaladinFighting());
         CardPile.Add(new PaladinJump());
