@@ -7,13 +7,13 @@ public class WarlockVampire : IPlayerCard
     public bool Disposable { get; set; }
     private int range = 2;
     private int cost = 20;
-    private int amount = 3;
+    private int amount = 5;
     private bool interrupted;
     public string ExplainText
     {
         get
         {
-            return $"대상에게 ‘흡혈’ 버프 {amount}를 부여합니다.";
+            return $"대상에게 ‘흡혈’ 디버프 {amount}를 부여합니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
