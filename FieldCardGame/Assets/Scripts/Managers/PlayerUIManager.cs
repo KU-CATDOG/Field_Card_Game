@@ -177,8 +177,8 @@ public class PlayerUIManager : MonoBehaviour
     public IEnumerator GenerateCardToHand()
     {
         CardObject card = Instantiate(GameManager.Instance.CardObjectDict[GameManager.Instance.CurPlayer.addedCard.GetCardID()], cardArea.transform);
-        card.ReferenceCard = GameManager.Instance.CurPlayer.drawCard;
-        CardImages.Add(Instantiate(GameManager.Instance.CardObjectDict[GameManager.Instance.CurPlayer.addedCard.GetCardID()], cardArea.transform));
+        card.ReferenceCard = GameManager.Instance.CurPlayer.addedCard;
+        CardImages.Add(card);
         
         CardImages[CardImages.Count - 1].isPileCard = false;
         yield return StartCoroutine(Rearrange());
