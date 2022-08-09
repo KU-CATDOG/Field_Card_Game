@@ -17,6 +17,7 @@ public enum BuffType
     Illusion,
     Regeneration,
     Growth,
+    Heal,
     Debug,
 }
 public enum DebuffType
