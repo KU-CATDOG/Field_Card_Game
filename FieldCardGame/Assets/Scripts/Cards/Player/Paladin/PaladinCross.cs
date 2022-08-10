@@ -94,11 +94,9 @@ public class PaladinCross : IPlayerCard
         {
             Paladin owner = (Paladin) GameManager.Instance.Map[target.X, target.Y].CharacterOnTile;
             owner.CrystalCount += GetAmount();
-            //yield return owner.StartCoroutine(owner.DrawCard());
-            yield break;
+            yield return owner.StartCoroutine(owner.DrawCard());
         }
-        yield return caster.StartCoroutine(caster.DrawCard());
-        //yield break;
+        yield break;
     }
     public void CardRoutineInterrupt()
     {
