@@ -12,7 +12,7 @@ public class WarlockFalseContract : IPlayerCard
     {
         get
         {
-            return $"이번 턴 동안 패에 있는 모든 카드의 코스트를 0으로 만듭니다. ‘허약’ 디버프 1을 받습니다.";
+            return $"이번 턴 동안 패에 있는 모든 카드의 코스트를 10으로 만듭니다. \n‘허약’ 디버프 1을 받습니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -73,10 +73,11 @@ public class WarlockFalseContract : IPlayerCard
         List<ICard> InHand = new(caster.HandCard);
         foreach(var i in InHand)
         {
-            i.SetCost(0);
+            i.SetCost(10);
         }
         caster.AddTurnEndDebuff(RetrieveCost(caster, InHand), 0);
         caster.EffectHandler.DebuffDict[DebuffType.Fragility].SetEffect(1);
+        //caster.EffectHandler.DebuffDict[DebuffType.Rooted].SetEffect(2);
         yield return null;
     }
     private IEnumerator RetrieveCost(Character caster, List<ICard> toRetrieve)
@@ -129,7 +130,7 @@ public class WarlockFalseContract : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3107001;
+        return 3105001;
     }
 
 }

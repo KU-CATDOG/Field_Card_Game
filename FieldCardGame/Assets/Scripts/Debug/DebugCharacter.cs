@@ -177,10 +177,6 @@ public class DebugCharacter : Player
     {
         StartCoroutine(AddCard(new WarlockSnatch()));
     }
-    public void AddWarlockGatheringCard()
-    {
-        StartCoroutine(AddCard(new WarlockGathering()));
-    }
     public void AddWarlockDrainCard()
     {
         StartCoroutine(AddCard(new WarlockDrain()));
@@ -225,21 +221,9 @@ public class DebugCharacter : Player
     {
         StartCoroutine(AddCard(new WarlockEarthbound()));
     }
-    public void AddWarlockSmite()
-    {
-        StartCoroutine(AddCard(new WarlockSmite()));
-    }
-    public void AddWarlockBatWizard()
-    {
-        StartCoroutine(AddCard(new WarlockBatWizard()));
-    }
     public void AddWarlockSoul()
     {
         StartCoroutine(AddCard(new WarlockSoul()));
-    }
-    public void AddWarlockRegeneration()
-    {
-        StartCoroutine(AddCard(new WarlockRegeneration()));
     }
     public void AddWarlockDmgDraw()
     {
@@ -252,18 +236,6 @@ public class DebugCharacter : Player
     public void AddWarlockRanyor()
     {
         StartCoroutine(AddCard(new WarlockRanyor()));
-    }
-    public void AddWarlockInflation()
-    {
-        StartCoroutine(AddCard(new WarlockInflation()));
-    }
-    public void AddWarlockMemento()
-    {
-        StartCoroutine(AddCard(new WarlockMemento()));
-    }
-    public void AddWarlockHeal()
-    {
-        StartCoroutine(AddCard(new WarlockHeal()));
     }
     public void AddWarlockIllusion()
     {
@@ -283,7 +255,7 @@ public class DebugCharacter : Player
     }
     public void AddWarlockOverheal()
     {
-        StartCoroutine(AddCard(new WarlockOvverheal()));
+        StartCoroutine(AddCard(new WarlockOverheal()));
     }
     public void AddWarlockMosquito()
     {
@@ -292,14 +264,6 @@ public class DebugCharacter : Player
     public void AddWarlockAdvancedMove()
     {
         StartCoroutine(AddCard(new WarlockAdvancedMove()));
-    }
-    public void AddWarlockRecover()
-    {
-        StartCoroutine(AddCard(new WarlockRecover()));
-    }
-    public void AddWarlockCurse()
-    {
-        StartCoroutine(AddCard(new WarlockCurse()));
     }
     public void AddWarlockVampire()
     {

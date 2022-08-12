@@ -5,7 +5,7 @@ using UnityEngine;
 public class WarlockRanyor : IPlayerCard
 {
     private int range = 2;
-    private int cost = 20;
+    private int cost = 10;
     private int damage = 10;
     private bool interrupted;
     public bool Disposable { get; set; }
@@ -13,7 +13,7 @@ public class WarlockRanyor : IPlayerCard
     {
         get
         {
-            return $"적에게 {damage}의 피해를 줍니다. 이 카드로 적을 처치할 때 마다 이 카드의 데미지가 5 증가합니다.";
+            return $"{damage}의 피해를 줍니다. 이 카드로 적을 처치할 때 마다 이 카드의 피해량이 10 증가합니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -86,7 +86,9 @@ public class WarlockRanyor : IPlayerCard
         }
         while (queue.Count != 0)
         {
-            ret.Add(queue.Dequeue());
+            Coordinate tmp = queue.Dequeue();
+            if (tmp.X != pos.X || tmp.Y != pos.Y)
+                ret.Add(tmp);
         }
         return ret;
     }
@@ -129,7 +131,7 @@ public class WarlockRanyor : IPlayerCard
             }
             yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
             if(tmp.IsDie)
-                SetDamage(GetDamage()+5);
+                SetDamage(GetDamage()+10);
         }
         yield break;
     }
@@ -155,6 +157,6 @@ public class WarlockRanyor : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3115010;
+        return 3109010;
     }
 }

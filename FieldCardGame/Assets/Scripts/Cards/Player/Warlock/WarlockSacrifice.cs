@@ -13,7 +13,7 @@ public class WarlockSacrifice : IPlayerCard
     {
         get
         {
-            return $"뽑을 카드 더미에서 카드를 {draw}장 드로우한다.";
+            return $"뽑을 카드 더미에서 카드를 {draw}장 뽑습니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -104,6 +104,6 @@ public class WarlockSacrifice : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3011001;
+        return 3008001;
     }
 }

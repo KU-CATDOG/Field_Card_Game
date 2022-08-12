@@ -360,7 +360,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59eca5a0a97da9b4a8e1bf8a35010e87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 3219010
+  pos: {x: 0, y: 0, z: 0}
+  id: 3110010
 --- !u!1 &7998534071231833864
 GameObject:
   m_ObjectHideFlags: 0

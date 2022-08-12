@@ -7,14 +7,14 @@ public class WarlockVampAttack : IPlayerCard
     public bool Disposable { get; set; }
     private int range = 2;
     private int cost = 7;
-    private int damage = 10;
+    private int damage = 20;
     private int amount = 10;
     private bool interrupted;
     public string ExplainText
     {
         get
         {
-            return $"대상이 ‘흡혈’ 디버프가 걸린 상태면 {damage}의 피해를 주고, {amount}의 생명력을 회복합니다.";
+            return $"대상이 ‘흡혈'에 걸려 있다면, {damage}의 피해를 주고, {amount}의 생명력을 회복합니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -172,7 +172,7 @@ public class WarlockVampAttack : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3142010;
+        return 3036010;
     }
 
 }

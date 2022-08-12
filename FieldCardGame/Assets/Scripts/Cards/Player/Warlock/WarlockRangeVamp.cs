@@ -6,7 +6,7 @@ public class WarlockRangeVamp : IPlayerCard
 {
     private int range = 2;
     private int cost = 20;
-    private int damage = 5;
+    private int damage = 10;
     private int amount = 3;
     private bool interrupted;
     public bool Disposable { get; set; }
@@ -14,7 +14,7 @@ public class WarlockRangeVamp : IPlayerCard
     {
         get
         {
-            return $"기본 4방향에만 사용 가능, 시전 지점을 중심으로 3*3 칸에 위치한 생명체에게 {damage}의 피해를 준다. 이후 맞은 생명체 수당 {amount}의 체력을 회복한다.";
+            return $"시전 지점을 중심으로 3*3 칸에 위치한 적에게 {damage}의 피해를 주고, ‘흡혈’을 {amount}만큼 부여합니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -174,6 +174,6 @@ public class WarlockRangeVamp : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3138011;
+        return 3135011;
     }
 }

@@ -6,7 +6,7 @@ public class WarlockMosquito : IPlayerCard
 {
     private int range = 1;
     private bool notRemoved = true;
-    private int cost = 500;
+    private int cost = 300;
     private int damage = 100;
     private bool interrupted;
     public bool Disposable { get; set; } = true;
@@ -14,7 +14,7 @@ public class WarlockMosquito : IPlayerCard
     {
         get
         {
-            return $"플레이어가 데미지를 입을 때마다 비용이 10 감소한다. 사용하면 적에게 {GetDamage()}의 피해를 주고, 비용이 다시 500으로 초기화된다.";
+            return $"패에 있을 때, 비용으로 지불한 체력을 제외하고 피해를 입을 때마다 비용이 50 감소합니다. {damage}의 피해를 준 후, 비용이 300이 됩니다.";
         }
     }
     public int GetRange()
@@ -103,20 +103,21 @@ public class WarlockMosquito : IPlayerCard
     }
     public IEnumerator GetCardRoutine(Character owner)
     {
-        owner.AddGetDmgRoutine(ReduceCost(),0);
+        owner.AddGetDmgRoutine(ReduceCost(owner),0);
         yield break;
     }
-    private IEnumerator ReduceCost()
+    private IEnumerator ReduceCost(Character owner)
     {
         while(notRemoved)
         {
-            SetCost(GetCost() - 10);
+            if(owner.HandCard.Contains(this))
+                SetCost(GetCost() - 50);
             yield return null;
         }
     }
     public IEnumerator RemoveCardRoutine(Character owner)
     {
-        notRemoved = true;
+        notRemoved = false;
         yield break;
     }
     public void CardRoutineInterrupt()
@@ -141,6 +142,6 @@ public class WarlockMosquito : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3213010;
+        return 3221010;
     }
 }

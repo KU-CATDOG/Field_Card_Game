@@ -6,15 +6,15 @@ public class WarlockGrip : IPlayerCard
 {
     private int range = 2;
     private int cost = 20;
-    private int damage = 8;
-    private int healAmount = 2;
+    private int damage = 10;
+    private int healAmount = 5;
     private bool interrupted;
     public bool Disposable { get; set; }
     public string ExplainText
     {
         get
         {
-            return $"기본 4방향에만 사용 가능, 시전 지점을 중심으로 3*3 칸에 위치한 생명체에게 {damage}의 피해를 준다. 이후 맞은 생명체 수당 {healAmount}의 체력을 회복한다.";
+            return $"시전 지점을 중심으로 3*3 칸에 위치한 적에게 {damage}의 피해를 줍니다. \n적중한 적 당 {healAmount}의 체력을 회복합니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -173,6 +173,6 @@ public class WarlockGrip : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3108010;
+        return 3106010;
     }
 }

@@ -7,13 +7,13 @@ public class WarlockWeakness : IPlayerCard
     public bool Disposable { get; set; } = true;
     private int range = 1;
     private int cost = 15;
-    private int amount = 30;
+    private int amount = 99;
     private bool interrupted;
     public string ExplainText
     {
         get
         {
-            return $"대상에게 ‘취약’ 디버프 {amount}을 부여합니다.";
+            return $"‘허약’ {amount}을 부여합니다.\n소멸.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -128,7 +128,7 @@ public class WarlockWeakness : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3037001;
+        return 3118001;
     }
 
 }

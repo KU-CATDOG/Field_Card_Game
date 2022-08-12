@@ -13,7 +13,7 @@ public class WarlockIllusion : IPlayerCard
     {
         get
         {
-            return $"환각버프가 {buffCount} 적용됩니다.";
+            return $"'환각' {buffCount}을 부여합니다.\n<align=center>소멸.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -101,6 +101,6 @@ public class WarlockIllusion : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3224001;
+        return 3213001;
     }
 }

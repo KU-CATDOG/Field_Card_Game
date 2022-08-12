@@ -12,7 +12,7 @@ public class WarlockFinalBlow : IPlayerCard
     {
         get
         {
-            return $"플레이어의 생명력 1로 만들고 적에게 감소한 생명력의 3배의 데미지를 줍니다.";
+            return $"체력을 10로 만들고 적에게 감소한 생명력의 3배의 데미지를 줍니다.";
         }
     }
 
@@ -104,7 +104,7 @@ public class WarlockFinalBlow : IPlayerCard
                 interrupted = false;
                 yield break;
             }
-            SetDamage(caster.Hp - 1);
+            SetDamage(caster.Hp - 10);
             yield return GameManager.Instance.StartCoroutine(caster.HitAttack(caster, GetDamage()));
             yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()*3));
         }
@@ -132,6 +132,6 @@ public class WarlockFinalBlow : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3239010;
+        return 3137010;
     }
 }

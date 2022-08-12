@@ -297,7 +297,7 @@ public class WarlockAdvancedMove : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3028100;
+        return 3014100;
     }
 
 }

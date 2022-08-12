@@ -13,7 +13,7 @@ public class WarlockLissandra : IPlayerCard
     {
         get
         {
-            return $"기본 4방향만 사용가능, 해당 위치로 이동하는 경로에 있는 적에게 {damage} 데미지를 줍니다.";
+            return $"기본 4방향중 한 방향으로 이동하면서, 이동하는 경로에 있는 적에게 {damage} 데미지를 줍니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -189,6 +189,6 @@ public class WarlockLissandra : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3021110;
+        return 3011110;
     }
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarlockOvverheal : IPlayerCard
+public class WarlockOverheal : IPlayerCard
 {
     private int range = 0;
     private int cost = 15;
@@ -13,7 +13,7 @@ public class WarlockOvverheal : IPlayerCard
     {
         get
         {
-            return $"생명력을 이번 턴에 사용한 카드의 개수의 5배만큼 회복합니다.";
+            return $"이번 턴에 사용한 카드의 수당 5만큼 체력을 회복합니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -108,6 +108,6 @@ public class WarlockOvverheal : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3127001;
+        return 3128001;
     }
 }
