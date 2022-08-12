@@ -1219,7 +1219,6 @@ public abstract class Character : MonoBehaviour
         {
             yield return StartCoroutine(Die(caster));
         }
-        Debug.Log("!!!!");
         for (int i = GetDmgRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
             while (NeedWait != 0) yield return null;
