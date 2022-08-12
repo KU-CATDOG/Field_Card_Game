@@ -19,6 +19,7 @@ public enum BuffType
     Growth,
     Heal,
     Debug,
+    Length,
 }
 public enum DebuffType
 {
@@ -28,6 +29,7 @@ public enum DebuffType
     Fragility,
     Rooted,
     Vampire,
+    Length,
 }
 public enum CostType
 {

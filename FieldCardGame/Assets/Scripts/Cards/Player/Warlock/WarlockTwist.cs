@@ -1,20 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class WarlockDmgDraw : IPlayerCard
+using System.Linq;
+public class WarlockTwist : IPlayerCard
 {
-    private int range = 2;
-    private int cost = 5;
-    private int damage = 10;
-    private int drawNum = 2;
-    private bool interrupted;
     public bool Disposable { get; set; }
+    private int range = 0;
+    private int cost = 20;
+    private bool interrupted;
     public string ExplainText
     {
         get
         {
-            return $"적에게 {damage}의 피해를 줍니다. 이 카드로 적을 처치하면 카드를 {drawNum}장 뽑습니다.";
+            return $"사거리 2 이내 적의 모든 버프를 랜덤한 디버프로 바꾸고, 내가 가진 모든 디버프를 랜덤한 버프로 바꿉니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -33,14 +31,6 @@ public class WarlockDmgDraw : IPlayerCard
     {
         range = _range;
     }
-    public int GetDamage()
-    {
-        return damage;
-    }
-    public void SetDamage(int _damage)
-    {
-        damage = _damage;
-    }
     public Color GetUnAvailableTileColor()
     {
         return Color.red;
@@ -48,17 +38,28 @@ public class WarlockDmgDraw : IPlayerCard
     public List<Coordinate> GetAvailableTile(Coordinate pos)
     {
         List<Coordinate> ret = new List<Coordinate>();
+        ret.Add(pos);
+        return ret;
+    }
+    public Color GetAvailableTileColor()
+    {
+        return Color.blue;
+    }
+    public List<Coordinate> GetAreaofEffect(Coordinate relativePos)
+    {
+        List<Coordinate> ret = new List<Coordinate>();
+        Coordinate pos = new Coordinate(0, 0);
         int level = 1;
         bool[,] visited = new bool[128, 128];
         Queue<Coordinate> queue = new Queue<Coordinate>();
         Queue<Coordinate> nextQueue = new Queue<Coordinate>();
         queue.Enqueue(pos);
-        while (level++ <= GetRange())
+        while (level++ <= 2)
         {
             while (queue.Count != 0)
             {
                 Coordinate tmp = queue.Dequeue();
-                if(tmp.X != pos.X || tmp.Y != pos.Y)
+                if ((tmp.X != pos.X || tmp.Y != pos.Y) && GameManager.Instance.Map[tmp.X,tmp.Y].CharacterOnTile)
                     ret.Add(tmp);
                 Coordinate tile;
                 if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y])
@@ -88,19 +89,9 @@ public class WarlockDmgDraw : IPlayerCard
         while (queue.Count != 0)
         {
             Coordinate tmp = queue.Dequeue();
-            if (tmp.X != pos.X || tmp.Y != pos.Y)
+            if ((tmp.X != pos.X || tmp.Y != pos.Y) && GameManager.Instance.Map[tmp.X, tmp.Y].CharacterOnTile)
                 ret.Add(tmp);
         }
-        return ret;
-    }
-    public Color GetAvailableTileColor()
-    {
-        return Color.blue;
-    }
-    public List<Coordinate> GetAreaofEffect(Coordinate relativePos)
-    {
-        List<Coordinate> ret = new List<Coordinate>();
-        ret.Add(new Coordinate(0, 0));
         return ret;
     }
     public Color GetColorOfEffect(Coordinate pos)
@@ -122,19 +113,35 @@ public class WarlockDmgDraw : IPlayerCard
     }
     public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
-        Character tmp = GameManager.Instance.Map[target.X, target.Y].CharacterOnTile;
-        if (tmp)
+        if (interrupted)
         {
-            if (interrupted)
+             interrupted = false;
+             yield break;
+        }
+        List<Coordinate> enemyList = GetAreaofEffect(target);
+        foreach (var j in enemyList)
+        {
+            Character tmp = GameManager.Instance.Map[j.X, j.Y].CharacterOnTile;
+            if (tmp)
             {
-                interrupted = false;
-                yield break;
+                foreach (var i in tmp.EffectHandler.BuffDict)
+                {
+                    if (i.Value.IsEnabled)
+                    {
+                        int buffCount = i.Value.Value;
+                        i.Value.ForceRemoveEffect();
+                        tmp.EffectHandler.DebuffDict[(DebuffType)Random.Range(1, (int)(DebuffType.Length))].SetEffect(buffCount);
+                    }
+                }
             }
-            yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
-            if (tmp.IsDie)
+        }
+        foreach (var i in caster.EffectHandler.DebuffDict)
+        {
+            if (i.Value.IsEnabled)
             {
-                for (int i = 0; i < drawNum; i++)
-                    yield return GameManager.Instance.StartCoroutine(caster.DrawCard());
+                int buffCount = i.Value.Value;
+                i.Value.ForceRemoveEffect();
+                caster.EffectHandler.BuffDict[(BuffType)Random.Range(0, (int)(BuffType.Length))].SetEffect(buffCount);
             }
         }
         yield break;
@@ -157,10 +164,11 @@ public class WarlockDmgDraw : IPlayerCard
     }
     public CardType GetCardType()
     {
-        return CardType.Attack;
+        return CardType.Skill;
     }
     public int GetCardID()
     {
-        return 3012010;
+        return 3119001;
     }
+
 }

@@ -12,7 +12,7 @@ public class WarlockFalseContract : IPlayerCard
     {
         get
         {
-            return $"이번 턴 동안 패에 있는 모든 카드의 코스트를 10으로 만듭니다. \n‘허약’ 디버프 1을 받습니다.";
+            return $"턴 종료할 때까지 패에 있는 모든 카드의 비용을 10으로 만듭니다. ‘허약' 1, '속박' 1을 받습니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)

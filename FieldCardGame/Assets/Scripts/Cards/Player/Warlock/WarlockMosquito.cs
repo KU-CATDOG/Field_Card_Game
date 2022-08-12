@@ -14,7 +14,7 @@ public class WarlockMosquito : IPlayerCard
     {
         get
         {
-            return $"패에 있을 때, 비용으로 지불한 체력을 제외하고 피해를 입을 때마다 비용이 50 감소합니다. {damage}의 피해를 준 후, 비용이 300이 됩니다.";
+            return $"패에 있을 때, 피해를 입을 때마다 비용이 50 감소합니다. {damage}의 피해를 준 후, 비용이 300이 됩니다.";
         }
     }
     public int GetRange()
@@ -108,10 +108,12 @@ public class WarlockMosquito : IPlayerCard
     }
     private IEnumerator ReduceCost(Character owner)
     {
-        while(notRemoved)
+        while (notRemoved)
         {
-            if(owner.HandCard.Contains(this))
+            if (owner.HandCard.Contains(this))
+            { 
                 SetCost(GetCost() - 50);
+            }
             yield return null;
         }
     }

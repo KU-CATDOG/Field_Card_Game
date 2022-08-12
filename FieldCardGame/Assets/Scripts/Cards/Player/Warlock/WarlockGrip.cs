@@ -14,7 +14,7 @@ public class WarlockGrip : IPlayerCard
     {
         get
         {
-            return $"시전 지점을 중심으로 3*3 칸에 위치한 적에게 {damage}의 피해를 줍니다. \n적중한 적 당 {healAmount}의 체력을 회복합니다.";
+            return $"시전 지점을 중심으로 3*3 칸에 위치한 적에게 {damage}의 피해를 줍니다. 적중한 적 당 {healAmount}의 체력을 회복합니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
