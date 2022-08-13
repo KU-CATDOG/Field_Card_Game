@@ -77,7 +77,7 @@ public class WarlockFalseContract : IPlayerCard
         }
         caster.AddTurnEndDebuff(RetrieveCost(caster, InHand), 0);
         caster.EffectHandler.DebuffDict[DebuffType.Fragility].SetEffect(1);
-        //caster.EffectHandler.DebuffDict[DebuffType.Rooted].SetEffect(2);
+        caster.EffectHandler.DebuffDict[DebuffType.Rooted].SetEffect(1);
         yield return null;
     }
     private IEnumerator RetrieveCost(Character caster, List<ICard> toRetrieve)
