@@ -79,7 +79,7 @@ public class Warlock : Player
         GameManager.Instance.StartCoroutine(AddCard(new WarlockMosquito()));
         CardPile.Add(new WarlockMove());
         CardPile.Add(new WarlockVampire());
-        CardPile.Add(new WarlockTwist()); 
+        CardPile.Add(new WarlockBurn()); 
         CardPile.Add(new WarlockExchange());
         CardPile.Add(new WarlockWeakness());
         StartCoroutine(ShuffleDeck());
