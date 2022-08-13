@@ -42,6 +42,7 @@ public class EffectHandler
         debuffDict.Add(DebuffType.Weakness, weakness);
         debuffDict.Add(DebuffType.Poison, poison);
         debuffDict.Add(DebuffType.Fragility, fragility);
+        debuffDict.Add(DebuffType.Rooted, rooted);
         debuffDict.Add(DebuffType.Vampire, vampire);
     }
 

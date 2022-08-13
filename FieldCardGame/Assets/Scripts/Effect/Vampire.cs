@@ -53,7 +53,7 @@ public class Vampire : Effect
     {
         if (!IsEnabled)
             return;
-        caster.RemoveForceTurnEndDebuffByIdx(FindRoutineIndex(RemoveEffect(), caster.ForceTurnEndDebuffHandler));
+        caster.RemoveForceTurnEndDebuffByIdx(FindRoutineIndex(ApplyEffect(), caster.ForceTurnEndDebuffHandler));
         caster.RemoveStartDebuffByIdx(FindRoutineIndex(RemoveEffect(), caster.StartDebuffHandler));
         Value = 0;
         IsEnabled = false;
