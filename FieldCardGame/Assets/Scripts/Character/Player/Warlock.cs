@@ -76,11 +76,10 @@ public class Warlock : Player
 
     protected override void InitializeDeck()
     {
-        GameManager.Instance.StartCoroutine(AddCard(new WarlockMosquito()));
+        GameManager.Instance.StartCoroutine(AddCard(new WarlockRepay()));
         CardPile.Add(new WarlockMove());
         CardPile.Add(new WarlockCycle());
         CardPile.Add(new WarlockNecromancy()); 
-        CardPile.Add(new WarlockExchange());
         CardPile.Add(new WarlockWeakness());
         StartCoroutine(ShuffleDeck());
     }
