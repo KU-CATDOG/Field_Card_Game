@@ -2,18 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarlockGetSoul : IPlayerCard
+public class WarlockNecromancy : IPlayerCard
 {
     public bool Disposable { get; set; }
     private int range = 0;
     private int cost = 10;
-    private int giveCard = 4;
+    private int giveCard = 2;
+    private int healAmount = 20;
     private bool interrupted;
     public string ExplainText
     {
         get
         {
-            return $"영혼 {giveCard}장을 패에 추가합니다.";
+            return $"영혼 {giveCard}장을 패에 추가합니다. 체력을 {healAmount} 회복합니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -31,6 +32,14 @@ public class WarlockGetSoul : IPlayerCard
     public void SetRange(int _range)
     {
         range = _range;
+    }
+    public int GetHealAmount()
+    {
+        return healAmount;
+    }
+    public void SetHealAmount(int _healAmount)
+    {
+        healAmount = _healAmount;
     }
     public Color GetUnAvailableTileColor()
     {
@@ -75,6 +84,7 @@ public class WarlockGetSoul : IPlayerCard
         {
             yield return GameManager.Instance.StartCoroutine(caster.AddCard(GameManager.Instance.CardDict[3027001],true));
         }
+        yield return GameManager.Instance.StartCoroutine(caster.GiveHeal(caster, GetHealAmount(), true));
         yield return null;
     }
     public void CardRoutineInterrupt()
@@ -99,7 +109,7 @@ public class WarlockGetSoul : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3126001;
+        return 3030001;
     }
 
 }
