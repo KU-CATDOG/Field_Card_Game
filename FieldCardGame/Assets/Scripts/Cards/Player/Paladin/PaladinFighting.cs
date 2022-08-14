@@ -86,6 +86,7 @@ public class PaladinFighting : IPlayerCard
             i.SetCost(Mathf.Max(0, tmp));
         }
         caster.AddPayCostRoutine(RetrieveCost(caster, InHand), 0);
+        caster.AddTurnEndDebuff(RetrieveCost(caster, InHand), 0);
         yield return null;
     }
     private IEnumerator RetrieveCost(Character caster, List<ICard> toRetrieve)
