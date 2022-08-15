@@ -113,10 +113,11 @@ public class Slime : Enemy
         a._dmg = 15;
         CardPile.Add(a);
 
-        PaladinMove b = new PaladinMove();
-        b.SetCost(1);
-        b.SetRange(4);
-        CardPile.Add(b);
+        EnemyMove m = new EnemyMove();
+        m.Disposable = false;
+        m.SetCost(1);
+        m._range = 4;
+        CardPile.Add(m);
     }
 
     protected override IEnumerator payCost(int cost, CostType type)

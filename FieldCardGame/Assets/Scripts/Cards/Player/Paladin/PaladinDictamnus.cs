@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PaladinDictamnus : IPlayerCard
 {
-    public bool Disposable { get; set; }
+    public bool Disposable { get; set; } = true;
     private int range = 1;
     private int cost = 0;
     private int damage = 7;
@@ -104,17 +104,19 @@ public class PaladinDictamnus : IPlayerCard
                 yield break;
             }
             yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
-            PaladinDictamnus paladinDictamnus = new PaladinDictamnus();
+            ICard paladinDictamnus = new PaladinDictamnus();
             paladinDictamnus.SetCost(GetCost() + 1);
-            yield return GameManager.Instance.StartCoroutine(caster.AddCard(paladinDictamnus, true));
+            yield return caster.StartCoroutine(caster.AddCard(paladinDictamnus, true));
             caster.AddTurnEndDebuff(RetrieveCost(caster, paladinDictamnus), 0);
-            Disposable = true;
         }
         yield break;
     }
     private IEnumerator RetrieveCost(Character caster, ICard toRetrieve)
     {
-        toRetrieve.SetCost(0);
+        if(toRetrieve !=null)
+        { 
+            toRetrieve.SetCost(0);
+        }
         yield return null;
     }
     public void CardRoutineInterrupt()
@@ -139,6 +141,6 @@ public class PaladinDictamnus : IPlayerCard
     }
     public int GetCardID()
     {
-        return 1106001;
+        return 1106011;
     }
 }

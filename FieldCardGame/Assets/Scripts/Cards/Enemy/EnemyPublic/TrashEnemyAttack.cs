@@ -1,31 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackNDebuff : ICard
+public class TrashEnemyAttack : ICard
 {
     public bool Disposable { get; set; }
 
     private int cost;
     private int dmg;
-    private DebuffType debuffType;
-    private int debuffValue;
     public int _dmg
     {
         get { return dmg; }
         set { dmg = value; }
     }
-    public DebuffType _debuffType
-    {
-        get { return debuffType; }
-        set { debuffType = value; }
-    }
-    public int _debuffValue
-    {
-        get { return debuffValue; }
-        set { debuffValue = value; }
-    }
-
+    
     private int range;
 
     private bool interrupted;
@@ -38,27 +27,35 @@ public class AttackNDebuff : ICard
         yield break;
     }
 
+    /*public TrashEnemyAttack (int _cost, int _dmg, int _range)
+    {
+        cost = _cost;
+        dmg = _dmg;
+        range = _range;
+    }
+    */
+
     public int GetCardID()
     {
-        return 0002124;
+        return 0001123;
     }
-
+    
     public CostType GetCostType()
     {
         return CostType.MonsterCrystal;
     }
     public CardType GetCardType()
     {
-        return CardType.Skill; //Attack N Skill ÇÊ¿ä
+        return CardType.Attack;
     }
     public List<Coordinate> GetAvailableTile(Coordinate pos)
     {
         List<Coordinate> ret = new List<Coordinate>();
-        List<Coordinate> canTile = pos.GetDistanceAvailableTile(range);
-
+        List<Coordinate> canTile = pos.GetDistanceAvailableTile(range, RangeType.Distance, true);
+        
         foreach (var t in canTile)
         {
-            if (GameManager.Instance.Map[t.X, t.Y].CharacterOnTile is Player)
+            if(GameManager.Instance.Map[t.X, t.Y].CharacterOnTile is Player)
             {
                 ret.Add(t);
             }
@@ -66,7 +63,7 @@ public class AttackNDebuff : ICard
         //Debug.Log(ret.Count);
 
         return ret;
-    }
+    }   
     public bool IsAvailablePosition(Coordinate caster, Coordinate target)
     {
         List<Coordinate> availablePositions = GetAvailableTile(caster);
@@ -84,30 +81,19 @@ public class AttackNDebuff : ICard
     }
     public IEnumerator CardRoutine(Character caster, Coordinate center)
     {
-        Character tmp = GameManager.Instance.Map[center.X, center.Y].CharacterOnTile;
-
-        if (tmp)
-        {
-            if (interrupted)
-            {
-                interrupted = false;
-                yield break;
-            }
-            yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, dmg));
-            tmp.EffectHandler.DebuffDict[debuffType].SetEffect(debuffValue);
-        }
+        if (interrupted)
+            yield break;
+        GameManager.Instance.StartCoroutine(caster.HitAttack(GameManager.Instance.Map[center.X, center.Y].CharacterOnTile, dmg));
     }
     public void CardRoutineInterrupt()
     {
         interrupted = true;
     }
 
-
-
     // not use
     public int GetRange()
     {
-        return range;
+        return 1;
     }
     public void SetRange(int _range)
     {
@@ -122,4 +108,8 @@ public class AttackNDebuff : ICard
         cost = _cost;
     }
 
+    public static implicit operator TrashEnemyAttack(TrashEnemyDebuff v)
+    {
+        throw new NotImplementedException();
+    }
 }

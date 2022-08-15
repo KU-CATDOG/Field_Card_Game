@@ -25,7 +25,6 @@ public class PaladinMove : IPlayerCard
     }
     public int GetRange()
     {
-        //return range;
         return range;
     }
     public void SetRange(int _range)
@@ -275,8 +274,6 @@ public class PaladinMove : IPlayerCard
             }
             yield return GameManager.Instance.StartCoroutine(caster.Move(i, speed));
         }
-        //Delete After Test
-        yield return caster.StartCoroutine(caster.AddCard(new PaladinDefilement()));
     }
     public void CardRoutineInterrupt()
     {

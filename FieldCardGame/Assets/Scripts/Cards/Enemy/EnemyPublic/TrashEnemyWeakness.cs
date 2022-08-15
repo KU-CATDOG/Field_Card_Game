@@ -2,18 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TrashEnemyMoveStar : ICard
+public class TrashEnemyDebuff : ICard
 {
     public bool Disposable { get; set; }
 
     private int cost;
     private int dmg;
-    public int _dmg
+    private DebuffType debuffType;
+    private int debuffValue;
+    private RangeType rangeType;
+    public DebuffType _debuffType
     {
-        get { return dmg; }
-        set { dmg = value; }
+        get { return debuffType; }
+        set { debuffType = value; }
     }
-    
+    public int _debuffValue
+    {
+        get { return debuffValue; }
+        set { debuffValue = value; }
+    }
+    public RangeType _rangeType
+    {
+        get { return rangeType; }
+        set { rangeType = value; }
+    }
+
     private int range;
 
     private bool interrupted;
@@ -28,33 +41,32 @@ public class TrashEnemyMoveStar : ICard
 
     public int GetCardID()
     {
-        return 0002223;
+        return 0002123;
     }
-    
+
     public CostType GetCostType()
     {
         return CostType.MonsterCrystal;
     }
     public CardType GetCardType()
     {
-        return CardType.Attack;
+        return CardType.Skill;
     }
     public List<Coordinate> GetAvailableTile(Coordinate pos)
     {
         List<Coordinate> ret = new List<Coordinate>();
-        List<Coordinate> canTile = pos.GetDistanceAvailableTile(range);
-        
+        List<Coordinate> canTile = pos.GetDistanceAvailableTile(range, RangeType.Distance, true);
+
         foreach (var t in canTile)
         {
-            if(GameManager.Instance.Map[t.X, t.Y].CharacterOnTile is Player)
+            if (GameManager.Instance.Map[t.X, t.Y].CharacterOnTile is Player)
             {
                 ret.Add(t);
             }
         }
-        //Debug.Log(ret.Count);
 
         return ret;
-    }   
+    }
     public bool IsAvailablePosition(Coordinate caster, Coordinate target)
     {
         List<Coordinate> availablePositions = GetAvailableTile(caster);
@@ -72,9 +84,17 @@ public class TrashEnemyMoveStar : ICard
     }
     public IEnumerator CardRoutine(Character caster, Coordinate center)
     {
-        if (interrupted)
-            yield break;
-        GameManager.Instance.StartCoroutine(caster.HitAttack(GameManager.Instance.Map[center.X, center.Y].CharacterOnTile, dmg));
+        Character tmp = GameManager.Instance.Map[center.X, center.Y].CharacterOnTile;
+
+        if (tmp)
+        {
+            if (interrupted)
+            {
+                interrupted = false;
+                yield break;
+            }
+            tmp.EffectHandler.DebuffDict[debuffType].SetEffect(debuffValue);
+        }
     }
     public void CardRoutineInterrupt()
     {

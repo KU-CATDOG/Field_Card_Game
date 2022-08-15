@@ -65,7 +65,9 @@ public class Viper : Enemy
                 }
 
                 crystalCount -= HandCard[atkIsFst ? 0 : 1].GetCost();
+                DropInterrupted = true;
                 yield return StartCoroutine(CardUse(toATK, atkIsFst ? 0 : 1));
+                DropInterrupted = false;
                 break;
             }
             else if ((tiles = HandCard[atkIsFst ? 1 : 0].GetAvailableTile(position)).Count > 0)
@@ -119,11 +121,11 @@ public class Viper : Enemy
         a._debuffValue = 4;
         CardPile.Add(a);
 
-        PaladinMove b = new PaladinMove();
-        b.Disposable = false;
-        b.SetCost(1);
-        b.SetRange(3);
-        CardPile.Add(b);
+        EnemyMove m = new EnemyMove();
+        m.Disposable = false;
+        m.SetCost(1);
+        m._range = 3;
+        CardPile.Add(m);
     }
 
     protected override IEnumerator payCost(int cost, CostType type)

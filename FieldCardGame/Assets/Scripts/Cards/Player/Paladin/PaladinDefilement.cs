@@ -8,12 +8,12 @@ public class PaladinDefilement : IPlayerCard
     private int cost = 0;
     private bool notRemoved = true;
     private bool interrupted;
-    public bool Disposable { get; set; } = true;
+    public bool Disposable { get; set; }
     public string ExplainText
     {
         get
         {
-            return $"사용 불가";
+            return $"사용불가, 손패에 있다면 턴이 종료될 때 사라집니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -38,7 +38,7 @@ public class PaladinDefilement : IPlayerCard
 
             if (isCardInHand) {
                 notRemoved = false;
-                owner.StartCoroutine(owner.RemoveCard(idx));
+                yield return owner.StartCoroutine(owner.RemoveCard(idx));
             }
 
             yield return null;
@@ -46,12 +46,10 @@ public class PaladinDefilement : IPlayerCard
     }
     public IEnumerator RemoveCardRoutine(Character owner)
     {
-        notRemoved = false;
         yield break;
     }
     public int GetRange()
     {
-        //return range;
         return range;
     }
     public void SetRange(int _range)

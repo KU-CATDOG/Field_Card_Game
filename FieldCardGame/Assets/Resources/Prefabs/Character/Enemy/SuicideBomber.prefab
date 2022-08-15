@@ -254,6 +254,7 @@ MonoBehaviour:
   hpText: {fileID: 0}
   buffListText: {fileID: 4819268451879131142}
   debuffListText: {fileID: 6104430117882730046}
+  Owner: {fileID: 0}
 --- !u!1 &8893698363308357318
 GameObject:
   m_ObjectHideFlags: 0
@@ -352,7 +353,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HealedBy: {fileID: 0}
-  Id: 5
+  Id: 50
 --- !u!1 &9166853415520541228
 GameObject:
   m_ObjectHideFlags: 0
