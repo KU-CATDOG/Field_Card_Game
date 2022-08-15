@@ -65,7 +65,7 @@ public class Warlock : Player
         base.Start();
         bloodText = PlayerUI.GetComponentInChildren<TextMeshProUGUI>();
         TurnStartDraw = 5;
-        MaxHp = 30; Hp = 50;
+        MaxHp = 70; Hp = 100;
     }
     protected override void Update()
     {
@@ -79,8 +79,12 @@ public class Warlock : Player
         GameManager.Instance.StartCoroutine(AddCard(new WarlockRepay()));
         CardPile.Add(new WarlockMove());
         CardPile.Add(new WarlockCrops());
-        CardPile.Add(new WarlockNecromancy()); 
-        CardPile.Add(new WarlockVampire());
+        CardPile.Add(new WarlockNecromancy());
+        CardPile.Add(new WarlockSoulLiberation());
+        CardPile.Add(new WarlockSoul());
+        CardPile.Add(new WarlockSoul());
+        CardPile.Add(new WarlockSoul());
+        CardPile.Add(new WarlockSoul());
         StartCoroutine(ShuffleDeck());
     }
 }
