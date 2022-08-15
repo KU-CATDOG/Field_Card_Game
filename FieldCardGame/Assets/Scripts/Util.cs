@@ -37,6 +37,13 @@ public enum CostType
     MonsterCrystal,
     Unpayable,
 }
+public enum RangeType
+{
+   CrossWise,
+   DiagonalWise,
+   Distance,
+   Square,
+}
 public enum CardType
 {
     Move,
@@ -116,15 +123,80 @@ public class Coordinate
         return ret;
     }
 
-    public List<Coordinate> GetDistanceAvailableTile(int _distance)
+    public List<Coordinate> GetDistanceAvailableTile(int _distance, RangeType rangeType, bool _forATK)
     {
         List<Coordinate> ret = new List<Coordinate> ();
         
-        ret.AddRange(findTileInRange(_distance, new Coordinate(X, Y, 0), false));
+        switch (rangeType)
+        {
+            case RangeType.CrossWise:
+                ret.AddRange(findTileInCross(_distance, new Coordinate(X, Y, 0), _forATK));
+                break;
+            case RangeType.DiagonalWise:
+
+                break;
+            case RangeType.Distance:
+                ret.AddRange(findTileInRange(_distance, new Coordinate(X, Y, 0), _forATK));
+                break;
+            case RangeType.Square:
+
+                break;
+            default:
+
+                break;
+        }
+        
+        return ret;
+    }
+    public List<Coordinate> findTileInCross(int _distance, Coordinate _pos, bool forATK)
+    {
+        List<Coordinate> ret = new List<Coordinate>();
+
+
+
+        int[][] dirs = new int[][]
+        {
+            new int[] {0, 1},
+            new int[] {0, -1},
+            new int[] {1, 0},
+            new int[] {-1, 0},
+        };
+
+        for (int j = 0; j < dirs.Length; j++)
+        {
+            Coordinate nextPos = new Coordinate(_pos.X, _pos.Y, 0);
+
+            for (int i = 0; i < _distance; i++)
+            {
+                nextPos.X = _pos.X + dirs[j][0] * i;
+                nextPos.Y = _pos.Y + dirs[j][1] * i;
+
+                if(OutRange(nextPos))
+                {
+                    break;
+                }
+
+                // �̵� ���� �Ÿ� ���� �ִ� Ÿ������ �˻�.
+                if (forATK)
+                {
+                        ret.Add(new Coordinate(nextPos.X, nextPos.Y));
+                }
+                else
+                {
+                    if (GameManager.Instance.Map[nextPos.X, nextPos.Y].CharacterOnTile == null)
+                    {
+                        ret.Add(new Coordinate(nextPos.X, nextPos.Y));
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+        }
 
         return ret;
     }
-
     public List<Coordinate> findTileInRange(int _distance, Coordinate _pos, bool forATK)
     {
         List<Coordinate> ret = new List<Coordinate>();
@@ -180,20 +252,21 @@ public class Coordinate
                     continue;
 
                 // �̵� ���� �Ÿ� ���� �ִ� Ÿ������ �˻�.
+                // need check. what is this function. just find all avaliable tile(no enemy(player))? or find only correct tile(tile on enemy)?
                 if (forATK)
                 {
+                    useTile[id].distance = t.distance + 1;
+                    checkNext.Enqueue(useTile[id]);
+                    ret.Add(new Coordinate(useTile[id].X, useTile[id].Y));   
+                }
+                else
+                {
                     if (GameManager.Instance.Map[useTile[id].X, useTile[id].Y].CharacterOnTile == null)
-                    {
+                    {   
                         useTile[id].distance = t.distance + 1;
                         checkNext.Enqueue(useTile[id]);
                         ret.Add(new Coordinate(useTile[id].X, useTile[id].Y));
                     }
-                }
-                else
-                {
-                    useTile[id].distance = t.distance + 1;
-                    checkNext.Enqueue(useTile[id]);
-                    ret.Add(new Coordinate(useTile[id].X, useTile[id].Y));
                 }
                 
             }

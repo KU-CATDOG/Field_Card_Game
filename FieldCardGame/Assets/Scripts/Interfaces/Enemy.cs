@@ -44,6 +44,20 @@ public abstract class Enemy : Character
         dropCardObj.position = position;
         GameManager.Instance.Map[position.X, position.Y].AddOnCharacterEnterRoutine(dropCardObj.GiveReward(), 0);
     }
+
+    protected int findCardIDX(System.Type _type)
+    {
+        for (int i = 0; i < HandCard.Count; i++)
+        {
+            if (HandCard[i].GetType() == _type.GetType())
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
     public override IEnumerator StartTurn()
     {
         crystalCount = maxCrystalCount;
