@@ -9,7 +9,7 @@ public class Minotaurs : Enemy
         base.Start();
         Hp = MaxHp = 150;
         GiveExp = 1;
-        TurnStartDraw = 5;
+        TurnStartDraw = 4;
         crystalCount = maxCrystalCount = 4;
 }
     protected override IEnumerator payCost(int cost, CostType type)
@@ -276,11 +276,25 @@ public class Minotaurs : Enemy
         b.SetRange(2);
         CardPile.Add(b);
 
-        
+        EnemyMoveNAttack c = new EnemyMoveNAttack();
+        c.Disposable = false;
+        c._cost = 2;
+        c._range = 4;
+        c._rangeType = RangeType.CrossWise;
+        c._dmg = 40;
+        CardPile.Add(c);
 
-        CardPile.Add(new QueenBMove());
-        CardPile.Add(new QueenRMove());
-        CardPile.Add(new QueenAttack());
-        CardPile.Add(new BishopBomb());
+        TrashEnemyAttack p = new TrashEnemyAttack();
+        p.Disposable = false;
+        p.SetCost(3);
+        p.SetRange(1);
+        p._dmg = 20;
+        CardPile.Add(p);
+
+        TrashEnemyAttack s = new TrashEnemyAttack();
+        s.Disposable = true;
+        s.SetCost(2);
+        s.SetRange(0);
+        CardPile.Add(s);
     }
 }
