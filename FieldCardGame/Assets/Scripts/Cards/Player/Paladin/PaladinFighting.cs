@@ -2,18 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PaladinDictamnus : IPlayerCard
+public class PaladinFighting : IPlayerCard
 {
-    public bool Disposable { get; set; } = true;
-    private int range = 1;
-    private int cost = 0;
-    private int damage = 7;
+    private int range = 0;
+    private int cost = 1;
     private bool interrupted;
+    public bool Disposable { get; set; }
     public string ExplainText
     {
         get
         {
-            return $"Àû¿¡°Ô {GetDamage()}ÀÇ ÇÇÇØ¸¦ ÁÖ°í ¼ÕÆĞ·Î µ¹¾Æ¿É´Ï´Ù. ÀÌ¹ø ÅÏ µ¿¾È ÀÌ Ä«µåÀÇ ½Å¼º·Â ¼Ò¸ğ·®ÀÌ 1 Áõ°¡ÇÕ´Ï´Ù";
+            return $"ì¹´ë“œë¥¼ 3ì¥ ë½‘ì€ í›„, ì†íŒ¨ ì „ì²´ì—ì„œ ê³µê²© íƒœê·¸ê°€ ì—†ëŠ” ì¹´ë“œë“¤ì„ ëª¨ë‘ ë²„ë¦°ë‹¤. ë‹¤ìŒ ì‚¬ìš©í•˜ëŠ” ì¹´ë“œì˜ ì‹ ì„±ë ¥ ì†Œëª¨ëŸ‰ì´ 1 ê°ì†Œí•œë‹¤.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -32,14 +31,6 @@ public class PaladinDictamnus : IPlayerCard
     {
         range = _range;
     }
-    public int GetDamage()
-    {
-        return damage;
-    }
-    public void SetDamage(int _damage)
-    {
-        damage = _damage;
-    }
     public Color GetUnAvailableTileColor()
     {
         return Color.red;
@@ -47,23 +38,7 @@ public class PaladinDictamnus : IPlayerCard
     public List<Coordinate> GetAvailableTile(Coordinate pos)
     {
         List<Coordinate> ret = new List<Coordinate>();
-        Coordinate tile;
-        if ((tile = pos.GetDownTile()) != null && GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
-        {
-            ret.Add(tile);
-        }
-        if ((tile = pos.GetLeftTile()) != null && GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
-        {
-            ret.Add(tile);
-        }
-        if ((tile = pos.GetRightTile()) != null && GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
-        {
-            ret.Add(tile);
-        }
-        if ((tile = pos.GetUpTile()) != null && GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
-        {
-            ret.Add(tile);
-        }
+        ret.Add(pos);
         return ret;
     }
     public Color GetAvailableTileColor()
@@ -95,27 +70,49 @@ public class PaladinDictamnus : IPlayerCard
     }
     public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
-        Character tmp = GameManager.Instance.Map[target.X, target.Y].CharacterOnTile;
-        if (tmp)
-        {
-            if (interrupted)
-            {
-                interrupted = false;
-                yield break;
-            }
-            yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
-            ICard paladinDictamnus = new PaladinDictamnus();
-            paladinDictamnus.SetCost(GetCost() + 1);
-            yield return caster.StartCoroutine(caster.AddCard(paladinDictamnus, true));
-            caster.AddTurnEndDebuff(RetrieveCost(caster, paladinDictamnus), 0);
+        yield return caster.StartCoroutine(caster.DrawCard());
+        yield return caster.StartCoroutine(caster.DrawCard());
+        yield return caster.StartCoroutine(caster.DrawCard());
+
+        for (int i = caster.HandCard.Count - 1; i >= 0; i--){
+            if (caster.HandCard[i].GetCardID() != 1130001 && caster.HandCard[i].GetCardID()%100 < 10)
+                yield return caster.StartCoroutine(caster.DropCard(i));
         }
-        yield break;
+
+        List<ICard> InHand = new(caster.HandCard);
+        foreach(var i in InHand)
+        {
+            var tmp = i.GetCost() - 1;
+            i.SetCost(Mathf.Max(0, tmp));
+        }
+        caster.AddPayCostRoutine(RetrieveCost(caster, InHand), 0);
+        yield return null;
     }
-    private IEnumerator RetrieveCost(Character caster, ICard toRetrieve)
+    private IEnumerator RetrieveCost(Character caster, List<ICard> toRetrieve)
     {
-        if(toRetrieve !=null)
-        { 
-            toRetrieve.SetCost(0);
+        List<ICard> InHand = caster.HandCard;
+        List<ICard> InDiscarded = caster.DiscardedPile;
+        List<ICard> InDummy = caster.CardPile;
+        foreach(var i in InHand)
+        {
+            if(toRetrieve.Exists(j => j==i))
+            {
+                i.SetCost(GameManager.Instance.CardDict[i.GetCardID()].GetCost());
+            }
+        }
+        foreach(var i in InDiscarded)
+        {
+            if(toRetrieve.Exists(j => j==i))
+            {
+                i.SetCost(GameManager.Instance.CardDict[i.GetCardID()].GetCost());
+            }
+        }
+        foreach(var i in InDummy)
+        {
+            if(toRetrieve.Exists(j => j==i))
+            {
+                i.SetCost(GameManager.Instance.CardDict[i.GetCardID()].GetCost());
+            }
         }
         yield return null;
     }
@@ -141,6 +138,6 @@ public class PaladinDictamnus : IPlayerCard
     }
     public int GetCardID()
     {
-        return 1106011;
+        return 1130001;
     }
 }

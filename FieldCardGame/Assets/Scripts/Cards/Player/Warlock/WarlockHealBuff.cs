@@ -2,18 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PaladinDictamnus : IPlayerCard
+public class WarlockHealBuff : IPlayerCard
 {
-    public bool Disposable { get; set; } = true;
-    private int range = 1;
-    private int cost = 0;
-    private int damage = 7;
+    private int range = 0;
+    private int cost = 15;
+    private int healCount = 0;
     private bool interrupted;
+    public bool Disposable { get; set; }
     public string ExplainText
     {
         get
         {
-            return $"적에게 {GetDamage()}의 피해를 주고 손패로 돌아옵니다. 이번 턴 동안 이 카드의 신성력 소모량이 1 증가합니다";
+            return $"플레이어에게 걸린 디버프 카운트 수만큼 ‘회복’ 버프를 부여합니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -32,14 +32,6 @@ public class PaladinDictamnus : IPlayerCard
     {
         range = _range;
     }
-    public int GetDamage()
-    {
-        return damage;
-    }
-    public void SetDamage(int _damage)
-    {
-        damage = _damage;
-    }
     public Color GetUnAvailableTileColor()
     {
         return Color.red;
@@ -47,23 +39,7 @@ public class PaladinDictamnus : IPlayerCard
     public List<Coordinate> GetAvailableTile(Coordinate pos)
     {
         List<Coordinate> ret = new List<Coordinate>();
-        Coordinate tile;
-        if ((tile = pos.GetDownTile()) != null && GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
-        {
-            ret.Add(tile);
-        }
-        if ((tile = pos.GetLeftTile()) != null && GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
-        {
-            ret.Add(tile);
-        }
-        if ((tile = pos.GetRightTile()) != null && GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
-        {
-            ret.Add(tile);
-        }
-        if ((tile = pos.GetUpTile()) != null && GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
-        {
-            ret.Add(tile);
-        }
+        ret.Add(pos);
         return ret;
     }
     public Color GetAvailableTileColor()
@@ -95,29 +71,17 @@ public class PaladinDictamnus : IPlayerCard
     }
     public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
-        Character tmp = GameManager.Instance.Map[target.X, target.Y].CharacterOnTile;
-        if (tmp)
+        if (interrupted)
         {
-            if (interrupted)
-            {
-                interrupted = false;
-                yield break;
-            }
-            yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
-            ICard paladinDictamnus = new PaladinDictamnus();
-            paladinDictamnus.SetCost(GetCost() + 1);
-            yield return caster.StartCoroutine(caster.AddCard(paladinDictamnus, true));
-            caster.AddTurnEndDebuff(RetrieveCost(caster, paladinDictamnus), 0);
+            interrupted = false;
+            yield break;
         }
+        foreach (var i in caster.EffectHandler.DebuffDict)
+        {
+            healCount += i.Value.Value;
+        }
+        caster.EffectHandler.BuffDict[BuffType.Heal].SetEffect(healCount);
         yield break;
-    }
-    private IEnumerator RetrieveCost(Character caster, ICard toRetrieve)
-    {
-        if(toRetrieve !=null)
-        { 
-            toRetrieve.SetCost(0);
-        }
-        yield return null;
     }
     public void CardRoutineInterrupt()
     {
@@ -133,7 +97,7 @@ public class PaladinDictamnus : IPlayerCard
     }
     public CostType GetCostType()
     {
-        return CostType.PaladinEnergy;
+        return CostType.Hp;
     }
     public CardType GetCardType()
     {
@@ -141,6 +105,6 @@ public class PaladinDictamnus : IPlayerCard
     }
     public int GetCardID()
     {
-        return 1106011;
+        return 3148001;
     }
 }

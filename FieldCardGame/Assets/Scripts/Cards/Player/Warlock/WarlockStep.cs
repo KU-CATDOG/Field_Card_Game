@@ -2,19 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PaladinMove : IPlayerCard
+public class WarlockStep : IPlayerCard
 {
-    private int range = 4;
-    private int cost =0;
+    private int range = 2;
+    private int cost = 0;
     private bool interrupted;
-    public bool Disposable { get; set; }
     public string ExplainText
     {
         get
         {
-            return $"ï¿½Ö´ï¿½ {GetRange()}Ä­ ï¿½Ìµï¿½ï¿½Õ´Ï´ï¿½.";
+            return $"ÃÖ´ë {range}Ä­ ÀÌµ¿ÇÕ´Ï´Ù.";
         }
     }
+
     public IEnumerator GetCardRoutine(Character owner)
     {
         yield break;
@@ -23,6 +23,7 @@ public class PaladinMove : IPlayerCard
     {
         yield break;
     }
+    public bool Disposable { get; set; } = true;
     public int GetRange()
     {
         return range;
@@ -37,55 +38,30 @@ public class PaladinMove : IPlayerCard
     }
     public List<Coordinate> GetAvailableTile(Coordinate pos)
     {
-        List<Coordinate> ret = new List<Coordinate>();
-        int level = 1;
-        bool[,] visited = new bool[128, 128];
-        Queue<Coordinate> queue = new Queue<Coordinate>();
-        Queue<Coordinate> nextQueue = new Queue<Coordinate>();
-        queue.Enqueue(pos);
-        while (level++ <= GetRange())
-        {
-            while (queue.Count != 0)
-            {
-                Coordinate tmp = queue.Dequeue();
-                if (tmp.X != pos.X || tmp.Y != pos.Y)
-                    ret.Add(tmp);
-                Coordinate tile;
-                if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                };
-                if ((tile = tmp.GetLeftTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                };
-                if ((tile = tmp.GetRightTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                };
-                if ((tile = tmp.GetUpTile()) != null && !visited[tile.X, tile.Y] && !GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile)
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                }
-            }
-            queue = new Queue<Coordinate>(nextQueue);
-            nextQueue.Clear();
-        }
-        while (queue.Count != 0)
-        {
-            ret.Add(queue.Dequeue());
-        }
-        return ret;
+      List<Coordinate> ret = new List<Coordinate>();
+      Coordinate tile;
+      if ((tile = pos.GetDownTile()) != null)
+      {
+        ret.Add(tile);
+      };
+      if ((tile = pos.GetLeftTile()) != null)
+      {
+        ret.Add(tile);
+      };
+      if ((tile = pos.GetRightTile()) != null)
+      {
+        ret.Add(tile);
+      };
+      if ((tile = pos.GetUpTile()) != null)
+      {
+        ret.Add(tile);
+      }
+      return ret;
     }
     public Color GetAvailableTileColor()
     {
         return Color.blue;
     }
-
     private List<Coordinate> FindPath(Coordinate from, Coordinate to)
     {
         List<Coordinate> ret;
@@ -289,7 +265,7 @@ public class PaladinMove : IPlayerCard
     }
     public CostType GetCostType()
     {
-        return CostType.PaladinEnergy;
+        return CostType.Hp;
     }
     public CardType GetCardType()
     {
@@ -297,7 +273,6 @@ public class PaladinMove : IPlayerCard
     }
     public int GetCardID()
     {
-        return 1001100;
+        return 3050100;
     }
-
 }
