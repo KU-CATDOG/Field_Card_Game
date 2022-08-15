@@ -47,6 +47,11 @@ public enum RangeType
    Distance,
    Square,
 }
+public enum Keyword
+{
+    Protect,
+}
+
 public enum CardType
 {
     Move,
