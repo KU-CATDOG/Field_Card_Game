@@ -78,9 +78,9 @@ public class Warlock : Player
     {
         GameManager.Instance.StartCoroutine(AddCard(new WarlockRepay()));
         CardPile.Add(new WarlockMove());
-        CardPile.Add(new WarlockOverflow());
+        CardPile.Add(new WarlockCrops());
         CardPile.Add(new WarlockNecromancy()); 
-        CardPile.Add(new WarlockWeakness());
+        CardPile.Add(new WarlockVampire());
         StartCoroutine(ShuffleDeck());
     }
 }
