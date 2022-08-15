@@ -35,6 +35,7 @@ public class Paladin : Player
     }
     public override IEnumerator AwakeTurn()
     {
+        yield return base.AwakeTurn();
         yield break;
     }
     public override IEnumerator StartTurn()

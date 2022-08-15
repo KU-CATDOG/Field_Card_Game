@@ -90,6 +90,9 @@ public class PlayerUIManager : MonoBehaviour
     private Transform playerSpecificArea;
     [SerializeField]
     private RewardPanel rewardPanel;
+    [SerializeField]
+    private InteractionButton interactButton;
+    public InteractionButton InteractButton => interactButton;
     public Transform PlayerSpecificArea
     {
         get
@@ -107,6 +110,7 @@ public class PlayerUIManager : MonoBehaviour
     public bool UseTileSelected { get; set; }
     public bool ReadyUseMode { get; set; }
     public bool PanelOpenned { get; set; }
+    
     private Dictionary<Keyword, GameObject> keywordPrefabDict;
     public IReadOnlyDictionary<Keyword, GameObject> KeywordPrefabDict
     {
@@ -328,7 +332,6 @@ public class PlayerUIManager : MonoBehaviour
         card.SetActive(false);
         int range = UseModeCard.GetRange();
         List<Coordinate> inRange = new List<Coordinate>();
-        bool[,] visited = new bool[128, 128];
         bfs(range, GameManager.Instance.CurPlayer.position, inRange);
         foreach (Coordinate i in inRange)
         {
@@ -365,6 +368,7 @@ public class PlayerUIManager : MonoBehaviour
                     GameManager.Instance.Map[target.X, target.Y].RestoreColor();
                 }
             }
+            UseModeCard = null;
             yield break;
         }
         UseMode = false;
@@ -379,6 +383,39 @@ public class PlayerUIManager : MonoBehaviour
        // yield return StartCoroutine(MainCamera.Instance.moveCamera(false));
         yield return StartCoroutine(GameManager.Instance.CurPlayer.CardUse(CardUsePos, cardIdx));
         OnRoutine = false;
+        UseTileSelected = false;
+        UseModeCard = null;
+    }
+    public Coordinate SelectedTile { get; set; }
+    public IEnumerator TileSelect(int range, List<Coordinate> AvailableTile = null)
+    {
+        UseMode = true;
+        List<Coordinate> inRange = new();
+        bfs(range, GameManager.Instance.CurPlayer.position, inRange);
+        foreach (Coordinate i in inRange)
+        {
+            if(AvailableTile == null || AvailableTile.Find((j)=> i.X == j.X && i.Y == j.Y ) == null)
+            {
+                GameManager.Instance.Map[i.X, i.Y].TileColor.material.color = Color.red;
+                continue;
+            }
+            GameManager.Instance.Map[i.X, i.Y].TileColor.material.color = Color.blue;
+        }
+        bool SelectCancel = false;
+        yield return new WaitUntil(() =>
+        {
+            SelectCancel = Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(1);
+            return UseTileSelected || SelectCancel;
+        });
+        UseMode = false;
+        foreach (Coordinate i in inRange)
+        {
+            GameManager.Instance.Map[i.X, i.Y].RestoreColor();
+        }
+        if (SelectCancel)
+        {
+            SelectedTile = null;
+        }
         UseTileSelected = false;
     }
     private void bfs(int level, Coordinate center, List<Coordinate> list)

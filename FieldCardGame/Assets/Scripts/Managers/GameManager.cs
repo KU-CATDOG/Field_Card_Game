@@ -92,7 +92,17 @@ public class GameManager : MonoBehaviour
             return enemyDict;
         }
     }
-
+    //fixme
+    private List<GameObject> neutralList = new();
+    public List<GameObject> NeutralList => neutralList;
+    private Dictionary<int, Enemy> neutralDict = new();
+    public IReadOnlyDictionary<int, Enemy> NeutralDict
+    {
+        get
+        {
+            return neutralDict;
+        }
+    }
     public static GameManager Instance { get; set; }
     public List<Character> EnemyList { get; private set; } = new List<Character>();
     public Character CurPlayer { get; set; }
@@ -257,10 +267,11 @@ public class GameManager : MonoBehaviour
         CharacterSelected.position = new Coordinate(10, 10);
         Map[10, 10].CharacterOnTile = CharacterSelected;
         CharacterSelected.SightUpdate(CharacterSelected.Sight);
-        Character enemy = Instantiate(EnemyDict[3]);
+        //fixme
+        neutralList[0].GetComponent<Merchant>().position = new Coordinate(9, 9);
+        neutralList[1].GetComponent<Merchant>().position = new Coordinate(8, 8);
+        Character enemy = Instantiate(EnemyDict[90]);
         enemy.position = new Coordinate(15, 15);
-        Character enemy2 = Instantiate(EnemyDict[2]);
-        enemy2.position = new Coordinate(10, 15);
         StartCoroutine(TurnManager.Instance.TurnRoutine());
     }
     //fixme

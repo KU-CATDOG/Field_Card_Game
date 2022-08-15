@@ -58,10 +58,13 @@ public abstract class Character : MonoBehaviour
                 GameManager.Instance.Map[pos.X, pos.Y].CharacterOnTile = null;
             }
             pos = value;
+            if(OnPosChanged != null)
+                OnPosChanged();
             GameManager.Instance.Map[pos.X, pos.Y].CharacterOnTile = this;
             transform.position = new Vector3(value.X, 0.5f, value.Y);
         }
     }
+    protected System.Action OnPosChanged { get; set; }
     private int sight = 10;
     public int Sight
     {
@@ -922,7 +925,7 @@ public abstract class Character : MonoBehaviour
             }
         }
     }
-    public IEnumerator RemoveCard(ICard toRemove, bool discardedPileFirst)
+    public IEnumerator RemoveCard(ICard toRemove, bool discardedPileFirst = false)
     {
         RemoveCardInterrupted = false;
         //need Animation for Player

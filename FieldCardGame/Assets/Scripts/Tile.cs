@@ -24,7 +24,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             {
                 TileColor.material = DiscoveredColor;
                 discovered = value;
-                if(OnSightRoutine != null)
+                if (OnSightRoutine != null)
                     OnSightRoutine();
             }
             else
@@ -95,6 +95,13 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     public void OnPointerEnter(PointerEventData data)
     {
         if (!PlayerUIManager.Instance.UseMode) return;
+        if (PlayerUIManager.Instance.UseModeCard == null)
+        {
+            OriginColor = TileColor.material.color;
+            if (TileColor.material.color == Color.blue)
+                TileColor.material.color = Color.white;
+            return;
+        }
         if (!PlayerUIManager.Instance.UseModeCard.IsAvailablePosition(GameManager.Instance.CurPlayer.position, position)) return;
         PlayerUIManager.Instance.UseReadyPos = position;
         OriginColor = TileColor.material.color;
@@ -102,13 +109,13 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         {
             Coordinate target = position + i;
             if (Coordinate.OutRange(target))
-              continue;
+                continue;
             GameManager.Instance.Map[target.X, target.Y].OriginColor = GameManager.Instance.Map[target.X, target.Y].TileColor.material.color;
             GameManager.Instance.Map[target.X, target.Y].TileColor.material.color = (PlayerUIManager.Instance.UseModeCard as IPlayerCard).GetColorOfEffect(i);
 
             if (PlayerUIManager.Instance.UseModeCard is IPlayerConditionCard)
             {
-                if((PlayerUIManager.Instance.UseModeCard as IPlayerConditionCard).isSatisfied(target))
+                if ((PlayerUIManager.Instance.UseModeCard as IPlayerConditionCard).isSatisfied(target))
                     GameManager.Instance.Map[target.X, target.Y].TileColor.material.color = (PlayerUIManager.Instance.UseModeCard as IPlayerConditionCard).SatisfiedAreaColor();
             }
         }
@@ -116,19 +123,33 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     public void OnPointerExit(PointerEventData data)
     {
         if (!PlayerUIManager.Instance.UseMode) return;
+        if (PlayerUIManager.Instance.UseModeCard == null)
+        {
+            TileColor.material.color = OriginColor;
+            return;
+        }
         if (!PlayerUIManager.Instance.UseModeCard.IsAvailablePosition(GameManager.Instance.CurPlayer.position, position)) return;
         foreach (Coordinate i in PlayerUIManager.Instance.UseModeCard.GetAreaofEffect(position - GameManager.Instance.CurPlayer.position))
         {
             Coordinate target = position + i;
             if (Coordinate.OutRange(target))
-              continue;
-            GameManager.Instance.Map[target.X, target.Y].TileColor.material.color = GameManager.Instance.Map[target.X,target.Y].OriginColor;
+                continue;
+            GameManager.Instance.Map[target.X, target.Y].TileColor.material.color = GameManager.Instance.Map[target.X, target.Y].OriginColor;
         }
     }
     public void OnPointerClick(PointerEventData data)
     {
         if (!PlayerUIManager.Instance.UseMode) return;
         if (data.button != 0) return;
+        if (PlayerUIManager.Instance.UseModeCard == null)
+        {
+            if (TileColor.material.color == Color.white)
+            {
+                PlayerUIManager.Instance.UseTileSelected = true;
+                PlayerUIManager.Instance.SelectedTile = position;
+            }
+            return;
+        }
         if (!PlayerUIManager.Instance.UseModeCard.IsAvailablePosition(GameManager.Instance.CurPlayer.position, position)) return;
         PlayerUIManager.Instance.UseTileSelected = true;
         PlayerUIManager.Instance.CardUsePos = position;
