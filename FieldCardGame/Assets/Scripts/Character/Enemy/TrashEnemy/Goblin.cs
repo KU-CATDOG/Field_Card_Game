@@ -59,11 +59,15 @@ public class Goblin : Enemy
                     foreach (var i in tiles)
                     {
                         int d;
-                        if ((d = Coordinate.Distance(i, j)) == 2 || d < minDist)
+                        if ((d = Coordinate.Distance(i, j)) < minDist)
                         {
                             minDist = d;
                             toGo = i;
-                            break;
+
+                            if (minDist == 2)
+                            {
+                                break;
+                            }
                         }
                     }
 
@@ -87,27 +91,37 @@ public class Goblin : Enemy
 
                 List<Coordinate> tiles;
 
-                if ((tiles = HandCard[atkIsFst ? 1 : 0].GetAvailableTile(position)).Count > 0)
+                Coordinate runTile = position * 2 - j;
+                Coordinate toGo = position;
+
+                if (!Coordinate.OutRange(runTile))
                 {
-                    Coordinate toGo = tiles[0];
+                    toGo = runTile;
+                }
+                else if ((tiles = HandCard[0].GetAvailableTile(position)).Count > 0)
+                {
                     int maxDist = int.MinValue;
 
                     foreach (var i in tiles)
                     {
                         int d;
-                        if ((d = Coordinate.Distance(i, j)) == 2 || d > maxDist)
+                        if ((d = Coordinate.Distance(i, j)) > maxDist)
                         {
                             maxDist = d;
                             toGo = i;
-                            break;
+
+                            if (maxDist == 2)
+                            {
+                                break;
+                            }
                         }
                     }
-
-                    crystalCount -= HandCard[atkIsFst ? 1 : 0].GetCost();
-                    DropInterrupted = true;
-                    yield return StartCoroutine(CardUse(toGo, atkIsFst ? 1 : 0));
-                    DropInterrupted = false;
                 }
+
+                crystalCount -= HandCard[0].GetCost();
+                DropInterrupted = true;
+                yield return StartCoroutine(CardUse(toGo, 0));
+                DropInterrupted = false;
             }
         }
     }
@@ -134,13 +148,21 @@ public class Goblin : Enemy
         D.SetRange(2);
         D._dmg = 12;
         CardPile.Add(D);
-    
 
+        /*
         PaladinMove b = new PaladinMove();
         b.Disposable = false;
         b.SetCost(1);
         b.SetRange(3);
         CardPile.Add(b);
+        */
+
+        EnemyMove m = new EnemyMove();
+        m.Disposable = false;
+        m.SetCost(1);
+        m._range = 3;
+        m._rangeType = RangeType.Distance;
+        CardPile.Add(m);
     }
 
     protected override IEnumerator payCost(int cost, CostType type)

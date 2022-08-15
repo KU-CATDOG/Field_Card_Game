@@ -215,7 +215,7 @@ public class EnemyMove : ICard
     private List<Coordinate> FindPath(Coordinate from, Coordinate to)
     {
         List<Coordinate> ret;
-        ret = backTracking(GetRange(), from, to);
+        ret = backTracking(range, from, to);
         if (ret != null)
         {
             ret.Reverse();
