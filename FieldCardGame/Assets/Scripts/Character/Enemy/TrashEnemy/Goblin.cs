@@ -149,19 +149,10 @@ public class Goblin : Enemy
         D._dmg = 12;
         CardPile.Add(D);
 
-        /*
-        PaladinMove b = new PaladinMove();
-        b.Disposable = false;
-        b.SetCost(1);
-        b.SetRange(3);
-        CardPile.Add(b);
-        */
-
         EnemyMove m = new EnemyMove();
         m.Disposable = false;
         m.SetCost(1);
         m._range = 3;
-        m._rangeType = RangeType.Distance;
         CardPile.Add(m);
     }
 

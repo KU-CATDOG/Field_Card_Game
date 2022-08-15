@@ -164,11 +164,11 @@ public class Witch : Enemy
         S._debuffValue = 1;
         CardPile.Add(S);
 
-        PaladinMove b = new PaladinMove();
-        b.Disposable = false;
-        b.SetCost(1);
-        b.SetRange(3);
-        CardPile.Add(b);
+        EnemyMove m = new EnemyMove();
+        m.Disposable = false;
+        m.SetCost(1);
+        m._range = 3;
+        CardPile.Add(m);
     }
 
     protected override IEnumerator payCost(int cost, CostType type)

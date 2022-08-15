@@ -8,7 +8,7 @@ public class EnemyMove : ICard
 
     private int cost;
     private int range;
-    private RangeType rangeType;
+    private RangeType rangeType = RangeType.Distance;
     public int _cost
     {
         get { return cost; }
