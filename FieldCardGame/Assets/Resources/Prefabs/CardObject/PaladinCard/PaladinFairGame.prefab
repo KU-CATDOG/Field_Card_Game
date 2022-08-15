@@ -284,7 +284,7 @@ GameObject:
   - component: {fileID: 4899360329481768548}
   - component: {fileID: -2726015609422013599}
   m_Layer: 5
-  m_Name: PaladinCross
+  m_Name: PaladinFairGame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -361,7 +361,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pos: {x: 0, y: 0, z: 0}
-  id: 1125001
+  id: 1035001
 --- !u!1 &6866451541833111395
 GameObject:
   m_ObjectHideFlags: 0
