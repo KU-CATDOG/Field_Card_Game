@@ -12,7 +12,7 @@ public class WarlockDebuff : IPlayerCard
     {
         get
         {
-            return $"대상에게 ‘약화’ 디버프 2, '허약' 디버프 1을 부여합니다.";
+            return $"‘약화’ 디버프 2, '허약' 디버프 1을 부여합니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -144,7 +144,7 @@ public class WarlockDebuff : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3035001;
+        return 3017001;
     }
 
 }

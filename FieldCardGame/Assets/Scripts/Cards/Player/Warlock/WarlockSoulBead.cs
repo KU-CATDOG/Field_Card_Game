@@ -13,7 +13,7 @@ public class WarlockSoulBead : IPlayerCard
     {
         get
         {
-            return $"시전 중심에서 시전한 방향으로 2칸 뒤까지 {damage}의 피해를 준다. 적이 1명 맞을 때마다 다음 대상에 주는 피해가 5씩 증가합니다.";
+            return $"선택한 방향으로 사거리 3만큼 범위의 적에게 {damage}의 피해를 줍니다. 적에게 적중할 때마다 다음 적이 받는 피해가 5만큼 증가합니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -153,6 +153,6 @@ public class WarlockSoulBead : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3106010;
+        return 3004010;
     }
 }

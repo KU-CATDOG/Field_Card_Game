@@ -13,7 +13,7 @@ public class WarlockTwice : IPlayerCard
     {
         get
         {
-            return $"대상에게 걸려있는 ‘흡혈’ 디버프 카운트를 2배로 만듭니다.";
+            return $"'흡혈'의 카운트를 2배로 만듭니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -86,7 +86,9 @@ public class WarlockTwice : IPlayerCard
         }
         while (queue.Count != 0)
         {
-            ret.Add(queue.Dequeue());
+            Coordinate tmp = queue.Dequeue();
+            if (tmp.X != pos.X || tmp.Y != pos.Y)
+                ret.Add(tmp);
         }
         return ret;
     }
@@ -158,7 +160,7 @@ public class WarlockTwice : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3132001;
+        return 3134001;
     }
 
 }

@@ -90,7 +90,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pos: {x: 0, y: 0, z: 0}
-  id: 3009011
+  id: 3016011
 --- !u!1 &6769687318577893120
 GameObject:
   m_ObjectHideFlags: 0

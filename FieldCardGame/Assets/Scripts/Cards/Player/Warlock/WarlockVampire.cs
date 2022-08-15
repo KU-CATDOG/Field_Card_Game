@@ -6,14 +6,14 @@ public class WarlockVampire : IPlayerCard
 {
     public bool Disposable { get; set; }
     private int range = 2;
-    private int cost = 20;
-    private int amount = 5;
+    private int cost = 15;
+    private int amount = 6;
     private bool interrupted;
     public string ExplainText
     {
         get
         {
-            return $"대상에게 ‘흡혈’ 디버프 {amount}를 부여합니다.";
+            return $"‘흡혈' {amount}을 부여합니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -86,9 +86,7 @@ public class WarlockVampire : IPlayerCard
         }
         while (queue.Count != 0)
         {
-            Coordinate tmp = queue.Dequeue();
-            if (tmp.X != pos.X || tmp.Y != pos.Y)
-                ret.Add(tmp);
+            ret.Add(queue.Dequeue());
         }
         return ret;
     }
@@ -153,7 +151,7 @@ public class WarlockVampire : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3131001;
+        return 3033001;
     }
 
 }

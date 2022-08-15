@@ -6,7 +6,7 @@ public class WarlockLegend : IPlayerCard
 {
     private int range = 1;
     private int cost = 0;
-    private int damage = 30;
+    private int damage = 20;
     private int healAmount = 5;
     private bool interrupted;
     public bool Disposable { get; set; }
@@ -14,7 +14,7 @@ public class WarlockLegend : IPlayerCard
     {
         get
         {
-            return $"선택한 방향의 뒤로 3칸까지 적에게 {damage}의 피해를 줍니다. 맞은 적의 수만큼 피를 {healAmount}회복합니다. 이 카드를 사용할 때마다 해당 카드의 코스트가 2 증가합니다.";
+            return $"선택한 방향으로 사거리 4만큼의 적에게 {damage}의 피해를 줍니다. 적중한 적만큼 체력을 {healAmount} 회복합니다. 이 카드를 사용할 때마다 이 카드의 비용이 2만큼 증가합니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -164,6 +164,6 @@ public class WarlockLegend : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3219010;
+        return 3110010;
     }
 }

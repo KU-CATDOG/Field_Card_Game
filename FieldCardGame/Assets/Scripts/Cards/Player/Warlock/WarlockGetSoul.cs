@@ -6,14 +6,14 @@ public class WarlockGetSoul : IPlayerCard
 {
     public bool Disposable { get; set; }
     private int range = 0;
-    private int cost = 12;
-    private int giveCard = 3;
+    private int cost = 10;
+    private int giveCard = 4;
     private bool interrupted;
     public string ExplainText
     {
         get
         {
-            return $"이 카드를 사용하면 영혼 {giveCard}장을 손 패에 추가합니다.";
+            return $"영혼 {giveCard}장을 패에 추가합니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -73,7 +73,7 @@ public class WarlockGetSoul : IPlayerCard
     {
         for (int i = 0; i < giveCard; i++)
         {
-            yield return GameManager.Instance.StartCoroutine(caster.AddCard(GameManager.Instance.CardDict[3026001],true));
+            yield return GameManager.Instance.StartCoroutine(caster.AddCard(GameManager.Instance.CardDict[3027001],true));
         }
         yield return null;
     }
@@ -99,7 +99,7 @@ public class WarlockGetSoul : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3125001;
+        return 3126001;
     }
 
 }

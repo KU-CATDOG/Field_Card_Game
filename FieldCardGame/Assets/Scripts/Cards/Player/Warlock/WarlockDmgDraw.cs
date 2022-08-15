@@ -5,7 +5,7 @@ using UnityEngine;
 public class WarlockDmgDraw : IPlayerCard
 {
     private int range = 2;
-    private int cost = 10;
+    private int cost = 5;
     private int damage = 10;
     private int drawNum = 2;
     private bool interrupted;
@@ -14,7 +14,7 @@ public class WarlockDmgDraw : IPlayerCard
     {
         get
         {
-            return $"적에게 {damage}의 데미지를 주고 그러면 카드를 {drawNum}장 드로우합니다.";
+            return $"적에게 {damage}의 피해를 줍니다. 이 카드로 적을 처치하면 카드를 {drawNum}장 뽑습니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -87,7 +87,9 @@ public class WarlockDmgDraw : IPlayerCard
         }
         while (queue.Count != 0)
         {
-            ret.Add(queue.Dequeue());
+            Coordinate tmp = queue.Dequeue();
+            if (tmp.X != pos.X || tmp.Y != pos.Y)
+                ret.Add(tmp);
         }
         return ret;
     }
@@ -129,8 +131,11 @@ public class WarlockDmgDraw : IPlayerCard
                 yield break;
             }
             yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
-            for(int i = 0; i< drawNum;i++)
-                yield return GameManager.Instance.StartCoroutine(caster.DrawCard());
+            if (tmp.IsDie)
+            {
+                for (int i = 0; i < drawNum; i++)
+                    yield return GameManager.Instance.StartCoroutine(caster.DrawCard());
+            }
         }
         yield break;
     }
@@ -156,6 +161,6 @@ public class WarlockDmgDraw : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3022010;
+        return 3012010;
     }
 }

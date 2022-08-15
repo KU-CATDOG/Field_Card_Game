@@ -361,7 +361,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pos: {x: 0, y: 0, z: 0}
-  id: 3107001
+  id: 3105001
 --- !u!1 &7146422550346913704
 GameObject:
   m_ObjectHideFlags: 0

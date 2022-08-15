@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class WarlockEarthbound : IPlayerCard
 {
-    private int range = 2;
+    private int range = 3;
     private int cost = 15;
-    private int damage = 5;
+    private int damage = 15;
     private bool interrupted;
     public bool Disposable { get; set; }
     public string ExplainText
     {
         get
         {
-            return $"적에게 {damage}의 피해를 주고, ‘속박’ 디버프를 부여합니다.";
+            return $"{damage}의 피해를 주고, ‘속박’과 ‘시야감소’를 2 부여합니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -128,7 +128,8 @@ public class WarlockEarthbound : IPlayerCard
                 yield break;
             }
             yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
-            tmp.EffectHandler.DebuffDict[DebuffType.Rooted].SetEffect(1);
+            tmp.EffectHandler.DebuffDict[DebuffType.Rooted].SetEffect(2);
+            //tmp.EffectHandler.DebuffDict[DebuffType.].SetEffect(2);
         }
         yield break;
     }
@@ -154,6 +155,6 @@ public class WarlockEarthbound : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3009011;
+        return 3016011;
     }
 }

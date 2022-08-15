@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class WarlockExchange : IPlayerCard
 {
-    private int range = 1;
-    private int cost = 35;
-    private int damage = 35;
-    private bool interrupted;
     public bool Disposable { get; set; }
+    private int range = 2;
+    private int cost = 5;
+    private int amount = 10;
+    private bool interrupted;
     public string ExplainText
     {
         get
         {
-            return $"적에게 {damage}의 피해를 줍니다.";
+            return $"대상의 디버프를 모두 제거하고, 그 디버프 하나당 10의 피해를 줍니다. ";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -32,13 +32,13 @@ public class WarlockExchange : IPlayerCard
     {
         range = _range;
     }
-    public int GetDamage()
+    public int GetAmount()
     {
-        return damage;
+        return amount;
     }
-    public void SetDamage(int _damage)
+    public void SetAmount(int _amount)
     {
-        damage = _damage;
+        amount = _amount;
     }
     public Color GetUnAvailableTileColor()
     {
@@ -46,25 +46,51 @@ public class WarlockExchange : IPlayerCard
     }
     public List<Coordinate> GetAvailableTile(Coordinate pos)
     {
-      List<Coordinate> ret = new List<Coordinate>();
-      Coordinate tile;
-      if ((tile = pos.GetDownTile()) != null)
-      {
-        ret.Add(tile);
-      };
-      if ((tile = pos.GetLeftTile()) != null)
-      {
-        ret.Add(tile);
-      };
-      if ((tile = pos.GetRightTile()) != null)
-      {
-        ret.Add(tile);
-      };
-      if ((tile = pos.GetUpTile()) != null)
-      {
-        ret.Add(tile);
-      }
-      return ret;
+        List<Coordinate> ret = new List<Coordinate>();
+        int level = 1;
+        bool[,] visited = new bool[128, 128];
+        Queue<Coordinate> queue = new Queue<Coordinate>();
+        Queue<Coordinate> nextQueue = new Queue<Coordinate>();
+        queue.Enqueue(pos);
+        while (level++ <= GetRange())
+        {
+            while (queue.Count != 0)
+            {
+                Coordinate tmp = queue.Dequeue();
+                if(tmp.X != pos.X || tmp.Y != pos.Y)
+                    ret.Add(tmp);
+                Coordinate tile;
+                if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y])
+                {
+                    visited[tile.X, tile.Y] = true;
+                    nextQueue.Enqueue(tile);
+                };
+                if ((tile = tmp.GetLeftTile()) != null && !visited[tile.X, tile.Y])
+                {
+                    visited[tile.X, tile.Y] = true;
+                    nextQueue.Enqueue(tile);
+                };
+                if ((tile = tmp.GetRightTile()) != null && !visited[tile.X, tile.Y])
+                {
+                    visited[tile.X, tile.Y] = true;
+                    nextQueue.Enqueue(tile);
+                };
+                if ((tile = tmp.GetUpTile()) != null && !visited[tile.X, tile.Y])
+                {
+                    visited[tile.X, tile.Y] = true;
+                    nextQueue.Enqueue(tile);
+                }
+            }
+            queue = new Queue<Coordinate>(nextQueue);
+            nextQueue.Clear();
+        }
+        while (queue.Count != 0)
+        {
+            Coordinate tmp = queue.Dequeue();
+            if (tmp.X != pos.X || tmp.Y != pos.Y)
+                ret.Add(tmp);
+        }
+        return ret;
     }
     public Color GetAvailableTileColor()
     {
@@ -95,15 +121,21 @@ public class WarlockExchange : IPlayerCard
     }
     public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
+        int count = 0;
+        if (interrupted)
+        {
+             interrupted = false;
+             yield break;
+        }
         Character tmp = GameManager.Instance.Map[target.X, target.Y].CharacterOnTile;
         if (tmp)
         {
-            if (interrupted)
+            foreach (var i in tmp.EffectHandler.DebuffDict)
             {
-                interrupted = false;
-                yield break;
+                count++;
+                i.Value.ForceRemoveEffect();
             }
-            yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
+            yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetAmount() * count));
         }
         yield break;
     }
@@ -125,10 +157,11 @@ public class WarlockExchange : IPlayerCard
     }
     public CardType GetCardType()
     {
-        return CardType.Attack;
+        return CardType.Skill;
     }
     public int GetCardID()
     {
-        return 3005010;
+        return 3120010;
     }
+
 }
