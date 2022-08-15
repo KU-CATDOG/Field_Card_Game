@@ -276,8 +276,8 @@ public class DebugCharacter : Player
         CardPile.Add(new PaladinSatanMark());
         CardPile.Add(new PaladinForwardDefense());
         CardPile.Add(new PaladinFighting());
-        CardPile.Add(new PaladinJump());
-        CardPile.Add(new PaladinJump());
+        CardPile.Add(new PaladinLightSmite());
+        CardPile.Add(new PaladinBrain());
         CardPile.Add(new PaladinMove());
     }
 }
