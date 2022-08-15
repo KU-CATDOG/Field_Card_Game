@@ -65,7 +65,9 @@ public class Viper : Enemy
                 }
 
                 crystalCount -= HandCard[atkIsFst ? 0 : 1].GetCost();
+                DropInterrupted = true;
                 yield return StartCoroutine(CardUse(toATK, atkIsFst ? 0 : 1));
+                DropInterrupted = false;
                 break;
             }
             else if ((tiles = HandCard[atkIsFst ? 1 : 0].GetAvailableTile(position)).Count > 0)

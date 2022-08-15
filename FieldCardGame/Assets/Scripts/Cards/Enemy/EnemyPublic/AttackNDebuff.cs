@@ -2,16 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TrashEnemyWeakness : ICard
+public class AttackNDebuff : ICard
 {
     public bool Disposable { get; set; }
 
     private int cost;
     private int dmg;
+    private DebuffType debuffType;
+    private int debuffValue;
+    private RangeType rangeType;
     public int _dmg
     {
         get { return dmg; }
         set { dmg = value; }
+    }
+    public DebuffType _debuffType
+    {
+        get { return debuffType; }
+        set { debuffType = value; }
+    }
+    public int _debuffValue
+    {
+        get { return debuffValue; }
+        set { debuffValue = value; }
+    }
+    public RangeType _rangeType
+    {
+        get { return rangeType; }
+        set { rangeType = value; }
     }
 
     private int range;
@@ -28,7 +46,7 @@ public class TrashEnemyWeakness : ICard
 
     public int GetCardID()
     {
-        return 0002123;
+        return 0002124;
     }
 
     public CostType GetCostType()
@@ -37,12 +55,12 @@ public class TrashEnemyWeakness : ICard
     }
     public CardType GetCardType()
     {
-        return CardType.Skill;
+        return CardType.Skill; //Attack N Skill ÇÊ¿ä
     }
     public List<Coordinate> GetAvailableTile(Coordinate pos)
     {
         List<Coordinate> ret = new List<Coordinate>();
-        List<Coordinate> canTile = pos.GetDistanceAvailableTile(range);
+        List<Coordinate> canTile = pos.GetDistanceAvailableTile(range, rangeType, true);
 
         foreach (var t in canTile)
         {
@@ -51,7 +69,6 @@ public class TrashEnemyWeakness : ICard
                 ret.Add(t);
             }
         }
-        //Debug.Log(ret.Count);
 
         return ret;
     }
@@ -81,7 +98,8 @@ public class TrashEnemyWeakness : ICard
                 interrupted = false;
                 yield break;
             }
-            tmp.EffectHandler.DebuffDict[DebuffType.Weakness].SetEffect(dmg);
+            yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, dmg));
+            tmp.EffectHandler.DebuffDict[debuffType].SetEffect(debuffValue);
         }
     }
     public void CardRoutineInterrupt()
@@ -94,7 +112,7 @@ public class TrashEnemyWeakness : ICard
     // not use
     public int GetRange()
     {
-        return 1;
+        return range;
     }
     public void SetRange(int _range)
     {

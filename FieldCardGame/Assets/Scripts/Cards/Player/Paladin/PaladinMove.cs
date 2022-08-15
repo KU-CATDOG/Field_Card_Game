@@ -25,7 +25,6 @@ public class PaladinMove : IPlayerCard
     }
     public int GetRange()
     {
-        //return range;
         return range;
     }
     public void SetRange(int _range)

@@ -146,10 +146,11 @@ public class Totem : Enemy
         a._dmg = 10;
         CardPile.Add(a);
 
-        TrashEnemyWeakness b = new TrashEnemyWeakness();
+        TrashEnemyDebuff b = new TrashEnemyDebuff();
         b.SetCost(1);
         b.SetRange(3);
-        b._dmg = 2;
+        b._debuffType = DebuffType.Weakness;
+        b._debuffValue = 2;
         CardPile.Add(b);
     }
 
