@@ -48,7 +48,7 @@ public class Illusion : Effect
     {
         if (!IsEnabled)
             return;
-        caster.RemoveTryGetDmgRoutineByIdx(FindRoutineIndex(RemoveEffect(), caster.TryGetDmgRoutine));
+        caster.RemoveTryGetDmgRoutineByIdx(FindRoutineIndex(ApplyEffect(), caster.TryGetDmgRoutine));
         caster.RemoveStartBuffByIdx(FindRoutineIndex(RemoveEffect(), caster.StartBuffHandler));
         Value = 0;
         IsEnabled = false;

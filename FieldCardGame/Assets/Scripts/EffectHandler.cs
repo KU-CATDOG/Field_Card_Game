@@ -19,6 +19,7 @@ public class EffectHandler
         Effect illusion = new Illusion(caster);
         Effect regeneration = new Regeneration(caster);
         Effect growth = new Growth(caster);
+        Effect heal = new Heal(caster);
         Effect debug = new DebugEffect(caster);
         
         buffDict.Add(BuffType.Strengthen, strengthen);
@@ -27,6 +28,7 @@ public class EffectHandler
         buffDict.Add(BuffType.Illusion, illusion);
         buffDict.Add(BuffType.Regeneration, regeneration);
         buffDict.Add(BuffType.Growth, growth);
+        buffDict.Add(BuffType.Heal, heal);
         buffDict.Add(BuffType.Debug, debug);
 
         Effect stun = new Stun(caster);
@@ -40,6 +42,7 @@ public class EffectHandler
         debuffDict.Add(DebuffType.Weakness, weakness);
         debuffDict.Add(DebuffType.Poison, poison);
         debuffDict.Add(DebuffType.Fragility, fragility);
+        debuffDict.Add(DebuffType.Rooted, rooted);
         debuffDict.Add(DebuffType.Vampire, vampire);
     }
 

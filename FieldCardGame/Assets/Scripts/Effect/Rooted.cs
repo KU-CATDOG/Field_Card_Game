@@ -43,7 +43,7 @@ public class Rooted : Effect
     {
         if (!IsEnabled)
             return;
-        caster.RemoveTryMoveRoutineByIdx(FindRoutineIndex(RemoveEffect(), caster.TryMoveRoutine));
+        caster.RemoveTryMoveRoutineByIdx(FindRoutineIndex(ApplyEffect(), caster.TryMoveRoutine));
         caster.RemoveTurnEndDebuffByIdx(FindRoutineIndex(RemoveEffect(), caster.TurnEndDebuffHandler));
         Value = 0;
         IsEnabled = false;

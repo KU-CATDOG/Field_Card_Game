@@ -2,11 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Vampire : Effect 
+public class Heal : Effect 
 {
-    private Character player;
-    private bool isTargetAlive = false;
-    public Vampire(Character caster)
+    public Heal(Character caster)
     {
         this.caster = caster;
     }
@@ -18,22 +16,17 @@ public class Vampire : Effect
         }
         else
         {
-            Value = value;
             IsEnabled = true;
-            isTargetAlive = true;
-            player = GameManager.Instance.CurPlayer;
-            player.AddTurnEndDebuff(ApplyEffect(), 5);
-            player.AddStartDebuff(RemoveEffect(), 0);
+            Value = value;
+            caster.AddStartBuff(ApplyEffect(), 0);
+            caster.AddStartBuff(RemoveEffect(), -1);
         }
     }
     public override IEnumerator ApplyEffect()
     {
-        while (IsEnabled && isTargetAlive)
+        while (IsEnabled)
         {
-            caster.StartCoroutine(caster.GetDmg(caster, Value));
-            if (caster.IsDie)
-                isTargetAlive = false;
-            player.StartCoroutine(player.GiveHeal(player, Value, true));
+            caster.StartCoroutine(caster.GiveHeal(caster, Value, true));
             yield return null;
         }
     }
@@ -53,8 +46,8 @@ public class Vampire : Effect
     {
         if (!IsEnabled)
             return;
-        caster.RemoveForceTurnEndDebuffByIdx(FindRoutineIndex(ApplyEffect(), caster.ForceTurnEndDebuffHandler));
-        caster.RemoveStartDebuffByIdx(FindRoutineIndex(RemoveEffect(), caster.StartDebuffHandler));
+        caster.RemoveStartBuffByIdx(FindRoutineIndex(ApplyEffect(), caster.StartBuffHandler));
+        caster.RemoveStartBuffByIdx(FindRoutineIndex(RemoveEffect(), caster.StartBuffHandler));
         Value = 0;
         IsEnabled = false;
     }

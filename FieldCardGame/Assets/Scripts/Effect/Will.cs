@@ -47,7 +47,7 @@ public class Will : Effect
     {
         if (!IsEnabled)
             return;
-        caster.RemoveTurnEndBuffByIdx(FindRoutineIndex(RemoveEffect(), caster.TurnEndBuffHandler));
+        caster.RemoveTurnEndBuffByIdx(FindRoutineIndex(ApplyEffect(), caster.TurnEndBuffHandler));
         caster.RemoveStartBuffByIdx(FindRoutineIndex(RemoveEffect(), caster.StartBuffHandler));
         Value = 0;
         IsEnabled = false;

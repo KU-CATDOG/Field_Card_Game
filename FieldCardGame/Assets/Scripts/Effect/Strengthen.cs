@@ -34,7 +34,7 @@ public class Strengthen : Effect
     {
         if (!IsEnabled)
             return;
-        caster.RemoveTryHitAttackRoutineByIdx(FindRoutineIndex(RemoveEffect(), caster.TryHitAttackRoutine));
+        caster.RemoveTryHitAttackRoutineByIdx(FindRoutineIndex(ApplyEffect(), caster.TryHitAttackRoutine));
         caster.RemoveTurnEndBuffByIdx(FindRoutineIndex(RemoveEffect(), caster.TurnEndBuffHandler));
         Value = 0;
         IsEnabled = false;

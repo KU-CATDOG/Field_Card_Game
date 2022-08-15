@@ -46,7 +46,7 @@ public class Weakness : Effect
     {
         if (!IsEnabled)
             return;
-        caster.RemoveTryHitAttackRoutineByIdx(FindRoutineIndex(RemoveEffect(), caster.TryHitAttackRoutine));
+        caster.RemoveTryHitAttackRoutineByIdx(FindRoutineIndex(ApplyEffect(), caster.TryHitAttackRoutine));
         caster.RemoveTurnEndDebuffByIdx(FindRoutineIndex(RemoveEffect(), caster.TurnEndDebuffHandler));
         Value = 0;
         IsEnabled = false;

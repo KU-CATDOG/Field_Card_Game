@@ -25,7 +25,7 @@ public class Stun : Effect
     {
         if (!IsEnabled)
             return;
-        caster.RemoveForceTurnEndDebuffByIdx(FindRoutineIndex(RemoveEffect(), caster.ForceTurnEndDebuffHandler));
+        caster.RemoveForceTurnEndDebuffByIdx(FindRoutineIndex(ApplyEffect(), caster.ForceTurnEndDebuffHandler));
         IsEnabled = false;
     }
 }
