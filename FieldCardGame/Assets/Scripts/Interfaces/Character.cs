@@ -813,7 +813,7 @@ public abstract class Character : MonoBehaviour
         cardUseInTurn++;
         bool disposable = HandCard[idx].Disposable;
         CardUseInterrupted = false;
-        usedCard = HandCard[idx];
+        ICard card = usedCard = HandCard[idx];        
         yield return StartCoroutine(PayCost(usedCard.GetCost(), usedCard.GetCostType()));
         for (int i = CardUseTry.Count - 1; !CardUseInterrupted && !IsDie && i >= 0; i--)
         {
@@ -839,6 +839,7 @@ public abstract class Character : MonoBehaviour
                 RemoveCardUseRoutineByIdx(i);
             }
         }
+        idx = HandCard.FindIndex((i) => i == card);
         if (!disposable)
             yield return StartCoroutine(DropCard(idx));
         else

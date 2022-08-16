@@ -257,7 +257,8 @@ public class PlayerUIManager : MonoBehaviour
                 }
                 CardObject obj = CardImages[i];
                 obj.SiblingIndex = defaultSiblingIndex + i;
-                StartCoroutine(MoveCard(obj, centerPos + evenVectors[5 - size / 2 + i], timeLimit));
+                if(obj.gameObject.activeInHierarchy)
+                    obj.StartCoroutine(MoveCard(obj, centerPos + evenVectors[5 - size / 2 + i], timeLimit));
                 obj.rotation = Quaternion.Euler(Vector3.back * evenAngles[5 - size / 2 + i] * 70f);
             }
         }
@@ -271,7 +272,8 @@ public class PlayerUIManager : MonoBehaviour
                 }
                 CardObject obj = CardImages[i];
                 obj.SiblingIndex = defaultSiblingIndex + i;
-                StartCoroutine(MoveCard(obj, centerPos + oddVectors[4 - size / 2 + i], timeLimit));
+                if (obj.gameObject.activeInHierarchy)
+                    obj.StartCoroutine(MoveCard(obj, centerPos + oddVectors[4 - size / 2 + i], timeLimit));
                 obj.rotation = Quaternion.Euler(Vector3.back * oddAngles[4 - size / 2 + i] * 70f);
             }
         }
@@ -294,13 +296,15 @@ public class PlayerUIManager : MonoBehaviour
             CardObject obj = CardImages[i];
             Vector2 movVec = new Vector2(Mathf.Log(10000, Mathf.Abs(val)) * ((i - cardIndex < 0) ? -1f : 1f), 0);
             target = (Vector2)centerPos + (cards.Count % 2 == 0 ? (Vector2)evenVectors[5 - size / 2 + i] : (Vector2)oddVectors[4 - size / 2 + i]) + movVec;
-            StartCoroutine(MoveCard(obj, target));
+            if (obj.gameObject.activeInHierarchy)
+                obj.StartCoroutine(MoveCard(obj, target));
         }
         card.transform.localScale = CardObject.HighlightedCardSize;
         card.UsableEffect.transform.localScale = card.UsableEffect.HighlightedScale;
 
         target = new Vector2(centerPos.x + (cards.Count % 2 == 0 ? evenVectors[5 - size / 2 + cardIndex] : oddVectors[4 - size / 2 + cardIndex]).x, HighlightedAnchor.position.y);
-        StartCoroutine(MoveCard(card, target, 0.05f));
+        if (card.gameObject.activeInHierarchy)
+            card.StartCoroutine(MoveCard(card, target, 0.05f));
         card.SetAsLastSibling();
         card.rotation = Quaternion.Euler(Vector2.zero);
         yield break;
@@ -327,7 +331,8 @@ public class PlayerUIManager : MonoBehaviour
             if (i == cardIdx) continue;
             CardObject obj = CardImages[i];
             Vector3 target = obj.transform.position - new Vector3(0, CardUseHeight, 0);
-            StartCoroutine(MoveCard(obj, target));
+            if (obj.gameObject.activeInHierarchy)
+                obj.StartCoroutine(MoveCard(obj, target));
         }
         card.SetActive(false);
         int range = UseModeCard.GetRange();
