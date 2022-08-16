@@ -246,6 +246,22 @@ public class GameManager : MonoBehaviour
             for (int j = 0; j < MAPSIZE; j++)
             {
                 Tile tile = Instantiate(tilePrefab, MapObject.transform);
+                if(i == 0)
+                {
+                    tile.WallMask |= 0b1;
+                }
+                if(j == 0)
+                {
+                    tile.WallMask |= 0b10;
+                }
+                if(i == MAPSIZE - 1)
+                {
+                    tile.WallMask |= 0b100;
+                }
+                if(j == MAPSIZE - 1)
+                {
+                    tile.WallMask |= 0b1000;
+                }
                 tile.transform.position = new Vector3(i, 0, j);
                 tile.position = new Coordinate(i, j);
                 Map[i, j] = tile;

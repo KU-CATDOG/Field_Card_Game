@@ -1026,6 +1026,16 @@ public abstract class Character : MonoBehaviour
                 Coordinate tmp = queue.Dequeue();
                 GameManager.Instance.Map[tmp.X, tmp.Y].Discovered = discovered;
                 Coordinate tile;
+                if ((tile = tmp.GetUpTile()) != null && !visited[tile.X, tile.Y])
+                {
+                    visited[tile.X, tile.Y] = true;
+                    nextQueue.Enqueue(tile);
+                }
+                if ((tile = tmp.GetRightTile()) != null && !visited[tile.X, tile.Y])
+                {
+                    visited[tile.X, tile.Y] = true;
+                    nextQueue.Enqueue(tile);
+                };
                 if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y])
                 {
                     visited[tile.X, tile.Y] = true;
@@ -1036,16 +1046,6 @@ public abstract class Character : MonoBehaviour
                     visited[tile.X, tile.Y] = true;
                     nextQueue.Enqueue(tile);
                 };
-                if ((tile = tmp.GetRightTile()) != null && !visited[tile.X, tile.Y])
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                };
-                if ((tile = tmp.GetUpTile()) != null && !visited[tile.X, tile.Y])
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                }
             }
             queue = new Queue<Coordinate>(nextQueue);
             nextQueue.Clear();

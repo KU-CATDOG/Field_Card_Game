@@ -6,6 +6,31 @@ using UnityEngine.EventSystems;
 public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     [SerializeField]
+    private GameObject UpSideWall;
+    [SerializeField]
+    private GameObject RightSideWall;
+    [SerializeField]
+    private GameObject DownSideWall;
+    [SerializeField]
+    private GameObject LeftSideWall;
+    private int wallMask;
+
+    /// <summary>
+    /// 0bxxxx ==> { up right down left }
+    /// </summary>
+    public int WallMask
+    {
+        get => wallMask;
+        set
+        {
+            wallMask = value;
+            UpSideWall.SetActive((value & 0b1000) != 0);
+            RightSideWall.SetActive((value & 0b0100) != 0);
+            DownSideWall.SetActive((value & 0b0010) != 0);
+            LeftSideWall.SetActive((value & 0b0001) != 0);
+        }
+    }
+    [SerializeField]
     private Material DiscoveredColor;
     [SerializeField]
     private Material DefaultColor;
