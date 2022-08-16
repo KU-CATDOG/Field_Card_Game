@@ -2,24 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarlockSoul : IPlayerCard
+public class WarlockDenial : IPlayerCard
 {
-    private int range = 1;
-    private int cost = 0;
-    private int damage = 5;
-    private bool notRemoved = true;
+    public bool Disposable { get; set; }
+    private int range = 0;
+    private int cost = 10;
+    private int giveCard = 4;
     private bool interrupted;
-    public bool Disposable { get; set; } = true;
     public string ExplainText
     {
         get
         {
-            return $"{damage}의 피해를 줍니다. 턴 종료 시, 5의 피해를 받습니다. \n소멸.";
+            return $"이번 턴에 소멸한 ‘영혼’의 수만큼 ‘영혼’을 패로 가져옵니다.";
         }
+    }
+    public IEnumerator GetCardRoutine(Character owner)
+    {
+        yield break;
     }
     public IEnumerator RemoveCardRoutine(Character owner)
     {
-        notRemoved = false;
         yield break;
     }
     public int GetRange()
@@ -30,14 +32,6 @@ public class WarlockSoul : IPlayerCard
     {
         range = _range;
     }
-    public int GetDamage()
-    {
-        return damage;
-    }
-    public void SetDamge(int _damage)
-    {
-        damage = _damage;
-    }
     public Color GetUnAvailableTileColor()
     {
         return Color.red;
@@ -46,23 +40,6 @@ public class WarlockSoul : IPlayerCard
     {
         List<Coordinate> ret = new List<Coordinate>();
         ret.Add(pos);
-        Coordinate tile;
-        if ((tile = pos.GetDownTile()) != null)
-        {
-            ret.Add(tile);
-        };
-        if ((tile = pos.GetLeftTile()) != null)
-        {
-            ret.Add(tile);
-        };
-        if ((tile = pos.GetRightTile()) != null)
-        {
-            ret.Add(tile);
-        };
-        if ((tile = pos.GetUpTile()) != null)
-        {
-            ret.Add(tile);
-        }
         return ret;
     }
     public Color GetAvailableTileColor()
@@ -94,32 +71,11 @@ public class WarlockSoul : IPlayerCard
     }
     public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
-        caster.SoulCount++;
-        Character tmp = GameManager.Instance.Map[target.X, target.Y].CharacterOnTile;
-        if (tmp)
+        for (int i = 0; i < caster.SoulCount; i++)
         {
-            if (interrupted)
-            {
-                interrupted = false;
-                yield break;
-            }
-            yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
+            yield return GameManager.Instance.StartCoroutine(caster.AddCard(GameManager.Instance.CardDict[3027001],true));
         }
-        yield break;
-    }
-    public IEnumerator GetCardRoutine(Character owner)
-    {
-        owner.AddTurnEndDebuff(Selfharm(owner),0);
-        yield break;
-    }
-    private IEnumerator Selfharm(Character owner)
-    {
-        while (notRemoved)
-        {
-            if (owner.HandCard.Contains(this))
-                GameManager.Instance.StartCoroutine(owner.HitAttack(owner,5));
-            yield return null;
-        }
+        yield return null;
     }
     public void CardRoutineInterrupt()
     {
@@ -143,6 +99,7 @@ public class WarlockSoul : IPlayerCard
     }
     public int GetCardID()
     {
-        return 3027001;
+        return 3131001;
     }
+
 }

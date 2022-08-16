@@ -7,6 +7,7 @@ public abstract class Character : MonoBehaviour
 {
     public int cardUseInTurn {get; set;}
     public int MaxHp { get; set; }
+    public int SoulCount { get; set; }
     protected int hp;
     public virtual int Hp
     {

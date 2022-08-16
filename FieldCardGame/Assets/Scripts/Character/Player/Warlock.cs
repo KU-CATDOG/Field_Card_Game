@@ -5,6 +5,7 @@ using TMPro;
 public class Warlock : Player
 {
     private TextMeshProUGUI bloodText;
+    
     protected override IEnumerator levelUp()
     {
         yield break;
@@ -31,6 +32,7 @@ public class Warlock : Player
     }
     public override IEnumerator StartTurn()
     {
+        SoulCount = 0;
         yield break;
     }
     protected override IEnumerator dieRoutine()
@@ -66,6 +68,7 @@ public class Warlock : Player
         bloodText = PlayerUI.GetComponentInChildren<TextMeshProUGUI>();
         TurnStartDraw = 5;
         MaxHp = 70; Hp = 100;
+        SoulCount = 0;
     }
     protected override void Update()
     {
@@ -80,7 +83,7 @@ public class Warlock : Player
         CardPile.Add(new WarlockMove());
         CardPile.Add(new WarlockCrops());
         CardPile.Add(new WarlockNecromancy());
-        CardPile.Add(new WarlockSoulLiberation());
+        CardPile.Add(new WarlockDenial());
         CardPile.Add(new WarlockSoul());
         CardPile.Add(new WarlockSoul());
         CardPile.Add(new WarlockSoul());
