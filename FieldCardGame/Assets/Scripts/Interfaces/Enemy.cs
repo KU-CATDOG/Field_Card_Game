@@ -33,6 +33,7 @@ public abstract class Enemy : Character
         yield return enemyDieRoutine();
         if(KilledBy is Player && GameManager.Instance.CharacterSelected)
         {
+            (GameManager.Instance.CharacterSelected as Player).Gold += Random.Range(10, 20);
             yield return (GameManager.Instance.CharacterSelected as Player).GainExp(GiveExp);
             DropItem();
         }

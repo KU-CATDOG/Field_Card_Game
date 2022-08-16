@@ -13,6 +13,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     private GameObject DownSideWall;
     [SerializeField]
     private GameObject LeftSideWall;
+    [SerializeField]
     private int wallMask;
     List<GameObject> wallList = new();
     /// <summary>
