@@ -14,7 +14,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     [SerializeField]
     private GameObject LeftSideWall;
     private int wallMask;
-
+    List<GameObject> wallList = new();
     /// <summary>
     /// 0bxxxx ==> { up right down left }
     /// </summary>
@@ -24,12 +24,26 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         set
         {
             wallMask = value;
-            UpSideWall.SetActive((value & 0b1000) != 0);
-            RightSideWall.SetActive((value & 0b0100) != 0);
-            DownSideWall.SetActive((value & 0b0010) != 0);
-            LeftSideWall.SetActive((value & 0b0001) != 0);
+            if((value & 0b1000) != 0)
+            {
+                wallList.Add(UpSideWall);
+            }
+            if ((value & 0b0100) != 0)
+            {
+                wallList.Add(RightSideWall);
+            }
+            if ((value & 0b0010) != 0)
+            {
+                wallList.Add(DownSideWall);
+            }
+            if ((value & 0b0001) != 0)
+            {
+                wallList.Add(LeftSideWall);
+            }
+            Discovered = Discovered;
         }
     }
+    private bool Enter;
     [SerializeField]
     private Material DiscoveredColor;
     [SerializeField]
@@ -51,6 +65,10 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
                 discovered = value;
                 if (OnSightRoutine != null)
                     OnSightRoutine();
+                foreach(var i in wallList)
+                {
+                    i.SetActive(true);
+                }
             }
             else
             {
@@ -119,6 +137,8 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     //fixme
     public void OnPointerEnter(PointerEventData data)
     {
+        if (Enter) return;
+        Enter = true;
         if (!PlayerUIManager.Instance.UseMode) return;
         if (PlayerUIManager.Instance.UseModeCard == null)
         {
@@ -130,6 +150,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         if (!PlayerUIManager.Instance.UseModeCard.IsAvailablePosition(GameManager.Instance.CurPlayer.position, position)) return;
         PlayerUIManager.Instance.UseReadyPos = position;
         OriginColor = TileColor.material.color;
+        Debug.Log("ENTEr");
         foreach (Coordinate i in PlayerUIManager.Instance.UseModeCard.GetAreaofEffect(position - GameManager.Instance.CurPlayer.position))
         {
             Coordinate target = position + i;
@@ -147,6 +168,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     }
     public void OnPointerExit(PointerEventData data)
     {
+        Enter = false;
         if (!PlayerUIManager.Instance.UseMode) return;
         if (PlayerUIManager.Instance.UseModeCard == null)
         {
@@ -154,6 +176,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             return;
         }
         if (!PlayerUIManager.Instance.UseModeCard.IsAvailablePosition(GameManager.Instance.CurPlayer.position, position)) return;
+        Debug.Log("EXIT");
         foreach (Coordinate i in PlayerUIManager.Instance.UseModeCard.GetAreaofEffect(position - GameManager.Instance.CurPlayer.position))
         {
             Coordinate target = position + i;

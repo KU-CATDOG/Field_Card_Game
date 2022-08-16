@@ -1024,7 +1024,9 @@ public abstract class Character : MonoBehaviour
             while (queue.Count != 0)
             {
                 Coordinate tmp = queue.Dequeue();
-                GameManager.Instance.Map[tmp.X, tmp.Y].Discovered = discovered;
+                Vector3 target = new Vector3(tmp.X, transform.position.y, tmp.Y);
+                if (!Physics.Raycast(transform.position, target - transform.position, Coordinate.EuclideanDist(position, tmp), LayerMask.GetMask("Wall")))
+                    GameManager.Instance.Map[tmp.X, tmp.Y].Discovered = discovered;
                 Coordinate tile;
                 if ((tile = tmp.GetUpTile()) != null && !visited[tile.X, tile.Y])
                 {
@@ -1053,7 +1055,9 @@ public abstract class Character : MonoBehaviour
         while (queue.Count != 0)
         {
             Coordinate tmp = queue.Dequeue();
-            GameManager.Instance.Map[tmp.X, tmp.Y].Discovered = discovered;
+            Vector3 target = new Vector3(tmp.X, transform.position.y, tmp.Y);
+            if (!Physics.Raycast(transform.position, target - transform.position, Coordinate.EuclideanDist(position, tmp), LayerMask.GetMask("Wall")))
+                GameManager.Instance.Map[tmp.X, tmp.Y].Discovered = discovered;
         }
     }
     /// <summary>

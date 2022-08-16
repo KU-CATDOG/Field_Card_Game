@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6702200700121652826}
   - component: {fileID: 3148933401227683262}
   - component: {fileID: 7228210029134205604}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: DownSideWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 521624707930876911}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 5.5, z: -0.5}
-  m_LocalScale: {x: 0.1, y: 0.10000002, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.10000003, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4068269855793044107}
@@ -95,7 +95,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &2746601893013666261
@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: 4316842454875711470}
   - component: {fileID: 2894672903567132559}
   - component: {fileID: 3570392586086107819}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RightSideWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -193,7 +193,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &3540753563977273292
@@ -208,7 +208,7 @@ GameObject:
   - component: {fileID: 8247926232986471064}
   - component: {fileID: 2805482257066218698}
   - component: {fileID: 7678271573290526867}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: UpSideWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -222,9 +222,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3540753563977273292}
-  m_LocalRotation: {x: 0, y: 0.7071068, z: -0.7071068, w: 0}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0.7071068, w: 0}
   m_LocalPosition: {x: 0, y: 5.5, z: 0.5}
-  m_LocalScale: {x: 0.1, y: 0.10000002, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.10000003, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4068269855793044107}
@@ -291,7 +291,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &4068269855793044119
@@ -426,7 +426,7 @@ GameObject:
   - component: {fileID: 6457875963015108294}
   - component: {fileID: 6028029362462505797}
   - component: {fileID: 4853970179787968546}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: LeftSideWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -509,6 +509,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
