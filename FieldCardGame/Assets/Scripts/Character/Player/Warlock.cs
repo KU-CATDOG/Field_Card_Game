@@ -5,6 +5,7 @@ using TMPro;
 public class Warlock : Player
 {
     private TextMeshProUGUI bloodText;
+    public List<IEnumerator> awakeRoutine = new List<IEnumerator>();
     public int soulCount { get; set; }
     protected override IEnumerator levelUp()
     {
@@ -28,6 +29,8 @@ public class Warlock : Player
         {
             Hp = (Hp-10) > MaxHp ? Hp - 10:MaxHp;
         }
+        foreach (var i in awakeRoutine)
+            yield return StartCoroutine(i);
         yield break;
     }
     public override IEnumerator StartTurn()
@@ -81,8 +84,8 @@ public class Warlock : Player
     {
         GameManager.Instance.StartCoroutine(AddCard(new WarlockRepay()));
         CardPile.Add(new WarlockMove());
-        CardPile.Add(new WarlockCrops());
-        CardPile.Add(new WarlockScotch());
+        CardPile.Add(new WarlockSoul());
+        CardPile.Add(new WarlockBackpropagation());
         CardPile.Add(new WarlockCycle());
         StartCoroutine(ShuffleDeck());
     }
