@@ -71,7 +71,8 @@ public class WarlockDenial : IPlayerCard
     }
     public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
-        for (int i = 0; i < caster.SoulCount; i++)
+        int SoulCount = (caster as Warlock).soulCount;
+        for (int i = 0; i < SoulCount; i++)
         {
             yield return GameManager.Instance.StartCoroutine(caster.AddCard(GameManager.Instance.CardDict[3027001],true));
         }

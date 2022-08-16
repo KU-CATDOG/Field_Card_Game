@@ -6,8 +6,8 @@ using TMPro;
 public abstract class Character : MonoBehaviour
 {
     public int cardUseInTurn {get; set;}
+    public int attackCardUseInTurn { get; set; }
     public int MaxHp { get; set; }
-    public int SoulCount { get; set; }
     protected int hp;
     public virtual int Hp
     {
@@ -809,6 +809,8 @@ public abstract class Character : MonoBehaviour
     public IEnumerator CardUse(Coordinate target, int idx)
     {
         cardUseInTurn++;
+        if ((HandCard[idx].GetCardID() % 100) >= 10)
+            attackCardUseInTurn++;
         bool disposable = HandCard[idx].Disposable;
         CardUseInterrupted = false;
         usedCard = HandCard[idx];

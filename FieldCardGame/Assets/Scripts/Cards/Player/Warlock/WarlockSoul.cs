@@ -94,7 +94,7 @@ public class WarlockSoul : IPlayerCard
     }
     public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
-        caster.SoulCount++;
+        (caster as Warlock).soulCount++;
         Character tmp = GameManager.Instance.Map[target.X, target.Y].CharacterOnTile;
         if (tmp)
         {
