@@ -2,17 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PaladinMercy : IPlayerCard
+public class PaladinSlam : IPlayerCard
 {
-    private int range = 0;
+    private int range = 1;
     private bool interrupted;
-    private int cost = 1;
+    private int cost = 3;
+    private int damage = 40;
     public bool Disposable { get; set; }
     public string ExplainText
     {
         get
         {
-            return $"ī�带 {2}�� �̽��ϴ�.";
+            return $"적에게 {GetDamage()}의 피해를 입히고, ‘무장해제’를 1 줍니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -31,6 +32,14 @@ public class PaladinMercy : IPlayerCard
     {
         range = _range;
     }
+    public int GetDamage()
+    {
+        return damage;
+    }
+    public void SetDamage(int _damage)
+    {
+        damage = _damage;
+    }
     public Color GetUnAvailableTileColor()
     {
         return Color.red;
@@ -39,7 +48,23 @@ public class PaladinMercy : IPlayerCard
     public List<Coordinate> GetAvailableTile(Coordinate pos)
     {
         List<Coordinate> ret = new List<Coordinate>();
-        ret.Add(pos);
+        Coordinate tile;
+        if ((tile = pos.GetDownTile()) != null)
+        {
+            ret.Add(tile);
+        }
+        if ((tile = pos.GetLeftTile()) != null)
+        {
+            ret.Add(tile);
+        }
+        if ((tile = pos.GetRightTile()) != null)
+        {
+            ret.Add(tile);
+        }
+        if ((tile = pos.GetUpTile()) != null)
+        {
+            ret.Add(tile);
+        }
         return ret;
     }
 
@@ -75,8 +100,18 @@ public class PaladinMercy : IPlayerCard
     }
     public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
-        yield return caster.StartCoroutine(caster.DrawCard());
-        yield return caster.StartCoroutine(caster.DrawCard());
+        Character tmp = GameManager.Instance.Map[target.X, target.Y].CharacterOnTile;
+        if (tmp)
+        {
+            if (interrupted)
+            {
+                interrupted = false;
+                yield break;
+            }
+            yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
+            //tmp.EffectHandler.DebuffDict[DebuffType.Disarm].SetEffect(1);
+        }
+        yield break;
     }
     public void CardRoutineInterrupt()
     {
@@ -86,9 +121,9 @@ public class PaladinMercy : IPlayerCard
     {
         return cost;
     }
-    public void SetCost(int value)
+    public void SetCost(int _cost)
     {
-        cost = value;
+        cost = _cost;
     }
     public CostType GetCostType()
     {
@@ -100,6 +135,7 @@ public class PaladinMercy : IPlayerCard
     }
     public int GetCardID()
     {
-        return 1017001;
+        return 1136011;
     }
 }
+

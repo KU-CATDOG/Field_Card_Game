@@ -2,17 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PaladinMercy : IPlayerCard
+public class PaladinAgony : IPlayerCard
 {
     private int range = 0;
     private bool interrupted;
-    private int cost = 1;
+    private int cost = 0;
+    private int card = 3;
+    private int draw = 2;
     public bool Disposable { get; set; }
     public string ExplainText
     {
         get
         {
-            return $"ī�带 {2}�� �̽��ϴ�.";
+            return $"뽑을 카드 더미에 번뇌를 {card}장 섞어 넣은 후, {draw}장을 뽑습니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -75,8 +77,19 @@ public class PaladinMercy : IPlayerCard
     }
     public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
-        yield return caster.StartCoroutine(caster.DrawCard());
-        yield return caster.StartCoroutine(caster.DrawCard());
+        if (interrupted)
+        {
+            interrupted = false;
+            yield break;
+        }
+        for (int i = 0; i < card; i++)
+        {
+            yield return caster.StartCoroutine(caster.AddCard(new PaladinDefilement()));
+        }
+        for (int i = 0; i < draw; i++)
+        {
+            yield return caster.StartCoroutine(caster.DrawCard());
+        }
     }
     public void CardRoutineInterrupt()
     {
@@ -100,6 +113,6 @@ public class PaladinMercy : IPlayerCard
     }
     public int GetCardID()
     {
-        return 1017001;
+        return 1139001;
     }
 }
