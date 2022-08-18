@@ -97,7 +97,7 @@ public class Coordinate
     public Coordinate GetUpTile()
     {
         Coordinate ret = new Coordinate(X, Y + 1);
-        if (OutRange(ret))
+        if (OutRange(ret) || (GameManager.Instance.Map[X, Y].WallMask & 0b1000) != 0)
         {
             return null;
         }
@@ -106,7 +106,7 @@ public class Coordinate
     public Coordinate GetDownTile()
     {
         Coordinate ret = new Coordinate(X, Y - 1);
-        if (OutRange(ret))
+        if (OutRange(ret) || (GameManager.Instance.Map[X, Y].WallMask & 0b0010) != 0)
         {
             return null;
         }
@@ -115,7 +115,7 @@ public class Coordinate
     public Coordinate GetLeftTile()
     {
         Coordinate ret = new Coordinate(X - 1, Y);
-        if (OutRange(ret))
+        if (OutRange(ret) || (GameManager.Instance.Map[X, Y].WallMask & 0b0001) != 0)
         {
             return null;
         }
@@ -124,7 +124,7 @@ public class Coordinate
     public Coordinate GetRightTile()
     {
         Coordinate ret = new Coordinate(X + 1, Y);
-        if (OutRange(ret))
+        if (OutRange(ret) || (GameManager.Instance.Map[X, Y].WallMask & 0b0100) != 0)
         {
             return null;
         }

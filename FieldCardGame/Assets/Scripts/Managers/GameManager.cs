@@ -6,6 +6,8 @@ using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
+    public LevelUpHandler LvUpHandler;
+    public Dictionary<Player, LevelUpSkill> BaseSkillDict{ get; } = new();    
     private Dictionary<System.Type, int> CharacterIDDict;
     private List<SpawnEntity> worldEntityList;
     private Dictionary<int, ICard> cardDict = new Dictionary<int, ICard>();
@@ -83,7 +85,17 @@ public class GameManager : MonoBehaviour
             return loadingPanel;
         }
     }
-    public Character CharacterSelected { get; set; }
+    private Character characterSelected;
+    public Character CharacterSelected
+    {
+        get=> characterSelected;
+        set=> characterSelected = value;
+        /*
+        {
+            characterSelected = value;
+            LvUpHandler = new();
+        }*/
+    }
     private Dictionary<int, Enemy> enemyDict = new();
     public IReadOnlyDictionary<int, Enemy> EnemyDict
     {
