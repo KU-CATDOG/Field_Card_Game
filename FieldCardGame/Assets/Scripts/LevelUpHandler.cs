@@ -48,7 +48,7 @@ public class LevelUpHandler
         var list = skill.GetNextSkillList();
         foreach(var i in list)
         {
-            if(--i.Count == 0)
+            if(--i.Count <= 0)
             {
                 UnAvailableSkillList.Remove(i);
                 AvailableSkillList.Add(i);
