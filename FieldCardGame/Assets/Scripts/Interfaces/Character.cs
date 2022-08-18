@@ -59,10 +59,13 @@ public abstract class Character : MonoBehaviour
                 GameManager.Instance.Map[pos.X, pos.Y].CharacterOnTile = null;
             }
             pos = value;
+            if(OnPosChanged != null)
+                OnPosChanged();
             GameManager.Instance.Map[pos.X, pos.Y].CharacterOnTile = this;
             transform.position = new Vector3(value.X, 0.5f, value.Y);
         }
     }
+    protected System.Action OnPosChanged { get; set; }
     private int sight = 10;
     public int Sight
     {
@@ -813,7 +816,7 @@ public abstract class Character : MonoBehaviour
             attackCardUseInTurn++;
         bool disposable = HandCard[idx].Disposable;
         CardUseInterrupted = false;
-        usedCard = HandCard[idx];
+        ICard card = usedCard = HandCard[idx];        
         yield return StartCoroutine(PayCost(usedCard.GetCost(), usedCard.GetCostType()));
         for (int i = CardUseTry.Count - 1; !CardUseInterrupted && !IsDie && i >= 0; i--)
         {
@@ -839,6 +842,7 @@ public abstract class Character : MonoBehaviour
                 RemoveCardUseRoutineByIdx(i);
             }
         }
+        idx = HandCard.FindIndex((i) => i == card);
         if (!disposable)
             yield return StartCoroutine(DropCard(idx));
         else
@@ -925,7 +929,7 @@ public abstract class Character : MonoBehaviour
             }
         }
     }
-    public IEnumerator RemoveCard(ICard toRemove, bool discardedPileFirst)
+    public IEnumerator RemoveCard(ICard toRemove, bool discardedPileFirst = false)
     {
         RemoveCardInterrupted = false;
         //need Animation for Player
@@ -1023,8 +1027,20 @@ public abstract class Character : MonoBehaviour
             while (queue.Count != 0)
             {
                 Coordinate tmp = queue.Dequeue();
-                GameManager.Instance.Map[tmp.X, tmp.Y].Discovered = discovered;
+                Vector3 target = new Vector3(tmp.X, transform.position.y, tmp.Y);
+                if (!Physics.Raycast(transform.position, target - transform.position, Coordinate.EuclideanDist(position, tmp), LayerMask.GetMask("Wall")))
+                    GameManager.Instance.Map[tmp.X, tmp.Y].Discovered = discovered;
                 Coordinate tile;
+                if ((tile = tmp.GetUpTile()) != null && !visited[tile.X, tile.Y])
+                {
+                    visited[tile.X, tile.Y] = true;
+                    nextQueue.Enqueue(tile);
+                }
+                if ((tile = tmp.GetRightTile()) != null && !visited[tile.X, tile.Y])
+                {
+                    visited[tile.X, tile.Y] = true;
+                    nextQueue.Enqueue(tile);
+                };
                 if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y])
                 {
                     visited[tile.X, tile.Y] = true;
@@ -1035,16 +1051,6 @@ public abstract class Character : MonoBehaviour
                     visited[tile.X, tile.Y] = true;
                     nextQueue.Enqueue(tile);
                 };
-                if ((tile = tmp.GetRightTile()) != null && !visited[tile.X, tile.Y])
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                };
-                if ((tile = tmp.GetUpTile()) != null && !visited[tile.X, tile.Y])
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                }
             }
             queue = new Queue<Coordinate>(nextQueue);
             nextQueue.Clear();
@@ -1052,7 +1058,9 @@ public abstract class Character : MonoBehaviour
         while (queue.Count != 0)
         {
             Coordinate tmp = queue.Dequeue();
-            GameManager.Instance.Map[tmp.X, tmp.Y].Discovered = discovered;
+            Vector3 target = new Vector3(tmp.X, transform.position.y, tmp.Y);
+            if (!Physics.Raycast(transform.position, target - transform.position, Coordinate.EuclideanDist(position, tmp), LayerMask.GetMask("Wall")))
+                GameManager.Instance.Map[tmp.X, tmp.Y].Discovered = discovered;
         }
     }
     /// <summary>

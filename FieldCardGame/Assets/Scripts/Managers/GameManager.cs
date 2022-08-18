@@ -6,6 +6,8 @@ using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
+    public LevelUpHandler LvUpHandler;
+    public Dictionary<Player, LevelUpSkill> BaseSkillDict{ get; } = new();    
     private Dictionary<System.Type, int> CharacterIDDict;
     private List<SpawnEntity> worldEntityList;
     private Dictionary<int, ICard> cardDict = new Dictionary<int, ICard>();
@@ -83,7 +85,17 @@ public class GameManager : MonoBehaviour
             return loadingPanel;
         }
     }
-    public Character CharacterSelected { get; set; }
+    private Character characterSelected;
+    public Character CharacterSelected
+    {
+        get=> characterSelected;
+        set=> characterSelected = value;
+        /*
+        {
+            characterSelected = value;
+            LvUpHandler = new();
+        }*/
+    }
     private Dictionary<int, Enemy> enemyDict = new();
     public IReadOnlyDictionary<int, Enemy> EnemyDict
     {
@@ -92,7 +104,17 @@ public class GameManager : MonoBehaviour
             return enemyDict;
         }
     }
-
+    //fixme
+    private List<GameObject> neutralList = new();
+    public List<GameObject> NeutralList => neutralList;
+    private Dictionary<int, Enemy> neutralDict = new();
+    public IReadOnlyDictionary<int, Enemy> NeutralDict
+    {
+        get
+        {
+            return neutralDict;
+        }
+    }
     public static GameManager Instance { get; set; }
     public List<Character> EnemyList { get; private set; } = new List<Character>();
     public Character CurPlayer { get; set; }
@@ -230,12 +252,24 @@ public class GameManager : MonoBehaviour
     {
         InitializeDictionary();
         MapObject = GameObject.Find("Map");
+        Tile[] tiles = MapObject.GetComponentsInChildren<Tile>();
+        foreach(var i in tiles)
+        {
+            i.position = new Coordinate((int)i.transform.position.x, (int)i.transform.position.z);
+            i.WallMask = i.WallMask;
+            Map[i.position.X, i.position.Y] = i;
+        }
+        /*
         int entityIdx = 0;
         for (int i = 0; i < MAPSIZE; i++)
         {
             for (int j = 0; j < MAPSIZE; j++)
             {
                 Tile tile = Instantiate(tilePrefab, MapObject.transform);
+                if(i == 15 && j != 15)
+                {
+                    tile.WallMask |= 0b0100;
+                }
                 tile.transform.position = new Vector3(i, 0, j);
                 tile.position = new Coordinate(i, j);
                 Map[i, j] = tile;
@@ -252,13 +286,14 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
-        //fixme
+        //fixme*/
         CharacterSelected.gameObject.SetActive(true);
-        CharacterSelected.position = new Coordinate(10, 10);
+        CharacterSelected.position = new Coordinate(0, 0);
+        Map[CharacterSelected.position.X, CharacterSelected.position.Y].CharacterOnTile = CharacterSelected;
+        CharacterSelected.SightUpdate(CharacterSelected.Sight);/*
         Map[10, 10].CharacterOnTile = CharacterSelected;
-        CharacterSelected.SightUpdate(CharacterSelected.Sight);
         Character enemy = Instantiate(EnemyDict[90]);
-        enemy.position = new Coordinate(15, 10);
+        enemy.position = new Coordinate(15, 15);*/
         StartCoroutine(TurnManager.Instance.TurnRoutine());
     }
     //fixme

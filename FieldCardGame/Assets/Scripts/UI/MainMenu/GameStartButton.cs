@@ -27,7 +27,7 @@ public class GameStartButton : MonoBehaviour, IPointerClickHandler, IPointerEnte
         GameManager.Instance.CharacterSelected.gameObject.SetActive(false);
         DontDestroyOnLoad(GameManager.Instance.CharacterSelected.gameObject);
         yield return GameManager.Instance.StartCoroutine(GameManager.Instance.LoadingPanel.StartLoad());
-        AsyncOperation async = SceneManager.LoadSceneAsync("MainField");
+        AsyncOperation async = SceneManager.LoadSceneAsync("Grassland");
         yield return new WaitUntil(() => {  return async.isDone; });
         GameManager.Instance.GenerateMap();
         yield return new WaitForSeconds(0.5f);

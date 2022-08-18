@@ -21,6 +21,8 @@ public abstract class Player : Character
         yield return GameManager.Instance.StartCoroutine(GameManager.Instance.DmgEffect.StartLoad(0.3f, 0.08f));
         yield return GameManager.Instance.StartCoroutine(GameManager.Instance.DmgEffect.LoadEnd(0.08f));
     }
+    private List<IInteractable> interactables = new();
+    public IReadOnlyList<IInteractable> Interactables => interactables.AsReadOnly();
     public int Level { get; set; } = 1;
     public int Exp { get; set; }
     public int Gold { get; set; } = 0;
@@ -45,6 +47,7 @@ public abstract class Player : Character
     protected override void Awake()
     {
         base.Awake();
+        OnPosChanged += CheckInteraction;
         GameManager.Instance.Allies.Add(this);
     }
     protected override void Start()
@@ -53,6 +56,77 @@ public abstract class Player : Character
         playerUI = Instantiate(PlayerUI, PlayerUIManager.Instance.PlayerSpecificArea).gameObject;
         PlayerUI.SetActive(false);
     }
+    public override IEnumerator AwakeTurn()
+    {
+        CheckInteraction();
+        yield break;
+    }
+    private void CheckInteraction()
+    {
+        ClearInteractable();
+        Coordinate coord;
+        if ((coord = position.GetLeftTile()) != null)
+        {
+            Tile tile = GameManager.Instance.Map[coord.X, coord.Y];
+            if (tile.CharacterOnTile is IInteractable)
+            {
+                AddInteractable(tile.CharacterOnTile as IInteractable);
+            }
+            foreach (var i in tile.EntityOnTile)
+            {
+                if (i is IInteractable)
+                {
+                    AddInteractable(i as IInteractable);
+                }
+            }
+        }
+        if ((coord = position.GetRightTile()) != null)
+        {
+            Tile tile = GameManager.Instance.Map[coord.X, coord.Y];
+            if (tile.CharacterOnTile is IInteractable)
+            {
+                AddInteractable(tile.CharacterOnTile as IInteractable);
+            }
+            foreach (var i in tile.EntityOnTile)
+            {
+                if (i is IInteractable)
+                {
+                    AddInteractable(i as IInteractable);
+                }
+            }
+        }
+        if ((coord = position.GetUpTile()) != null)
+        {
+            Tile tile = GameManager.Instance.Map[coord.X, coord.Y];
+            if (tile.CharacterOnTile is IInteractable)
+            {
+                AddInteractable(tile.CharacterOnTile as IInteractable);
+            }
+            foreach (var i in tile.EntityOnTile)
+            {
+                if (i is IInteractable)
+                {
+                    AddInteractable(i as IInteractable);
+                }
+            }
+        }
+        if ((coord = position.GetDownTile()) != null)
+        {
+            Tile tile = GameManager.Instance.Map[coord.X, coord.Y];
+            if (tile.CharacterOnTile is IInteractable)
+            {
+                AddInteractable(tile.CharacterOnTile as IInteractable);
+            }
+            foreach (var i in tile.EntityOnTile)
+            {
+                if (i is IInteractable)
+                {
+                    AddInteractable(i as IInteractable);
+                }
+            }
+        }
+    }
+
     public IEnumerator GainExp(int exp)
     {
         GainedExp = exp;
@@ -117,6 +191,19 @@ public abstract class Player : Character
             }
         }
         yield break;
+    }
+    private void AddInteractable(IInteractable interactable)
+    {
+        if(interactables.Count == 0)
+        {
+            PlayerUIManager.Instance.InteractButton.gameObject.SetActive(true);
+        }
+        interactables.Add(interactable);
+    }
+    private void ClearInteractable()
+    {
+        PlayerUIManager.Instance.InteractButton.gameObject.SetActive(false);
+        interactables.Clear();
     }
     protected abstract IEnumerator levelUp();
 
