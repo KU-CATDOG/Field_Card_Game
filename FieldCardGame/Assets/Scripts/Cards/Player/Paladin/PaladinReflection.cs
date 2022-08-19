@@ -80,6 +80,7 @@ public class PaladinReflection : IPlayerCard
             interrupted = false;
             yield break;
         }
+        PlayerUIManager.Instance.GetCardFromDiscardedPilePanel = true;
         PlayerUIManager.Instance.OpenDiscardedPilePanel();
     }
     public void CardRoutineInterrupt()
