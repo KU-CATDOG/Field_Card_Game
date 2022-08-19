@@ -133,9 +133,12 @@ public abstract class Player : Character
         for (int i = TryGainExpRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
             IEnumerator routine = TryGainExpRoutine[i];
-            while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 TryGainExpRoutine.RemoveAt(i);
             }
         }
@@ -155,9 +158,12 @@ public abstract class Player : Character
         for (int i = GainExpRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
             IEnumerator routine = GainExpRoutine[i];
-            while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 GainExpRoutine.RemoveAt(i);
             }
         }
@@ -168,9 +174,12 @@ public abstract class Player : Character
         for (int i = TryLevelUpRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
             IEnumerator routine = TryLevelUpRoutine[i];
-            while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 TryLevelUpRoutine.RemoveAt(i);
             }
         }
@@ -184,9 +193,12 @@ public abstract class Player : Character
         for (int i = GainExpRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
             IEnumerator routine = GainExpRoutine[i];
-            while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 GainExpRoutine.RemoveAt(i);
             }
         }

@@ -42,7 +42,6 @@ public abstract class Character : MonoBehaviour
     private Animator animator;
     public EffectHandler EffectHandler { get; private set; }
     public int TurnStartDraw { get; set; }
-    public int NeedWait { get; set; }
     private Coordinate pos;
     public Coordinate PrevPos { get; set; }
     public Coordinate position
@@ -734,10 +733,12 @@ public abstract class Character : MonoBehaviour
         for (int i = DrawCardTry.Count - 1; !DrawInterrupted && !IsDie && i >= 0; i--)
         {
             IEnumerator routine = DrawCardTry[i].Routine;
-
-            while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 RemoveTryDrawRoutineByIdx(i);
             }
         }
@@ -760,9 +761,12 @@ public abstract class Character : MonoBehaviour
         for (int i = DrawCardRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
             IEnumerator routine = DrawCardRoutine[i].Routine;
-            while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 RemoveDrawCardRoutineByIdx(i);
             }
         }
@@ -780,9 +784,12 @@ public abstract class Character : MonoBehaviour
         for (int i = DropCardTry.Count - 1; !DropInterrupted && !IsDie && i >= 0; i--)
         {
             IEnumerator routine = DropCardTry[i].Routine;
-            while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 RemoveTryDropCardRoutineByIdx(i);
             }
         }
@@ -801,9 +808,12 @@ public abstract class Character : MonoBehaviour
         for (int i = DropCardRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
             IEnumerator routine = DropCardRoutine[i].Routine;
-            while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 RemoveDropCardRoutineByIdx(i);
             }
         }
@@ -821,9 +831,12 @@ public abstract class Character : MonoBehaviour
         for (int i = CardUseTry.Count - 1; !CardUseInterrupted && !IsDie && i >= 0; i--)
         {
             IEnumerator routine = CardUseTry[i].Routine;
-            while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 RemoveTryCardUseRoutineByIdx(i);
             }
         }
@@ -836,9 +849,12 @@ public abstract class Character : MonoBehaviour
         for (int i = CardUseRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
             IEnumerator routine = CardUseRoutine[i].Routine;
-            while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 RemoveCardUseRoutineByIdx(i);
             }
         }
@@ -855,10 +871,12 @@ public abstract class Character : MonoBehaviour
         for (int i = AddCardTry.Count - 1; !AddCardInterrupted && !IsDie && i >= 0; i--)
         {
             IEnumerator routine = AddCardTry[i].Routine;
-            while (NeedWait != 0) yield return null;
-
             if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 RemoveTryAddCardRoutineByIdx(i);
             }
         }
@@ -884,9 +902,12 @@ public abstract class Character : MonoBehaviour
         for (int i = AddCardRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
             IEnumerator routine = AddCardRoutine[i].Routine;
-            while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 RemoveAddCardRoutineByIdx(i);
             }
         }
@@ -899,10 +920,12 @@ public abstract class Character : MonoBehaviour
         for (int i = RemoveCardTry.Count - 1; !RemoveCardInterrupted && !IsDie && i >= 0; i--)
         {
             IEnumerator routine = RemoveCardTry[i].Routine;
-            while (NeedWait != 0) yield return null;
-
             if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 RemoveTryRemoveCardByIdx(i);
             }
         }
@@ -922,9 +945,12 @@ public abstract class Character : MonoBehaviour
         for (int i = RemoveCardRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
             IEnumerator routine = RemoveCardRoutine[i].Routine;
-            while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 RemoveRemoveCardRoutineByIdx(i);
             }
         }
@@ -936,10 +962,13 @@ public abstract class Character : MonoBehaviour
         for (int i = RemoveCardTry.Count - 1; !RemoveCardInterrupted && !IsDie && i >= 0; i--)
         {
             IEnumerator routine = RemoveCardTry[i].Routine;
-            while (NeedWait != 0) yield return null;
 
             if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 RemoveTryRemoveCardByIdx(i);
             }
         }
@@ -995,9 +1024,12 @@ public abstract class Character : MonoBehaviour
         for (int i = RemoveCardRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
             IEnumerator routine = RemoveCardRoutine[i].Routine;
-            while (NeedWait != 0) yield return null;
             if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 RemoveRemoveCardRoutineByIdx(i);
             }
         }
@@ -1074,9 +1106,13 @@ public abstract class Character : MonoBehaviour
         MoveInterrupted = false;
         for (int i = TryMoveRoutine.Count - 1; !MoveInterrupted && !IsDie && i >= 0; i--)
         {
-            while (NeedWait != 0) yield return null;
-            if (!TryMoveRoutine[i].Routine.MoveNext())
+            IEnumerator routine = TryMoveRoutine[i].Routine;
+            if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 RemoveTryMoveRoutineByIdx(i);
             }
         }
@@ -1089,9 +1125,13 @@ public abstract class Character : MonoBehaviour
         Tile targetTile = GameManager.Instance.Map[target.X, target.Y];
         for (int i = prevTile.OnCharacterExitRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
-            while (NeedWait != 0) yield return null;
-            if (!prevTile.OnCharacterExitRoutine[i].Routine.MoveNext())
+            IEnumerator routine = prevTile.OnCharacterExitRoutine[i].Routine;
+            if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 prevTile.RemoveOnCharacterExitRoutineByIdx(i);
             }
         }
@@ -1117,18 +1157,26 @@ public abstract class Character : MonoBehaviour
         }
         for (int i = targetTile.OnCharacterEnterRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
-            while (NeedWait != 0) yield return null;
-            if (!targetTile.OnCharacterEnterRoutine[i].Routine.MoveNext())
+            IEnumerator routine = targetTile.OnCharacterEnterRoutine[i].Routine;
+            if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 targetTile.RemoveOnCharacterEnterRoutineByIdx(i);
             }
         }
 
         for (int i = MoveRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
-            while (NeedWait != 0) yield return null;
-            if (!MoveRoutine[i].Routine.MoveNext())
+            IEnumerator routine = MoveRoutine[i].Routine;
+            if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 RemoveMoveRoutineByIdx(i);
             }
         }
@@ -1140,9 +1188,13 @@ public abstract class Character : MonoBehaviour
         ForceMovedBy = caster;
         for (int i = TryForceMoveRoutine.Count - 1; !ForceMoveInterrupted && !IsDie && i >= 0; i--)
         {
-            while (NeedWait != 0) yield return null;
-            if (!TryForceMoveRoutine[i].Routine.MoveNext())
+            IEnumerator routine = TryForceMoveRoutine[i].Routine;
+            if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 RemoveTryForceMoveRoutineByIdx(i);
             }
         }
@@ -1156,9 +1208,13 @@ public abstract class Character : MonoBehaviour
         Tile targetTile = GameManager.Instance.Map[target.X, target.Y];
         for (int i = prevTile.OnCharacterExitRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
-            while (NeedWait != 0) yield return null;
-            if (!prevTile.OnCharacterExitRoutine[i].Routine.MoveNext())
+            IEnumerator routine = prevTile.OnCharacterExitRoutine[i].Routine;
+            if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 prevTile.RemoveOnCharacterExitRoutineByIdx(i);
             }
         }
@@ -1181,18 +1237,26 @@ public abstract class Character : MonoBehaviour
 
         for (int i = targetTile.OnCharacterEnterRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
-            while (NeedWait != 0) yield return null;
-            if (!targetTile.OnCharacterEnterRoutine[i].Routine.MoveNext())
+            IEnumerator routine = targetTile.OnCharacterEnterRoutine[i].Routine;
+            if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 targetTile.RemoveOnCharacterEnterRoutineByIdx(i);
             }
         }
 
         for (int i = ForceMoveRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
-            while (NeedWait != 0) yield return null;
-            if (!ForceMoveRoutine[i].Routine.MoveNext())
+            IEnumerator routine = ForceMoveRoutine[i].Routine;
+            if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 RemoveForceMoveRoutineByIdx(i);
             }
         }
@@ -1207,9 +1271,13 @@ public abstract class Character : MonoBehaviour
         {
             for (int i = TryGetDmgRoutine.Count - 1; !GetDmgInterrupted && !IsDie && i >= 0; i--)
             {
-                while (NeedWait != 0) yield return null;
-                if (!TryGetDmgRoutine[i].Routine.MoveNext())
+                IEnumerator routine = TryGetDmgRoutine[i].Routine;
+                if (!routine.MoveNext())
                 {
+                    if(routine.Current != null)
+                    {
+                        yield return routine.Current;
+                    }
                     RemoveTryGetDmgRoutineByIdx(i);
                 }
             }
@@ -1232,9 +1300,13 @@ public abstract class Character : MonoBehaviour
         }
         for (int i = GetDmgRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
-            while (NeedWait != 0) yield return null;
-            if (!GetDmgRoutine[i].Routine.MoveNext())
+            IEnumerator routine = GetDmgRoutine[i].Routine;
+            if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 RemoveGetDmgRoutineByIdx(i);
             }
         }
@@ -1246,9 +1318,13 @@ public abstract class Character : MonoBehaviour
         HitDmg = dmg;
         for (int i = TryHitAttackRoutine.Count - 1; !HitInterrupted && !IsDie && i >= 0; i--)
         {
-            while (NeedWait != 0) yield return null;
-            if (!TryHitAttackRoutine[i].Routine.MoveNext())
+            IEnumerator routine = TryHitAttackRoutine[i].Routine;
+            if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 RemoveTryHitAttackRoutineByIdx(i);
             }
         }
@@ -1265,9 +1341,13 @@ public abstract class Character : MonoBehaviour
 
         for (int i = HitAttackRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
-            while (NeedWait != 0) yield return null;
+            IEnumerator routine = HitAttackRoutine[i].Routine;
             if (!HitAttackRoutine[i].Routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 RemoveHitAttackRoutineByIdx(i);
             }
         }
@@ -1278,9 +1358,13 @@ public abstract class Character : MonoBehaviour
         GiveHealAmount = amount;
         for (int i = TryGiveHealRoutine.Count - 1; !GiveHealInterrupted && !IsDie && i >= 0; i--)
         {
-            while (NeedWait != 0) yield return null;
-            if (!TryGiveHealRoutine[i].Routine.MoveNext())
+            IEnumerator routine = TryGiveHealRoutine[i].Routine;
+            if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 RemoveTryGiveHealRoutineByIdx(i);
             }
         }
@@ -1293,9 +1377,13 @@ public abstract class Character : MonoBehaviour
 
         for (int i = GiveHealRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
-            while (NeedWait != 0) yield return null;
-            if (!GiveHealRoutine[i].Routine.MoveNext())
+            IEnumerator routine = GiveHealRoutine[i].Routine;
+            if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 RemoveGiveHealRoutineByIdx(i);
             }
         }
@@ -1307,9 +1395,13 @@ public abstract class Character : MonoBehaviour
         HealAmount = amount;
         for (int i = TryHealRoutine.Count - 1; !HealInterrupted && !IsDie && i >= 0; i--)
         {
-            while (NeedWait != 0) yield return null;
-            if (!TryHealRoutine[i].Routine.MoveNext())
+            IEnumerator routine = TryHealRoutine[i].Routine;
+            if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 RemoveTryHealRoutineByIdx(i);
             }
         }
@@ -1324,9 +1416,13 @@ public abstract class Character : MonoBehaviour
 
         for (int i = HealRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
-            while (NeedWait != 0) yield return null;
-            if (!HealRoutine[i].Routine.MoveNext())
+            IEnumerator routine = HealRoutine[i].Routine;
+            if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 RemoveHealRoutineByIdx(i);
             }
         }
@@ -1338,9 +1434,13 @@ public abstract class Character : MonoBehaviour
         KilledBy = caster;
         for (int i = TryDieRoutine.Count - 1; !DieInterrupted && !IsDie && i >= 0; i--)
         {
-            while (NeedWait != 0) yield return null;
-            if (!TryDieRoutine[i].Routine.MoveNext())
+            IEnumerator routine = TryDieRoutine[i].Routine;
+            if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 RemoveTryDieRoutineByIdx(i);
             }
         }
@@ -1353,9 +1453,13 @@ public abstract class Character : MonoBehaviour
 
         for (int i = DieRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
-            while (NeedWait != 0) yield return null;
-            if (!DieRoutine[i].Routine.MoveNext())
+            IEnumerator routine = DieRoutine[i].Routine;
+            if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 RemoveDieRoutineByIdx(i);
             }
         }
@@ -1391,9 +1495,13 @@ public abstract class Character : MonoBehaviour
         yield return StartCoroutine(payCost(cost, type));
         for (int i = PayCostRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
-            while (NeedWait != 0) yield return null;
-            if (!PayCostRoutine[i].Routine.MoveNext())
+            IEnumerator routine = PayCostRoutine[i].Routine;
+            if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 RemovePayCostRoutineByIdx(i);
             }
         }

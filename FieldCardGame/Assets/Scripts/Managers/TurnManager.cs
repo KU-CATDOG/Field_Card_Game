@@ -204,9 +204,13 @@ public class TurnManager : MonoBehaviour
     {
         for (int i = TurnStartRoutine.Count - 1; i >= 0; i--)
         {
-            if (!TurnStartRoutine[i].Routine.MoveNext())
+            IEnumerator routine = TurnStartRoutine[i].Routine;
+            if (!routine.MoveNext())
             {
-                while (NeedWait) yield return null;
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 RemoveTurnStartRoutineByIdx(i);
             }
             while (NeedWait) yield return null;
@@ -216,9 +220,13 @@ public class TurnManager : MonoBehaviour
     {
         for (int i = curChar.StartBuffHandler.Count - 1; !curChar.IsDie && i >= 0; i--)
         {
-            while (curChar.NeedWait != 0) yield return null;
-            if (!curChar.StartBuffHandler[i].Routine.MoveNext())
+            IEnumerator routine = curChar.StartBuffHandler[i].Routine;
+            if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 curChar.RemoveStartBuffByIdx(i);
             }
         }
@@ -227,9 +235,13 @@ public class TurnManager : MonoBehaviour
     {
         for (int i = curChar.StartDebuffHandler.Count - 1; !curChar.IsDie && i >= 0; i--)
         {
-            while (curChar.NeedWait != 0) yield return null;
-            if (!curChar.StartDebuffHandler[i].Routine.MoveNext())
+            IEnumerator routine = curChar.StartDebuffHandler[i].Routine;
+            if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 curChar.RemoveStartDebuffByIdx(i);
             }
         }
@@ -238,9 +250,13 @@ public class TurnManager : MonoBehaviour
     {
         for (int i = curChar.DrawBuffHandler.Count - 1; !curChar.IsDie && i >= 0; i--)
         {
-            while (curChar.NeedWait != 0) yield return null;
-            if (!curChar.DrawBuffHandler[i].Routine.MoveNext())
+            IEnumerator routine = curChar.DrawBuffHandler[i].Routine;
+            if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 curChar.RemoveDrawBuffByIdx(i);
             }
         }
@@ -249,9 +265,13 @@ public class TurnManager : MonoBehaviour
     {
         for (int i = curChar.DrawDebuffHandler.Count - 1; !curChar.IsDie && i >= 0; i--)
         {
-            while (curChar.NeedWait != 0) yield return null;
-            if (!curChar.DrawDebuffHandler[i].Routine.MoveNext())
+            IEnumerator routine = curChar.DrawDebuffHandler[i].Routine;
+            if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 curChar.RemoveDrawDebuffByIdx(i);
             }
         }
@@ -260,9 +280,14 @@ public class TurnManager : MonoBehaviour
     {
         for (int i = curChar.ForceTurnEndDebuffHandler.Count - 1; !curChar.IsDie && i >= 0; i--)
         {
-            while (curChar.NeedWait != 0) yield return null;
-            if (!curChar.ForceTurnEndDebuffHandler[i].Routine.MoveNext())
+            IEnumerator routine = curChar.ForceTurnEndDebuffHandler[i].Routine;
+            if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
+
                 curChar.RemoveForceTurnEndDebuffByIdx(i);
             }
         }
@@ -271,9 +296,13 @@ public class TurnManager : MonoBehaviour
     {
         for (int i = curChar.TurnEndBuffHandler.Count - 1; !curChar.IsDie && i >= 0; i--)
         {
-            while (curChar.NeedWait != 0) yield return null;
-            if (!curChar.TurnEndBuffHandler[i].Routine.MoveNext())
+            IEnumerator routine = curChar.TurnEndBuffHandler[i].Routine;
+            if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 curChar.RemoveTurnEndBuffByIdx(i);
             }
         }
@@ -282,9 +311,13 @@ public class TurnManager : MonoBehaviour
     {
         for (int i = curChar.TurnEndDebuffHandler.Count - 1; !curChar.IsDie && i >= 0; i--)
         {
-            while (curChar.NeedWait != 0) yield return null;
-            if (!curChar.TurnEndDebuffHandler[i].Routine.MoveNext())
+            IEnumerator routine = curChar.TurnEndDebuffHandler[i].Routine;
+            if (!routine.MoveNext())
             {
+                if(routine.Current != null)
+                {
+                    yield return routine.Current;
+                }
                 curChar.RemoveTurnEndDebuffByIdx(i);
             }
         }
