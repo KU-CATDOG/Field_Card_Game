@@ -46,11 +46,11 @@ public abstract class Enemy : Character
         GameManager.Instance.Map[position.X, position.Y].AddOnCharacterEnterRoutine(dropCardObj.GiveReward(), 0);
     }
 
-    protected int findCardIDX(System.Type _type)
+    protected int FindCardIDX(System.Type _type)
     {
         for (int i = 0; i < HandCard.Count; i++)
         {
-            if (HandCard[i].GetType() == _type.GetType())
+            if (HandCard[i].GetType() == _type)
             {
                 return i;
             }
@@ -65,4 +65,9 @@ public abstract class Enemy : Character
         yield break;
     }
     public abstract IEnumerator EnemyRoutine();
+
+    protected void TurnEnd()
+    {
+        crystalCount = 0;
+    }
 }

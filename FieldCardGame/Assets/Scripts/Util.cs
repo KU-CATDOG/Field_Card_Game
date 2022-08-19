@@ -153,7 +153,7 @@ public class Coordinate
 
                 break;
         }
-        
+        //Debug.Log(ret.Count);
         return ret;
     }
     public List<Coordinate> findTileInCross(int _distance, Coordinate _pos, bool forATK, bool isMax)

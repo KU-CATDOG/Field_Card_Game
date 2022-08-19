@@ -46,8 +46,8 @@ public class Minotaurs : Enemy
     {
         int[] ret = new int[] { -1, -1, -1, -1 };
 
-        ret[0] = findCardIDX(typeof(EnemyMove));
-        ret[1] = findCardIDX(typeof(EnemyMoveNAttack));
+        ret[0] = FindCardIDX(typeof(EnemyMove));
+        ret[1] = FindCardIDX(typeof(EnemyMoveNAttack));
 
 
         for (int i = 0; i < HandCard.Count; i++)
