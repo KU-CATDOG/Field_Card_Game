@@ -11,6 +11,7 @@ public abstract class LevelUpSkill
     {
         levelUpRoutine();
     }
+    public abstract string GetText();
     ///First => Generate new instance, else => just return the instance generated 
     public abstract List<LevelUpSkill> GetNextSkillList();
     protected abstract void levelUpRoutine();

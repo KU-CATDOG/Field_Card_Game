@@ -10,10 +10,14 @@ public class MagicReinforce : LevelUpSkill
         get=>count;
         set=>count = value;
     }
-    public override int ID => 0;
+    public override int ID => 4;
     protected override void levelUpRoutine()
     {
         return;
+    }
+    public override string GetText()
+    {
+        return "MagicReinforce";
     }
     List<LevelUpSkill> nextSkillList;
     public override List<LevelUpSkill> GetNextSkillList()

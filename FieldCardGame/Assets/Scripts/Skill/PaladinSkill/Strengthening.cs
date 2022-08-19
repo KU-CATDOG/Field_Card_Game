@@ -10,10 +10,14 @@ public class Strengthening : LevelUpSkill
         get=>count;
         set=>count = value;
     }
-    public override int ID => 0;
+    public override int ID => 7;
     protected override void levelUpRoutine()
     {
         return;
+    }
+    public override string GetText()
+    {
+        return "Strengthening";
     }
     List<LevelUpSkill> nextSkillList;
     public override List<LevelUpSkill> GetNextSkillList()

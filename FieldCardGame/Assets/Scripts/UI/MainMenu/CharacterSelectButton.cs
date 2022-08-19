@@ -30,7 +30,7 @@ public class CharacterSelectButton : MonoBehaviour, IPointerClickHandler, IPoint
                 {
                     gameStartButton.gameObject.SetActive(true);
                 }
-                GameManager.Instance.CharacterSelected = character;
+                GameManager.Instance.CharacterSelectedPrefab = character;
                 image.color = Color.red;
                 prev = this;
             }

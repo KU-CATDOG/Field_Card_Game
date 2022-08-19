@@ -5,7 +5,7 @@ using UnityEngine;
 public class DivineStigma : Effect
 {
     int count;
-    public static int StigamDamage{get; set;}
+    public static int StigamDamage{get; set;} = 3;
     public DivineStigma(Character caster)
     {
         this.caster = caster;

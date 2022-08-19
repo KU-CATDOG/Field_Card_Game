@@ -2346,6 +2346,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6598237354727999962, guid: 3edbc0b4980a2ae4a939b53cef258fe8, type: 3}
+      propertyPath: skillImg
+      value: 
+      objectReference: {fileID: 6373951203199567629, guid: 1c0751084f3eec041844928671e749bd, type: 3}
+    - target: {fileID: 6598237354727999962, guid: 3edbc0b4980a2ae4a939b53cef258fe8, type: 3}
       propertyPath: dmgEffect
       value: 
       objectReference: {fileID: 2121881227}
