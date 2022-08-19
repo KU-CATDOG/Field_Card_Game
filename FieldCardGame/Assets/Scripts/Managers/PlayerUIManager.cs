@@ -552,7 +552,7 @@ public class PlayerUIManager : MonoBehaviour
     }
     public void CloseSkillTreePanel()
     {
-        (GameManager.Instance.CharacterSelected as Player).TreePanel.gameObject.SetActive(true);
+        (GameManager.Instance.CharacterSelected as Player).TreePanel.gameObject.SetActive(false);
     }
     private void Update()
     {
