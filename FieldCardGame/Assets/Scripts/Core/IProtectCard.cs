@@ -4,5 +4,6 @@ using UnityEngine;
 
 public interface IProtectCard
 {
-    public List<int> ProtectAmount{ get; set; }
+    public List<int> ProtectAmount{ get; }
+    public void SetProtectAmount(int val);
 }

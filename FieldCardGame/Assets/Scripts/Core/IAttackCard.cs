@@ -4,5 +4,6 @@ using UnityEngine;
 
 public interface IAttackCard
 {
-    public List<int> Damage{get; set;}
+    public List<int> Damage{get;}
+    public void SetDmg(int value);
 }

@@ -4,5 +4,6 @@ using UnityEngine;
 
 public interface IHealCard
 {
-    public List<int> HealAmounts{get; set;}
+    public List<int> HealAmounts{get;}
+    public void SetHealAmount(int val);
 }
