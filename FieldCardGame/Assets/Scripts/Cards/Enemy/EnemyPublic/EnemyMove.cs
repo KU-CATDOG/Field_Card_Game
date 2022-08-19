@@ -8,6 +8,7 @@ public class EnemyMove : ICard
 
     private int cost;
     private int range;
+    private int minRange = 1;
     private RangeType rangeType = RangeType.Distance;
     public int _cost
     {
@@ -53,7 +54,7 @@ public class EnemyMove : ICard
     public List<Coordinate> GetAvailableTile(Coordinate pos)
     {
 
-        return pos.GetDistanceAvailableTile(range, rangeType, false);
+        return pos.GetDistanceAvailableTile(range, rangeType, false, false, minRange);
     }   
     public bool IsAvailablePosition(Coordinate caster, Coordinate target)
     {
@@ -241,6 +242,11 @@ public class EnemyMove : ICard
     public void CardRoutineInterrupt()
     {
         interrupted = true;
+    }
+
+    public void SetMinRange(int value)
+    {
+        minRange = value;
     }
 
 

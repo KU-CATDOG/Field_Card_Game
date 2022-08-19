@@ -127,6 +127,8 @@ public class GameManager : MonoBehaviour
     //[SerializeField]
     //private int[,] EnemyID;
     //private ArrayForInspector EnemyID = new ArrayForInspector();
+    [SerializeField]
+    public int ogerCount = 0;
 
     private void Awake()
     {
@@ -290,10 +292,13 @@ public class GameManager : MonoBehaviour
         CharacterSelected.gameObject.SetActive(true);
         CharacterSelected.position = new Coordinate(0, 0);
         Map[CharacterSelected.position.X, CharacterSelected.position.Y].CharacterOnTile = CharacterSelected;
-        CharacterSelected.SightUpdate(CharacterSelected.Sight);/*
+        CharacterSelected.SightUpdate(CharacterSelected.Sight);
         Map[10, 10].CharacterOnTile = CharacterSelected;
-        Character enemy = Instantiate(EnemyDict[90]);
-        enemy.position = new Coordinate(15, 15);*/
+        for (int i = 0; i < 4; i++)
+        {
+            Character enemy = Instantiate(EnemyDict[60]);
+            enemy.position = new Coordinate(6 + i, 6);
+        }
         StartCoroutine(TurnManager.Instance.TurnRoutine());
     }
     //fixme
