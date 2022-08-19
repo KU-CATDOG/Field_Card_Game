@@ -82,10 +82,10 @@ public class Warlock : Player
 
     protected override void InitializeDeck()
     {
-        GameManager.Instance.StartCoroutine(AddCard(new WarlockRepay()));
+        GameManager.Instance.StartCoroutine(AddCard(new WarlockBloodLine()));
         CardPile.Add(new WarlockMove());
+        CardPile.Add(new WarlockBurn());
         CardPile.Add(new WarlockSoul());
-        CardPile.Add(new WarlockBackpropagation());
         CardPile.Add(new WarlockCycle());
         StartCoroutine(ShuffleDeck());
     }
