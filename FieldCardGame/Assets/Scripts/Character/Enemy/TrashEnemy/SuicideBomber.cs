@@ -27,47 +27,44 @@ public class SuicideBomber : Enemy
     {
         yield break;
     }
+    private int[] findAllCardIDX()
+    {
+        int[] ret = new int[] {FindCardIDX(typeof(TrashEnemyAttack)), FindCardIDX(typeof(EnemyMove))};
 
+        return ret;
+    }
     public override IEnumerator EnemyRoutine()
     {
-        bool atkIsFst = false;
+        int[] cardIDX;
         
         while (crystalCount > 0)
         {
-            if (HandCard[0] is TrashEnemyAttack)
-            {
-                atkIsFst = true;
-            }
-            else
-            {
-                atkIsFst = false;
-            }
+            cardIDX = findAllCardIDX();
+
             List<Coordinate> tiles;
 
-            if ((tiles = HandCard[atkIsFst ? 0 : 1].GetAvailableTile(position)).Count > 0)
+            if (cardIDX[0] != -1 && (tiles = HandCard[cardIDX[0]].GetAvailableTile(position)).Count > 0)
             {
                 Coordinate toATK = tiles[0];
-                int minDist = int.MaxValue;
 
                 foreach (var i in tiles)
                 {
                     foreach (var j in GameManager.Instance.Allies)
                     {
                         Coordinate pos = j.position;
-                        if (i.X == pos.X && i.Y == pos.Y && minDist > Coordinate.Distance(i, pos))
+                        if (i.X == pos.X && i.Y == pos.Y )
                         {
-                            minDist = Coordinate.Distance(i, pos);
                             toATK = i;
                         }
                     }
                 }
 
-                crystalCount -= HandCard[atkIsFst ? 0 : 1].GetCost();
-                yield return StartCoroutine(CardUse(toATK, atkIsFst ? 0 : 1));
+                crystalCount -= HandCard[cardIDX[0]].GetCost();
+                yield return StartCoroutine(CardUse(toATK, cardIDX[0]));
+                yield return GameManager.Instance.StartCoroutine(this.HitAttack(GameManager.Instance.Map[position.X, position.Y].CharacterOnTile, MaxHp));
             }
-            else
+            else if (cardIDX[1] != -1 && (tiles = HandCard[cardIDX[1]].GetAvailableTile(position)).Count > 0)
             {
-                tiles = HandCard[atkIsFst ? 1 : 0].GetAvailableTile(position);
                 Coordinate toGo = tiles[0];
                 int minDist = int.MaxValue;
 
@@ -84,9 +81,14 @@ public class SuicideBomber : Enemy
                     }
                 }
 
-                crystalCount -= HandCard[atkIsFst ? 1 : 0].GetCost();
-                yield return StartCoroutine(CardUse(toGo, atkIsFst ? 1 : 0));
+                crystalCount -= HandCard[cardIDX[1]].GetCost();
+                yield return StartCoroutine(CardUse(toGo, cardIDX[1]));
             }
+            else
+            {
+                TurnEnd();
+            }
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
@@ -108,6 +110,7 @@ public class SuicideBomber : Enemy
     protected override void InitializeDeck()
     {
         TrashEnemyAttack a = new TrashEnemyAttack();
+        a.Disposable = false;
         a.SetCost(1);
         a.SetRange(1);
         a._dmg = 40;

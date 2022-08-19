@@ -53,7 +53,6 @@ public class EnemyMove : ICard
     public List<Coordinate> GetAvailableTile(Coordinate pos)
     {
 
-
         return pos.GetDistanceAvailableTile(range, rangeType, false);
     }   
     public bool IsAvailablePosition(Coordinate caster, Coordinate target)

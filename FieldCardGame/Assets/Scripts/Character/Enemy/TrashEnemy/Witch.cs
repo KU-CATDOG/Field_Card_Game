@@ -32,7 +32,7 @@ public class Witch : Enemy
     {
         int[] ret = new int[] { -1, -1, -1 };
 
-        ret[0] = findCardIDX(typeof(EnemyMove));
+        ret[0] = FindCardIDX(typeof(EnemyMove));
 
         for (int i = 0; i < HandCard.Count; i++)
         {
