@@ -2429,6 +2429,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HealedBy: {fileID: 0}
   playerUI: {fileID: 1632723056526928107, guid: bd5bc4ded2e77b848a74e6c6bd0c60bf, type: 3}
+  skillTreePanel: {fileID: 8408551093587951849, guid: 5f12f2eb8f762fa498d1ca5ce758a502, type: 3}
 --- !u!114 &545024004598738899
 MonoBehaviour:
   m_ObjectHideFlags: 0

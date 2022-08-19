@@ -8,9 +8,6 @@ using System.Linq;
 public class PlayerUIManager : MonoBehaviour
 {
     [SerializeField]
-    private SkillTreePanel skillTreePanel;
-    public SkillTreePanel TreePanel => skillTreePanel;
-    [SerializeField]
     private SkillSelectPanel skillSelectPanel;
     public SkillSelectPanel SkillPanel => skillSelectPanel;
     public static PlayerUIManager Instance { get; set; }
@@ -551,11 +548,11 @@ public class PlayerUIManager : MonoBehaviour
     }
     public void OpenSkillTreePanel()
     {
-        skillTreePanel.gameObject.SetActive(true);
+        (GameManager.Instance.CharacterSelected as Player).TreePanel.gameObject.SetActive(true);
     }
     public void CloseSkillTreePanel()
     {
-        skillTreePanel.gameObject.SetActive(false);
+        (GameManager.Instance.CharacterSelected as Player).TreePanel.gameObject.SetActive(true);
     }
     private void Update()
     {

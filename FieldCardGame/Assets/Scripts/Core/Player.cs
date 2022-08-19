@@ -44,6 +44,9 @@ public abstract class Player : Character
             return playerUI;
         }
     }
+    [SerializeField]
+    private SkillTreePanel skillTreePanel;
+    public SkillTreePanel TreePanel => skillTreePanel;
     protected override void Awake()
     {
         base.Awake();
@@ -55,6 +58,8 @@ public abstract class Player : Character
         base.Start();
         playerUI = Instantiate(PlayerUI, PlayerUIManager.Instance.PlayerSpecificArea).gameObject;
         PlayerUI.SetActive(false);
+        if(skillTreePanel)
+            skillTreePanel = Instantiate(skillTreePanel, PlayerUIManager.Instance.GetComponentInChildren<Canvas>().transform);
     }
     public override IEnumerator AwakeTurn()
     {

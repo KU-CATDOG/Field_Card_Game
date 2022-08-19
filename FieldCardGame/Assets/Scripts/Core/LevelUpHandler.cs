@@ -55,7 +55,7 @@ public class LevelUpHandler
     {
         skill.LevelUpRoutine();
         if(PlayerUIManager.Instance)
-            PlayerUIManager.Instance.TreePanel.ActiveUI(skill.ID);
+            (GameManager.Instance.CharacterSelected as Player).TreePanel.ActiveUI(skill.ID);
         AvailableSkillList.Remove(skill);
         var list = skill.GetNextSkillList();
         if(list == null)    return;
