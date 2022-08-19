@@ -159,7 +159,10 @@ public class PaladinShining : IPlayerCard
         {
             pos = available[i];
             tmp = GameManager.Instance.Map[pos.X, pos.Y].CharacterOnTile;
-            GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
+            if (tmp != caster)
+            {
+                GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
+            }
         }
         pos = available[available.Count - 1];
         tmp = GameManager.Instance.Map[pos.X, pos.Y].CharacterOnTile;
