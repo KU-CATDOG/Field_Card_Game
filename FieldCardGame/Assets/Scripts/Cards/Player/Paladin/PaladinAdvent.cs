@@ -2,18 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PaladinShining : IPlayerCard
+public class PaladinAdvent : IPlayerCard
 {
-    private int range = 3;
-    private int cost = 3;
-    private int damage = 25;
+    private int range = 0;
     private bool interrupted;
+    private int cost = 0;
+    private int damage = 50;
     public bool Disposable { get; set; }
     public string ExplainText
     {
         get
         {
-            return $"���� ������ ���鿡�� {GetDamage()}�� ���ظ� �ݴϴ�.";
+            return $"다른 공격카드를 사용하면 이 카드를 사용할 수 없습니다. 거리 3 이내의 범위에 {GetDamage()}의 피해를 입힙니다. 턴을 종료합니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -44,81 +44,60 @@ public class PaladinShining : IPlayerCard
     {
         return Color.red;
     }
+
     public List<Coordinate> GetAvailableTile(Coordinate pos)
     {
         List<Coordinate> ret = new List<Coordinate>();
-        int level = 1;
-        bool[,] visited = new bool[128, 128];
-        Queue<Coordinate> queue = new Queue<Coordinate>();
-        Queue<Coordinate> nextQueue = new Queue<Coordinate>();
-        queue.Enqueue(pos);
-        while (level++ <= GetRange())
-        {
-            while (queue.Count != 0)
-            {
-                Coordinate tmp = queue.Dequeue();
-                if (tmp.X != pos.X || tmp.Y != pos.Y)
-                    ret.Add(tmp);
-                Coordinate tile;
-                if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y])
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                };
-                if ((tile = tmp.GetLeftTile()) != null && !visited[tile.X, tile.Y])
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                };
-                if ((tile = tmp.GetRightTile()) != null && !visited[tile.X, tile.Y])
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                };
-                if ((tile = tmp.GetUpTile()) != null && !visited[tile.X, tile.Y])
-                {
-                    visited[tile.X, tile.Y] = true;
-                    nextQueue.Enqueue(tile);
-                }
-            }
-            queue = new Queue<Coordinate>(nextQueue);
-            nextQueue.Clear();
-        }
-        while (queue.Count != 0)
-        {
-            ret.Add(queue.Dequeue());
-        }
+        ret.Add(pos);
         return ret;
     }
+
     public Color GetAvailableTileColor()
     {
         return Color.blue;
     }
+
     public List<Coordinate> GetAreaofEffect(Coordinate relativePos)
     {
         List<Coordinate> ret = new List<Coordinate>();
         Coordinate pos = new Coordinate(0, 0);
         Coordinate tile;
-        tile = pos;
-        ret.Add(tile);
         tile = pos.GetDownTilewithoutTest();
+        ret.Add(tile);
+        tile = tile.GetDownTilewithoutTest();
+        ret.Add(tile);
+        tile = tile.GetDownTilewithoutTest();
         ret.Add(tile);
         tile = pos.GetLeftTilewithoutTest();
         ret.Add(tile);
+        tile = tile.GetLeftTilewithoutTest();
+        ret.Add(tile);
+        tile = tile.GetLeftTilewithoutTest();
+        ret.Add(tile);
         tile = pos.GetRightTilewithoutTest();
+        ret.Add(tile);
+        tile = tile.GetRightTilewithoutTest();
+        ret.Add(tile);
+        tile = tile.GetRightTilewithoutTest();
         ret.Add(tile);
         tile = pos.GetUpTilewithoutTest();
         ret.Add(tile);
+        tile = tile.GetUpTilewithoutTest();
+        ret.Add(tile);
+        tile = tile.GetUpTilewithoutTest();
+        ret.Add(tile);
         return ret;
     }
+
     public Color GetColorOfEffect(Coordinate pos)
     {
         if (pos.X == 0 && pos.Y == 0)
         {
             return Color.white;
         }
-        return Color.red;
+        return Color.black;
     }
+
     public bool IsAvailablePosition(Coordinate caster, Coordinate target)
     {
         List<Coordinate> availablePositions = GetAvailableTile(caster);
@@ -130,12 +109,17 @@ public class PaladinShining : IPlayerCard
     }
     public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
+        /*int attackCount = caster.attackCardUseInTurn;
+        if (attackCount != 0)
+        {
+            yield break;
+        }*/
         List<Coordinate> attack;
         List<Coordinate> available = new List<Coordinate>();
         Character tmp;
         Coordinate pos;
         attack = GetAreaofEffect(target - caster.position);
-        for (int i = 0; i<attack.Count;i++)
+        for (int i = 0; i < attack.Count; i++)
         {
             pos = attack[i] + target;
             if (Coordinate.OutRange(pos))
@@ -159,14 +143,12 @@ public class PaladinShining : IPlayerCard
         {
             pos = available[i];
             tmp = GameManager.Instance.Map[pos.X, pos.Y].CharacterOnTile;
-            if (tmp != caster)
-            {
-                GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
-            }
+            GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
         }
         pos = available[available.Count - 1];
         tmp = GameManager.Instance.Map[pos.X, pos.Y].CharacterOnTile;
         yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()));
+        yield return TurnManager.Instance.TurnEnd = true;
     }
     public void CardRoutineInterrupt()
     {
@@ -186,10 +168,11 @@ public class PaladinShining : IPlayerCard
     }
     public CardType GetCardType()
     {
-        return CardType.Attack;
+        return CardType.Skill;
     }
     public int GetCardID()
     {
-        return 1103010;
+        return 1240011;
     }
 }
+
