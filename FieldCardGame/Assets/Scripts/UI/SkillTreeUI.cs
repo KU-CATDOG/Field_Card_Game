@@ -24,9 +24,4 @@ public class SkillTreeUI : SkillImage
     {
         return;
     }
-    private void Start() 
-    {
-        ExplainText.text = "LOCKED";
-        ReferenceSkill = GameManager.Instance.LvUpHandler.SkillDict[ID];
-    }
 }
