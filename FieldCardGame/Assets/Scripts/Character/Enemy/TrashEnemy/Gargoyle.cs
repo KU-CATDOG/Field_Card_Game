@@ -50,6 +50,14 @@ public class Gargoyle : Enemy
         Character pagan1 = Instantiate(GameManager.Instance.EnemyDict[58]);
         pagan1.position = new Coordinate(position.X + 3, position.Y - 1);
 
+        GameManager.Instance.ogerCount += 1;
+
+        if(GameManager.Instance.ogerCount == 4)
+        {
+            Character oger = Instantiate(GameManager.Instance.EnemyDict[92]);
+            oger.position = new Coordinate(15, 15);
+        }
+
         yield return new WaitForSeconds(0.5f);
     }
 

@@ -131,20 +131,20 @@ public class Coordinate
         return ret;
     }
 
-    public List<Coordinate> GetDistanceAvailableTile(int _distance, RangeType rangeType, bool _forATK, bool isMax = false)
+    public List<Coordinate> GetDistanceAvailableTile(int _distance, RangeType rangeType, bool _forATK, bool isMax = false, int minDist = 1)
     {
         List<Coordinate> ret = new List<Coordinate> ();
         
         switch (rangeType)
         {
             case RangeType.CrossWise:
-                ret.AddRange(findTileInCross(_distance, new Coordinate(X, Y, 0), _forATK, isMax));
+                ret.AddRange(findTileInCross(_distance, new Coordinate(X, Y, 0), _forATK, isMax, minDist));
                 break;
             case RangeType.DiagonalWise:
 
                 break;
             case RangeType.Distance:
-                ret.AddRange(findTileInRange(_distance, new Coordinate(X, Y, 0), _forATK, isMax));
+                ret.AddRange(findTileInRange(_distance, new Coordinate(X, Y, 0), _forATK, isMax, minDist));
                 break;
             case RangeType.Square:
 
@@ -156,7 +156,7 @@ public class Coordinate
         //Debug.Log(ret.Count);
         return ret;
     }
-    public List<Coordinate> findTileInCross(int _distance, Coordinate _pos, bool forATK, bool isMax)
+    public List<Coordinate> findTileInCross(int _distance, Coordinate _pos, bool forATK, bool isMax, int minDist)
     {
         List<Coordinate> ret = new List<Coordinate>();
 
@@ -174,7 +174,7 @@ public class Coordinate
         {
             Coordinate nextPos = new Coordinate(_pos.X, _pos.Y, 0);
 
-            for (int i = isMax ? _distance - 1 : 0; i < _distance; i++)
+            for (int i = (isMax ? _distance : minDist) - 1; i < _distance; i++)
             {
                 nextPos.X = _pos.X + dirs[j][0] * i;
                 nextPos.Y = _pos.Y + dirs[j][1] * i;
@@ -205,7 +205,7 @@ public class Coordinate
 
         return ret;
     }
-    public List<Coordinate> findTileInRange(int _distance, Coordinate _pos, bool forATK, bool isMax)
+    public List<Coordinate> findTileInRange(int _distance, Coordinate _pos, bool forATK, bool isMax, int minDist)
     {
         List<Coordinate> ret = new List<Coordinate>();
         List<Coordinate> useTile = new List<Coordinate>();

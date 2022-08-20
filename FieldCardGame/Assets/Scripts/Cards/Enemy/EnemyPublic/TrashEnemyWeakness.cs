@@ -28,6 +28,7 @@ public class TrashEnemyDebuff : ICard
     }
 
     private int range;
+    private int minRange = 1;
 
     private bool interrupted;
     public IEnumerator GetCardRoutine(Character owner)
@@ -55,7 +56,7 @@ public class TrashEnemyDebuff : ICard
     public List<Coordinate> GetAvailableTile(Coordinate pos)
     {
         List<Coordinate> ret = new List<Coordinate>();
-        List<Coordinate> canTile = pos.GetDistanceAvailableTile(range, RangeType.Distance, true);
+        List<Coordinate> canTile = pos.GetDistanceAvailableTile(range, RangeType.Distance, true, false, minRange);
 
         foreach (var t in canTile)
         {
@@ -101,6 +102,10 @@ public class TrashEnemyDebuff : ICard
         interrupted = true;
     }
 
+    public void SetMinRange(int value)
+    {
+        minRange = value;
+    }
 
 
     // not use
