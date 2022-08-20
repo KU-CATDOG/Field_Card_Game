@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PaladinShining : IPlayerCard
+public class PaladinShining : IPlayerCard, IAttackCard
 {
     private int range = 3;
     private int cost = 3;
@@ -39,6 +39,15 @@ public class PaladinShining : IPlayerCard
     public void SetDamage(int _damage)
     {
         damage = _damage;
+    }
+    public List<int> Damage{get;}
+    public void SetDmg(int value)
+    {
+        if (damage + value < 0)
+        {
+            return;
+        }
+        damage += value;
     }
     public Color GetUnAvailableTileColor()
     {
