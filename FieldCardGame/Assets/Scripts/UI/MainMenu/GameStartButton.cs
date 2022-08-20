@@ -20,7 +20,7 @@ public class GameStartButton : MonoBehaviour, IPointerClickHandler, IPointerEnte
     }
     private IEnumerator LoadScene()
     {
-        GameManager.Instance.CharacterSelected = Instantiate(GameManager.Instance.CharacterSelected);
+        GameManager.Instance.CharacterSelected = Instantiate(GameManager.Instance.CharacterSelectedPrefab);
         //fixme
         GameManager.Instance.CharacterSelected.transform.position = new Vector3(10, 1, 10);
         //

@@ -7,6 +7,9 @@ using System.Linq;
 
 public class PlayerUIManager : MonoBehaviour
 {
+    [SerializeField]
+    private SkillSelectPanel skillSelectPanel;
+    public SkillSelectPanel SkillPanel => skillSelectPanel;
     public static PlayerUIManager Instance { get; set; }
     public float CardUseHeight { get; set; }
     [SerializeField]
@@ -543,7 +546,14 @@ public class PlayerUIManager : MonoBehaviour
         PanelOpenned = false;
         rewardPanel.RewardEnd();
     }
-
+    public void OpenSkillTreePanel()
+    {
+        (GameManager.Instance.CharacterSelected as Player).TreePanel.gameObject.SetActive(true);
+    }
+    public void CloseSkillTreePanel()
+    {
+        (GameManager.Instance.CharacterSelected as Player).TreePanel.gameObject.SetActive(false);
+    }
     private void Update()
     {
         if (GameManager.Instance.GameOver || GameManager.Instance.GameClear || !GameManager.Instance.CharacterSelected)

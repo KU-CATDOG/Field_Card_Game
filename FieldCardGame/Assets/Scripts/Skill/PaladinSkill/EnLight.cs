@@ -10,10 +10,14 @@ public class EnLight : LevelUpSkill
         get=>count;
         set=>count = value;
     }
-    public override int ID => 0;
+    public override int ID => 2;
     protected override void levelUpRoutine()
     {
         return;
+    }
+    public override string GetText()
+    {
+        return "EnLight";
     }
     List<LevelUpSkill> nextSkillList;
     public override List<LevelUpSkill> GetNextSkillList()

@@ -44,6 +44,9 @@ public abstract class Player : Character
             return playerUI;
         }
     }
+    [SerializeField]
+    private SkillTreePanel skillTreePanel;
+    public SkillTreePanel TreePanel => skillTreePanel;
     protected override void Awake()
     {
         base.Awake();
@@ -55,6 +58,8 @@ public abstract class Player : Character
         base.Start();
         playerUI = Instantiate(PlayerUI, PlayerUIManager.Instance.PlayerSpecificArea).gameObject;
         PlayerUI.SetActive(false);
+        if(skillTreePanel)
+            skillTreePanel = Instantiate(skillTreePanel, PlayerUIManager.Instance.GetComponentInChildren<Canvas>().transform);
     }
     public override IEnumerator AwakeTurn()
     {
@@ -188,18 +193,19 @@ public abstract class Player : Character
             LevelUpInterrupted = false;
             yield break;
         }
+        PlayerUIManager.Instance.SkillPanel.ShowReward(GameManager.Instance.LvUpHandler.GetAvailableSkill(3));
         yield return StartCoroutine(levelUp());
         Level++;
-        for (int i = GainExpRoutine.Count - 1; !IsDie && i >= 0; i--)
+        for (int i = LevelUpRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
-            IEnumerator routine = GainExpRoutine[i];
+            IEnumerator routine = LevelUpRoutine[i];
             if (!routine.MoveNext())
             {
                 if(routine.Current != null)
                 {
                     yield return routine.Current;
                 }
-                GainExpRoutine.RemoveAt(i);
+                LevelUpRoutine.RemoveAt(i);
             }
         }
         yield break;

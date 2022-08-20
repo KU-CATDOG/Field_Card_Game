@@ -10,10 +10,14 @@ public class Aura : LevelUpSkill
         get=>count;
         set=>count = value;
     }
-    public override int ID => 0;
+    public override int ID => 1;
     protected override void levelUpRoutine()
     {
         return;
+    }
+    public override string GetText()
+    {
+        return "AURA";
     }
     List<LevelUpSkill> nextSkillList;
     public override List<LevelUpSkill> GetNextSkillList()

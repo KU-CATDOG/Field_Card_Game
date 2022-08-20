@@ -7,13 +7,16 @@ using System.Linq;
 public class GameManager : MonoBehaviour
 {
     public LevelUpHandler LvUpHandler;
-    public Dictionary<Player, LevelUpSkill> BaseSkillDict{ get; } = new();    
+    public Dictionary<System.Type, LevelUpSkill> BaseSkillDict{ get; } = new();    
     private Dictionary<System.Type, int> CharacterIDDict;
     private List<SpawnEntity> worldEntityList;
     private Dictionary<int, ICard> cardDict = new Dictionary<int, ICard>();
     [SerializeField]
     private CharacterUIManager effectUIPrefab;
     public CharacterUIManager EffectUIPrefab => effectUIPrefab;
+    [SerializeField]
+    private SkillImage skillImg;
+    public SkillImage SkillImage => skillImg;
     [SerializeField]
     private GameObject empty;
     public GameObject Empty
@@ -85,16 +88,16 @@ public class GameManager : MonoBehaviour
             return loadingPanel;
         }
     }
+    public Character CharacterSelectedPrefab {get; set;}
     private Character characterSelected;
     public Character CharacterSelected
     {
         get=> characterSelected;
-        set=> characterSelected = value;
-        /*
+        set
         {
             characterSelected = value;
             LvUpHandler = new();
-        }*/
+        }
     }
     private Dictionary<int, Enemy> enemyDict = new();
     public IReadOnlyDictionary<int, Enemy> EnemyDict
@@ -141,9 +144,14 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(gameObject);
+        InitializeBaseSkillDict();
         InitializeEnemyDict();
         InitializeSpawnEntityList();
         InitializeCharacterIDDict();
+    }
+    private void InitializeBaseSkillDict()
+    {
+        BaseSkillDict[typeof(Paladin)] = new PaladinBaseSkill();
     }
     private void InitializeCharacterIDDict()
     {

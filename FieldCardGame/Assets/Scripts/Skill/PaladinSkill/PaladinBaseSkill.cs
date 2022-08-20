@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseSkill : LevelUpSkill
+public class PaladinBaseSkill : LevelUpSkill
 {
     private int count = 0;
     public override int Count
@@ -10,10 +10,14 @@ public class BaseSkill : LevelUpSkill
         get=>count;
         set=>count = value;
     }
-    public override int ID => 0;
+    public override int ID => -1;
     protected override void levelUpRoutine()
     {
         return;
+    }
+    public override string GetText()
+    {
+        return null;
     }
     List<LevelUpSkill> nextSkillList;
     public override List<LevelUpSkill> GetNextSkillList()
