@@ -210,6 +210,10 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
             {
                 StartCoroutine(rewardRoutine());
             }
+            else if(PlayerUIManager.Instance.GetCardFromDiscardedPilePanel)
+            {
+                StartCoroutine(GetCardFromDiscardedPileRoutine());
+            }
             else
             {
 
@@ -241,6 +245,15 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
         Usable = false;
         yield return StartCoroutine(GameManager.Instance.CharacterSelected.AddCard(GameManager.Instance.CardDict[ID]));
         PlayerUIManager.Instance.CloseRewardPanel();
+    }
+    private IEnumerator GetCardFromDiscardedPileRoutine()
+    {
+        Usable = false;
+        yield return StartCoroutine(GameManager.Instance.CurPlayer.AddCard(ReferenceCard,true));
+        GameManager.Instance.CurPlayer.DiscardedPile.Remove(ReferenceCard);
+        PlayerUIManager.Instance.GetCardFromDiscardedPilePanel = false;
+        PlayerUIManager.Instance.CloseDiscardedPilePanel();
+        yield return null;
     }
     public void SetSiblingIndex(int idx)
     {

@@ -7,6 +7,7 @@ public abstract class Character : MonoBehaviour
 {
     public int cardUseInTurn {get; set;}
     public int attackCardUseInTurn { get; set; }
+    public int moveCardUseInTurn { get; set; }
     public int MaxHp { get; set; }
     protected int hp;
     public virtual int Hp
@@ -824,6 +825,8 @@ public abstract class Character : MonoBehaviour
         cardUseInTurn++;
         if ((HandCard[idx].GetCardID() % 100) >= 10)
             attackCardUseInTurn++;
+        if ((HandCard[idx].GetCardID() % 1000) >= 100)
+            moveCardUseInTurn++;
         bool disposable = HandCard[idx].Disposable;
         CardUseInterrupted = false;
         ICard card = usedCard = HandCard[idx];        

@@ -113,7 +113,8 @@ public class PlayerUIManager : MonoBehaviour
     public bool UseTileSelected { get; set; }
     public bool ReadyUseMode { get; set; }
     public bool PanelOpenned { get; set; }
-    
+    public bool GetCardFromDiscardedPilePanel { get; set; }
+
     private Dictionary<Keyword, GameObject> keywordPrefabDict;
     public IReadOnlyDictionary<Keyword, GameObject> KeywordPrefabDict
     {
@@ -536,6 +537,11 @@ public class PlayerUIManager : MonoBehaviour
         DiscardedPilePanel.ShowPile(GameManager.Instance.CurPlayer.DiscardedPile, false);
     }
 
+    public void CloseDiscardedPilePanel()
+    {
+        PanelOpenned = false;
+        DiscardedPilePanel.ClosePile();
+    }
     public void OpenRewardPanel(List<ICard> cards)
     {
         PanelOpenned = true;
