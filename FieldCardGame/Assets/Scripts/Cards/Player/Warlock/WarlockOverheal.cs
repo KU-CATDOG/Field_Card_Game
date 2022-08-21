@@ -2,18 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarlockOverheal : IPlayerCard
+public class WarlockOverheal : IPlayerCard,IHealCard
 {
     private int range = 0;
     private int cost = 15;
-    private int healAmount = 0;
+    private int healAmount = 5;
+    public List<int> HealAmounts
+    {
+        get
+        {
+            List<int> tmp = new();
+            tmp.Add(healAmount);
+            return tmp;
+        }
+    }
+    public void SetHealAmount(int value)
+    {
+        healAmount = healAmount + value < 0 ? 0 : healAmount + value;
+        HealAmounts[0] = healAmount;
+    }
     private bool interrupted;
     public bool Disposable { get; set; }
     public string ExplainText
     {
         get
         {
-            return $"이번 턴에 사용한 카드의 수당 5만큼 체력을 회복합니다.";
+            return $"이번 턴에 사용한 카드의 수당 {healAmount}만큼 체력을 회복합니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -35,10 +49,6 @@ public class WarlockOverheal : IPlayerCard
     public int GetHealAmount()
     {
         return healAmount;
-    }
-    public void SetHealAmount(int _healAmount)
-    {
-        healAmount = _healAmount;
     }
     public Color GetUnAvailableTileColor()
     {
@@ -84,7 +94,7 @@ public class WarlockOverheal : IPlayerCard
             interrupted = false;
             yield break;
         }
-        yield return GameManager.Instance.StartCoroutine(caster.GiveHeal(caster, (caster.cardUseInTurn-1)* 5,true));
+        yield return GameManager.Instance.StartCoroutine(caster.GiveHeal(caster, (caster.cardUseInTurn-1)* GetHealAmount(),true));
     }
     public void CardRoutineInterrupt()
     {

@@ -2,18 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarlockScotch : IPlayerCard
+public class WarlockScotch : IPlayerCard,IAttackCard
 {
     public bool Disposable { get; set; }
     private int range = 2;
     private int cost = 15;
     private int amount = 5;
+    public List<int> Damage
+    {
+        get
+        {
+            List<int> tmp = new();
+            tmp.Add(amount);
+            return tmp;
+        }
+    }
+    public void SetDmg(int value)
+    {
+        amount = amount + value < 0 ? 0 : amount + value;
+        Damage[0] = amount;
+    }
     private bool interrupted;
     public string ExplainText
     {
         get
         {
-            return $"이번 턴에 사용한 공격카드 한 장 당 5의 피해를 줍니다.";
+            return $"이번 턴에 사용한 공격카드 한 장 당 {amount}의 피해를 줍니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)

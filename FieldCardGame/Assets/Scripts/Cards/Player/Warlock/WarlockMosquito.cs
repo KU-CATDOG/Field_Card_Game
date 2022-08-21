@@ -2,12 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarlockMosquito : IPlayerCard
+public class WarlockMosquito : IPlayerCard,IAttackCard
 {
     private int range = 1;
     private bool notRemoved = true;
     private int cost = 300;
     private int damage = 100;
+    public List<int> Damage
+    {
+        get
+        {
+            List<int> tmp = new();
+            tmp.Add(damage);
+            return tmp;
+        }
+    }
+    public void SetDmg(int value)
+    {
+        damage = damage + value < 0 ? 0 : damage + value;
+        Damage[0] = damage;
+    }
     private bool interrupted;
     public bool Disposable { get; set; } = true;
     public string ExplainText

@@ -2,12 +2,42 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-public class WarlockCrops : IPlayerCard
+public class WarlockCrops : IPlayerCard,IAttackCard,IHealCard
 {
     public bool Disposable { get; set; }
     private int range = 0;
     private int cost = 20;
+    private int damage = 0;
+    private int healAmount = 0;
     private bool interrupted;
+    public List<int> Damage
+    {
+        get
+        {
+            List<int> tmp = new();
+            tmp.Add(damage);
+            return tmp;
+        }
+    }
+    public void SetDmg(int value)
+    {
+        damage = damage + value < 0 ? 0 : damage + value;
+        Damage[0] = damage;
+    }
+    public List<int> HealAmounts
+    {
+        get
+        {
+            List<int> tmp = new();
+            tmp.Add(healAmount);
+            return tmp;
+        }
+    }
+    public void SetHealAmount(int value)
+    {
+        healAmount = healAmount + value < 0 ? 0 : healAmount + value;
+        HealAmounts[0] = healAmount;
+    }
     public string ExplainText
     {
         get
@@ -130,7 +160,8 @@ public class WarlockCrops : IPlayerCard
                     {
                         int buffCount = i.Value.Value;
                         i.Value.ForceRemoveEffect();
-                        yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, buffCount * 5));
+                        yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, damage+ buffCount * 5));
+                        yield return GameManager.Instance.StartCoroutine(caster.GiveHeal(caster, healAmount + buffCount * 5, true));
                     }
                 }
             }

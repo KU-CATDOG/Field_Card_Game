@@ -2,11 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarlockSoulBomb : IPlayerCard
+public class WarlockSoulBomb : IPlayerCard,IAttackCard
 {
     private int range = 0;
     private int cost = 20;
     private int damage = 0;
+    public List<int> Damage
+    {
+        get
+        {
+            List<int> tmp = new();
+            tmp.Add(damage);
+            return tmp;
+        }
+    }
+    public void SetDmg(int value)
+    {
+        damage = damage + value < 0 ? 0 : damage + value;
+        Damage[0] = damage;
+    }
     private bool interrupted;
     public bool Disposable { get; set; }
     public string ExplainText
@@ -179,11 +193,11 @@ public class WarlockSoulBomb : IPlayerCard
         {
             pos = available[i];
             tmp = GameManager.Instance.Map[pos.X, pos.Y].CharacterOnTile;
-            GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, soulCount * 5));
+            GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, damage + soulCount * 5));
         }
         pos = available[enemyCount - 1];
         tmp = GameManager.Instance.Map[pos.X, pos.Y].CharacterOnTile;
-        yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, soulCount * 5));
+        yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, damage+ soulCount * 5));
     }
     public void CardRoutineInterrupt()
     {

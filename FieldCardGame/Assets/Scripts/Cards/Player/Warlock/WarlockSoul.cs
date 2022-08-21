@@ -2,11 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarlockSoul : IPlayerCard
+public class WarlockSoul : IPlayerCard,IAttackCard
 {
     private int range = 1;
     private int cost = 0;
     private int damage = 5;
+    public List<int> Damage
+    {
+        get
+        {
+            List<int> tmp = new();
+            tmp.Add(damage);
+            return tmp;
+        }
+    }
+    public void SetDmg(int value)
+    {
+        damage = damage + value < 0 ? 0 : damage + value;
+        Damage[0] = damage;
+    }
     private bool notRemoved = true;
     private bool interrupted;
     public bool Disposable { get; set; } = true;
@@ -14,7 +28,7 @@ public class WarlockSoul : IPlayerCard
     {
         get
         {
-            return $"{damage}의 피해를 줍니다. 턴 종료 시, 5의 피해를 받습니다. \n소멸.";
+            return $"{damage}의 피해를 줍니다. 턴 종료 시, {damage}의 피해를 받습니다. \n소멸.";
         }
     }
     public IEnumerator RemoveCardRoutine(Character owner)
