@@ -13,6 +13,8 @@ public class SpawnEntity : MonoBehaviour
     {
         get
         {
+            if (pos == null)
+                position = new Coordinate((int)transform.position.x, (int)transform.position.z);
             return pos;
         }
         set
@@ -20,7 +22,8 @@ public class SpawnEntity : MonoBehaviour
             if (!meshRenderer)
                 meshRenderer = GetComponent<MeshRenderer>();
             meshRenderer.enabled = false;
-            GameManager.Instance.Map[value.X, value.Y].OnSightRoutine += OnSightRoutine;
+            if (!GameManager.Instance.Map[value.X, value.Y]) return;
+            else if (GameManager.Instance.Map[value.X, value.Y].Discovered) OnSightRoutine();
             pos = value;
             transform.position = new Vector3(pos.X, transform.position.y, pos.Y);
         }
@@ -31,5 +34,10 @@ public class SpawnEntity : MonoBehaviour
     private void OnSightRoutine()
     {
         meshRenderer.enabled = true;
+    }
+    private void Update()
+    {
+        if (position == null) return;
+        
     }
 }

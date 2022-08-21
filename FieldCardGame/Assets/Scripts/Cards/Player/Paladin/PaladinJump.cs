@@ -28,7 +28,7 @@ public class PaladinJump : IPlayerCard, IAttackCard
     {
         get
         {
-            return $"�� �������� �ִ� {GetRange()}ĭ �Ÿ��� �� ������ �پ��� ���� ���� �ֺ� {1}ĭ �Ÿ��� ���鿡�� {GetDamage()}�� ���ظ� �ݴϴ�.";
+            return $"해당 위치로 점프하여 이동, 1칸 거리의 적들에게 7의 피해를 준다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -178,7 +178,7 @@ public class PaladinJump : IPlayerCard, IAttackCard
     private IEnumerator JumpRoutine(Character caster, Coordinate target, float height)
     {
         float distance = Coordinate.EuclideanDist(caster.position, target);
-        float slope = 4 * (height - 1) / distance / distance;
+        float slope = 4 * (height - caster.transform.position.y) / distance / distance;
         while(caster.position != target && !caster.MoveInterrupted)
         {
             float x = Mathf.Sqrt(Mathf.Pow(target.X - caster.transform.position.x, 2) + Mathf.Pow(target.Y - caster.transform.position.z, 2));

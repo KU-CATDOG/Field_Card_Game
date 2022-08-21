@@ -12,7 +12,7 @@ public class PaladinMove : IPlayerCard
     {
         get
         {
-            return $"�ִ� {GetRange()}ĭ �̵��մϴ�.";
+            return $"최대 {GetRange()}칸 이동합니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
