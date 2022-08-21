@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PaladinDictamnus : IPlayerCard
+public class PaladinDictamnus : IPlayerCard, IAttackCard
 {
     public bool Disposable { get; set; } = true;
     private int range = 1;
@@ -39,6 +39,16 @@ public class PaladinDictamnus : IPlayerCard
     public void SetDamage(int _damage)
     {
         damage = _damage;
+    }
+    public List<int> Damage { get; }
+    public void SetDmg(int value)
+    {
+        if ((damage + value < 0))
+        {
+            damage = 0;
+            return;
+        }
+        damage += value;
     }
     public Color GetUnAvailableTileColor()
     {
