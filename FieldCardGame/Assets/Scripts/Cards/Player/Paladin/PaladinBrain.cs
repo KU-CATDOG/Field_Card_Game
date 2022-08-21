@@ -2,8 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PaladinBrain : IPlayerConditionCard
+public class PaladinBrain : IPlayerConditionCard, IAttackCard
 {
+    public List<int> Damage
+    {
+        get
+        {
+            List<int> ret = new();
+            ret.Add(damage);
+            return ret;
+        }
+    }
+    public void SetDmg(int value)
+    {
+        SetDamage(Mathf.Max(0, GetDamage() + value));
+
+        Damage[0] = GetDamage();
+    }
     public bool Disposable { get; set; }
     private int range = 1;
     private int cost = 1;

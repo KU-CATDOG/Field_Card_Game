@@ -2,8 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PaladinLightSmite : IPlayerCard
+public class PaladinLightSmite : IPlayerCard, IAttackCard
 {
+    public List<int> Damage
+    {
+        get
+        {
+            List<int> ret = new();
+            ret.Add(damage);
+            return ret;
+        }
+    }
+    public void SetDmg(int value)
+    {
+        SetDamage(Mathf.Max(0, GetDamage() + value));
+
+        Damage[0] = GetDamage();
+    }
     private int range = 1;
     private bool interrupted;
     private int cost = 2;
