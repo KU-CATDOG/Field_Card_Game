@@ -22,7 +22,7 @@ public class GameStartButton : MonoBehaviour, IPointerClickHandler, IPointerEnte
     {
         GameManager.Instance.CharacterSelected = Instantiate(GameManager.Instance.CharacterSelectedPrefab);
         //fixme
-        GameManager.Instance.CharacterSelected.transform.position = new Vector3(10, 1, 10);
+        GameManager.Instance.CharacterSelected.transform.position = new Vector3(10, 0.5f, 10);
         //
         GameManager.Instance.CharacterSelected.gameObject.SetActive(false);
         DontDestroyOnLoad(GameManager.Instance.CharacterSelected.gameObject);

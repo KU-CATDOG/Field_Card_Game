@@ -166,6 +166,7 @@ public class TurnManager : MonoBehaviour
                     yield return StartCoroutine(curChar.StartTurn());
                     if (j.IsDie) continue;
                     yield return StartCoroutine((curChar as Enemy).EnemyRoutine());
+                    if (j.IsDie) continue;
                     if (curChar.TurnEndBuffHandler.Count != 0)
                         yield return StartCoroutine(TurnEndBuffRoutine(curChar));
                     if (curChar.TurnEndDebuffHandler.Count != 0)

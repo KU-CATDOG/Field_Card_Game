@@ -27,6 +27,11 @@ public abstract class Enemy : Character
         base.Awake();
         GameManager.Instance.EnemyList.Add(this);
     }
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        GameManager.Instance.EnemyList.Remove(this);
+    }
     protected abstract IEnumerator enemyDieRoutine();
     protected override IEnumerator dieRoutine()
     {

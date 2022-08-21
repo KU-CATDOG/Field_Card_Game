@@ -13,6 +13,10 @@ public class InteractionButton : PlayerButton, IPointerClickHandler
             {
                 StartCoroutine(SelectInteraction());
             }
+            else
+            {
+                player.Interactables[0].Interaction();
+            }
         }
     }
 

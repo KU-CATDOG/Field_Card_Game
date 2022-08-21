@@ -260,9 +260,10 @@ public class GameManager : MonoBehaviour
     {
         return tilePrefab;
     }
-    public void GenerateMap()
+    public void GenerateMap(bool init = true)
     {
-        InitializeDictionary();
+        if(init)
+           InitializeDictionary();
         MapObject = GameObject.Find("Map");
         Tile[] tiles = MapObject.GetComponentsInChildren<Tile>();
         foreach(var i in tiles)
@@ -310,7 +311,8 @@ public class GameManager : MonoBehaviour
             Character enemy = Instantiate(EnemyDict[60]);
             enemy.position = new Coordinate(6 + i, 6);
         }*/
-        StartCoroutine(TurnManager.Instance.TurnRoutine());
+       if(init)
+            StartCoroutine(TurnManager.Instance.TurnRoutine());
     }
     //fixme
     public void GetCardReward(int rewardNum)
@@ -327,7 +329,7 @@ public class GameManager : MonoBehaviour
                 continue;
             }
             visited[rand] = true;
-            if(cardDict.Values.ElementAt(rand) is NotReward)
+            if(cardDict.Values.ElementAt(rand).GetType() is NotReward)
             {
                 i--;
                 continue;

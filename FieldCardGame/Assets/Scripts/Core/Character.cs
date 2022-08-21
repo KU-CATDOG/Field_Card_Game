@@ -1343,7 +1343,7 @@ public abstract class Character : MonoBehaviour
         {
             StartCoroutine(MainCamera.Instance.Shake(0.2f, 0.15f, 0.07f));
         }
-        yield return StartCoroutine(target.GetDmg(this, HitDmg));
+        yield return GameManager.Instance.StartCoroutine(target.GetDmg(this, HitDmg));
 
         for (int i = HitAttackRoutine.Count - 1; !IsDie && i >= 0; i--)
         {
@@ -1535,6 +1535,10 @@ public abstract class Character : MonoBehaviour
         HpBar.transform.position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 1.5f);
         hpBarImg = HpBar.transform.GetChild(1).GetComponent<RectTransform>();
         hpText = HpBar.GetComponentInChildren<TextMeshProUGUI>();
+    }
+    protected virtual void OnDestroy()
+    {
+        Destroy(HpBar);
     }
     protected virtual void Update()
     {
