@@ -228,7 +228,7 @@ public class EnemyMove : ICard
         List<Coordinate> path;
         path = FindPath(caster.position, center);
         float speed = 5f;
-
+        if (path == null) yield break;
         foreach (Coordinate i in path)
         {
             if (interrupted)

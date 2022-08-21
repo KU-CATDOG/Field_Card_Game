@@ -134,6 +134,8 @@ public class TurnManager : MonoBehaviour
                 for (EnemyIdx = 0; EnemyIdx < GameManager.Instance.EnemyList.Count; EnemyIdx++)
                 {
                     var j = GameManager.Instance.EnemyList[EnemyIdx];
+                    if (!GameManager.Instance.Map[j.position.X, j.position.Y].Discovered)
+                        continue;
                     curChar = j;
                     j.cardUseInTurn = 0;
                     j.attackCardUseInTurn = 0;

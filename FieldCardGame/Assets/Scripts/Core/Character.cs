@@ -40,6 +40,7 @@ public abstract class Character : MonoBehaviour
     private RectTransform hpBarImg;
     private const int MAXHANDSIZE = 10;
     private MeshRenderer meshRenderer;
+    private SkinnedMeshRenderer skinnedMeshRenderer;
     private Animator animator;
     public EffectHandler EffectHandler { get; private set; }
     public int TurnStartDraw { get; set; }
@@ -49,6 +50,8 @@ public abstract class Character : MonoBehaviour
     {
         get
         {
+            if (pos == null)
+                pos = new Coordinate((int)transform.position.x, (int)transform.position.z);
             return pos;
         }
         set
@@ -62,7 +65,7 @@ public abstract class Character : MonoBehaviour
             if(OnPosChanged != null)
                 OnPosChanged();
             GameManager.Instance.Map[pos.X, pos.Y].CharacterOnTile = this;
-            transform.position = new Vector3(value.X, 0.5f, value.Y);
+            transform.position = new Vector3(value.X, transform.position.y, value.Y);
         }
     }
     protected System.Action OnPosChanged { get; set; }
@@ -780,7 +783,7 @@ public abstract class Character : MonoBehaviour
     /// <returns></returns>
     public IEnumerator DropCard(int idx)
     {
-        DrawInterrupted = false;
+        //DropInterrupted = false;
         //need animation for player
         for (int i = DropCardTry.Count - 1; !DropInterrupted && !IsDie && i >= 0; i--)
         {
@@ -796,7 +799,7 @@ public abstract class Character : MonoBehaviour
         }
         if (DropInterrupted || IsDie)
         {
-            DrawInterrupted = false;
+            DropInterrupted = false;
             yield break;
         }
         dropCard = HandCard[idx];
@@ -1521,7 +1524,8 @@ public abstract class Character : MonoBehaviour
     protected virtual void Awake()
     {
         InitializeDeck();
-        meshRenderer = GetComponent<MeshRenderer>();
+        meshRenderer = GetComponentInChildren<MeshRenderer>();
+        skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
         animator = GetComponent<Animator>();
         EffectHandler = new EffectHandler(this);
     }
@@ -1534,10 +1538,12 @@ public abstract class Character : MonoBehaviour
     }
     protected virtual void Update()
     {
-        if (!GameManager.Instance.Map[position.X, position.Y].Discovered)
+        if (GameManager.Instance.Map[position.X, position.Y] && !GameManager.Instance.Map[position.X, position.Y].Discovered)
         {
             if(meshRenderer)
                 meshRenderer.enabled = false;
+            if (skinnedMeshRenderer)
+                skinnedMeshRenderer.enabled = false;
             if (animator)
                 animator.enabled = false;
 
@@ -1550,6 +1556,8 @@ public abstract class Character : MonoBehaviour
 
         if (meshRenderer)
             meshRenderer.enabled = true;
+        if (skinnedMeshRenderer)
+            skinnedMeshRenderer.enabled = true;
         if (animator)
             animator.enabled = true;
         EffectUI.transform.position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 3f);

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PaladinDefilement : IPlayerCard
+public class PaladinDefilement : IPlayerCard, NotReward
 {
     private int range = 0;
     private int cost = 0;
