@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class DivineStigma : Effect
 {
-    int count;
     public static int StigamDamage{get; set;} = 3;
     public DivineStigma(Character caster)
     {
@@ -14,10 +13,11 @@ public class DivineStigma : Effect
     {
         if (IsEnabled)
         {
-            count++;
+            Value+=value;
             return;
         }
         IsEnabled = true;
+        Value = value;
         caster.AddTryGetDmgRoutine(ApplyEffect(), -1);
     }
     public override IEnumerator ApplyEffect()
@@ -25,7 +25,7 @@ public class DivineStigma : Effect
         while (IsEnabled)
         {
             caster.Dmg += StigamDamage;
-            if(--count == 0)
+            if(--Value == 0)
             {
                 RemoveEffect().MoveNext();
                 yield break;

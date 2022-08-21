@@ -37,6 +37,7 @@ public class EffectHandler
         Effect fragility = new Fragility(caster);
         Effect rooted = new Rooted(caster);
         Effect vampire = new Vampire(caster);
+        Effect divineStigma = new DivineStigma(caster);
 
         debuffDict.Add(DebuffType.Stun, stun);
         debuffDict.Add(DebuffType.Weakness, weakness);
@@ -44,6 +45,7 @@ public class EffectHandler
         debuffDict.Add(DebuffType.Fragility, fragility);
         debuffDict.Add(DebuffType.Rooted, rooted);
         debuffDict.Add(DebuffType.Vampire, vampire);
+        debuffDict.Add(DebuffType.DivineStigma, divineStigma);
     }
 
     // For Debug

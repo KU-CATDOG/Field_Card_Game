@@ -99,6 +99,8 @@ public class Paladin : Player
         CardPile.Add(new PaladinJump());
         CardPile.Add(new PaladinFirm());
         CardPile.Add(new PaladinChecking());
+        CardPile.Add(new PaladinCrucifixion());
+        CardPile.Add(new PaladinDistress());
         StartCoroutine(ShuffleDeck());
     }
 }

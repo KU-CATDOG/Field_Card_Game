@@ -28,7 +28,7 @@ public class PaladinJump : IPlayerCard, IAttackCard
     {
         get
         {
-            return $"해당 위치로 점프하여 이동, 1칸 거리의 적들에게 7의 피해를 준다.";
+            return $"해당 위치로 점프하여 이동, 1칸 거리의 적들에게 {damage}의 피해를 준다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)

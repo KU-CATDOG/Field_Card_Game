@@ -30,6 +30,7 @@ public enum DebuffType
     Rooted,
     Vampire,
     Length,
+    DivineStigma
 }
 public enum CostType
 {
