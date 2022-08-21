@@ -2,8 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PaladinFirm : IPlayerConditionCard
+public class PaladinFirm : IPlayerConditionCard, IProtectCard
 {
+    public List<int> ProtectAmount
+    {
+        get
+        {
+            List<int> ret = new();
+            ret.Add(amount);
+            return ret;
+        }
+    }
+    public void SetProtectAmount(int val)
+    {
+        SetAmount(Mathf.Max(0, GetAmount() + val));
+
+        ProtectAmount[0] = GetAmount();
+    }
     public bool Disposable { get; set; }
     private int range = 0;
     public int amount = 10;
@@ -13,7 +28,7 @@ public class PaladinFirm : IPlayerConditionCard
     {
         get
         {
-            return $"¡®º¸È£¡¯ ÁßÀÌ¶ó¸é ¡®º¸È£¡¯¸¦ {amount} ´õ ¾ò½À´Ï´Ù.";
+            return $"â€˜ë³´í˜¸â€™ ì¤‘ì´ë¼ë©´ â€˜ë³´í˜¸â€™ë¥¼ {GetAmount()} ë” ì–»ìŠµë‹ˆë‹¤.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)

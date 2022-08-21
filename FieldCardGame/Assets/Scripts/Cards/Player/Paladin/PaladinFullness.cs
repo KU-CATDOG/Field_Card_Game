@@ -2,8 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PaladinFullness : IPlayerCard
+public class PaladinFullness : IPlayerCard, IAttackCard
 {
+    public List<int> Damage
+    {
+        get
+        {
+            List<int> ret = new();
+            ret.Add(damage);
+            return ret;
+        }
+    }
+    public void SetDmg(int value)
+    {
+        SetDamage(Mathf.Max(0, GetDamage() + value));
+
+        Damage[0] = GetDamage();
+    }
     private int range = 3;
     private int cost = 1;
     private bool notRemoved = true;

@@ -2,8 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PaladinRepent : IPlayerConditionCard
+public class PaladinRepent : IPlayerConditionCard, IAttackCard
 {
+    public List<int> Damage
+    {
+        get
+        {
+            List<int> ret = new();
+            ret.Add(damage);
+            return ret;
+        }
+    }
+    public void SetDmg(int value)
+    {
+        SetDamage(Mathf.Max(0, GetDamage() + value));
+
+        Damage[0] = GetDamage();
+    }
     public bool Disposable { get; set; }
     private int range = 1;
     private int cost = 1;
@@ -13,7 +28,7 @@ public class PaladinRepent : IPlayerConditionCard
     {
         get
         {
-            return $"{GetDamage()}ÀÇ ÇÇÇØ¸¦ ÁÝ´Ï´Ù. ÀûÀÇ Ã¼·ÂÀÌ 15 ÀÌÇÏ¶ó¸é {GetDamage()+5}ÀÇ ÇÇÇØ¸¦ ÁÝ´Ï´Ù.";
+            return $"{GetDamage()}ï¿½ï¿½ ï¿½ï¿½ï¿½Ø¸ï¿½ ï¿½Ý´Ï´ï¿½. ï¿½ï¿½ï¿½ï¿½ Ã¼ï¿½ï¿½ï¿½ï¿½ 15 ï¿½ï¿½ï¿½Ï¶ï¿½ï¿½ {GetDamage()+5}ï¿½ï¿½ ï¿½ï¿½ï¿½Ø¸ï¿½ ï¿½Ý´Ï´ï¿½.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)

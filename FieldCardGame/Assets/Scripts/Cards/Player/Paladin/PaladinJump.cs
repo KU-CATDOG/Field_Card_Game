@@ -2,8 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PaladinJump : IPlayerCard
+public class PaladinJump : IPlayerCard, IAttackCard
 {
+    public List<int> Damage
+    {
+        get
+        {
+            List<int> ret = new();
+            ret.Add(damage);
+            return ret;
+        }
+    }
+    public void SetDmg(int value)
+    {
+        SetDamage(Mathf.Max(0, GetDamage() + value));
+
+        Damage[0] = GetDamage();
+    }
     private int range = 3;
     private int cost = 1;
     private int damage = 14;
@@ -13,7 +28,7 @@ public class PaladinJump : IPlayerCard
     {
         get
         {
-            return $"ÇÑ ¹æÇâÀ¸·Î ÃÖ´ë {GetRange()}Ä­ °Å¸®ÀÇ ºó ÁöÁ¡¿¡ ¶Ù¾îµé¾î µµÂø ÁöÁ¡ ÁÖº¯ {1}Ä­ °Å¸®ÀÇ Àûµé¿¡°Ô {GetDamage()}ÀÇ ÇÇÇØ¸¦ ÁÝ´Ï´Ù.";
+            return $"ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ {GetRange()}Ä­ ï¿½Å¸ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Öºï¿½ {1}Ä­ ï¿½Å¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½é¿¡ï¿½ï¿½ {GetDamage()}ï¿½ï¿½ ï¿½ï¿½ï¿½Ø¸ï¿½ ï¿½Ý´Ï´ï¿½.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
