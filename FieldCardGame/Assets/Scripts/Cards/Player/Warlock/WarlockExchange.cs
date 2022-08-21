@@ -2,18 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarlockExchange : IPlayerCard
+public class WarlockExchange : IPlayerCard,IAttackCard
 {
     public bool Disposable { get; set; }
     private int range = 2;
     private int cost = 5;
     private int amount = 10;
+    public List<int> Damage
+    {
+        get
+        {
+            List<int> tmp = new();
+            tmp.Add(amount);
+            return tmp;
+        }
+    }
+    public void SetDmg(int value)
+    {
+        amount = amount + value < 0 ? 0 : amount + value;
+        Damage[0] = amount;
+    }
     private bool interrupted;
     public string ExplainText
     {
         get
         {
-            return $"대상의 디버프를 모두 제거하고, 그 디버프 하나당 10의 피해를 줍니다. ";
+            return $"대상의 디버프를 모두 제거하고, 그 디버프 하나당 {amount}의 피해를 줍니다. ";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)

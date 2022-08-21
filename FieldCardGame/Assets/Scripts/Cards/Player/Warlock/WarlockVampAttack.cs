@@ -2,13 +2,41 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarlockVampAttack : IPlayerCard
+public class WarlockVampAttack : IPlayerCard,IAttackCard,IHealCard
 {
     public bool Disposable { get; set; }
     private int range = 2;
     private int cost = 7;
     private int damage = 20;
     private int amount = 10;
+    public List<int> Damage
+    {
+        get
+        {
+            List<int> tmp = new();
+            tmp.Add(damage);
+            return tmp;
+        }
+    }
+    public void SetDmg(int value)
+    {
+        damage = damage + value < 0 ? 0 : damage + value;
+        Damage[0] = damage;
+    }
+    public List<int> HealAmounts
+    {
+        get
+        {
+            List<int> tmp = new();
+            tmp.Add(amount);
+            return tmp;
+        }
+    }
+    public void SetHealAmount(int value)
+    {
+        amount = amount + value < 0 ? 0 : amount + value;
+        HealAmounts[0] = amount;
+    }
     private bool interrupted;
     public string ExplainText
     {

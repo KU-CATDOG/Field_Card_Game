@@ -2,11 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarlockFinalBlow : IPlayerCard
+public class WarlockFinalBlow : IPlayerCard,IAttackCard
 {
     private int range = 1;
     private int cost = 0;
     private int damage = 0;
+    public List<int> Damage
+    {
+        get
+        {
+            List<int> tmp = new();
+            tmp.Add(damage);
+            return tmp;
+        }
+    }
+    public void SetDmg(int value)
+    {
+        damage = damage + value < 0 ? 0 : damage + value;
+        Damage[0] = damage;
+    }
     private bool interrupted;
     public string ExplainText
     {
@@ -96,6 +110,7 @@ public class WarlockFinalBlow : IPlayerCard
     }
     public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
+        int temp;
         Character tmp = GameManager.Instance.Map[target.X, target.Y].CharacterOnTile;
         if (tmp)
         {
@@ -104,9 +119,9 @@ public class WarlockFinalBlow : IPlayerCard
                 interrupted = false;
                 yield break;
             }
-            SetDamage(caster.Hp - 10);
-            yield return GameManager.Instance.StartCoroutine(caster.HitAttack(caster, GetDamage()));
-            yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, GetDamage()*3));
+            temp = caster.Hp - 10;
+            yield return GameManager.Instance.StartCoroutine(caster.HitAttack(caster, temp));
+            yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, temp + GetDamage()*3));
         }
         yield break;
     }

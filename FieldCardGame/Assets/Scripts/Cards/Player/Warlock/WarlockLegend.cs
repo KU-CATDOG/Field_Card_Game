@@ -2,12 +2,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarlockLegend : IPlayerCard
+public class WarlockLegend : IPlayerCard,IAttackCard,IHealCard
 {
     private int range = 1;
     private int cost = 0;
     private int damage = 20;
     private int healAmount = 5;
+    public List<int> Damage
+    {
+        get
+        {
+            List<int> tmp = new();
+            tmp.Add(damage);
+            return tmp;
+        }
+    }
+    public void SetDmg(int value)
+    {
+        damage = damage + value < 0 ? 0 : damage + value;
+        Damage[0] = damage;
+    }
+    public List<int> HealAmounts
+    {
+        get
+        {
+            List<int> tmp = new();
+            tmp.Add(healAmount);
+            return tmp;
+        }
+    }
+    public void SetHealAmount(int value)
+    {
+        healAmount = healAmount + value < 0 ? 0 : healAmount + value;
+        HealAmounts[0] = healAmount;
+    }
     private bool interrupted;
     public bool Disposable { get; set; }
     public string ExplainText
@@ -44,10 +72,6 @@ public class WarlockLegend : IPlayerCard
     public int GetHealAmount()
     {
         return healAmount;
-    }
-    public void SetHealAmount(int _healAmount)
-    {
-        healAmount = _healAmount;
     }
     public Color GetUnAvailableTileColor()
     {

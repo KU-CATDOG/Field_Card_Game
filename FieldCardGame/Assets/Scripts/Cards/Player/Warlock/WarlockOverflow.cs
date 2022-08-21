@@ -2,10 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarlockOverflow : IPlayerCard
+public class WarlockOverflow : IPlayerCard,IAttackCard
 {
     private int range = 3;
     private int cost = 10;
+    private int amount = 0;
+    public List<int> Damage
+    {
+        get
+        {
+            List<int> tmp = new();
+            tmp.Add(amount);
+            return tmp;
+        }
+    }
+    public void SetDmg(int value)
+    {
+        amount = amount + value < 0 ? 0 : amount + value;
+        Damage[0] = amount;
+    }
     private bool interrupted;
     public bool Disposable { get; set; } = true;
     public string ExplainText
@@ -121,7 +136,7 @@ public class WarlockOverflow : IPlayerCard
                     interrupted = false;
                     yield break;
                 }
-                yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, damage));
+                yield return GameManager.Instance.StartCoroutine(caster.HitAttack(tmp, amount+damage));
             }
         }
         ICard warlockOverflow = new WarlockOverflow();

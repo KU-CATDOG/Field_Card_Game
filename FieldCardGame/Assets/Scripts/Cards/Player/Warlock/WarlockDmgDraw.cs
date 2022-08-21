@@ -2,12 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarlockDmgDraw : IPlayerCard
+public class WarlockDmgDraw : IPlayerCard,IAttackCard
 {
     private int range = 2;
     private int cost = 5;
     private int damage = 10;
     private int drawNum = 2;
+    public List<int> Damage
+    {
+        get
+        {
+            List<int> tmp = new();
+            tmp.Add(damage);
+            return tmp;
+        }
+    }
+    public void SetDmg(int value)
+    {
+        damage = damage + value < 0 ? 0 : damage + value;
+        Damage[0] = damage;
+    }
     private bool interrupted;
     public bool Disposable { get; set; }
     public string ExplainText
