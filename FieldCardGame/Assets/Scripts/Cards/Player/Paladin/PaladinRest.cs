@@ -2,17 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PaladinRest : IPlayerCard
+public class PaladinRest : IPlayerCard, IHealCard
 {
     private int range = 0;
     private bool interrupted;
     private int cost = 0;
+    private int amount = 10;
     public bool Disposable { get; set; }
     public string ExplainText
     {
         get
         {
-            return $"체력을 10 회복합니다. 카드를 1장 버립니다.";
+            return $"체력을 {amount} 회복합니다. 카드를 1장 버립니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -30,6 +31,23 @@ public class PaladinRest : IPlayerCard
     public void SetRange(int _range)
     {
         range = _range;
+    }
+    public int GetAmount()
+    {
+        return amount;
+    }
+    public void SetAmount(int _amount)
+    {
+        amount = _amount;
+    }
+    public List<int> HealAmounts{get;}
+    public void SetHealAmount(int val)
+    {
+        if (amount + val < 0)
+        {
+            return;
+        }
+        amount += val;
     }
     public Color GetUnAvailableTileColor()
     {
@@ -81,7 +99,7 @@ public class PaladinRest : IPlayerCard
             yield break;
         }
 
-        yield return GameManager.Instance.StartCoroutine(caster.GiveHeal(caster, 10));
+        yield return GameManager.Instance.StartCoroutine(caster.GiveHeal(caster, GetAmount()));
         int i = Random.Range(0, caster.HandCard.Count);
         yield return caster.StartCoroutine(caster.DropCard(i));
     }

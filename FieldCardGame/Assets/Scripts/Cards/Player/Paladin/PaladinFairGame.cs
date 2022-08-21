@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PaladinFairGame : IPlayerCard
+public class PaladinFairGame : IPlayerCard, IProtectCard
 {
     private int range = 1;
     private bool interrupted;
@@ -13,7 +13,7 @@ public class PaladinFairGame : IPlayerCard
     {
         get
         {
-            return $"대상을 ‘속박’합니다. ‘보호’를 20 얻습니다.";
+            return $"대상을 ‘속박’합니다. ‘보호’를 {amount} 얻습니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -35,6 +35,15 @@ public class PaladinFairGame : IPlayerCard
     public int GetAmount()
     {
         return amount;
+    }
+    public List<int> ProtectAmount{ get; }
+    public void SetProtectAmount(int val)
+    {
+        if (amount + val < 0)
+        {
+            return;
+        }
+        amount += val;
     }
     public void SetAmount(int _amount)
     {
