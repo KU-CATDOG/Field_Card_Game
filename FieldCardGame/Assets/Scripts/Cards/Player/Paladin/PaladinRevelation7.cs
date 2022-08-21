@@ -2,17 +2,51 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PaladinRevelation7 : IPlayerCard
+public class PaladinRevelation7 : IPlayerCard, IAttackCard, IHealCard
 {
     private int range = 3;
     private int cost = 1;
     public bool Disposable { get; set; } = true;
+    private int healAmount = 7;
+    private int damage = 7;
+    private List<int> damages;
+    public List<int> Damage
+    {
+        get
+        {
+            if (damages == null)
+            {
+                damages = new();
+                damages.Add(damage);
+            }
+            return damages;
+        }
+    }
+    public void SetDmg(int val)
+    {
+        damage = damage + val < 0 ? 0 : damage + val;
+        Damage[0] = damage;
+    }
+
+    public List<int> HealAmounts
+    {
+        get
+        {
+            List<int> ret = new();
+            ret.Add(healAmount);
+            return ret;
+        }
+    }
+    public void SetHealAmount(int val)
+    {
+        healAmount = healAmount + val < 0 ? 0 : healAmount + val;
+    }
 
     private bool interrupted = false; public string ExplainText
     {
         get
         {
-            return $"적에게 피해를 7만큼 7번 줍니다. 내 체력을 7만큼 7번 회복합니다. 묵시록_1.txt를 뽑을 카드 더미에 넣습니다.";
+            return $"적에게 피해를 {damage}만큼 7번 줍니다. 내 체력을 {healAmount}만큼 7번 회복합니다. 묵시록_1.txt를 뽑을 카드 더미에 넣습니다.";
         }
     }
 
@@ -130,7 +164,7 @@ public class PaladinRevelation7 : IPlayerCard
                 interrupted = false;
                 yield break;
             }
-            yield return caster.StartCoroutine(caster.HitAttack(targetEnemy, 7));
+            yield return caster.StartCoroutine(caster.HitAttack(targetEnemy, damage));
             yield return new WaitForSeconds(0.05f);
         }
 
@@ -144,7 +178,7 @@ public class PaladinRevelation7 : IPlayerCard
                 yield break;
             }
 
-            yield return caster.StartCoroutine(caster.GiveHeal(caster, 7));
+            yield return caster.StartCoroutine(caster.GiveHeal(caster, healAmount));
             yield return new WaitForSeconds(0.05f);
         }
 
