@@ -37,10 +37,9 @@ public class SuicideBomber : Enemy
     {
         int[] cardIDX;
         
-        while (crystalCount > 0)
+        while (crystalCount > 0 && !IsDie)
         {
             cardIDX = findAllCardIDX();
-
             List<Coordinate> tiles;
 
             if (cardIDX[0] != -1 && (tiles = HandCard[cardIDX[0]].GetAvailableTile(position)).Count > 0)
