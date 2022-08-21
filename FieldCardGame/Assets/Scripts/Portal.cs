@@ -12,14 +12,22 @@ public class Portal : MonoBehaviour, IInteractable
         get
         {
             if (pos == null)
-                pos = new Coordinate((int)transform.position.x, (int)transform.position.z);
+                position = new Coordinate((int)transform.position.x, (int)transform.position.z);
             return pos;
         }
         set
         {
-            pos = value;
+            if (!GameManager.Instance.Map[value.X, value.Y])
+                return;
+            pos = value; 
+            GameManager.Instance.Map[value.X, value.Y].EntityOnTile.Add(this);
             transform.position = new Vector3(pos.X, transform.position.y, pos.Y);
         }
+    }
+    private void Update()
+    {
+        if (position == null)
+            return;
     }
     public Coordinate GetPosition()
     {
@@ -35,6 +43,7 @@ public class Portal : MonoBehaviour, IInteractable
         AsyncOperation async = SceneManager.LoadSceneAsync(target);
         yield return new WaitUntil(() => { return async.isDone; });
         yield return new WaitForSeconds(0.5f);
+        GameManager.Instance.GenerateMap(false);
         GameManager.Instance.StartCoroutine(GameManager.Instance.LoadingPanel.LoadEnd());
     }
 
