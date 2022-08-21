@@ -387,7 +387,7 @@ public class PlayerUIManager : MonoBehaviour
             GameManager.Instance.Map[i.X, i.Y].RestoreColor();
         }
         //fixme
-        if(CardUsePos != GameManager.Instance.CurPlayer.position)
+        if(CardUsePos.X != GameManager.Instance.CurPlayer.position.X && CardUsePos.Y != GameManager.Instance.CurPlayer.position.Y)
             GameManager.Instance.CurPlayer.transform.LookAt(new Vector3(CardUsePos.X, 0.5f, CardUsePos.Y));
        // yield return StartCoroutine(MainCamera.Instance.moveCamera(false));
         yield return StartCoroutine(GameManager.Instance.CurPlayer.CardUse(CardUsePos, cardIdx));
@@ -550,6 +550,7 @@ public class PlayerUIManager : MonoBehaviour
     public void CloseRewardPanel()
     {
         PanelOpenned = false;
+        DropCardObject.OnReward = false;
         rewardPanel.RewardEnd();
     }
     public void OpenSkillTreePanel()

@@ -1166,11 +1166,11 @@ public abstract class Character : MonoBehaviour
             IEnumerator routine = targetTile.OnCharacterEnterRoutine[i].Routine;
             if (!routine.MoveNext())
             {
-                if(routine.Current != null)
-                {
-                    yield return routine.Current;
-                }
                 targetTile.RemoveOnCharacterEnterRoutineByIdx(i);
+            }
+            if (routine.Current != null)
+            {
+                yield return routine.Current;
             }
         }
 
