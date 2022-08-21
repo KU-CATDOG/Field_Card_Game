@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DebugJump : IPlayerCard
+public class DebugJump : IPlayerCard, NotReward
 {
 
     private int range = 20;

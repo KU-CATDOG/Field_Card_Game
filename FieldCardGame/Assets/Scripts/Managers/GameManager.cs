@@ -7,7 +7,7 @@ using System.Linq;
 public class GameManager : MonoBehaviour
 {
     public LevelUpHandler LvUpHandler;
-    public Dictionary<System.Type, LevelUpSkill> BaseSkillDict{ get; } = new();    
+    public Dictionary<System.Type, LevelUpSkill> BaseSkillDict { get; } = new();
     private Dictionary<System.Type, int> CharacterIDDict;
     private List<SpawnEntity> worldEntityList;
     private Dictionary<int, ICard> cardDict = new Dictionary<int, ICard>();
@@ -88,15 +88,16 @@ public class GameManager : MonoBehaviour
             return loadingPanel;
         }
     }
-    public Character CharacterSelectedPrefab {get; set;}
+    public Character CharacterSelectedPrefab { get; set; }
     private Character characterSelected;
     public Character CharacterSelected
     {
-        get=> characterSelected;
+        get => characterSelected;
         set
         {
             characterSelected = value;
-            LvUpHandler = new();
+            if (value != null)
+                LvUpHandler = new();
         }
     }
     private Dictionary<int, Enemy> enemyDict = new();
@@ -167,7 +168,7 @@ public class GameManager : MonoBehaviour
     {
         Enemy[] enemyList = new Enemy[0];
         enemyList = Resources.LoadAll<Enemy>("Prefabs/Character/Enemy");
-        foreach(var i in enemyList)
+        foreach (var i in enemyList)
         {
             enemyDict.Add(i.ID, i);
         }
@@ -188,7 +189,7 @@ public class GameManager : MonoBehaviour
                 cardDict.Add(card.GetCardID(), card);
             }
             cardObjectList = Resources.LoadAll<CardObject>("Prefabs/CardObject");
-            foreach(var i in cardObjectList)
+            foreach (var i in cardObjectList)
             {
                 cardObjectDict.Add(i.ID, i);
             }
@@ -225,7 +226,7 @@ public class GameManager : MonoBehaviour
         //fixme
     }
     private IEnumerator GameOverRoutine()
-    { 
+    {
         yield return StartCoroutine(LoadingPanel.StartLoad());
         Initialize();
         TurnManager.Instance.Initialize();
@@ -253,6 +254,7 @@ public class GameManager : MonoBehaviour
         cardDict.Clear();
         cardObjectDict.Clear();
     }
+
 
     public Tile GetTilePrefab()
     {
@@ -301,12 +303,13 @@ public class GameManager : MonoBehaviour
         CharacterSelected.position = new Coordinate(0, 0);
         Map[CharacterSelected.position.X, CharacterSelected.position.Y].CharacterOnTile = CharacterSelected;
         CharacterSelected.SightUpdate(CharacterSelected.Sight);
-        Map[10, 10].CharacterOnTile = CharacterSelected;
-        for (int i = 0; i < 4; i++)
+
+        //Map[10, 10].CharacterOnTile = CharacterSelected;
+       /* for (int i = 0; i < 4; i++)
         {
             Character enemy = Instantiate(EnemyDict[60]);
             enemy.position = new Coordinate(6 + i, 6);
-        }
+        }*/
         StartCoroutine(TurnManager.Instance.TurnRoutine());
     }
     //fixme
@@ -324,6 +327,11 @@ public class GameManager : MonoBehaviour
                 continue;
             }
             visited[rand] = true;
+            if(cardDict.Values.ElementAt(rand) is NotReward)
+            {
+                i--;
+                continue;
+            }
             rewardList.Add(System.Activator.CreateInstance(cardDict.Values.ElementAt(rand).GetType()) as ICard);
         }
         PlayerUIManager.Instance.OpenRewardPanel(rewardList);

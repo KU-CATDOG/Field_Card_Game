@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DebugCard : IPlayerCard
+public class DebugCard : IPlayerCard, NotReward
 {
     private bool interrupted;
     private int cost = 1;

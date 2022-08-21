@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DropCardObject : MonoBehaviour
 {
+    public static bool OnReward { get; set; }
     private Coordinate pos;
     public Coordinate position
     {
@@ -54,7 +55,13 @@ public class DropCardObject : MonoBehaviour
         {
             yield return null;
         }
+        OnReward = true;
         GameManager.Instance.GetCardReward(3);
         DestroyOffer = true;
+        yield return GameManager.Instance.StartCoroutine(wait());
+    }
+    private IEnumerator wait()
+    {
+        yield return new WaitUntil(() => {  return !OnReward; });
     }
 }
