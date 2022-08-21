@@ -9,7 +9,7 @@ public class Witch : Enemy
         base.Start();
         Hp = MaxHp = 35;
         GiveExp = 0;
-        TurnStartDraw = 2;
+        TurnStartDraw = 3;
         crystalCount = maxCrystalCount = 2;
     }
 
@@ -60,7 +60,8 @@ public class Witch : Enemy
         while (crystalCount > 0)
         {
             cardIDX = findAllCardIDX();
-
+            if (!GameManager.Instance.CharacterSelected)
+                yield break;
             var j = GameManager.Instance.CharacterSelected.position;
             int currDist = Coordinate.Distance(position, j); //need fix
 
@@ -69,11 +70,13 @@ public class Witch : Enemy
                 if (crystalCount == 2)
                 {
                     crystalCount = 0;
+                    DropInterrupted = true;
                     yield return StartCoroutine(CardUse(j, cardIDX[1]));
                 }
                 else
                 {
                     crystalCount = 0;
+                    DropInterrupted = true;
                     yield return StartCoroutine(CardUse(j, cardIDX[2]));
 
                 }

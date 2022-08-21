@@ -45,8 +45,7 @@ public class Wolf : Enemy
             }
 
             List<Coordinate> tiles;
-
-            if ((tiles = HandCard[atkIsFst ? 0 : 1].GetAvailableTile(position)).Count > 0)
+            if ((tiles = (HandCard[atkIsFst ? 0 : 1]).GetAvailableTile(position)).Count > 0)
             {
                 Coordinate toATK = tiles[0];
                 int minDist = int.MaxValue;
@@ -89,7 +88,9 @@ public class Wolf : Enemy
                 }
 
                 crystalCount -= HandCard[atkIsFst ? 1 : 0].GetCost();
+                DropInterrupted = true;
                 yield return StartCoroutine(CardUse(toGo, atkIsFst ? 1 : 0));
+                DropInterrupted = false;
             }
         }
     }
