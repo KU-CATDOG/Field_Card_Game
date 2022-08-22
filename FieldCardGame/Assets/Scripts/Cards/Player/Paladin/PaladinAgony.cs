@@ -85,6 +85,8 @@ public class PaladinAgony : IPlayerCard
         for (int i = 0; i < card; i++)
         {
             yield return caster.StartCoroutine(caster.AddCard(new PaladinDefilement()));
+            Paladin owner = (Paladin) caster;
+            yield return owner.StartCoroutine(owner.ShuffleDeck());
         }
         for (int i = 0; i < draw; i++)
         {

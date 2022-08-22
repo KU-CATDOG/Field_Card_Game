@@ -129,6 +129,8 @@ public class PaladinSatanMark : IPlayerCard
             tmp.EffectHandler.DebuffDict[DebuffType.Fragility].SetEffect(1);
         }
         yield return caster.StartCoroutine(caster.AddCard(new PaladinDefilement()));
+        Paladin owner = (Paladin) caster;
+        yield return owner.StartCoroutine(owner.ShuffleDeck());
     }
     public void CardRoutineInterrupt()
     {
