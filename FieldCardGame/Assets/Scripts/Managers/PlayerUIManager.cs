@@ -8,6 +8,15 @@ using System.Linq;
 public class PlayerUIManager : MonoBehaviour
 {
     [SerializeField]
+    private OptionPanel optionPanel;
+    public OptionPanel Option
+    {
+        get
+        {
+            return optionPanel;
+        }
+    }
+    [SerializeField]
     private SkillSelectPanel skillSelectPanel;
     public SkillSelectPanel SkillPanel => skillSelectPanel;
     public static PlayerUIManager Instance { get; set; }
@@ -562,6 +571,14 @@ public class PlayerUIManager : MonoBehaviour
     public void CloseSkillTreePanel()
     {
         (GameManager.Instance.CharacterSelected as Player).TreePanel.gameObject.SetActive(false);
+    }
+    public void OpenOptionPanel()
+    {
+        Option.gameObject.SetActive(true);
+    }
+    public void CloseOptionPanel()
+    {
+        Option.gameObject.SetActive(false);
     }
     private void Update()
     {

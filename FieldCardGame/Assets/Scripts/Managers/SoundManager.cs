@@ -7,6 +7,33 @@ public class SoundManager : MonoBehaviour
     /// <summary>
     /// fixme
     /// </summary>
+    
+    private float bgmV;
+    public float BGMVolume
+    {
+        get
+        {
+            return bgmV;
+        }
+        set
+        {
+            bgmV = value;
+            BGM.volume = value;
+        }
+    }
+    private float sfxV;
+    public float SFXVolume
+    {
+        get
+        {
+            return sfxV;
+        }
+        set
+        {
+            sfxV = value;
+            SFX.volume = value;
+        }
+    }
     [SerializeField]
     List<AudioClip> bgmClips;
     [SerializeField]
@@ -47,7 +74,7 @@ public class SoundManager : MonoBehaviour
     private void Start()
     {
         SceneManager.sceneLoaded += SceneLoaded;
-        BGMDict.Add("MainField", bgmClips[0]);
+        BGMDict.Add("Grassland", bgmClips[0]);
         SFXDict.Add(sfxClips[0].name, sfxClips[0]);
         
     }
