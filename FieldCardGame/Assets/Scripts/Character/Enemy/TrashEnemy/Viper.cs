@@ -8,7 +8,7 @@ public class Viper : Enemy
     {
         base.Start();
         Hp = MaxHp = 45;
-        GiveExp = 0;
+        GiveExp = 1;
         TurnStartDraw = 2;
         crystalCount = maxCrystalCount = 2;
     }

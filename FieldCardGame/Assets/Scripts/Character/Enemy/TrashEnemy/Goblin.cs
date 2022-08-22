@@ -8,7 +8,7 @@ public class Goblin : Enemy
     {
         base.Start();
         Hp = MaxHp = 40;
-        GiveExp = 0;
+        GiveExp = 1;
         TurnStartDraw = 2;
         crystalCount = maxCrystalCount = 2;
     }

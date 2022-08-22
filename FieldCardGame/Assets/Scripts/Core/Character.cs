@@ -1541,7 +1541,8 @@ public abstract class Character : MonoBehaviour
     protected virtual void OnDestroy()
     {
         Destroy(HpBar);
-        Destroy(EffectUI.gameObject);
+        if(effectUI)
+            Destroy(effectUI.gameObject);
     }
     protected virtual void Update()
     {

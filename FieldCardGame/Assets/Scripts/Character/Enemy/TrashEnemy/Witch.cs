@@ -8,7 +8,7 @@ public class Witch : Enemy
     {
         base.Start();
         Hp = MaxHp = 35;
-        GiveExp = 0;
+        GiveExp = 2;
         TurnStartDraw = 3;
         crystalCount = maxCrystalCount = 2;
     }

@@ -8,7 +8,7 @@ public class SuicideBomber : Enemy
     {
         base.Start();
         Hp = MaxHp = 20;
-        GiveExp = 0;
+        GiveExp = 3;
         TurnStartDraw = 2;
         crystalCount = maxCrystalCount = 2;
     }

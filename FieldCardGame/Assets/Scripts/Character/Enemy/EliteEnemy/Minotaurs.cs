@@ -8,7 +8,7 @@ public class Minotaurs : Enemy
     {
         base.Start();
         Hp = MaxHp = 150;
-        GiveExp = 1;
+        GiveExp = 4;
         TurnStartDraw = 4;
         crystalCount = maxCrystalCount = 4;
 }
