@@ -2,10 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PaladinDefilement : IPlayerCard, NotReward
+public class PaladinDefilement : IPlayerCard, NotReward, IAttackCard
 {
+    //fixme
+    public List<int> Damage { get; }
+    public void SetDmg(int val)
+    {
+        return;
+    }
+
+    public static bool Scintillation { get; set; } = false;
+    public static bool Enlighted { get; set; } = false;
     private int range = 0;
-    private int cost = 0;
+    private int cost = -1;
     private bool notRemoved = true;
     private bool interrupted;
     public bool Disposable { get; set; }
@@ -50,6 +59,10 @@ public class PaladinDefilement : IPlayerCard, NotReward
     }
     public int GetRange()
     {
+        if (Scintillation)
+        {
+            SetRange(3);
+        }
         return range;
     }
     public void SetRange(int _range)
@@ -63,7 +76,50 @@ public class PaladinDefilement : IPlayerCard, NotReward
     public List<Coordinate> GetAvailableTile(Coordinate pos)
     {
         List<Coordinate> ret = new List<Coordinate>();
-
+        if (Scintillation)
+        {
+            int level = 1;
+            bool[,] visited = new bool[128, 128];
+            Queue<Coordinate> queue = new Queue<Coordinate>();
+            Queue<Coordinate> nextQueue = new Queue<Coordinate>();
+            queue.Enqueue(pos);
+            while (level++ <= GetRange())
+            {
+                while (queue.Count != 0)
+                {
+                    Coordinate tmp = queue.Dequeue();
+                    if (tmp.X != pos.X || tmp.Y != pos.Y)
+                        ret.Add(tmp);
+                    Coordinate tile;
+                    if ((tile = tmp.GetDownTile()) != null && !visited[tile.X, tile.Y] )
+                    {
+                        visited[tile.X, tile.Y] = true;
+                        nextQueue.Enqueue(tile);
+                    };
+                    if ((tile = tmp.GetLeftTile()) != null && !visited[tile.X, tile.Y] )
+                    {
+                        visited[tile.X, tile.Y] = true;
+                        nextQueue.Enqueue(tile);
+                    };
+                    if ((tile = tmp.GetRightTile()) != null && !visited[tile.X, tile.Y] )
+                    {
+                        visited[tile.X, tile.Y] = true;
+                        nextQueue.Enqueue(tile);
+                    };
+                    if ((tile = tmp.GetUpTile()) != null && !visited[tile.X, tile.Y] )
+                    {
+                        visited[tile.X, tile.Y] = true;
+                        nextQueue.Enqueue(tile);
+                    }
+                }
+                queue = new Queue<Coordinate>(nextQueue);
+                nextQueue.Clear();
+            }
+            while (queue.Count != 0)
+            {
+                ret.Add(queue.Dequeue());
+            }
+        }
         return ret;
     }
     public Color GetAvailableTileColor()
@@ -73,7 +129,8 @@ public class PaladinDefilement : IPlayerCard, NotReward
     public List<Coordinate> GetAreaofEffect(Coordinate relativePos)
     {
         List<Coordinate> ret = new List<Coordinate>();
-        
+        if (Scintillation)
+            ret.Add(new Coordinate(0, 0));
         return ret;
     }
     public Color GetColorOfEffect(Coordinate pos)
@@ -95,7 +152,7 @@ public class PaladinDefilement : IPlayerCard, NotReward
     }
     public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
-        yield break;
+        yield return GameManager.Instance.StartCoroutine(caster.HitAttack(GameManager.Instance.Map[target.X, target.Y].CharacterOnTile, 3));
     }
     public void CardRoutineInterrupt()
     {
@@ -111,7 +168,9 @@ public class PaladinDefilement : IPlayerCard, NotReward
     }
     public CostType GetCostType()
     {
-        return CostType.Unpayable;
+        if(!Enlighted)
+            return CostType.Unpayable;
+        return CostType.PaladinEnergy;
     }
     public CardType GetCardType()
     {

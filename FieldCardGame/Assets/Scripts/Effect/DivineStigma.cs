@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class DivineStigma : Effect
 {
+    public static bool Mastery { get; set; } = false;
+    public static bool Completion { get; set; } = false;
+    public static bool Punish { get; set; } = false;
+    public static bool Cycle { get; set; } = false;
     public static int StigamDamage{get; set;} = 3;
     public DivineStigma(Character caster)
     {
@@ -11,6 +15,18 @@ public class DivineStigma : Effect
     }
     public override void SetEffect(int value)
     {
+        if (Mastery)
+        {
+            value++;
+        }
+        if (Punish)
+        {
+            caster.EffectHandler.DebuffDict[DebuffType.Weakness].SetEffect(1);
+        }
+        if (Completion)
+        {
+            GameManager.Instance.StartCoroutine(caster.GetDmg(GameManager.Instance.CharacterSelected, 5, false));
+        }
         if (IsEnabled)
         {
             Value+=value;
@@ -25,10 +41,13 @@ public class DivineStigma : Effect
         while (IsEnabled)
         {
             caster.Dmg += StigamDamage;
-            if(--Value == 0)
+            if (!Cycle)
             {
-                RemoveEffect().MoveNext();
-                yield break;
+                if (--Value == 0)
+                {
+                    RemoveEffect().MoveNext();
+                    yield break;
+                }
             }
             yield return null;
         }

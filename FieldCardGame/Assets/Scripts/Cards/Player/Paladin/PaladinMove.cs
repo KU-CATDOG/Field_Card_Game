@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PaladinMove : IPlayerCard
+public class PaladinMove : IPlayerCard, IMoveCard
 {
     private int range = 4;
     private int cost =0;
@@ -12,7 +12,7 @@ public class PaladinMove : IPlayerCard
     {
         get
         {
-            return $"최대 {GetRange()}칸 이동합니다.";
+            return $"최대 {(this as IMoveCard).Range}칸 이동합니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)
@@ -43,7 +43,7 @@ public class PaladinMove : IPlayerCard
         Queue<Coordinate> queue = new Queue<Coordinate>();
         Queue<Coordinate> nextQueue = new Queue<Coordinate>();
         queue.Enqueue(pos);
-        while (level++ <= GetRange())
+        while (level++ <= (this as IMoveCard).Range)
         {
             while (queue.Count != 0)
             {
@@ -89,7 +89,7 @@ public class PaladinMove : IPlayerCard
     private List<Coordinate> FindPath(Coordinate from, Coordinate to)
     {
         List<Coordinate> ret;
-        ret = backTracking(GetRange(), from, to);
+        ret = backTracking((this as IMoveCard).Range, from, to);
         if (ret != null)
         {
             ret.Reverse();

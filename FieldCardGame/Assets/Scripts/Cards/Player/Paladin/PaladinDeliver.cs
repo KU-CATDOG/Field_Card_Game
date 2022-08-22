@@ -2,8 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PaladinDeliver : IPlayerCard
+public class PaladinDeliver : IPlayerCard, IAttackCard
 {
+    //fixme
+    public void SetDmg(int val)
+    {
+        return;
+    }
+    public List<int> Damage { get; }
     private int range = 1;
 
     private int cost = 2;

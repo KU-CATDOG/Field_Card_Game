@@ -28,7 +28,7 @@ public class PaladinProtect : IPlayerCard, IProtectCard
     {
         get
         {
-            return $"20�� '��ȣ���� ����ϴ�.";
+            return $"20의 보호를 얻습니다.";
         }
     }
     public IEnumerator GetCardRoutine(Character owner)

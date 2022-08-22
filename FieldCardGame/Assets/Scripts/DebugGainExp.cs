@@ -5,6 +5,6 @@ using UnityEngine;
 public class DebugGainExp : MonoBehaviour
 {
     public void click(){
-        StartCoroutine((GameManager.Instance.CharacterSelected as Player).GainExp(1));
+        StartCoroutine((GameManager.Instance.CharacterSelected as Player).LevelUp());
     }
 }

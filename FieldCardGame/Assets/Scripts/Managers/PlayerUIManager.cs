@@ -340,6 +340,8 @@ public class PlayerUIManager : MonoBehaviour
         }
         card.SetActive(false);
         int range = UseModeCard.GetRange();
+        if (UseModeCard is IMoveCard)
+            range = (UseModeCard as IMoveCard).Range;
         List<Coordinate> inRange = new List<Coordinate>();
         bfs(range, GameManager.Instance.CurPlayer.position, inRange);
         foreach (Coordinate i in inRange)

@@ -13,15 +13,32 @@ public class MagicReinforce : LevelUpSkill
     public override int ID => 4;
     protected override void levelUpRoutine()
     {
+        GameManager.Instance.CharacterSelected.AddTryHitAttackRoutine(MagicReinforcement(), 0);
         return;
+    }
+    private IEnumerator MagicReinforcement()
+    {
+        while (true)
+        {
+            if (GameManager.Instance.CharacterSelected.usedCard is IAttackCard && GameManager.Instance.CharacterSelected.usedCard.GetRange() >= 3)
+            {
+                GameManager.Instance.CharacterSelected.HitDmg += 5;
+            }
+            yield return null;
+        }
     }
     public override string GetText()
     {
-        return "MagicReinforce";
+        return "MagicReinforce\n 사거리가 3이상인 카드가 5의 추가피해를 입힙니다.";
     }
     List<LevelUpSkill> nextSkillList;
     public override List<LevelUpSkill> GetNextSkillList()
     {
-        return null;
+        if (nextSkillList == null)
+        {
+            nextSkillList = new();
+            nextSkillList.Add(new LongDistStigma());
+        }
+        return nextSkillList;
     }
 }

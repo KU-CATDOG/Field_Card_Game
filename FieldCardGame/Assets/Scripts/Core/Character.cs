@@ -295,6 +295,7 @@ public abstract class Character : MonoBehaviour
         forceMoveRoutine.RemoveAt(idx);
     }
 
+    public Character HitTarget { get; set; }
     public Character HitBy { get; set; }
     public int Dmg { get; set; }
     public bool GetDmgInterrupted { get; set; }
@@ -373,7 +374,7 @@ public abstract class Character : MonoBehaviour
         hitAttackRoutine.RemoveAt(idx);
     }
 
-    public Character HealedBy;
+    public object HealedBy;
     public bool HealInterrupted { get; set; }
     public int HealAmount { get; set; }
 
@@ -1322,6 +1323,7 @@ public abstract class Character : MonoBehaviour
     {
         HitInterrupted = false;
         HitDmg = dmg;
+        HitTarget = target;
         for (int i = TryHitAttackRoutine.Count - 1; !HitInterrupted && !IsDie && i >= 0; i--)
         {
             IEnumerator routine = TryHitAttackRoutine[i].Routine;
@@ -1394,7 +1396,7 @@ public abstract class Character : MonoBehaviour
             }
         }
     }
-    private IEnumerator Heal(Character caster, int amount, bool allowOverMaxHp)
+    public IEnumerator Heal(object caster, int amount, bool allowOverMaxHp)
     {
         HealInterrupted = false;
         HealedBy = caster;
@@ -1539,6 +1541,7 @@ public abstract class Character : MonoBehaviour
     protected virtual void OnDestroy()
     {
         Destroy(HpBar);
+        Destroy(EffectUI.gameObject);
     }
     protected virtual void Update()
     {

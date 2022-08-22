@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HealReinfoce : LevelUpSkill
+public class StigmaReinforce : LevelUpSkill
 {
     private int count = 0;
     public override int Count
@@ -10,23 +10,15 @@ public class HealReinfoce : LevelUpSkill
         get=>count;
         set=>count = value;
     }
-    public override int ID => 3;
+    public override int ID => 8;
     protected override void levelUpRoutine()
     {
-        GameManager.Instance.CharacterSelected.AddTryHealRoutine(HealReinforcement(), 0);
+        DivineStigma.StigamDamage = 5;
         return;
-    }
-    private IEnumerator HealReinforcement()
-    {
-        while (true)
-        {
-            GameManager.Instance.CharacterSelected.HealAmount += 3;
-            yield return null;
-        }
     }
     public override string GetText()
     {
-        return "HealReinforce\n 회복할때마다 3만큼 추가로 회복합니다.";
+        return "Stigma Reinforce\n 신성낙인의 추가 피해를 5로 증가시킵니다.";
     }
     List<LevelUpSkill> nextSkillList;
     public override List<LevelUpSkill> GetNextSkillList()
@@ -34,10 +26,13 @@ public class HealReinfoce : LevelUpSkill
         if (nextSkillList == null)
         {
             nextSkillList = new();
-            StaminaIs tmp = new();
+            nextSkillList.Add(new StigmaCycle());
+            nextSkillList.Add(new StigmaPunish());
+            Sanctuary tmp = new();
             if (GameManager.Instance.LvUpHandler.SkillDict.ContainsKey(tmp.ID))
             {
                 nextSkillList.Add(GameManager.Instance.LvUpHandler.SkillDict[tmp.ID]);
+
             }
             else
             {
@@ -46,4 +41,5 @@ public class HealReinfoce : LevelUpSkill
         }
         return nextSkillList;
     }
+
 }

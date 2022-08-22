@@ -70,6 +70,7 @@ public class Paladin : Player
             return false;
         }
     }
+    
     protected override void Start()
     {
         base.Start();

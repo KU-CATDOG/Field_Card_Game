@@ -2,8 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Attack : IPlayerCard
+public class Attack : IPlayerCard, IAttackCard
 {
+    //fixme
+    public void SetDmg(int val)
+    {
+        return;
+    }
+    public List<int> Damage { get; }
     public bool Disposable { get; set; }
     private int cost = 1;
     private bool interrupted;

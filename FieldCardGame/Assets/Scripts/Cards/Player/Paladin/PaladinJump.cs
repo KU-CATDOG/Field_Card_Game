@@ -140,7 +140,6 @@ public class PaladinJump : IPlayerCard, IAttackCard
         ret.Add(pos.GetDownTilewithoutTest());
         ret.Add(pos.GetLeftTilewithoutTest());
         ret.Add(pos.GetRightTilewithoutTest());
-
         return ret;
     }
     public List<Coordinate> GetAreaofEffect(Coordinate relativePos)
@@ -199,9 +198,10 @@ public class PaladinJump : IPlayerCard, IAttackCard
              interrupted = false;
              yield break;
         }
+        float tmp = caster.transform.position.y;
         caster.StartCoroutine(JumpRoutine(caster, target, 3));
         yield return caster.StartCoroutine(caster.Move(target, 5f));
-
+        caster.transform.position = new Vector3(caster.transform.position.x, tmp, caster.transform.position.z);
         attackArea = GetDamageArea(target);
         for (int i = 0; i<attackArea.Count;i++)
         {

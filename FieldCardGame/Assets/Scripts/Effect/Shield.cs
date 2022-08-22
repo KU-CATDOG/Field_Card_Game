@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class Shield : Effect 
 {
+    public static bool Reinforced { get; set; }
+    public static bool StaminaEnabled { get; set; }
     public Shield(Character caster)
     {
         this.caster = caster;
     }
     public override void SetEffect(int value)
     {
+        if (caster == GameManager.Instance.CharacterSelected && Reinforced)
+        {
+            value += 3;
+        }
         if (IsEnabled)
         {
             Value += value;
@@ -20,6 +26,10 @@ public class Shield : Effect
             IsEnabled = true;
             caster.AddTryGetDmgRoutine(ApplyEffect(), 0);
             caster.AddStartBuff(RemoveEffect(), 1);
+        }
+        if (StaminaEnabled && caster == GameManager.Instance.CharacterSelected)
+        {
+            GameManager.Instance.StartCoroutine(caster.Heal(this, 3, false));
         }
     }
     public override IEnumerator ApplyEffect()

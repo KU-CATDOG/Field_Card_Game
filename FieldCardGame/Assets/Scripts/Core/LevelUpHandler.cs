@@ -10,10 +10,8 @@ public class LevelUpHandler
     public IReadOnlyDictionary<int, LevelUpSkill> SkillDict => skillDict;
     public LevelUpHandler()
     {
-        AddSkillList(GameManager.Instance.BaseSkillDict[GameManager.Instance.CharacterSelected.GetType()]);
-        LevelUp(GameManager.Instance.BaseSkillDict[GameManager.Instance.CharacterSelected.GetType()]);
     }
-    private void AddSkillList(LevelUpSkill skill)
+    public void AddSkillList(LevelUpSkill skill)
     {
         if(skillDict.ContainsKey(skill.ID)) return;
         skillDict[skill.ID] = skill;

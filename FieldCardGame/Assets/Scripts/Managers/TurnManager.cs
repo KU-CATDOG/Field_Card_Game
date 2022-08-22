@@ -304,11 +304,11 @@ public class TurnManager : MonoBehaviour
             IEnumerator routine = curChar.TurnEndBuffHandler[i].Routine;
             if (!routine.MoveNext())
             {
-                if(routine.Current != null)
-                {
-                    yield return routine.Current;
-                }
                 curChar.RemoveTurnEndBuffByIdx(i);
+            }
+            if (routine.Current != null)
+            {
+                yield return routine.Current;
             }
         }
     }

@@ -2,32 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnLight : LevelUpSkill
+public class StigmaMastery : LevelUpSkill
 {
-    private int count = 0;
+    private int count = 2;
     public override int Count
     {
         get=>count;
         set=>count = value;
     }
-    public override int ID => 2;
+    public override int ID => 22;
     protected override void levelUpRoutine()
     {
-        PaladinDefilement.Enlighted = true;
+        DivineStigma.Mastery = true;
         return;
     }
     public override string GetText()
     {
-        return "EnLight\n 번뇌 카드를 사용할 수 있게 됩니다.";
+        return "Stigma Mastery\n 신성낙인을 부여할 때마다 추가 신성낙인을 부여합니다.";
     }
     List<LevelUpSkill> nextSkillList;
     public override List<LevelUpSkill> GetNextSkillList()
     {
-        if (nextSkillList == null)
-        {
-            nextSkillList = new();
-            nextSkillList.Add(new Scintillation());
-        }
-        return nextSkillList;
+        return null;
     }
+
 }

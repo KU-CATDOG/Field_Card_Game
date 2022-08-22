@@ -6,7 +6,7 @@ using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
-    public LevelUpHandler LvUpHandler;
+    public LevelUpHandler LvUpHandler { get; set; }
     public Dictionary<System.Type, LevelUpSkill> BaseSkillDict { get; } = new();
     private Dictionary<System.Type, int> CharacterIDDict;
     private List<SpawnEntity> worldEntityList;
@@ -97,7 +97,11 @@ public class GameManager : MonoBehaviour
         {
             characterSelected = value;
             if (value != null)
+            {
                 LvUpHandler = new();
+                LvUpHandler.AddSkillList(GameManager.Instance.BaseSkillDict[GameManager.Instance.CharacterSelected.GetType()]);
+                LvUpHandler.LevelUp(GameManager.Instance.BaseSkillDict[GameManager.Instance.CharacterSelected.GetType()]);
+            }
         }
     }
     private Dictionary<int, Enemy> enemyDict = new();
@@ -329,7 +333,7 @@ public class GameManager : MonoBehaviour
                 continue;
             }
             visited[rand] = true;
-            if(cardDict.Values.ElementAt(rand).GetType() is NotReward)
+            if(cardDict.Values.ElementAt(rand) is NotReward)
             {
                 i--;
                 continue;

@@ -13,7 +13,7 @@ public abstract class Enemy : Character
             return Id;
         }
     }
-    public int GiveExp { get; set; }
+    public int GiveExp { get; set; } = 1;
     //fixme
     protected int Gold { get; set; } = 10;
     //fixme
