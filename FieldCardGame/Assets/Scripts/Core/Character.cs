@@ -53,9 +53,9 @@ public abstract class Character : MonoBehaviour
             if (pos == null)
             {
                 pos = new Coordinate((int)transform.position.x, (int)transform.position.z);
-                if (GameManager.Instance.Map[pos.X, pos.Y])
-                    GameManager.Instance.Map[pos.X, pos.Y].CharacterOnTile = this;
             }
+            if (GameManager.Instance.Map[pos.X, pos.Y])
+                GameManager.Instance.Map[pos.X, pos.Y].CharacterOnTile = this;
             return pos;
         }
         set

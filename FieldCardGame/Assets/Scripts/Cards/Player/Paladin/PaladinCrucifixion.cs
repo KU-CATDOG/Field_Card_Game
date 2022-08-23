@@ -94,7 +94,9 @@ public class PaladinCrucifixion : IPlayerCard
         if (interrupted)
             yield break;
         yield return GameManager.Instance.StartCoroutine(caster.HitAttack(GameManager.Instance.Map[center.X, center.Y].CharacterOnTile, 2));
+        if (!GameManager.Instance.Map[center.X, center.Y].CharacterOnTile) yield break;
         yield return GameManager.Instance.StartCoroutine(caster.HitAttack(GameManager.Instance.Map[center.X, center.Y].CharacterOnTile, 2));
+        if (!GameManager.Instance.Map[center.X, center.Y].CharacterOnTile) yield break;
         GameManager.Instance.Map[center.X, center.Y].CharacterOnTile.EffectHandler.DebuffDict[DebuffType.DivineStigma].SetEffect(1);
     }
     public void CardRoutineInterrupt()

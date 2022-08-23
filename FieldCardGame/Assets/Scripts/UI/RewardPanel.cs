@@ -34,7 +34,7 @@ public class RewardPanel : MonoBehaviour
     {
         foreach(var i in rewardList)
         {
-            Destroy(i.gameObject);
+            i.Destroy();
         }
         rewardList.Clear();
         gameObject.SetActive(false);

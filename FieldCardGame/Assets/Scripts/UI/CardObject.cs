@@ -52,6 +52,7 @@ public class CardObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
                 parent.parent = PlayerUIManager.Instance.CardArea.transform;
                 usableEffect.transform.rotation = transform.rotation;
                 usableEffect.transform.position = transform.position;
+                SetSiblingIndex(SiblingIndex);
             }
             return usableEffect;
         }
