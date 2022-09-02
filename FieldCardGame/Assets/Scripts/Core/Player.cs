@@ -193,7 +193,10 @@ public abstract class Player : Character
             LevelUpInterrupted = false;
             yield break;
         }
-        PlayerUIManager.Instance.SkillPanel.ShowReward(GameManager.Instance.LvUpHandler.GetAvailableSkill(3));
+        var list = GameManager.Instance.LvUpHandler.GetAvailableSkill(3);
+        if (list.Count == 0)
+            yield break;
+        PlayerUIManager.Instance.SkillPanel.ShowReward(list);
         yield return StartCoroutine(levelUp());
         Level++;
         for (int i = LevelUpRoutine.Count - 1; !IsDie && i >= 0; i--)
