@@ -86806,6 +86806,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1449130435364560125, guid: adf42912160c2054aa4b305bd4188ca8, type: 3}
+      propertyPath: wallMask
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2746601893013666261, guid: adf42912160c2054aa4b305bd4188ca8, type: 3}
       propertyPath: m_IsActive
       value: 0

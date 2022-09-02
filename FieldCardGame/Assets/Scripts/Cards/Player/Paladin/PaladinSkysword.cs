@@ -60,6 +60,8 @@ public class PaladinSkysword : IPlayerCard, IAttackCard
         Coordinate tile = pos;
         for(int i=0;i<3;i++)
         {
+            if (tile == null)
+                break;
             if ((tile = tile.GetDownTile()) != null && GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile && i==2)
             {
                 ret.Add(tile);
@@ -68,6 +70,8 @@ public class PaladinSkysword : IPlayerCard, IAttackCard
         tile = pos;
         for (int i = 0; i < 3; i++)
         {
+            if (tile == null)
+                break;
             if ((tile = tile.GetUpTile()) != null && GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile && i == 2)
             {
                 ret.Add(tile);
@@ -76,6 +80,8 @@ public class PaladinSkysword : IPlayerCard, IAttackCard
         tile = pos;
         for (int i = 0; i < 3; i++)
         {
+            if (tile == null)
+                break;
             if ((tile = tile.GetRightTile()) != null && GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile && i == 2)
             {
                 ret.Add(tile);
@@ -84,6 +90,8 @@ public class PaladinSkysword : IPlayerCard, IAttackCard
         tile = pos;
         for (int i = 0; i < 3; i++)
         {
+            if (tile == null)
+                break;
             if ((tile = tile.GetLeftTile()) != null && GameManager.Instance.Map[tile.X, tile.Y].CharacterOnTile && i == 2)
             {
                 ret.Add(tile);

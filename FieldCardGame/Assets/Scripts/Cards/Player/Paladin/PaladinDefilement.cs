@@ -152,7 +152,8 @@ public class PaladinDefilement : IPlayerCard, NotReward, IAttackCard
     }
     public IEnumerator CardRoutine(Character caster, Coordinate target)
     {
-        yield return GameManager.Instance.StartCoroutine(caster.HitAttack(GameManager.Instance.Map[target.X, target.Y].CharacterOnTile, 3));
+        if(Scintillation)
+            yield return GameManager.Instance.StartCoroutine(caster.HitAttack(GameManager.Instance.Map[target.X, target.Y].CharacterOnTile, 3));
     }
     public void CardRoutineInterrupt()
     {
